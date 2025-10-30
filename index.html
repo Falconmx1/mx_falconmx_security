@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MxFalcon Security - Consultoría en Ciberseguridad</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h2>MxFalcon Security</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#portafolio">Portafolio</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Seguridad Digital <span class="highlight">Sin Compromisos</span></h1>
+            <p>Protección avanzada para tu negocio en el mundo digital</p>
+            <button class="cta-button">Comenzar Protección</button>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios" class="servicios">
+        <h2>Nuestros Servicios</h2>
+        <div class="servicios-grid">
+            <div class="servicio-card">
+                <h3>Auditoría de Seguridad</h3>
+                <p>Evaluación completa de vulnerabilidades en tus sistemas</p>
+            </div>
+            <div class="servicio-card">
+                <h3>Pentesting</h3>
+                <p>Pruebas de intrusión controladas para fortalecer defensas</p>
+            </div>
+            <div class="servicio-card">
+                <h3>Consultoría 24/7</h3>
+                <p>Soporte continuo para mantener tu seguridad al máximo</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Integrado -->
+    <div class="chat-container">
+        <button class="chat-toggle" onclick="toggleChat()">💬 Chat</button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <h3>Asistente MxFalcon</h3>
+                <button onclick="toggleChat()">✕</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    ¡Hola! Soy tu asistente de seguridad. ¿En qué puedo ayudarte?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Escribe tu pregunta...">
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
