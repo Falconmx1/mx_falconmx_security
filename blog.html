@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - MxFalcon Security</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-03YX9G53W1');
+    </script>
+    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .blog-hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 150px 2rem 100px;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .articulos {
+            padding: 80px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .articulo-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border-left: 4px solid #00d4ff;
+        }
+        
+        .articulo-card h2 {
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+        
+        .leer-mas {
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        
+        .leer-mas:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h2>🔒 MxFalcon Security</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html#servicios">Servicios</a></li>
+                <li><a href="index.html#portafolio">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="blog-hero">
+        <h1>Blog de Seguridad</h1>
+        <p>Tips, noticias y mejores prácticas en ciberseguridad</p>
+    </section>
+
+    <section class="articulos">
+        <article class="articulo-card">
+            <h2>🔒 5 Vulnerabilidades Comunes en APIs</h2>
+            <p>Protege tus interfaces de programación de ataques comunes como inyecciones SQL, autenticación débil y exposición de datos sensibles. Aprende a identificar y corregir estas vulnerabilidades críticas.</p>
+            <a href="#" class="leer-mas">Leer más →</a>
+        </article>
+        
+        <article class="articulo-card">
+            <h2>🛡️ Cómo Elegir un Buen Password Manager</h2>
+            <p>Guía completa para seleccionar el gestor de contraseñas ideal para tu empresa. Comparativa de características de seguridad, precios y facilidad de uso entre las mejores opciones del mercado.</p>
+            <a href="#" class="leer-mas">Leer más →</a>
+        </article>
+
+        <article class="articulo-card">
+            <h2>🚨 Ransomware: Prevención y Respuesta</h2>
+            <p>Estrategias efectivas para prevenir ataques de ransomware y protocolos de respuesta en caso de infección. Incluye backup strategies y planes de recuperación de desastres.</p>
+            <a href="#" class="leer-mas">Leer más →</a>
+        </article>
+    </section>
+
+    <!-- Chat Integrado -->
+    <div class="chat-container">
+        <button class="chat-toggle" onclick="toggleChat()">💬 Asistente</button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <h3>🔒 Asistente MxFalcon</h3>
+                <button onclick="toggleChat()">✕</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    ¡Hola! Soy tu asistente de seguridad. ¿Necesitas ayuda con auditoría, pentesting o consultoría?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Escribe tu pregunta..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">▶</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
