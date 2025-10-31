@@ -7,6 +7,7 @@ header {
     width: 100%;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 /* HERO CON ESPACIO PARA HEADER */
@@ -28,6 +29,7 @@ body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     color: #333;
+    scroll-behavior: smooth;
 }
 
 nav {
@@ -41,6 +43,7 @@ nav {
 
 .logo h2 {
     color: #00d4ff;
+    font-size: 1.5rem;
 }
 
 .nav-links {
@@ -53,6 +56,7 @@ nav {
     color: white;
     text-decoration: none;
     transition: color 0.3s;
+    font-weight: 500;
 }
 
 .nav-links a:hover {
@@ -68,6 +72,12 @@ nav {
     color: #00d4ff;
 }
 
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
 .cta-button {
     background: #00d4ff;
     color: white;
@@ -76,11 +86,14 @@ nav {
     font-size: 1.1rem;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s;
+    font-weight: bold;
 }
 
 .cta-button:hover {
     background: #00b8e6;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
 }
 
 .servicios {
@@ -93,6 +106,7 @@ nav {
     text-align: center;
     margin-bottom: 3rem;
     font-size: 2.5rem;
+    color: #1a1a1a;
 }
 
 .servicios-grid {
@@ -102,17 +116,126 @@ nav {
 }
 
 .servicio-card {
-    background: #f4f4f4;
-    padding: 2rem;
+    background: #f8f9fa;
+    padding: 2.5rem 2rem;
     border-radius: 10px;
     text-align: center;
-    transition: transform 0.3s;
+    transition: all 0.3s;
+    border: 1px solid #e9ecef;
 }
 
 .servicio-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-color: #00d4ff;
 }
 
+.servicio-card h3 {
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+/* PORTAFOLIO */
+.portafolio {
+    padding: 100px 2rem;
+    background: #f8f9fa;
+}
+
+.portafolio h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    color: #1a1a1a;
+}
+
+.portafolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.proyecto-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    position: relative;
+}
+
+.proyecto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.proyecto-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #00d4ff;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* CONTACTO */
+.contacto {
+    padding: 100px 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.contacto h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    color: #1a1a1a;
+}
+
+.contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.contacto-info h3 {
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.contacto-info p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.contacto-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contacto-form input,
+.contacto-form textarea {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.contacto-form textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+/* CHAT */
 .chat-container {
     position: fixed;
     bottom: 20px;
@@ -128,6 +251,14 @@ nav {
     border-radius: 50px;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+    transition: all 0.3s;
+}
+
+.chat-toggle:hover {
+    background: #00b8e6;
+    transform: scale(1.05);
 }
 
 .chat-window {
@@ -141,6 +272,7 @@ nav {
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     display: none;
     flex-direction: column;
+    border: 1px solid #e9ecef;
 }
 
 .chat-header {
@@ -157,13 +289,16 @@ nav {
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .message {
     margin-bottom: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1rem;
     border-radius: 10px;
-    max-width: 80%;
+    max-width: 85%;
+    word-wrap: break-word;
 }
 
 .bot-message {
@@ -171,20 +306,42 @@ nav {
     align-self: flex-start;
 }
 
+.user-message {
+    background: #00d4ff;
+    color: white;
+    align-self: flex-end;
+}
+
 .chat-input {
     display: flex;
     padding: 1rem;
     border-top: 1px solid #ddd;
+    gap: 0.5rem;
 }
 
 .chat-input input {
     flex: 1;
-    padding: 0.5rem;
+    padding: 0.8rem;
     border: 1px solid #ddd;
     border-radius: 5px;
-    margin-right: 0.5rem;
+    font-size: 1rem;
 }
 
+.chat-input button {
+    background: #00d4ff;
+    color: white;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.chat-input button:hover {
+    background: #00b8e6;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -197,5 +354,15 @@ nav {
     .chat-window {
         width: 300px;
         height: 400px;
+    }
+    
+    .contacto-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .servicios-grid,
+    .portafolio-grid {
+        grid-template-columns: 1fr;
     }
 }
