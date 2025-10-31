@@ -37,6 +37,11 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
             border-left: 4px solid #00d4ff;
+            transition: transform 0.3s;
+        }
+
+        .articulo-card:hover {
+            transform: translateY(-5px);
         }
         
         .articulo-card h2 {
@@ -54,6 +59,20 @@
         
         .leer-mas:hover {
             text-decoration: underline;
+        }
+
+        .oferta-especial {
+            background: linear-gradient(135deg, #00d4ff 0%, #00b8e6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .oferta-especial h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -79,6 +98,15 @@
     </section>
 
     <section class="articulos">
+        <!-- OFERTA ESPECIAL -->
+        <div class="oferta-especial">
+            <h3>🚀 OFERTA ESPECIAL: Auditoría Express GRATIS</h3>
+            <p>Estoy ofreciendo 3 auditorías de seguridad completamente GRATIS para pequeños negocios. 
+               Identifico vulnerabilidades críticas y te doy un reporte personalizado.</p>
+            <a href="index.html#contacto" class="cta-button" style="background: white; color: #00d4ff;">Solicitar Auditoría Gratis</a>
+        </div>
+
+        <!-- ARTÍCULOS -->
         <article class="articulo-card">
             <h2>🔒 5 Vulnerabilidades Comunes en APIs</h2>
             <p>Protege tus interfaces de programación de ataques comunes como inyecciones SQL, autenticación débil y exposición de datos sensibles. Aprende a identificar y corregir estas vulnerabilidades críticas.</p>
@@ -94,6 +122,18 @@
         <article class="articulo-card">
             <h2>🚨 Ransomware: Prevención y Respuesta</h2>
             <p>Estrategias efectivas para prevenir ataques de ransomware y protocolos de respuesta en caso de infección. Incluye backup strategies y planes de recuperación de desastres.</p>
+            <a href="#" class="leer-mas">Leer más →</a>
+        </article>
+
+        <article class="articulo-card">
+            <h2>💰 ¿Por Qué las PYMES Son Blancos Fáciles para Hackers?</h2>
+            <p>Análisis de por qué los pequeños negocios son objetivos frecuentes y cómo protegerte con un presupuesto limitado. Estrategias costo-efectivas para seguridad básica.</p>
+            <a href="#" class="leer-mas">Leer más →</a>
+        </article>
+
+        <article class="articulo-card">
+            <h2>📈 Mi Estrategia de 3 Meses para Crear un Negocio de Seguridad</h2>
+            <p>Te muestro exactamente cómo estoy construyendo MxFalcon Security desde cero: desde los primeros clientes gratis hasta los proyectos premium.</p>
             <a href="#" class="leer-mas">Leer más →</a>
         </article>
     </section>
