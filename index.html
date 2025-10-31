@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MxFalcon Security - Consultoría en Ciberseguridad</title>
+    <meta name="description" content="Protección avanzada en ciberseguridad, auditorías y pentesting para tu empresa">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +12,7 @@
     <header>
         <nav>
             <div class="logo">
-                <h2>MxFalcon Security</h2>
+                <h2>🔒 MxFalcon Security</h2>
             </div>
             <ul class="nav-links">
                 <li><a href="#inicio">Inicio</a></li>
@@ -26,8 +27,8 @@
     <section id="inicio" class="hero">
         <div class="hero-content">
             <h1>Seguridad Digital <span class="highlight">Sin Compromisos</span></h1>
-            <p>Protección avanzada para tu negocio en el mundo digital</p>
-            <button class="cta-button">Comenzar Protección</button>
+            <p>Protección avanzada para tu negocio en el mundo digital con soluciones 360°</p>
+            <button class="cta-button" onclick="scrollToSection('servicios')">Comenzar Protección</button>
         </div>
     </section>
 
@@ -36,36 +37,77 @@
         <h2>Nuestros Servicios</h2>
         <div class="servicios-grid">
             <div class="servicio-card">
-                <h3>Auditoría de Seguridad</h3>
-                <p>Evaluación completa de vulnerabilidades en tus sistemas</p>
+                <h3>🔍 Auditoría de Seguridad</h3>
+                <p>Evaluación completa de vulnerabilidades en tus sistemas y redes</p>
             </div>
             <div class="servicio-card">
-                <h3>Pentesting</h3>
-                <p>Pruebas de intrusión controladas para fortalecer defensas</p>
+                <h3>🛡️ Pentesting</h3>
+                <p>Pruebas de intrusión controladas para fortalecer tus defensas</p>
             </div>
             <div class="servicio-card">
-                <h3>Consultoría 24/7</h3>
-                <p>Soporte continuo para mantener tu seguridad al máximo</p>
+                <h3>📞 Consultoría 24/7</h3>
+                <p>Soporte continuo para mantener tu seguridad al máximo nivel</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portafolio -->
+    <section id="portafolio" class="portafolio">
+        <h2>Proyectos Destacados</h2>
+        <div class="portafolio-grid">
+            <div class="proyecto-card">
+                <h3>🏦 Fintech Security</h3>
+                <p>Auditoría completa para empresa financiera con 50,000+ usuarios</p>
+                <span class="proyecto-tag">Completado</span>
+            </div>
+            <div class="proyecto-card">
+                <h3>🛒 E-commerce Protection</h3>
+                <p>Pentesting para plataforma de retail con 1M+ transacciones mensuales</p>
+                <span class="proyecto-tag">En progreso</span>
+            </div>
+            <div class="proyecto-card">
+                <h3>🏛️ Gobierno Digital</h3>
+                <p>Consultoría de seguridad para institución gubernamental</p>
+                <span class="proyecto-tag">Completado</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="contacto">
+        <h2>Contacto</h2>
+        <div class="contacto-grid">
+            <div class="contacto-info">
+                <h3>📧 ¿Listo para proteger tu negocio?</h3>
+                <p>Email: contacto@mxfalcon.com</p>
+                <p>Tel: +52 55 1234 5678</p>
+                <p>📍 CDMX, México</p>
+            </div>
+            <div class="contacto-form">
+                <input type="text" placeholder="Tu nombre">
+                <input type="email" placeholder="Tu email">
+                <textarea placeholder="Tu mensaje"></textarea>
+                <button class="cta-button">Enviar Mensaje</button>
             </div>
         </div>
     </section>
 
     <!-- Chat Integrado -->
     <div class="chat-container">
-        <button class="chat-toggle" onclick="toggleChat()">💬 Chat</button>
+        <button class="chat-toggle" onclick="toggleChat()">💬 Asistente</button>
         <div class="chat-window" id="chatWindow">
             <div class="chat-header">
-                <h3>Asistente MxFalcon</h3>
+                <h3>🔒 Asistente MxFalcon</h3>
                 <button onclick="toggleChat()">✕</button>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot-message">
-                    ¡Hola! Soy tu asistente de seguridad. ¿En qué puedo ayudarte?
+                    ¡Hola! Soy tu asistente de seguridad. ¿Necesitas ayuda con auditoría, pentesting o consultoría?
                 </div>
             </div>
             <div class="chat-input">
-                <input type="text" id="userInput" placeholder="Escribe tu pregunta...">
-                <button onclick="sendMessage()">Enviar</button>
+                <input type="text" id="userInput" placeholder="Escribe tu pregunta..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">▶</button>
             </div>
         </div>
     </div>
