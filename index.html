@@ -29,6 +29,8 @@
             });
         });
     </script>
+    
+    <link rel="stylesheet" href="estilo-min.css">
 
     <!-- Schema.org markup -->
     <script type="application/ld+json">
@@ -149,7 +151,21 @@
                         <li>Recomendaciones inmediatas</li>
                         <li>Respuesta en 24 horas</li>
                     </ul>
-                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=500" class="btn btn-primary" target="_blank" onclick="gtag('event', 'purchase', {value: 500, currency: 'MXN', transaction_id: 'consultoria_express_'+Date.now()})">Contratar Ahora - $500 MXN</a>
+                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=500" 
+                       class="btn btn-primary" 
+                       target="_blank"
+                       onclick="gtag('event', 'begin_checkout', {
+                         'currency': 'MXN',
+                         'value': 500,
+                         'items': [{
+                           'item_id': 'consultoria_express',
+                           'item_name': 'Consultoría Express',
+                           'price': 500,
+                           'quantity': 1
+                         }]
+                       })">
+                       🛡️ Contratar Ahora - $500 MXN
+                    </a>
                 </div>
 
                 <div class="service-card">
@@ -161,7 +177,21 @@
                         <li>Reporte detallado</li>
                         <li>Solución de problemas críticos</li>
                     </ul>
-                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=1500" class="btn btn-primary" target="_blank" onclick="gtag('event', 'purchase', {value: 1500, currency: 'MXN', transaction_id: 'pentesting_'+Date.now()})">Contratar Ahora - $1,500 MXN</a>
+                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=1500" 
+                       class="btn btn-primary" 
+                       target="_blank"
+                       onclick="gtag('event', 'begin_checkout', {
+                         'currency': 'MXN',
+                         'value': 1500,
+                         'items': [{
+                           'item_id': 'pentesting_basico',
+                           'item_name': 'Pentesting Básico',
+                           'price': 1500,
+                           'quantity': 1
+                         }]
+                       })">
+                       🔍 Contratar Ahora - $1,500 MXN
+                    </a>
                 </div>
 
                 <div class="service-card">
@@ -173,7 +203,21 @@
                         <li>Detección de backdoors</li>
                         <li>Mejores prácticas de coding</li>
                     </ul>
-                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=2000" class="btn btn-primary" target="_blank" onclick="gtag('event', 'purchase', {value: 2000, currency: 'MXN', transaction_id: 'auditoria_'+Date.now()})">Contratar Ahora - $2,000 MXN</a>
+                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=2000" 
+                       class="btn btn-primary" 
+                       target="_blank"
+                       onclick="gtag('event', 'begin_checkout', {
+                         'currency': 'MXN',
+                         'value': 2000,
+                         'items': [{
+                           'item_id': 'auditoria_codigo',
+                           'item_name': 'Auditoría de Código',
+                           'price': 2000,
+                           'quantity': 1
+                         }]
+                       })">
+                       💻 Contratar Ahora - $2,000 MXN
+                    </a>
                 </div>
 
                 <div class="service-card">
