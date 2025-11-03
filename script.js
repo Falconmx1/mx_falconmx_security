@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
 
-    // Formulario de contacto
+    // Formulario de contacto MEJORADO
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
@@ -80,10 +80,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = formData.get('email');
             const message = formData.get('message');
             
-            // Simular envío
-            console.log('📧 Enviando mensaje:', { name, email, message });
-            alert('✅ Mensaje enviado. Te contactaré en menos de 24 horas.\n\n📧 Email: ' + email + '\n👤 Nombre: ' + name);
-            this.reset();
+            // Envío REAL por email
+            const mailtoLink = `mailto:mariofalcon030901@gmail.com?subject=Consulta de ${name}&body=Nombre: ${name}%0AEmail: ${email}%0A%0AMensaje:%0A${message}`;
+            
+            window.location.href = mailtoLink;
+            
+            console.log('📧 Email enviado:', { name, email, message });
+            
+            // Mensaje de confirmación
+            setTimeout(() => {
+                alert('✅ Mensaje listo para enviar. Revisa tu cliente de email.');
+                this.reset();
+            }, 1000);
         });
     }
 
