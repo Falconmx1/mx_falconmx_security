@@ -46,15 +46,23 @@ const observer = new IntersectionObserver((entries) => {
 
 // Inicializar cuando cargue la página
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Inicializando efectos...');
+    
     // Efecto de escritura en el título
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
         const originalText = "Mario Alberto Falcón Hernández";
+        console.log('🎯 Activando efecto typing...');
         typeWriter(heroTitle, originalText, 80);
+    } else {
+        console.log('❌ No se encontró .hero-title');
     }
     
     // Configurar elementos para animaciones de scroll
-    document.querySelectorAll('.service-card, .testimonial-card, .about-content').forEach(el => {
+    const animatedElements = document.querySelectorAll('.service-card, .testimonial-card, .about-content');
+    console.log(`🎯 Encontrados ${animatedElements.length} elementos para animar`);
+    
+    animatedElements.forEach(el => {
         el.style.opacity = "0";
         el.style.transform = "translateY(30px)";
         el.style.transition = "all 0.6s ease-out";
@@ -67,17 +75,23 @@ document.addEventListener('DOMContentLoaded', function() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const message = formData.get('message');
+            
             // Simular envío
-            alert('✅ Mensaje enviado. Te contactaré en menos de 24 horas.');
+            console.log('📧 Enviando mensaje:', { name, email, message });
+            alert('✅ Mensaje enviado. Te contactaré en menos de 24 horas.\n\n📧 Email: ' + email + '\n👤 Nombre: ' + name);
             this.reset();
         });
     }
 
-    // Efecto de glitch aleatorio en el título
+    // Efecto de glitch aleatorio en títulos
     setInterval(() => {
         const titles = document.querySelectorAll('.section-title, .hero-title');
         titles.forEach(title => {
-            if (Math.random() > 0.7) {
+            if (Math.random() > 0.8) {
                 title.style.textShadow = '0 0 20px #ff0000';
                 setTimeout(() => {
                     title.style.textShadow = '0 0 20px #00ff41';
@@ -88,8 +102,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Contador de estadísticas
     const stats = document.querySelectorAll('.stat-number');
+    console.log(`📊 Animando ${stats.length} estadísticas`);
+    
     stats.forEach(stat => {
-        const target = parseInt(stat.textContent);
+        const originalText = stat.textContent;
+        const target = parseInt(originalText.replace('+', ''));
         const duration = 2000;
         const step = target / (duration / 16);
         let current = 0;
@@ -97,30 +114,39 @@ document.addEventListener('DOMContentLoaded', function() {
         const timer = setInterval(() => {
             current += step;
             if (current >= target) {
-                stat.textContent = target + (stat.textContent.includes('+') ? '+' : '');
+                stat.textContent = originalText;
                 clearInterval(timer);
             } else {
-                stat.textContent = Math.floor(current) + (stat.textContent.includes('+') ? '+' : '');
+                stat.textContent = Math.floor(current) + (originalText.includes('+') ? '+' : '');
             }
         }, 16);
     });
+
+    // Inicializar partículas Matrix
+    createMatrixParticles();
 });
 
-// Efecto de partículas Matrix (simple)
+// Efecto de partículas Matrix
 function createMatrixParticles() {
     const matrixBg = document.querySelector('.matrix-bg');
-    if (!matrixBg) return;
+    if (!matrixBg) {
+        console.log('❌ No se encontró .matrix-bg');
+        return;
+    }
 
-    for (let i = 0; i < 20; i++) {
+    console.log('🌌 Creando partículas Matrix...');
+    
+    for (let i = 0; i < 25; i++) {
         const particle = document.createElement('div');
         particle.style.position = 'fixed';
         particle.style.width = '2px';
-        particle.style.height = '20px';
+        particle.style.height = Math.random() * 30 + 10 + 'px';
         particle.style.background = 'linear-gradient(transparent, #00ff41, transparent)';
         particle.style.left = Math.random() * 100 + 'vw';
-        particle.style.top = '-30px';
+        particle.style.top = '-50px';
         particle.style.opacity = '0';
         particle.style.zIndex = '-1';
+        particle.style.borderRadius = '1px';
         matrixBg.appendChild(particle);
 
         // Animación
@@ -129,53 +155,83 @@ function createMatrixParticles() {
 }
 
 function animateParticle(particle) {
-    const speed = Math.random() * 3 + 1;
-    const delay = Math.random() * 5000;
+    const speed = Math.random() * 3 + 2;
+    const delay = Math.random() * 8000;
     
     setTimeout(() => {
-        particle.style.opacity = '0.7';
-        particle.style.transition = `top ${speed}s linear`;
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        particle.style.transition = `top ${speed}s linear, opacity ${speed}s linear`;
         particle.style.top = '100vh';
         
         setTimeout(() => {
             particle.style.opacity = '0';
-            particle.style.top = '-30px';
-            setTimeout(() => animateParticle(particle), 1000);
+            particle.style.top = '-50px';
+            setTimeout(() => animateParticle(particle), Math.random() * 2000 + 1000);
         }, speed * 1000);
     }, delay);
 }
 
-// Iniciar partículas cuando la página cargue
-document.addEventListener('DOMContentLoaded', createMatrixParticles);
-
-// Efecto de sonido al hacer hover en botones (opcional)
-document.querySelectorAll('.btn').forEach(btn => {
-    btn.addEventListener('mouseenter', function() {
-        // Simular sonido de terminal (podrías agregar un audio real después)
-        const context = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = context.createOscillator();
-        const gainNode = context.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(context.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        gainNode.gain.value = 0.1;
-        
-        oscillator.start();
-        setTimeout(() => {
-            oscillator.stop();
-        }, 100);
+// Efecto de sonido al hacer hover en botones
+document.querySelectorAll('.btn, .service-card, .whatsapp-btn').forEach(element => {
+    element.addEventListener('mouseenter', function() {
+        // Crear sonido de terminal (beep)
+        try {
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = context.createOscillator();
+            const gainNode = context.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(context.destination);
+            
+            oscillator.frequency.value = 600 + Math.random() * 400;
+            oscillator.type = 'sine';
+            gainNode.gain.value = 0.05;
+            
+            oscillator.start();
+            setTimeout(() => {
+                oscillator.stop();
+            }, 50);
+        } catch (error) {
+            console.log('🔇 Audio no soportado');
+        }
     });
 });
 
-// Detectar clicks en servicios y registrar en Analytics
-document.querySelectorAll('.service-card .btn').forEach(btn => {
+// Tracking de clicks en servicios
+document.querySelectorAll('.service-card .btn, .whatsapp-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-        const service = this.closest('.service-card').querySelector('h3').textContent;
-        console.log(`📊 Servicio clickeado: ${service}`);
-        // Aquí integrarías Google Analytics
-        // gtag('event', 'service_click', { 'service_name': service });
+        let serviceName = 'General';
+        
+        if (this.classList.contains('whatsapp-btn')) {
+            serviceName = 'WhatsApp Consulta';
+        } else {
+            const serviceCard = this.closest('.service-card');
+            if (serviceCard) {
+                serviceName = serviceCard.querySelector('h3').textContent;
+            }
+        }
+        
+        console.log(`📊 Servicio clickeado: ${serviceName}`);
+        
+        // Google Analytics tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'service_click', {
+                'event_category': 'engagement',
+                'event_label': serviceName,
+                'value': 1
+            });
+        }
     });
 });
+
+// Efecto de parpadeo en consola
+console.log(`%c
+╔══════════════════════════════════╗
+║    FALCONMX SECURITY ACTIVADO    ║
+║                                  ║
+║    🚀 Sistemas: ONLINE           ║
+║    🔒 Seguridad: ACTIVADA        ║
+║    📊 Analytics: CONECTADO       ║
+║    💰 Pagos: LISTOS              ║
+╚══════════════════════════════════╝
+`, 'color: #00ff41; font-family: Courier; font-weight: bold;');
