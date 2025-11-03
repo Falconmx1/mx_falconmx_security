@@ -8,16 +8,27 @@
     <meta name="keywords" content="Mario Falcón, cybersecurity, pentesting, desarrollo seguro, full stack, React, Node.js, Python, seguridad informática">
     <meta name="author" content="Mario Alberto Falcón Hernández">
     
-    <!-- Google Analytics -->
+    <!-- Google Analytics Mejorado -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-03YX9G53W1');
+        gtag('config', 'G-03YX9G53W1', {
+            'page_title': document.title,
+            'page_location': window.location.href,
+            'page_path': window.location.pathname
+        });
+        
+        // Track page views manually
+        document.addEventListener('DOMContentLoaded', function() {
+            gtag('event', 'page_view', {
+                'page_title': document.title,
+                'page_location': window.location.href,
+                'page_path': window.location.pathname
+            });
+        });
     </script>
-    
-    <link rel="stylesheet" href="estilo.css">
 
     <!-- Schema.org markup -->
     <script type="application/ld+json">
