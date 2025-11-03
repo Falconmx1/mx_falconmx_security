@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+Sitemap: https://falconmx1.github.io/mx_falconmx_security/sitemap.xml
