@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Leads de Emergencia</title>
+    <style>
+        body { font-family: 'Courier New', monospace; background: #0a0a0a; color: #fff; }
+        .lead { background: #1a1a1a; padding: 15px; margin: 10px; border-left: 4px solid #ff0000; }
+        .converted { border-left-color: #00ff41; }
+    </style>
+</head>
+<body>
+    <h1>🚨 DASHBOARD LEADS URGENTES</h1>
+    <div id="leads-container"></div>
+    
+    <script>
+        // Aquí iría la conexión a base de datos o API
+        const leads = [
+            {empresa: "Restaurante La Parrilla", contacto: "+525551234567", estado: "nuevo", urgencia: "alta"},
+            {empresa: "Consultorio Dental Smile", contacto: "+525556789012", estado: "contactado", urgencia: "media"},
+            {empresa: "Inmobiliaria Casa Propia", contacto: "+525559876543", estado: "convertido", urgencia: "alta"}
+        ];
+
+        function displayLeads() {
+            const container = document.getElementById('leads-container');
+            leads.forEach(lead => {
+                const div = document.createElement('div');
+                div.className = `lead ${lead.estado === 'convertido' ? 'converted' : ''}`;
+                div.innerHTML = `
+                    <h3>${lead.empresa}</h3>
+                    <p>📞 ${lead.contacto} | 🚨 ${lead.urgencia} | 📊 ${lead.estado}</p>
+                    <a href="https://wa.me/${lead.contacto}?text=${encodeURIComponent(messages.urgent)}" target="_blank">Contactar</a>
+                `;
+                container.appendChild(div);
+            });
+        }
+        displayLeads();
+    </script>
+</body>
+</html>
