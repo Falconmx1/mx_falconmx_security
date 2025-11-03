@@ -8,7 +8,7 @@
     <meta name="keywords" content="Mario Falcón, cybersecurity, pentesting, desarrollo seguro, full stack, React, Node.js, Python, seguridad informática">
     <meta name="author" content="Mario Alberto Falcón Hernández">
     
-       <!-- Google Analytics -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -18,6 +18,49 @@
     </script>
     
     <link rel="stylesheet" href="estilo.css">
+
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mario Alberto Falcón Hernández",
+        "jobTitle": "Cybersecurity & Full Stack Developer",
+        "description": "Especialista en seguridad informática, pentesting y desarrollo seguro",
+        "email": "mailto:mariofalcon030901@gmail.com",
+        "telephone": "+52-561-855-4932",
+        "url": "https://falconmx1.github.io/mx_falconmx_security/",
+        "image": "https://falconmx1.github.io/mx_falconmx_security/og-image.jpg",
+        "sameAs": [
+            "https://github.com/Falconmx1",
+            "https://www.instagram.com/mxfalconmx/",
+            "https://g.dev/mxfalconmx",
+            "https://gitlab.com/mxfalconmx2001"
+        ],
+        "knowsAbout": [
+            "Cybersecurity",
+            "Pentesting", 
+            "Web Development",
+            "React",
+            "Node.js",
+            "Python",
+            "OWASP",
+            "Ethical Hacking",
+            "Secure Coding"
+        ],
+        "offers": {
+            "@type": "Offer",
+            "name": "Consultoría en Cybersecurity",
+            "description": "Servicios profesionales de seguridad informática y desarrollo seguro",
+            "areaServed": "Worldwide",
+            "availableChannel": {
+                "@type": "ServiceChannel",
+                "serviceUrl": "https://falconmx1.github.io/mx_falconmx_security/",
+                "servicePhone": "+52-561-855-4932"
+            }
+        }
+    }
+    </script>
 </head>
 <body>
     <div class="matrix-bg"></div>
@@ -32,7 +75,7 @@
                 <li class="nav-item"><a href="#home" class="nav-link">Inicio</a></li>
                 <li class="nav-item"><a href="#about" class="nav-link">Sobre Mí</a></li>
                 <li class="nav-item"><a href="#services" class="nav-link">Servicios</a></li>
-                <li class="nav-item"><a href="#projects" class="nav-link">Proyectos</a></li>
+                <li class="nav-item"><a href="#testimonials" class="nav-link">Testimonios</a></li>
                 <li class="nav-item"><a href="#contact" class="nav-link">Contacto</a></li>
             </ul>
         </div>
@@ -95,7 +138,7 @@
                         <li>Recomendaciones inmediatas</li>
                         <li>Respuesta en 24 horas</li>
                     </ul>
-                    <a href="https://paypal.me/mariofalcon030901/500" class="btn btn-primary" target="_blank">Contratar Ahora</a>
+                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=500" class="btn btn-primary" target="_blank" onclick="gtag('event', 'purchase', {value: 500, currency: 'MXN', transaction_id: 'consultoria_express_'+Date.now()})">Contratar Ahora - $500 MXN</a>
                 </div>
 
                 <div class="service-card">
@@ -107,7 +150,7 @@
                         <li>Reporte detallado</li>
                         <li>Solución de problemas críticos</li>
                     </ul>
-                    <a href="https://paypal.me/mariofalcon030901/1500" class="btn btn-primary" target="_blank">Contratar Ahora</a>
+                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=1500" class="btn btn-primary" target="_blank" onclick="gtag('event', 'purchase', {value: 1500, currency: 'MXN', transaction_id: 'pentesting_'+Date.now()})">Contratar Ahora - $1,500 MXN</a>
                 </div>
 
                 <div class="service-card">
@@ -119,7 +162,7 @@
                         <li>Detección de backdoors</li>
                         <li>Mejores prácticas de coding</li>
                     </ul>
-                    <a href="https://paypal.me/mariofalcon030901/2000" class="btn btn-primary" target="_blank">Contratar Ahora</a>
+                    <a href="https://www.paypal.com/paypalme/mariofalcon030901?amount=2000" class="btn btn-primary" target="_blank" onclick="gtag('event', 'purchase', {value: 2000, currency: 'MXN', transaction_id: 'auditoria_'+Date.now()})">Contratar Ahora - $2,000 MXN</a>
                 </div>
 
                 <div class="service-card">
@@ -131,7 +174,7 @@
                         <li>Proyectos prácticos</li>
                         <li>Material incluido</li>
                     </ul>
-                    <a href="https://wa.me/525618554932?text=Hola,%20quiero%20agendar%20una%20mentoría" class="btn btn-secondary" target="_blank">Agendar por WhatsApp</a>
+                    <a href="https://wa.me/525618554932?text=Hola%20Mario,%20quiero%20agendar%20una%20mentoría%20de%20cybersecurity" class="btn btn-secondary" target="_blank">Agendar por WhatsApp</a>
                 </div>
             </div>
         </div>
@@ -223,8 +266,7 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
-        <!-- WhatsApp Floating Button -->
+    <!-- WhatsApp Floating Button -->
     <div class="whatsapp-float">
         <a href="https://wa.me/525618554932?text=Hola%20Mario,%20vi%20tu%20portafolio%20y%20me%20interesan%20tus%20servicios%20de%20cybersecurity" 
            target="_blank" 
@@ -232,5 +274,7 @@
            📱 WhatsApp
         </a>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
