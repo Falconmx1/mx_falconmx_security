@@ -1,7 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="es-MX">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Leads de Emergencia</title>
+    
+    <!-- Google Tags Unificadas -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-03YX9G53W1');
+        gtag('config', 'AW-17640302689');
+    </script>
+
     <style>
         body { font-family: 'Courier New', monospace; background: #0a0a0a; color: #fff; }
         .lead { background: #1a1a1a; padding: 15px; margin: 10px; border-left: 4px solid #ff0000; }
@@ -28,7 +41,7 @@
                 div.innerHTML = `
                     <h3>${lead.empresa}</h3>
                     <p>📞 ${lead.contacto} | 🚨 ${lead.urgencia} | 📊 ${lead.estado}</p>
-                    <a href="https://wa.me/${lead.contacto}?text=${encodeURIComponent(messages.urgent)}" target="_blank">Contactar</a>
+                    <a href="https://wa.me/${lead.contacto}?text=${encodeURIComponent('Hola, vimos que solicitaste ayuda urgente en cybersecurity. ¿En qué podemos ayudarte?')}" target="_blank">Contactar</a>
                 `;
                 container.appendChild(div);
             });
