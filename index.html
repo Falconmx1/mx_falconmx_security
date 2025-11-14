@@ -14,56 +14,140 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        
-        // Configurar Google Analytics
         gtag('config', 'G-03YX9G53W1');
-        
-        // Configurar Google Ads
         gtag('config', 'AW-17640302689');
     </script>
 
-    <link rel="stylesheet" href="estilo-min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Courier New', monospace; 
+            background: #0a0a0a; 
+            color: #fff; 
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { 
+            text-align: center; 
+            padding: 50px 20px; 
+            background: #1a1a1a; 
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+        .header h1 { 
+            color: #00ff41; 
+            font-size: 2.5rem; 
+            margin-bottom: 10px; 
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .service-card {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        .service-card h3 {
+            color: #00ff41;
+            margin-bottom: 15px;
+        }
+        .whatsapp-btn {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .contact-info {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mario Falcón</h1>
+            <p>Cybersecurity & Full Stack Developer</p>
+            <p>Especialista en seguridad informática, pentesting y desarrollo seguro</p>
+        </div>
 
-    <!-- Schema.org markup -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Mario Alberto Falcón Hernández",
-        "jobTitle": "Cybersecurity & Full Stack Developer",
-        "description": "Especialista en seguridad informática, pentesting y desarrollo seguro",
-        "email": "mailto:mariofalcon030901@gmail.com",
-        "telephone": "+52-561-855-4932",
-        "url": "https://falconmx1.github.io/mx_falconmx_security/",
-        "image": "https://falconmx1.github.io/mx_falconmx_security/og-image.jpg",
-        "sameAs": [
-            "https://github.com/Falconmx1",
-            "https://www.instagram.com/mxfalconmx/",
-            "https://g.dev/mxfalconmx",
-            "https://gitlab.com/mxfalconmx2001"
-        ],
-        "knowsAbout": [
-            "Cybersecurity",
-            "Pentesting", 
-            "Web Development",
-            "React",
-            "Node.js",
-            "Python",
-            "OWASP",
-            "Ethical Hacking",
-            "Secure Coding"
-        ],
-        "offers": {
-            "@type": "Offer",
-            "name": "Consultoría en Cybersecurity",
-            "description": "Servicios profesionales de seguridad informática y desarrollo seguro",
-            "areaServed": "Worldwide",
-            "availableChannel": {
-                "@type": "ServiceChannel",
-                "serviceUrl": "https://falconmx1.github.io/mx_falconmx_security/",
-                "servicePhone": "+52-561-855-4932"
+        <div class="contact-info">
+            <h2>📞 Contacto Directo</h2>
+            <p><strong>WhatsApp:</strong> +52 561 855 4932</p>
+            <p><strong>Email:</strong> mariofalcon030901@gmail.com</p>
+            <a href="https://wa.me/525618554932" class="whatsapp-btn" target="_blank">
+                📱 Contactar por WhatsApp
+            </a>
+        </div>
+
+        <h2 style="text-align: center; margin: 40px 0; color: #00ff41;">Servicios Profesionales</h2>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>🚨 Emergencia Cybersecurity</h3>
+                <p>Solución inmediata para sitios hackeados</p>
+                <p><strong>$3,000 MXN</strong></p>
+                <a href="landing-urgencias.html" class="whatsapp-btn">Ver Más</a>
+            </div>
+            <div class="service-card">
+                <h3>🛡️ Protección Activa</h3>
+                <p>Suscripción mensual de seguridad</p>
+                <p><strong>$800 MXN/mes</strong></p>
+            </div>
+            <div class="service-card">
+                <h3>📊 Auditorías Masivas</h3>
+                <p>Paquete 5 sitios web</p>
+                <p><strong>$5,000 MXN</strong></p>
+            </div>
+            <div class="service-card">
+                <h3>🎓 Curso Express</h3>
+                <p>Cybersecurity para emprendedores</p>
+                <p><strong>$1,500 MXN</strong></p>
+            </div>
+        </div>
+
+        <!-- Schema.org markup -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Mario Alberto Falcón Hernández",
+            "jobTitle": "Cybersecurity & Full Stack Developer",
+            "description": "Especialista en seguridad informática, pentesting y desarrollo seguro",
+            "email": "mailto:mariofalcon030901@gmail.com",
+            "telephone": "+52-561-855-4932",
+            "url": "https://falconmx1.github.io/mx_falconmx_security/",
+            "sameAs": [
+                "https://github.com/Falconmx1",
+                "https://www.instagram.com/mxfalconmx/",
+                "https://g.dev/mxfalconmx",
+                "https://gitlab.com/mxfalconmx2001"
+            ],
+            "knowsAbout": ["Cybersecurity", "Pentesting", "Web Development", "React", "Node.js", "Python"],
+            "offers": {
+                "@type": "Offer",
+                "name": "Consultoría en Cybersecurity",
+                "description": "Servicios profesionales de seguridad informática",
+                "areaServed": "Worldwide",
+                "availableChannel": {
+                    "@type": "ServiceChannel",
+                    "serviceUrl": "https://falconmx1.github.io/mx_falconmx_security/",
+                    "servicePhone": "+52-561-855-4932"
+                }
             }
         }
-    }
-    </script>
-</head>
+        </script>
+    </div>
+</body>
+</html>
