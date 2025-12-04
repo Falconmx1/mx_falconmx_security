@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mario Falcón - Cybersecurity & Full Stack Developer</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- ← ESTA LÍNEA NUEVA -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Meta para redes sociales -->
+    <meta property="og:title" content="Mario Falcón - Cybersecurity & Full Stack Developer">
+    <meta property="og:description" content="Especialista en seguridad informática, pentesting y desarrollo seguro. Consultoría profesional.">
+    <meta property="og:image" content="https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png">
+    <meta property="og:url" content="https://falconmx1.github.io/mx_falconmx_security/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Mario Falcón - Cybersecurity">
+    <meta name="twitter:description" content="Especialista en seguridad informática y desarrollo seguro">
+    
     <meta name="description" content="Mario Alberto Falcón Hernández - Especialista en Cybersecurity y Desarrollo Full Stack. Consultoría en seguridad informática, pentesting y desarrollo seguro.">
     <meta name="keywords" content="Mario Falcón, cybersecurity, pentesting, desarrollo seguro, full stack, React, Node.js, Python, seguridad informática">
     <meta name="author" content="Mario Alberto Falcón Hernández">
@@ -118,6 +129,53 @@
             </div>
         </div>
 
+        <!-- FORMULARIO DE CONTACTO -->
+        <section style="background: #1a1a1a; padding: 40px; border-radius: 10px; margin: 50px 0;">
+          <h2 style="color: #00ff41; text-align: center; margin-bottom: 30px;">📧 Contacto Profesional</h2>
+          <form action="https://formspree.io/f/xvgeqowg" method="POST" style="max-width: 600px; margin: 0 auto;">
+            <input type="hidden" name="_subject" value="Nuevo contacto profesional - Mario Falcón">
+            
+            <div style="margin-bottom: 20px;">
+              <input type="text" name="nombre" placeholder="Nombre completo" required 
+                     style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+              <input type="email" name="email" placeholder="Correo electrónico" required 
+                     style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+              <input type="tel" name="telefono" placeholder="Teléfono (opcional)" 
+                     style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+              <select name="servicio" required 
+                      style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
+                <option value="" disabled selected>¿Qué servicio te interesa?</option>
+                <option value="emergencia">🚨 Emergencia Cybersecurity</option>
+                <option value="proteccion">🛡️ Protección Activa</option>
+                <option value="auditoria">📊 Auditorías Masivas</option>
+                <option value="curso">🎓 Curso Express</option>
+                <option value="otro">Otro servicio</option>
+              </select>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <textarea name="mensaje" placeholder="Describe tu proyecto o consulta..." rows="4" required 
+                        style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px; resize: vertical;"></textarea>
+            </div>
+            
+            <button type="submit" 
+                    style="background: #00ff41; color: black; border: none; padding: 15px 30px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px;">
+              📨 Enviar Consulta
+            </button>
+            
+            <input type="text" name="_gotcha" style="display:none;">
+          </form>
+        </section>
+
         <!-- Schema.org markup -->
         <script type="application/ld+json">
         {
@@ -150,5 +208,30 @@
         }
         </script>
     </div>
+
+    <!-- WhatsApp Flotante -->
+    <a href="https://wa.me/525618554932" class="whatsapp-float" target="_blank" title="Contactar por WhatsApp">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="50">
+    </a>
+    <style>
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: #25D366;
+      border-radius: 50%;
+      padding: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+    .whatsapp-float img {
+      display: block;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+    }
+    </style>
 </body>
 </html>
