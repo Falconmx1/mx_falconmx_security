@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte y Tickets - FalconMX Security</title>
+    <style>
+        :root {
+            --primary-dark: #0a192f;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --warning-orange: #f59e0b;
+            --alert-red: #ef4444;
+            --text-light: #f8fafc;
+            --card-bg: #1e293b;
+        }
+        body { font-family: sans-serif; background: var(--primary-dark); color: var(--text-light); padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .ticket-card { 
+            background: var(--card-bg); 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 8px; 
+            border-left: 4px solid var(--accent-cyan);
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .status-open { background: rgba(245, 158, 11, 0.2); color: var(--warning-orange); }
+        .status-in-progress { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+        .status-resolved { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: var(--accent-cyan);">🎫 Sistema de Soporte</h1>
+        <p style="color: #94a3b8;">Gestiona tus consultas y problemas técnicos.</p>
+        
+        <!-- Botón para nuevo ticket -->
+        <div style="text-align: center; margin: 30px 0;">
+            <button onclick="showNewTicketForm()" style="padding: 15px 30px; background: var(--accent-cyan); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                ✨ Crear nuevo ticket
+            </button>
+        </div>
+        
+        <!-- Formulario nuevo ticket (inicialmente oculto) -->
+        <div id="newTicketForm" style="display: none; background: var(--card-bg); padding: 30px; border-radius: 12px; margin: 30px 0;">
+            <h3>📝 Nuevo ticket de soporte</h3>
+            <form id="ticketForm">
+                <input type="text" placeholder="Asunto del ticket" required style="width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                
+                <select style="width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                    <option value="" disabled selected>Categoría</option>
+                    <option value="emergencia">🚨 Emergencia técnica</option>
+                    <option value="consulta">❓ Consulta general</option>
+                    <option value="facturacion">💰 Facturación</option>
+                    <option value="reporte">🐛 Reporte de bug</option>
+                </select>
+                
+                <textarea placeholder="Describe tu problema en detalle..." rows="5" required style="width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;"></textarea>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" style="flex: 1; padding: 15px; background: var(--accent-cyan); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                        🚀 Enviar ticket
+                    </button>
+                    <button type="button" onclick="hideNewTicketForm()" style="flex: 1; padding: 15px; background: transparent; color: var(--accent-cyan); border: 2px solid var(--accent-cyan); border-radius: 6px; font-weight: bold; cursor: pointer;">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Lista de tickets -->
+        <h2>Tus tickets</h2>
+        <div id="ticketsList">
+            <!-- Tickets se cargarán aquí -->
+        </div>
+    </div>
+
+    <script>
+        // Datos de ejemplo
+        const tickets = [
+            { id: 'TKT-001', asunto: 'Problema con firewall', categoria: 'emergencia', estado: 'resolved', fecha: '2024-01-15', ultimaActividad: 'Resuelto por Mario Falcón' },
+            { id: 'TKT-002', asunto: 'Consulta sobre auditoría', categoria: 'consulta', estado: 'in-progress', fecha: '2024-01-16', ultimaActividad: 'En revisión' },
+            { id: 'TKT-003', asunto: 'Facturación incorrecta', categoria: 'facturacion', estado: 'open', fecha: '2024-01-17', ultimaActividad: 'Esperando información' }
+        ];
+        
+        function showNewTicketForm() {
+            document.getElementById('newTicketForm').style.display = 'block';
+        }
+        
+        function hideNewTicketForm() {
+            document.getElementById('newTicketForm').style.display = 'none';
+        }
+        
+        function renderTickets() {
+            const container = document.getElementById('ticketsList');
+            container.innerHTML = '';
+            
+            tickets.forEach(ticket => {
+                const card = document.createElement('div');
+                card.className = 'ticket-card';
+                
+                let statusClass = '';
+                let statusText = '';
+                
+                switch(ticket.estado) {
+                    case 'open': statusClass = 'status-open'; statusText = 'Abierto'; break;
+                    case 'in-progress': statusClass = 'status-in-progress'; statusText = 'En progreso'; break;
+                    case 'resolved': statusClass = 'status-resolved'; statusText = 'Resuelto'; break;
+                }
+                
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div>
+                            <strong style="color: var(--accent-cyan);">${ticket.id}</strong>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        <small style="color: #94a3b8;">${ticket.fecha}</small>
+                    </div>
+                    <h3 style="margin: 10px 0;">${ticket.asunto}</h3>
+                    <p style="color: #94a3b8; margin: 5px 0;">📂 ${ticket.categoria}</p>
+                    <p style="color: #94a3b8; margin: 5px 0; font-size: 0.9rem;">🔄 ${ticket.ultimaActividad}</p>
+                    <button onclick="viewTicket('${ticket.id}')" style="margin-top: 10px; padding: 8px 15px; background: transparent; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); border-radius: 4px; cursor: pointer;">
+                        Ver detalles
+                    </button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function viewTicket(id) {
+            alert(`Ver detalles del ticket ${id}\n\nEn una implementación real, esto cargaría una vista detallada del ticket.`);
+        }
+        
+        // Manejar nuevo ticket
+        document.getElementById('ticketForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newTicket = {
+                id: 'TKT-' + (tickets.length + 1).toString().padStart(3, '0'),
+                asunto: this[0].value,
+                categoria: this[1].value,
+                estado: 'open',
+                fecha: new Date().toISOString().split('T')[0],
+                ultimaActividad: 'Recién creado'
+            };
+            
+            tickets.unshift(newTicket);
+            renderTickets();
+            hideNewTicketForm();
+            this.reset();
+            
+            alert(`✅ Ticket ${newTicket.id} creado exitosamente\n\nNuestro equipo se contactará contigo pronto.`);
+        });
+        
+        // Renderizar tickets iniciales
+        renderTickets();
+    </script>
+</body>
+</html>
