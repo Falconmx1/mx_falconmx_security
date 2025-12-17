@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos Gratuitos - FalconMX Security | Herramientas de Ciberseguridad</title>
+    <style>
+        :root {
+            --primary-dark: #0a192f;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --text-light: #f8fafc;
+            --card-bg: #1e293b;
+        }
+        body { font-family: sans-serif; background: var(--primary-dark); color: var(--text-light); padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .resources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 40px 0; }
+        .resource-card { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 25px; 
+            border: 1px solid #334155;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .resource-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .resource-icon { 
+            font-size: 3rem; 
+            margin-bottom: 20px; 
+            display: inline-block;
+        }
+        .download-btn { 
+            background: linear-gradient(135deg, var(--accent-cyan), #1e40af); 
+            color: white; 
+            padding: 12px 25px; 
+            border-radius: 6px; 
+            text-decoration: none; 
+            font-weight: 600; 
+            display: inline-block; 
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+        .download-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: var(--accent-cyan);">🛠️ Recursos Gratuitos de Ciberseguridad</h1>
+        <p style="color: #94a3b8;">Herramientas, plantillas y guías para proteger tu negocio sin costo.</p>
+        
+        <div class="resources-grid">
+            <!-- Recurso 1 -->
+            <div class="resource-card">
+                <div class="resource-icon">📋</div>
+                <h3>Checklist de Seguridad Básica</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Lista de verificación con 25 puntos críticos para evaluar la postura de seguridad de tu empresa.</p>
+                <div style="margin: 20px 0;">
+                    <span style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green); padding: 3px 10px; border-radius: 12px; font-size: 0.8rem;">PDF + Excel</span>
+                    <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; margin-left: 5px;">Gratuito</span>
+                </div>
+                <a href="checklist-seguridad-basica.pdf" class="download-btn" download>⬇️ Descargar Checklist</a>
+            </div>
+            
+            <!-- Recurso 2 -->
+            <div class="resource-card">
+                <div class="resource-icon">📄</div>
+                <h3>Plantilla de Política de Seguridad</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Documento base para crear políticas de seguridad informática adaptadas a tu organización.</p>
+                <div style="margin: 20px 0;">
+                    <span style="background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem;">Word + PDF</span>
+                    <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; margin-left: 5px;">Personalizable</span>
+                </div>
+                <a href="plantilla-politica-seguridad.docx" class="download-btn" download>⬇️ Descargar Plantilla</a>
+            </div>
+            
+            <!-- Recurso 3 -->
+            <div class="resource-card">
+                <div class="resource-icon">📖</div>
+                <h3>Guía Rápida OWASP Top 10</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Resumen ejecutivo de las 10 vulnerabilidades web más críticas con ejemplos y soluciones.</p>
+                <div style="margin: 20px 0;">
+                    <span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem;">PDF</span>
+                    <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; margin-left: 5px;">15 páginas</span>
+                </div>
+                <a href="guia-rapida-owasp.pdf" class="download-btn" download>⬇️ Descargar Guía</a>
+            </div>
+            
+            <!-- Recurso 4 -->
+            <div class="resource-card">
+                <div class="resource-icon">🧮</div>
+                <h3>Calculadora de Riesgos Interactiva</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Herramienta web para evaluar riesgos de seguridad específicos de tu empresa.</p>
+                <div style="margin: 20px 0;">
+                    <span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem;">HTML/JS</span>
+                    <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; margin-left: 5px;">Interactiva</span>
+                </div>
+                <a href="calculadora-riesgos.html" class="download-btn">🖥️ Usar Calculadora</a>
+            </div>
+            
+            <!-- Recurso 5 -->
+            <div class="resource-card">
+                <div class="resource-icon">🎬</div>
+                <h3>Video: Introducción a Ciberseguridad</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Grabación de webinar introductorio (45 min) sobre conceptos básicos de seguridad informática.</p>
+                <div style="margin: 20px 0;">
+                    <span style="background: rgba(59, 130, 246, 0.2); color: #3b82f6; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem;">MP4</span>
+                    <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; margin-left: 5px;">45 minutos</span>
+                </div>
+                <a href="video-introduccion.mp4" class="download-btn" download>⬇️ Descargar Video</a>
+            </div>
+            
+            <!-- Newsletter -->
+            <div class="resource-card" style="background: linear-gradient(135deg, #1e40af, #0a192f); grid-column: span 2;">
+                <h3 style="color: white;">📬 ¿Quieres más recursos como estos?</h3>
+                <p style="color: #cbd5e1;">Suscríbete a nuestro newsletter y recibe nuevos recursos gratuitos cada mes.</p>
+                
+                <form style="max-width: 400px; margin: 20px auto;">
+                    <input type="email" placeholder="tu@empresa.com" required 
+                           style="width: 100%; padding: 12px; border-radius: 6px; border: none; margin-bottom: 10px; background: rgba(255,255,255,0.9);">
+                    <button type="submit" 
+                            style="width: 100%; padding: 12px; background: var(--accent-cyan); color: white; border: none; border-radius: 6px; font-weight: 600;">
+                            Suscribirme y recibir recursos
+                    </button>
+                </form>
+                
+                <p style="color: #94a3b8; font-size: 0.8rem; margin-top: 15px;">
+                    🔒 Respetamos tu privacidad. Sin spam. Puedes darte de baja cuando quieras.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
