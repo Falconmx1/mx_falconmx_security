@@ -27,6 +27,47 @@
     <meta name="twitter:description" content="Soluciones integrales de seguridad informática para empresas mexicanas">
     <meta name="twitter:image" content="https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png">
     
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "FalconMX Security",
+        "description": "Consultoría especializada en ciberseguridad ética y desarrollo seguro",
+        "url": "https://falconmx1.github.io/mx_falconmx_security/",
+        "logo": "https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png",
+        "telephone": "+52-55-6126-4662",
+        "email": "mariofalcon030901@gmail.com",
+        "sameAs": [
+            "https://github.com/Falconmx1",
+            "https://gitlab.com/mxfalconmx2001",
+            "https://g.dev/mxfalconmx",
+            "https://www.instagram.com/mxfalconmx/"
+        ],
+        "priceRange": "$$",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "MX",
+            "addressRegion": "Ciudad de México"
+        },
+        "serviceType": [
+            "Pentesting Ético",
+            "Auditoría de Seguridad",
+            "Desarrollo Seguro",
+            "Respuesta a Incidentes",
+            "Capacitación en Ciberseguridad"
+        ],
+        "ethicsPolicy": "https://falconmx1.github.io/mx_falconmx_security/etica.html",
+        "areaServed": ["MX", "US", "ES", "CO", "AR"],
+        "founder": {
+            "@type": "Person",
+            "name": "Mario Alberto Falcón Hernández",
+            "jobTitle": "Cybersecurity Specialist & Full Stack Developer",
+            "knowsAbout": ["Cybersecurity", "Ethical Hacking", "Web Development", "Cloud Security", "DevSecOps"]
+        }
+    }
+    </script>
+    
     <!-- Google Analytics (Configuración Ética) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
     <script>
@@ -607,16 +648,23 @@
         .social-links {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
         }
         
         .social-link {
             color: var(--text-gray);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid transparent;
         }
         
         .social-link:hover {
             color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.3);
+            transform: translateY(-2px);
         }
         
         /* ========== WHATSAPP FLOTANTE ========== */
@@ -698,6 +746,10 @@
                 padding: 100px 20px 60px;
                 margin-top: 50px;
             }
+            
+            .social-links {
+                justify-content: center;
+            }
         }
         
         /* ========== MENÚ MÓVIL ========== */
@@ -708,6 +760,7 @@
             color: var(--text-light);
             font-size: 1.5rem;
             cursor: pointer;
+            padding: 5px;
         }
         
         @media (max-width: 768px) {
@@ -1175,9 +1228,18 @@
                     </div>
                     
                     <div class="social-links">
-                        <a href="#" class="social-link">LinkedIn</a>
-                        <a href="#" class="social-link">GitHub</a>
-                        <a href="#" class="social-link">Twitter</a>
+                        <a href="https://github.com/Falconmx1" class="social-link" target="_blank" rel="noopener noreferrer" title="GitHub - Falconmx1">
+                            <span style="margin-right: 5px;">🐙</span> GitHub
+                        </a>
+                        <a href="https://gitlab.com/mxfalconmx2001" class="social-link" target="_blank" rel="noopener noreferrer" title="GitLab - mxfalconmx2001">
+                            <span style="margin-right: 5px;">🦊</span> GitLab
+                        </a>
+                        <a href="https://g.dev/mxfalconmx" class="social-link" target="_blank" rel="noopener noreferrer" title="Google Developer - mxfalconmx">
+                            <span style="margin-right: 5px;">🔧</span> Google Dev
+                        </a>
+                        <a href="https://www.instagram.com/mxfalconmx/" class="social-link" target="_blank" rel="noopener noreferrer" title="Instagram - @mxfalconmx">
+                            <span style="margin-right: 5px;">📸</span> Instagram
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1188,6 +1250,7 @@
     <a href="https://wa.me/525561264662?text=¡Hola!%20Vengo%20de%20tu%20sitio%20web%20y%20me%20interesa%20consultar%20sobre%20tus%20servicios%20de%20ciberseguridad%20🛡️" 
        class="whatsapp-float" 
        target="_blank" 
+       rel="noopener noreferrer"
        title="Contactar por WhatsApp">
         <svg viewBox="0 0 32 32">
             <path d="M16 0C7.163 0 0 7.163 0 16c0 3.033.855 5.863 2.332 8.276L.512 31.488l7.212-1.82C10.137 31.145 12.967 32 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.942 22.892c-.402 1.132-2.007 2.073-3.277 2.345-.735.157-1.697.282-4.973-.602-3.785-1.017-6.207-4.507-6.397-4.737-.19-.23-1.545-2.032-1.545-3.877s.972-2.797 1.357-3.272c.385-.475.833-.595 1.112-.595.285 0 .57 0 .82.007.25.008.642-.098.997.73.355.827 1.212 2.865 1.317 3.072.105.207.175.475.052.73-.122.255-.175.415-.35.652-.175.237-.367.527-.525.707-.16.18-.327.38-.14.73.188.35.827 1.507 1.777 2.442 1.215 1.215 2.252 1.807 2.587 2.007.335.2.53.172.73-.105.2-.277.855-1.115 1.08-1.497.225-.382.45-.32.73-.18.28.14 1.767.93 2.072 1.102.305.172.508.257.585.402.077.145.077.842-.325 1.975z"/>
@@ -1278,6 +1341,15 @@
             } else {
                 nav.style.background = 'rgba(10, 25, 47, 0.95)';
                 nav.style.boxShadow = 'none';
+            }
+        });
+        
+        // Agregar current year al copyright
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyrightElement = document.querySelector('.copyright');
+            if (copyrightElement) {
+                const currentYear = new Date().getFullYear();
+                copyrightElement.innerHTML = copyrightElement.innerHTML.replace('2024', currentYear);
             }
         });
     </script>
