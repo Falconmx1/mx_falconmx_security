@@ -16,57 +16,16 @@
     <!-- Open Graph / Redes Sociales -->
     <meta property="og:title" content="FalconMX Security - Ciberseguridad Ética Profesional">
     <meta property="og:description" content="Protección avanzada para empresas y desarrolladores. Consultoría en seguridad informática con metodología ética.">
-    <meta property="og:image" content="https://falconmx1.github.io/mx_falconmx_security/assets/og-image.jpg">
+    <meta property="og:image" content="https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png">
     <meta property="og:url" content="https://falconmx1.github.io/mx_falconmx_security/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_MX">
     
     <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="FalconMX Security - Especialistas en Ciberseguridad">
     <meta name="twitter:description" content="Soluciones integrales de seguridad informática para empresas mexicanas">
-    <meta name="twitter:image" content="https://falconmx1.github.io/mx_falconmx_security/assets/twitter-card.jpg">
-    
-    <!-- Schema.org Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "FalconMX Security",
-        "description": "Consultoría especializada en ciberseguridad ética y desarrollo seguro",
-        "url": "https://falconmx1.github.io/mx_falconmx_security/",
-        "logo": "https://falconmx1.github.io/mx_falconmx_security/assets/logo.svg",
-        "telephone": "+52-55-6126-4662",
-        "email": "contacto@falconmxsecurity.com",
-        "priceRange": "$$",
-        "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "MX",
-            "addressRegion": "Ciudad de México"
-        },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": "19.4326",
-            "longitude": "-99.1332"
-        },
-        "openingHours": "Mo-Fr 09:00-18:00",
-        "serviceType": [
-            "Pentesting Ético",
-            "Auditoría de Seguridad",
-            "Desarrollo Seguro",
-            "Respuesta a Incidentes",
-            "Capacitación en Ciberseguridad"
-        ],
-        "ethicsPolicy": "https://falconmx1.github.io/mx_falconmx_security/etica.html",
-        "areaServed": ["MX", "US", "ES", "CO", "AR"],
-        "founder": {
-            "@type": "Person",
-            "name": "Mario Alberto Falcón Hernández",
-            "jobTitle": "Cybersecurity Specialist & Full Stack Developer",
-            "knowsAbout": ["Cybersecurity", "Ethical Hacking", "Web Development", "Cloud Security", "DevSecOps"]
-        }
-    }
-    </script>
+    <meta name="twitter:image" content="https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png">
     
     <!-- Google Analytics (Configuración Ética) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
@@ -540,7 +499,7 @@
                     <div class="contact-icon">✉️</div>
                     <div>
                         <h3 style="color: var(--text-light); margin-bottom: 5px;">Correo Electrónico</h3>
-                        <p style="color: var(--text-gray);">contacto@falconmxsecurity.com</p>
+                        <p style="color: var(--text-gray);">mariofalcon030901@gmail.com</p>
                     </div>
                 </div>
                 
@@ -689,8 +648,7 @@
                 <div class="form-group" style="background: rgba(6, 182, 212, 0.1); padding: 15px; border-radius: 8px; margin: 25px 0;">
                     <label style="display: flex; align-items: center; gap: 10px; color: var(--text-light);">
                         <input type="checkbox" name="privacidad" required style="width: 18px; height: 18px;">
-                        Acepto la <a href="privacidad.html" style="color: var(--accent-cyan);">Política de Privacidad</a> y el 
-                        <a href="etica.html" style="color: var(--accent-cyan);">Código Ético</a> de FalconMX Security
+                        Acepto la <a href="etica.html" style="color: var(--accent-cyan);">Política de Ética</a> de FalconMX Security
                     </label>
                 </div>
                 
@@ -713,7 +671,6 @@
                 
                 <div class="footer-links">
                     <a href="etica.html" title="Nuestro Código Ético">Ética Profesional</a>
-                    <a href="privacidad.html" title="Política de Privacidad">Privacidad</a>
                     <a href="#servicios" title="Nuestros Servicios">Servicios</a>
                     <a href="#contacto" title="Contacto">Contacto</a>
                 </div>
@@ -738,22 +695,25 @@
 
     <!-- ========== SCRIPT DEL CHATBOT ========== -->
     <script>
-        // Chatbot se cargará después de 5 segundos para no interferir con la experiencia inicial
+        // Cargar chatbot después de 3 segundos
         setTimeout(() => {
+            // Cargar CSS del chatbot
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'chatbot-styles.css';
+            document.head.appendChild(link);
+            
+            // Cargar JS del chatbot
             const script = document.createElement('script');
             script.src = 'chatbot-seguridad.js';
             script.async = true;
             document.body.appendChild(script);
             
-            const style = document.createElement('link');
-            style.rel = 'stylesheet';
-            style.href = 'chatbot-styles.css';
-            document.head.appendChild(style);
-        }, 5000);
+            console.log('Chatbot FalconMX Security cargado correctamente');
+        }, 3000);
         
         // Form submission handler
         document.getElementById('contact-form').addEventListener('submit', function(e) {
-            // Validación adicional
             const telefono = document.getElementById('telefono').value;
             if (!telefono.match(/^\+?[0-9\s\-\(\)]{10,}$/)) {
                 alert('Por favor ingresa un número de teléfono válido');
@@ -762,12 +722,13 @@
             }
             
             // Google Analytics event
-            gtag('event', 'contact_form_submit', {
-                'event_category': 'engagement',
-                'event_label': 'contact_form'
-            });
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'contact_form_submit', {
+                    'event_category': 'engagement',
+                    'event_label': 'contact_form'
+                });
+            }
             
-            // Mostrar mensaje de confirmación
             setTimeout(() => {
                 alert('✅ ¡Gracias! Tu consulta ha sido enviada. Un especialista se comunicará contigo en menos de 24 horas.');
             }, 500);
