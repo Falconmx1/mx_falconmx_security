@@ -3,50 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Leads de Emergencia</title>
-    
-    <!-- Google Tags Unificadas -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-03YX9G53W1');
-        gtag('config', 'AW-17640302689');
-    </script>
-
+    <title>Dashboard Cliente - FalconMX Security</title>
     <style>
-        body { font-family: 'Courier New', monospace; background: #0a0a0a; color: #fff; }
-        .lead { background: #1a1a1a; padding: 15px; margin: 10px; border-left: 4px solid #ff0000; }
-        .converted { border-left-color: #00ff41; }
+        :root {
+            --primary-dark: #0a192f;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --warning-orange: #f59e0b;
+            --text-light: #f8fafc;
+            --card-bg: #1e293b;
+        }
+        body { font-family: sans-serif; background: var(--primary-dark); color: var(--text-light); padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0; }
+        .stat-card { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 10px; 
+            border-top: 4px solid var(--accent-cyan);
+        }
+        .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--accent-cyan); margin: 10px 0; }
+        .project-card { 
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-green);
+        }
+        .progress-bar { 
+            height: 8px; 
+            background: #334155; 
+            border-radius: 4px; 
+            margin: 10px 0; 
+            overflow: hidden;
+        }
+        .progress-fill { 
+            height: 100%; 
+            background: var(--accent-cyan); 
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
-    <h1>🚨 DASHBOARD LEADS URGENTES</h1>
-    <div id="leads-container"></div>
-    
-    <script>
-        // Aquí iría la conexión a base de datos o API
-        const leads = [
-            {empresa: "Restaurante La Parrilla", contacto: "+525551234567", estado: "nuevo", urgencia: "alta"},
-            {empresa: "Consultorio Dental Smile", contacto: "+525556789012", estado: "contactado", urgencia: "media"},
-            {empresa: "Inmobiliaria Casa Propia", contacto: "+525559876543", estado: "convertido", urgencia: "alta"}
-        ];
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="color: var(--accent-cyan);">📊 Dashboard Cliente</h1>
+            <div style="color: #94a3b8;">Bienvenido, <strong style="color: var(--accent-cyan);">Cliente FalconMX</strong></div>
+        </div>
+        
+        <!-- Estadísticas rápidas -->
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div>🛡️ Proyectos Activos</div>
+                <div class="stat-value">3</div>
+                <div style="color: #94a3b8; font-size: 0.9rem;">+1 este mes</div>
+            </div>
+            
+            <div class="stat-card">
+                <div>✅ Tareas Completadas</div>
+                <div class="stat-value">42</div>
+                <div style="color: #94a3b8; font-size: 0.9rem;">85% de efectividad</div>
+            </div>
+            
+            <div class="stat-card">
+                <div>🚨 Incidentes este Mes</div>
+                <div class="stat-value">0</div>
+                <div style="color: #94a3b8; font-size: 0.9rem;">100% tiempo activo</div>
+            </div>
+            
+            <div class="stat-card">
+                <div>⏱️ Horas de Soporte</div>
+                <div class="stat-value">156h</div>
+                <div style="color: #94a3b8; font-size: 0.9rem;">Promedio respuesta: 15min</div>
+            </div>
+        </div>
+        
+        <!-- Proyectos activos -->
+        <h2 style="margin-top: 50px;">📋 Proyectos Activos</h2>
+        <div id="projectsList">
+            <!-- Proyectos se cargarán aquí -->
+        </div>
+        
+        <!-- Documentos y reportes -->
+        <h2 style="margin-top: 50px;">📄 Documentos Recientes</h2>
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <div style="font-size: 1.5rem;">📊</div>
+                    <div>
+                        <div style="font-weight: bold;">Reporte de Auditoría</div>
+                        <div style="color: #94a3b8; font-size: 0.9rem;">Actualizado: 15 Ene 2024</div>
+                    </div>
+                </div>
+                <button onclick="downloadDocument('auditoria')" style="width: 100%; padding: 10px; background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 6px; cursor: pointer;">
+                    ⬇️ Descargar PDF
+                </button>
+            </div>
+            
+            <div class="stat-card">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <div style="font-size: 1.5rem;">📋</div>
+                    <div>
+                        <div style="font-weight: bold;">Plan de Remediacón</div>
+                        <div style="color: #94a3b8; font-size: 0.9rem;">Actualizado: 10 Ene 2024</div>
+                    </div>
+                </div>
+                <button onclick="downloadDocument('plan')" style="width: 100%; padding: 10px; background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 6px; cursor: pointer;">
+                    ⬇️ Descargar PDF
+                </button>
+            </div>
+            
+            <div class="stat-card">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <div style="font-size: 1.5rem;">📈</div>
+                    <div>
+                        <div style="font-weight: bold;">Reporte Mensual</div>
+                        <div style="color: #94a3b8; font-size: 0.9rem;">Enero 2024</div>
+                    </div>
+                </div>
+                <button onclick="downloadDocument('mensual')" style="width: 100%; padding: 10px; background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 6px; cursor: pointer;">
+                    ⬇️ Descargar PDF
+                </button>
+            </div>
+        </div>
+        
+        <!-- Acciones rápidas -->
+        <h2 style="margin-top: 50px;">⚡ Acciones Rápidas</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+            <button onclick="location.href='calendario.html'" style="padding: 15px; background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border: 2px solid var(--accent-cyan); border-radius: 8px; cursor: pointer; font-weight: bold;">
+                📅 Agendar reunión
+            </button>
+            <button onclick="location.href='tickets.html'" style="padding: 15px; background: rgba(245, 158, 11, 0.1); color: var(--warning-orange); border: 2px solid var(--warning-orange); border-radius: 8px; cursor: pointer; font-weight: bold;">
+                🎫 Nuevo ticket
+            </button>
+            <button onclick="contactSupport()" style="padding: 15px; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 2px solid var(--accent-green); border-radius: 8px; cursor: pointer; font-weight: bold;">
+                💬 Soporte rápido
+            </button>
+            <button onclick="downloadReport()" style="padding: 15px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; border: 2px solid #8b5cf6; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                📊 Reporte completo
+            </button>
+        </div>
+    </div>
 
-        function displayLeads() {
-            const container = document.getElementById('leads-container');
-            leads.forEach(lead => {
-                const div = document.createElement('div');
-                div.className = `lead ${lead.estado === 'convertido' ? 'converted' : ''}`;
-                div.innerHTML = `
-                    <h3>${lead.empresa}</h3>
-                    <p>📞 ${lead.contacto} | 🚨 ${lead.urgencia} | 📊 ${lead.estado}</p>
-                    <a href="https://wa.me/${lead.contacto}?text=${encodeURIComponent('Hola, vimos que solicitaste ayuda urgente en cybersecurity. ¿En qué podemos ayudarte?')}" target="_blank">Contactar</a>
+    <script>
+        // Datos de proyectos
+        const projects = [
+            { id: 1, nombre: 'Auditoría de Seguridad FinTech', progreso: 100, estado: 'Completado', responsable: 'Mario Falcón', fechaFin: '2024-01-15' },
+            { id: 2, nombre: 'Hardening de Servidores E-commerce', progreso: 75, estado: 'En progreso', responsable: 'Equipo FalconMX', fechaFin: '2024-01-31' },
+            { id: 3, nombre: 'Capacitación en Ciberseguridad', progreso: 30, estado: 'Planificación', responsable: 'Mario Falcón', fechaFin: '2024-02-15' }
+        ];
+        
+        function renderProjects() {
+            const container = document.getElementById('projectsList');
+            container.innerHTML = '';
+            
+            projects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="margin: 0; color: var(--accent-cyan);">${project.nombre}</h3>
+                        <span style="padding: 5px 10px; background: ${project.estado === 'Completado' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)'}; color: ${project.estado === 'Completado' ? 'var(--accent-green)' : 'var(--warning-orange)'}; border-radius: 20px; font-size: 0.8rem;">
+                            ${project.estado}
+                        </span>
+                    </div>
+                    
+                    <div style="color: #94a3b8; margin: 10px 0;">
+                        👤 ${project.responsable} | 📅 ${project.fechaFin}
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${project.progreso}%"></div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span style="color: #94a3b8; font-size: 0.9rem;">Progreso</span>
+                        <span style="color: var(--accent-cyan); font-weight: bold;">${project.progreso}%</span>
+                    </div>
+                    
+                    <button onclick="viewProject(${project.id})" style="margin-top: 15px; padding: 8px 15px; background: transparent; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); border-radius: 4px; cursor: pointer;">
+                        Ver detalles
+                    </button>
                 `;
-                container.appendChild(div);
+                
+                container.appendChild(card);
             });
         }
-        displayLeads();
+        
+        function viewProject(id) {
+            const project = projects.find(p => p.id === id);
+            alert(`Detalles del proyecto:\n\nNombre: ${project.nombre}\nEstado: ${project.estado}\nProgreso: ${project.progreso}%\nResponsable: ${project.responsable}\nFecha fin: ${project.fechaFin}`);
+        }
+        
+        function downloadDocument(type) {
+            const documents = {
+                'auditoria': 'reporte-auditoria-completo.pdf',
+                'plan': 'plan-remediacion-detallado.pdf',
+                'mensual': 'reporte-mensual-enero-2024.pdf'
+            };
+            alert(`✅ Descargando: ${documents[type]}\n\nEn una implementación real, esto iniciaría la descarga del archivo.`);
+        }
+        
+        function contactSupport() {
+            window.open('https://wa.me/525561264662?text=Necesito%20soporte%20urgente%20desde%20el%20dashboard', '_blank');
+        }
+        
+        function downloadReport() {
+            alert('📊 Generando reporte completo...\n\nEsto incluye:\n• Estado de todos los proyectos\n• Métricas de seguridad\n• Reportes de incidentes\n• Próximas actividades\n\nEl reporte estará disponible en 2 minutos.');
+        }
+        
+        // Renderizar proyectos iniciales
+        renderProjects();
+        
+        // Simular actualización en tiempo real
+        setInterval(() => {
+            // En una implementación real, aquí se actualizarían datos desde el servidor
+            console.log('Actualizando datos del dashboard...');
+        }, 30000); // Cada 30 segundos
     </script>
 </body>
 </html>
