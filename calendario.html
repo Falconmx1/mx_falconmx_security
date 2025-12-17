@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Consulta - FalconMX Security</title>
+    <style>
+        :root {
+            --primary-dark: #0a192f;
+            --accent-cyan: #06b6d4;
+            --text-light: #f8fafc;
+            --card-bg: #1e293b;
+        }
+        body { font-family: sans-serif; background: var(--primary-dark); color: var(--text-light); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .calendar-wrapper { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            margin: 40px 0;
+            border: 1px solid #334155;
+        }
+        .time-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 20px 0; }
+        .time-slot { 
+            padding: 12px; 
+            background: rgba(6, 182, 212, 0.1); 
+            border: 1px solid rgba(6, 182, 212, 0.3); 
+            border-radius: 6px; 
+            text-align: center; 
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .time-slot:hover { background: rgba(6, 182, 212, 0.2); }
+        .time-slot.selected { background: var(--accent-cyan); color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: var(--accent-cyan);">📅 Agendar Consulta Gratuita</h1>
+        <p style="color: #94a3b8;">Selecciona una fecha y horario para tu consulta de 30 minutos.</p>
+        
+        <div class="calendar-wrapper">
+            <h3>🗓️ Selecciona una fecha</h3>
+            <input type="date" id="fecha" style="width: 100%; padding: 12px; margin: 15px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+            
+            <h3>⏰ Horarios disponibles</h3>
+            <div class="time-slots" id="timeSlots">
+                <!-- Los horarios se generarán con JavaScript -->
+            </div>
+            
+            <h3>📝 Información de contacto</h3>
+            <form id="bookingForm">
+                <input type="text" placeholder="Nombre completo" required style="width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                <input type="email" placeholder="Correo electrónico" required style="width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                <input type="tel" placeholder="Teléfono" required style="width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                <textarea placeholder="Breve descripción de tu consulta" rows="3" style="width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;"></textarea>
+                
+                <button type="submit" style="width: 100%; padding: 15px; background: var(--accent-cyan); color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer;">
+                    ✅ Confirmar cita
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Generar horarios disponibles
+        const timeSlotsContainer = document.getElementById('timeSlots');
+        const hours = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00'];
+        
+        hours.forEach(hour => {
+            const slot = document.createElement('div');
+            slot.className = 'time-slot';
+            slot.textContent = hour;
+            slot.addEventListener('click', function() {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+            timeSlotsContainer.appendChild(slot);
+        });
+        
+        // Configurar fecha mínima (mañana)
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const minDate = tomorrow.toISOString().split('T')[0];
+        
+        document.getElementById('fecha').min = minDate;
+        document.getElementById('fecha').value = minDate;
+        
+        // Manejar envío del formulario
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const selectedTime = document.querySelector('.time-slot.selected');
+            const fecha = document.getElementById('fecha').value;
+            
+            if (!selectedTime) {
+                alert('Por favor selecciona un horario');
+                return;
+            }
+            
+            const appointmentData = {
+                fecha: fecha,
+                hora: selectedTime.textContent,
+                nombre: this[0].value,
+                email: this[1].value,
+                telefono: this[2].value,
+                consulta: this[3].value
+            };
+            
+            // Aquí normalmente enviarías a un backend
+            // Por ahora simulamos éxito
+            alert(`✅ Cita confirmada para el ${fecha} a las ${selectedTime.textContent}\n\nTe enviaremos un recordatorio por correo.`);
+            this.reset();
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        });
+    </script>
+</body>
+</html>
