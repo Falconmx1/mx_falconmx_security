@@ -3,235 +3,775 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mario Falcón - Cybersecurity & Full Stack Developer</title>
+    <title>FalconMX Security - Consultoría Ética en Ciberseguridad y Desarrollo Seguro</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     
-    <!-- Meta para redes sociales -->
-    <meta property="og:title" content="Mario Falcón - Cybersecurity & Full Stack Developer">
-    <meta property="og:description" content="Especialista en seguridad informática, pentesting y desarrollo seguro. Consultoría profesional.">
-    <meta property="og:image" content="https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png">
+    <!-- ========== META TAGS PROFESIONALES ========== -->
+    <meta name="description" content="Consultoría profesional en ciberseguridad ética, pentesting, desarrollo seguro y respuesta a incidentes. Protege tu negocio con expertos certificados.">
+    <meta name="keywords" content="ciberseguridad, pentesting ético, desarrollo seguro, auditoría web, hacking ético, seguridad informática, protección de datos, OWASP, hardening">
+    <meta name="author" content="Mario Alberto Falcón Hernández - FalconMX Security">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Spanish">
+    
+    <!-- Open Graph / Redes Sociales -->
+    <meta property="og:title" content="FalconMX Security - Ciberseguridad Ética Profesional">
+    <meta property="og:description" content="Protección avanzada para empresas y desarrolladores. Consultoría en seguridad informática con metodología ética.">
+    <meta property="og:image" content="https://falconmx1.github.io/mx_falconmx_security/assets/og-image.jpg">
     <meta property="og:url" content="https://falconmx1.github.io/mx_falconmx_security/">
     <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Mario Falcón - Cybersecurity">
-    <meta name="twitter:description" content="Especialista en seguridad informática y desarrollo seguro">
+    <meta property="og:locale" content="es_MX">
     
-    <meta name="description" content="Mario Alberto Falcón Hernández - Especialista en Cybersecurity y Desarrollo Full Stack. Consultoría en seguridad informática, pentesting y desarrollo seguro.">
-    <meta name="keywords" content="Mario Falcón, cybersecurity, pentesting, desarrollo seguro, full stack, React, Node.js, Python, seguridad informática">
-    <meta name="author" content="Mario Alberto Falcón Hernández">
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FalconMX Security - Especialistas en Ciberseguridad">
+    <meta name="twitter:description" content="Soluciones integrales de seguridad informática para empresas mexicanas">
+    <meta name="twitter:image" content="https://falconmx1.github.io/mx_falconmx_security/assets/twitter-card.jpg">
     
-    <!-- Google Tags Unificadas -->
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "FalconMX Security",
+        "description": "Consultoría especializada en ciberseguridad ética y desarrollo seguro",
+        "url": "https://falconmx1.github.io/mx_falconmx_security/",
+        "logo": "https://falconmx1.github.io/mx_falconmx_security/assets/logo.svg",
+        "telephone": "+52-55-6126-4662",
+        "email": "contacto@falconmxsecurity.com",
+        "priceRange": "$$",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "MX",
+            "addressRegion": "Ciudad de México"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "19.4326",
+            "longitude": "-99.1332"
+        },
+        "openingHours": "Mo-Fr 09:00-18:00",
+        "serviceType": [
+            "Pentesting Ético",
+            "Auditoría de Seguridad",
+            "Desarrollo Seguro",
+            "Respuesta a Incidentes",
+            "Capacitación en Ciberseguridad"
+        ],
+        "ethicsPolicy": "https://falconmx1.github.io/mx_falconmx_security/etica.html",
+        "areaServed": ["MX", "US", "ES", "CO", "AR"],
+        "founder": {
+            "@type": "Person",
+            "name": "Mario Alberto Falcón Hernández",
+            "jobTitle": "Cybersecurity Specialist & Full Stack Developer",
+            "knowsAbout": ["Cybersecurity", "Ethical Hacking", "Web Development", "Cloud Security", "DevSecOps"]
+        }
+    }
+    </script>
+    
+    <!-- Google Analytics (Configuración Ética) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-03YX9G53W1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-03YX9G53W1');
-        gtag('config', 'AW-17640302689');
+        gtag('config', 'G-03YX9G53W1', {
+            'anonymize_ip': true,
+            'allow_ad_personalization_signals': false,
+            'restricted_data_processing': true
+        });
     </script>
 
+    <!-- ========== ESTILOS PROFESIONALES ========== -->
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Reset y Variables CSS */
+        :root {
+            /* Paleta de ciberseguridad profesional */
+            --primary-dark: #0a192f;
+            --primary-blue: #1e40af;
+            --primary-darker: #0f172a;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --warning-orange: #f59e0b;
+            --alert-red: #ef4444;
+            --text-light: #f8fafc;
+            --text-gray: #94a3b8;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            
+            /* Sombras y efectos */
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --glow-cyan: 0 0 15px rgba(6, 182, 212, 0.5);
+            --glow-green: 0 0 15px rgba(16, 185, 129, 0.5);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
         body { 
-            font-family: 'Courier New', monospace; 
-            background: #0a0a0a; 
-            color: #fff; 
-            line-height: 1.6;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--primary-dark);
+            color: var(--text-light);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(30, 64, 175, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 20%);
         }
-        .container { max-width: 1000px; margin: 0 auto; }
-        .header { 
-            text-align: center; 
-            padding: 50px 20px; 
-            background: #1a1a1a; 
-            border-radius: 10px;
-            margin-bottom: 40px;
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px;
         }
-        .header h1 { 
-            color: #00ff41; 
-            font-size: 2.5rem; 
-            margin-bottom: 10px; 
+        
+        /* ========== HEADER HERO ========== */
+        .hero-section {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 1%, var(--primary-dark) 1%);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--accent-cyan);
+            filter: drop-shadow(var(--glow-cyan));
+        }
+        
+        .header-title {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .badge-ethical {
+            display: inline-block;
+            background: var(--accent-green);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 15px 0;
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* ========== CONTACTO PROFESIONAL ========== */
+        .contact-bar {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 40px 0;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+        }
+        
+        .whatsapp-button {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .whatsapp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+        
+        /* ========== SERVICIOS ========== */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 60px 0 40px;
+            color: var(--text-light);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 30px;
             margin: 40px 0;
         }
+        
         .service-card {
-            background: #1a1a1a;
-            padding: 25px;
-            border-radius: 10px;
-            border: 1px solid #333;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        .service-card h3 {
-            color: #00ff41;
-            margin-bottom: 15px;
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
         }
-        .whatsapp-btn {
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-cyan);
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
             display: inline-block;
-            background: #25D366;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 10px 0;
         }
-        .contact-info {
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 10px;
+        
+        .service-card h3 {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .service-description {
+            color: var(--text-gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .service-features {
+            list-style: none;
             margin: 20px 0;
         }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Mario Falcón</h1>
-            <p>Cybersecurity & Full Stack Developer</p>
-            <p>Especialista en seguridad informática, pentesting y desarrollo seguro</p>
-        </div>
-
-        <div class="contact-info">
-            <h2>📞 Contacto Directo</h2>
-            <p><strong>WhatsApp:</strong> +52 561 855 4932</p>
-            <p><strong>Email:</strong> mariofalcon030901@gmail.com</p>
-            <a href="https://wa.me/525618554932" class="whatsapp-btn" target="_blank">
-                📱 Contactar por WhatsApp
-            </a>
-        </div>
-
-        <h2 style="text-align: center; margin: 40px 0; color: #00ff41;">Servicios Profesionales</h2>
-
-        <div class="services-grid">
-            <div class="service-card">
-                <h3>🚨 Emergencia Cybersecurity</h3>
-                <p>Solución inmediata para sitios hackeados</p>
-                <p><strong>$3,000 MXN</strong></p>
-                <a href="landing-urgencias.html" class="whatsapp-btn">Ver Más</a>
-            </div>
-            <div class="service-card">
-                <h3>🛡️ Protección Activa</h3>
-                <p>Suscripción mensual de seguridad</p>
-                <p><strong>$800 MXN/mes</strong></p>
-            </div>
-            <div class="service-card">
-                <h3>📊 Auditorías Masivas</h3>
-                <p>Paquete 5 sitios web</p>
-                <p><strong>$5,000 MXN</strong></p>
-            </div>
-            <div class="service-card">
-                <h3>🎓 Curso Express</h3>
-                <p>Cybersecurity para emprendedores</p>
-                <p><strong>$1,500 MXN</strong></p>
-            </div>
-        </div>
-
-        <!-- FORMULARIO DE CONTACTO -->
-        <section style="background: #1a1a1a; padding: 40px; border-radius: 10px; margin: 50px 0;">
-          <h2 style="color: #00ff41; text-align: center; margin-bottom: 30px;">📧 Contacto Profesional</h2>
-          <form action="https://formspree.io/f/xvgeqowg" method="POST" style="max-width: 600px; margin: 0 auto;">
-            <input type="hidden" name="_subject" value="Nuevo contacto profesional - Mario Falcón">
+        
+        .service-features li {
+            padding: 5px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text-gray);
+        }
+        
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        .price-tag {
+            display: inline-block;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 15px 0;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+        
+        /* ========== FORMULARIO DE CONTACTO ========== */
+        .contact-form-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 50px;
+            margin: 60px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--primary-darker);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
+        }
+        
+        /* ========== FOOTER ========== */
+        .footer {
+            background: var(--primary-darker);
+            padding: 40px 20px;
+            margin-top: 80px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-cyan);
+        }
+        
+        .copyright {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        /* ========== WHATSAPP FLOTANTE ========== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+        }
+        
+        .whatsapp-float svg {
+            width: 35px;
+            height: 35px;
+            fill: white;
+        }
+        
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
             
-            <div style="margin-bottom: 20px;">
-              <input type="text" name="nombre" placeholder="Nombre completo" required 
-                     style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
-            </div>
+            .section-title {
+                font-size: 2rem;
+            }
             
-            <div style="margin-bottom: 20px;">
-              <input type="email" name="email" placeholder="Correo electrónico" required 
-                     style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
-            </div>
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
             
-            <div style="margin-bottom: 20px;">
-              <input type="tel" name="telefono" placeholder="Teléfono (opcional)" 
-                     style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
-            </div>
+            .contact-form-section {
+                padding: 30px;
+            }
             
-            <div style="margin-bottom: 20px;">
-              <select name="servicio" required 
-                      style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px;">
-                <option value="" disabled selected>¿Qué servicio te interesa?</option>
-                <option value="emergencia">🚨 Emergencia Cybersecurity</option>
-                <option value="proteccion">🛡️ Protección Activa</option>
-                <option value="auditoria">📊 Auditorías Masivas</option>
-                <option value="curso">🎓 Curso Express</option>
-                <option value="otro">Otro servicio</option>
-              </select>
-            </div>
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
             
-            <div style="margin-bottom: 25px;">
-              <textarea name="mensaje" placeholder="Describe tu proyecto o consulta..." rows="4" required 
-                        style="width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px; resize: vertical;"></textarea>
-            </div>
-            
-            <button type="submit" 
-                    style="background: #00ff41; color: black; border: none; padding: 15px 30px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px;">
-              📨 Enviar Consulta
-            </button>
-            
-            <input type="text" name="_gotcha" style="display:none;">
-          </form>
-        </section>
-
-        <!-- Schema.org markup -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Person",
-            "name": "Mario Alberto Falcón Hernández",
-            "jobTitle": "Cybersecurity & Full Stack Developer",
-            "description": "Especialista en seguridad informática, pentesting y desarrollo seguro",
-            "email": "mailto:mariofalcon030901@gmail.com",
-            "telephone": "+52-561-855-4932",
-            "url": "https://falconmx1.github.io/mx_falconmx_security/",
-            "sameAs": [
-                "https://github.com/Falconmx1",
-                "https://www.instagram.com/mxfalconmx/",
-                "https://g.dev/mxfalconmx",
-                "https://gitlab.com/mxfalconmx2001"
-            ],
-            "knowsAbout": ["Cybersecurity", "Pentesting", "Web Development", "React", "Node.js", "Python"],
-            "offers": {
-                "@type": "Offer",
-                "name": "Consultoría en Cybersecurity",
-                "description": "Servicios profesionales de seguridad informática",
-                "areaServed": "Worldwide",
-                "availableChannel": {
-                    "@type": "ServiceChannel",
-                    "serviceUrl": "https://falconmx1.github.io/mx_falconmx_security/",
-                    "servicePhone": "+52-561-855-4932"
-                }
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
             }
         }
-        </script>
+    </style>
+    
+    <!-- Security Headers (mejor práctica) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+</head>
+<body>
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <div class="logo-icon">🛡️</div>
+                    <h1 class="header-title">FalconMX Security</h1>
+                </div>
+                
+                <div class="badge-ethical">🟢 Certificación Ética Asegurada</div>
+                
+                <p class="tagline">
+                    Protección avanzada para empresas y desarrolladores. Consultoría especializada en ciberseguridad 
+                    con metodología ética y resultados tangibles.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- ========== BARRA DE CONTACTO ========== -->
+        <div class="contact-bar">
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div>
+                        <h3 style="color: var(--text-light); margin-bottom: 5px;">Teléfono Directo</h3>
+                        <p style="color: var(--accent-cyan); font-size: 1.2rem; font-weight: 600;">+52 55 6126 4662</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div>
+                        <h3 style="color: var(--text-light); margin-bottom: 5px;">Correo Electrónico</h3>
+                        <p style="color: var(--text-gray);">contacto@falconmxsecurity.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <a href="https://wa.me/525561264662" class="whatsapp-button" target="_blank" title="Contactar por WhatsApp">
+                        <span>📱</span> Contactar por WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SERVICIOS PROFESIONALES ========== -->
+        <h2 class="section-title">Servicios Especializados</h2>
+        
+        <div class="services-grid">
+            <!-- Servicio 1: Auditoría de Seguridad -->
+            <div class="service-card">
+                <div class="service-icon">🔍</div>
+                <h3>Auditoría de Seguridad Completa</h3>
+                <p class="service-description">
+                    Análisis exhaustivo de vulnerabilidades en infraestructura, aplicaciones web y dispositivos.
+                </p>
+                <ul class="service-features">
+                    <li>Pentesting ético controlado</li>
+                    <li>Análisis OWASP Top 10</li>
+                    <li>Reporte ejecutivo + técnico</li>
+                    <li>Plan de remediación paso a paso</li>
+                </ul>
+                <div class="price-tag">Desde $8,000 MXN</div>
+                <a href="#contacto" class="whatsapp-button" style="display: block; text-align: center; margin-top: 20px;">
+                    Solicitar Auditoría
+                </a>
+            </div>
+
+            <!-- Servicio 2: Desarrollo Seguro -->
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>Desarrollo Seguro (DevSecOps)</h3>
+                <p class="service-description">
+                    Integración de seguridad en el ciclo de desarrollo de software desde el diseño.
+                </p>
+                <ul class="service-features">
+                    <li>Code Review especializado</li>
+                    <li>Implementación SAST/DAST</li>
+                    <li>Hardening de aplicaciones</li>
+                    <li>Capacitación para equipos dev</li>
+                </ul>
+                <div class="price-tag">Desde $12,000 MXN/mes</div>
+                <a href="#contacto" class="whatsapp-button" style="display: block; text-align: center; margin-top: 20px;">
+                    Consultar Planes
+                </a>
+            </div>
+
+            <!-- Servicio 3: Respuesta a Incidentes -->
+            <div class="service-card">
+                <div class="service-icon">🚨</div>
+                <h3>Respuesta a Incidentes</h3>
+                <p class="service-description">
+                    Reacción inmediata ante brechas de seguridad con contención y análisis forense.
+                </p>
+                <ul class="service-features">
+                    <li>Respuesta 24/7 para emergencias</li>
+                    <li>Contención de daños</li>
+                    <li>Análisis forense digital</li>
+                    <li>Plan de recuperación</li>
+                </ul>
+                <div class="price-tag">$15,000 MXN (emergencia)</div>
+                <a href="https://wa.me/525561264662?text=🚨%20NE%20SITO%20SU%20RESPUESTA%20INMEDIATA%20POR%20INCIDENTE%20DE%20SEGURIDAD" 
+                   class="whatsapp-button" 
+                   style="display: block; text-align: center; margin-top: 20px; background: linear-gradient(135deg, #ef4444, #dc2626);"
+                   target="_blank">
+                    🚨 EMERGENCIA
+                </a>
+            </div>
+
+            <!-- Servicio 4: Capacitación -->
+            <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <h3>Capacitación en Ciberseguridad</h3>
+                <p class="service-description">
+                    Programas de concientización y entrenamiento técnico para equipos empresariales.
+                </p>
+                <ul class="service-features">
+                    <li>Simulaciones de phishing</li>
+                    <li>Talleres de hardening</li>
+                    <li>Cursos OWASP prácticos</li>
+                    <li>Certificación interna</li>
+                </ul>
+                <div class="price-tag">Desde $5,000 MXN/sesión</div>
+                <a href="#contacto" class="whatsapp-button" style="display: block; text-align: center; margin-top: 20px;">
+                    Solicitar Programa
+                </a>
+            </div>
+        </div>
+
+        <!-- ========== FORMULARIO DE CONTACTO PROFESIONAL ========== -->
+        <section id="contacto" class="contact-form-section">
+            <h2 class="section-title" style="margin-top: 0;">Contacto Profesional</h2>
+            <p style="text-align: center; color: var(--text-gray); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Completa este formulario y un especialista se comunicará contigo en menos de 24 horas.
+            </p>
+            
+            <form action="https://formspree.io/f/xvgeqowg" method="POST" id="contact-form">
+                <input type="hidden" name="_subject" value="📋 Nueva Consulta Profesional - FalconMX Security">
+                <input type="hidden" name="_language" value="es">
+                
+                <div class="form-group">
+                    <label class="form-label" for="nombre">Nombre completo *</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Tu nombre y apellido" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="empresa">Empresa / Proyecto</label>
+                    <input type="text" id="empresa" name="empresa" class="form-control" placeholder="Nombre de tu empresa o proyecto">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">Correo electrónico *</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="correo@empresa.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="telefono">Teléfono *</label>
+                    <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="+52 55 1234 5678" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="servicio">Servicio de interés *</label>
+                    <select id="servicio" name="servicio" class="form-control" required>
+                        <option value="" disabled selected>Selecciona una opción</option>
+                        <option value="auditoria">🔍 Auditoría de Seguridad</option>
+                        <option value="desarrollo">💻 Desarrollo Seguro (DevSecOps)</option>
+                        <option value="incidentes">🚨 Respuesta a Incidentes</option>
+                        <option value="capacitacion">🎓 Capacitación en Ciberseguridad</option>
+                        <option value="proteccion">🛡️ Protección Activa Mensual</option>
+                        <option value="consultoria">💼 Consultoría Personalizada</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="mensaje">Detalles del proyecto o consulta *</label>
+                    <textarea id="mensaje" name="mensaje" class="form-control" rows="5" 
+                              placeholder="Describe tu situación actual, necesidades específicas o preguntas técnicas..." required></textarea>
+                </div>
+                
+                <div class="form-group" style="background: rgba(6, 182, 212, 0.1); padding: 15px; border-radius: 8px; margin: 25px 0;">
+                    <label style="display: flex; align-items: center; gap: 10px; color: var(--text-light);">
+                        <input type="checkbox" name="privacidad" required style="width: 18px; height: 18px;">
+                        Acepto la <a href="privacidad.html" style="color: var(--accent-cyan);">Política de Privacidad</a> y el 
+                        <a href="etica.html" style="color: var(--accent-cyan);">Código Ético</a> de FalconMX Security
+                    </label>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    📨 Enviar Consulta Profesional
+                </button>
+                
+                <!-- Honeypot para spam -->
+                <input type="text" name="_gotcha" style="display: none;">
+            </form>
+        </section>
+
+        <!-- ========== FOOTER ========== -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="logo-container" style="justify-content: flex-start;">
+                    <div class="logo-icon">🛡️</div>
+                    <h3 style="font-size: 1.5rem;">FalconMX Security</h3>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="etica.html" title="Nuestro Código Ético">Ética Profesional</a>
+                    <a href="privacidad.html" title="Política de Privacidad">Privacidad</a>
+                    <a href="#servicios" title="Nuestros Servicios">Servicios</a>
+                    <a href="#contacto" title="Contacto">Contacto</a>
+                </div>
+                
+                <div class="copyright">
+                    © 2024 FalconMX Security. Todos los derechos reservados.<br>
+                    Especialistas en Ciberseguridad Ética.
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <!-- WhatsApp Flotante -->
-    <a href="https://wa.me/525618554932" class="whatsapp-float" target="_blank" title="Contactar por WhatsApp">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="50">
+    <!-- ========== WHATSAPP FLOTANTE ========== -->
+    <a href="https://wa.me/525561264662?text=¡Hola!%20Vengo%20de%20tu%20sitio%20web%20y%20me%20interesa%20consultar%20sobre%20tus%20servicios%20de%20ciberseguridad%20🛡️" 
+       class="whatsapp-float" 
+       target="_blank" 
+       title="Contactar por WhatsApp">
+        <svg viewBox="0 0 32 32">
+            <path d="M16 0C7.163 0 0 7.163 0 16c0 3.033.855 5.863 2.332 8.276L.512 31.488l7.212-1.82C10.137 31.145 12.967 32 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.942 22.892c-.402 1.132-2.007 2.073-3.277 2.345-.735.157-1.697.282-4.973-.602-3.785-1.017-6.207-4.507-6.397-4.737-.19-.23-1.545-2.032-1.545-3.877s.972-2.797 1.357-3.272c.385-.475.833-.595 1.112-.595.285 0 .57 0 .82.007.25.008.642-.098.997.73.355.827 1.212 2.865 1.317 3.072.105.207.175.475.052.73-.122.255-.175.415-.35.652-.175.237-.367.527-.525.707-.16.18-.327.38-.14.73.188.35.827 1.507 1.777 2.442 1.215 1.215 2.252 1.807 2.587 2.007.335.2.53.172.73-.105.2-.277.855-1.115 1.08-1.497.225-.382.45-.32.73-.18.28.14 1.767.93 2.072 1.102.305.172.508.257.585.402.077.145.077.842-.325 1.975z"/>
+        </svg>
     </a>
-    <style>
-    .whatsapp-float {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-      background: #25D366;
-      border-radius: 50%;
-      padding: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.3s;
-    }
-    .whatsapp-float:hover {
-      transform: scale(1.1);
-    }
-    .whatsapp-float img {
-      display: block;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-    }
-    </style>
+
+    <!-- ========== SCRIPT DEL CHATBOT ========== -->
+    <script>
+        // Chatbot se cargará después de 5 segundos para no interferir con la experiencia inicial
+        setTimeout(() => {
+            const script = document.createElement('script');
+            script.src = 'chatbot-seguridad.js';
+            script.async = true;
+            document.body.appendChild(script);
+            
+            const style = document.createElement('link');
+            style.rel = 'stylesheet';
+            style.href = 'chatbot-styles.css';
+            document.head.appendChild(style);
+        }, 5000);
+        
+        // Form submission handler
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            // Validación adicional
+            const telefono = document.getElementById('telefono').value;
+            if (!telefono.match(/^\+?[0-9\s\-\(\)]{10,}$/)) {
+                alert('Por favor ingresa un número de teléfono válido');
+                e.preventDefault();
+                return;
+            }
+            
+            // Google Analytics event
+            gtag('event', 'contact_form_submit', {
+                'event_category': 'engagement',
+                'event_label': 'contact_form'
+            });
+            
+            // Mostrar mensaje de confirmación
+            setTimeout(() => {
+                alert('✅ ¡Gracias! Tu consulta ha sido enviada. Un especialista se comunicará contigo en menos de 24 horas.');
+            }, 500);
+        });
+    </script>
 </body>
 </html>
