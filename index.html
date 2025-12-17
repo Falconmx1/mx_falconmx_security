@@ -88,14 +88,106 @@
             padding: 0 20px;
         }
         
+        /* ========== NAVEGACIÓN PROFESIONAL ========== */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 15px 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .nav-logo-icon {
+            font-size: 1.8rem;
+            color: var(--accent-cyan);
+        }
+        
+        .nav-logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-cyan);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.3);
+        }
+        
         /* ========== HEADER HERO ========== */
         .hero-section {
             text-align: center;
-            padding: 80px 20px;
+            padding: 120px 20px 80px;
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
             border-bottom: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
+            margin-top: 60px;
         }
         
         .hero-section::before {
@@ -308,6 +400,97 @@
             border: 1px solid rgba(6, 182, 212, 0.3);
         }
         
+        /* ========== NUEVA SECCIÓN: PORTAFOLIO RESUMEN ========== */
+        .portfolio-showcase {
+            background: var(--primary-darker);
+            padding: 60px 20px;
+            margin: 60px 0;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .portfolio-grid-mini {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .portfolio-item {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-cyan);
+        }
+        
+        .portfolio-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .portfolio-stat {
+            background: rgba(6, 182, 212, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        /* ========== NUEVA SECCIÓN: RECURSOS DESTACADOS ========== */
+        .resources-highlight {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+            padding: 60px 20px;
+            margin: 60px 0;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .resources-grid-mini {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .resource-item {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s;
+        }
+        
+        .resource-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+        }
+        
+        .resource-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .download-resource {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .download-resource:hover {
+            background: rgba(6, 182, 212, 0.25);
+            transform: translateY(-2px);
+        }
+        
         /* ========== FORMULARIO DE CONTACTO ========== */
         .contact-form-section {
             background: var(--card-bg);
@@ -364,36 +547,76 @@
             box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
         }
         
-        /* ========== FOOTER ========== */
+        /* ========== FOOTER MEJORADO ========== */
         .footer {
             background: var(--primary-darker);
-            padding: 40px 20px;
+            padding: 60px 20px 30px;
             margin-top: 80px;
             border-top: 1px solid var(--border-color);
         }
         
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 30px;
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
         }
         
         .footer-links a {
             color: var(--text-gray);
             text-decoration: none;
-            margin-right: 20px;
             transition: color 0.3s;
+            display: inline-block;
+            padding: 3px 0;
         }
         
         .footer-links a:hover {
             color: var(--accent-cyan);
+            transform: translateX(5px);
+        }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
         }
         
         .copyright {
             color: var(--text-gray);
             font-size: 0.9rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .social-link:hover {
+            color: var(--accent-cyan);
         }
         
         /* ========== WHATSAPP FLOTANTE ========== */
@@ -427,6 +650,18 @@
         
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
+            .main-nav {
+                padding: 12px 15px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .nav-cta {
+                display: none;
+            }
+            
             .header-title {
                 font-size: 2.5rem;
             }
@@ -443,7 +678,11 @@
                 padding: 30px;
             }
             
-            .footer-content {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
                 flex-direction: column;
                 text-align: center;
             }
@@ -453,6 +692,40 @@
                 right: 20px;
                 width: 50px;
                 height: 50px;
+            }
+            
+            .hero-section {
+                padding: 100px 20px 60px;
+                margin-top: 50px;
+            }
+        }
+        
+        /* ========== MENÚ MÓVIL ========== */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-darker);
+                padding: 20px;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: var(--shadow-lg);
             }
         }
     </style>
@@ -464,6 +737,29 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 </head>
 <body>
+    <!-- ========== NAVEGACIÓN PROFESIONAL ========== -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon">🛡️</div>
+                <div class="nav-logo-text">FalconMX Security</div>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#" class="nav-link">Inicio</a></li>
+                <li><a href="#servicios" class="nav-link">Servicios</a></li>
+                <li><a href="portafolio/index.html" class="nav-link">Casos de Éxito</a></li>
+                <li><a href="blog/index.html" class="nav-link">Blog</a></li>
+                <li><a href="recursos/index.html" class="nav-link">Recursos</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+            
+            <a href="#contacto" class="nav-cta">Auditoría Gratuita</a>
+        </div>
+    </nav>
+
     <!-- ========== HERO SECTION ========== -->
     <section class="hero-section">
         <div class="container">
@@ -479,6 +775,15 @@
                     Protección avanzada para empresas y desarrolladores. Consultoría especializada en ciberseguridad 
                     con metodología ética y resultados tangibles.
                 </p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
+                    <a href="#servicios" class="whatsapp-button" style="background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue));">
+                        📋 Ver Servicios
+                    </a>
+                    <a href="tel:+525561264662" class="whatsapp-button" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        📞 Llamar Ahora
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -512,7 +817,7 @@
         </div>
 
         <!-- ========== SERVICIOS PROFESIONALES ========== -->
-        <h2 class="section-title">Servicios Especializados</h2>
+        <h2 class="section-title" id="servicios">Servicios Especializados</h2>
         
         <div class="services-grid">
             <!-- Servicio 1: Auditoría de Seguridad -->
@@ -595,9 +900,156 @@
             </div>
         </div>
 
+        <!-- ========== PORTAFOLIO RESUMEN ========== -->
+        <section class="portfolio-showcase">
+            <h2 class="section-title" style="margin-top: 0;">🏆 Casos de Éxito</h2>
+            <p style="text-align: center; color: var(--text-gray); max-width: 600px; margin: 0 auto 30px;">
+                Proyectos reales donde hemos protegido empresas mexicanas de ciberamenazas.
+            </p>
+            
+            <div class="portfolio-grid-mini">
+                <div class="portfolio-item">
+                    <h3 style="color: var(--text-light); margin-bottom: 10px;">🏦 FinTech Mexicana</h3>
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Auditoría de seguridad para plataforma procesando +$50M MXN mensuales.</p>
+                    <div class="portfolio-stats">
+                        <span class="portfolio-stat">✅ 15 vulnerabilidades corregidas</span>
+                        <span class="portfolio-stat">📈 0 incidentes post-auditoría</span>
+                    </div>
+                    <a href="portafolio/index.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 15px;">
+                        Ver caso completo →
+                    </a>
+                </div>
+                
+                <div class="portfolio-item">
+                    <h3 style="color: var(--text-light); margin-bottom: 10px;">🛒 E-commerce Retail</h3>
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Protección integral para tienda online con 10K+ usuarios activos.</p>
+                    <div class="portfolio-stats">
+                        <span class="portfolio-stat">🛡️ 99.9% uptime garantizado</span>
+                        <span class="portfolio-stat">📊 95% reducción de ataques</span>
+                    </div>
+                    <a href="portafolio/index.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 15px;">
+                        Ver caso completo →
+                    </a>
+                </div>
+                
+                <div class="portfolio-item">
+                    <h3 style="color: var(--text-light); margin-bottom: 10px;">💻 SaaS Startup</h3>
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Desarrollo seguro desde el día 0 con integración DevSecOps completa.</p>
+                    <div class="portfolio-stats">
+                        <span class="portfolio-stat">🔒 0 vulnerabilidades en producción</span>
+                        <span class="portfolio-stat">🏅 ISO 27001 compliant</span>
+                    </div>
+                    <a href="portafolio/index.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 15px;">
+                        Ver caso completo →
+                    </a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="portafolio/index.html" class="whatsapp-button" style="background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue)); display: inline-flex; align-items: center; gap: 10px;">
+                    <span>📂</span> Ver todos los casos de éxito
+                </a>
+            </div>
+        </section>
+
+        <!-- ========== RECURSOS DESTACADOS ========== -->
+        <section class="resources-highlight">
+            <h2 class="section-title" style="margin-top: 0;">🛠️ Recursos Gratuitos</h2>
+            <p style="text-align: center; color: var(--text-gray); max-width: 600px; margin: 0 auto 30px;">
+                Herramientas y plantillas para comenzar a proteger tu negocio hoy mismo.
+            </p>
+            
+            <div class="resources-grid-mini">
+                <div class="resource-item">
+                    <div class="resource-icon">📋</div>
+                    <h3 style="color: var(--text-light); margin-bottom: 10px;">Checklist de Seguridad</h3>
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">25 puntos críticos para evaluar tu postura de seguridad.</p>
+                    <a href="recursos/index.html" class="download-resource">⬇️ Descargar PDF</a>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon">📄</div>
+                    <h3 style="color: var(--text-light); margin-bottom: 10px;">Plantilla de Políticas</h3>
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Documento base para políticas de seguridad organizacional.</p>
+                    <a href="recursos/index.html" class="download-resource">⬇️ Descargar Word</a>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon">📖</div>
+                    <h3 style="color: var(--text-light); margin-bottom: 10px;">Guía OWASP Top 10</h3>
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Resumen ejecutivo de vulnerabilidades web críticas.</p>
+                    <a href="recursos/index.html" class="download-resource">⬇️ Descargar Guía</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="recursos/index.html" class="whatsapp-button" style="background: linear-gradient(135deg, #10b981, #059669); display: inline-flex; align-items: center; gap: 10px;">
+                    <span>📚</span> Ver todos los recursos gratuitos
+                </a>
+            </div>
+        </section>
+
+        <!-- ========== BLOG DESTACADO ========== -->
+        <section style="margin: 80px 0;">
+            <h2 class="section-title">📚 Artículos Destacados del Blog</h2>
+            <p style="text-align: center; color: var(--text-gray); max-width: 600px; margin: 0 auto 40px;">
+                Conocimiento especializado para mantenerte actualizado en ciberseguridad.
+            </p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🔐</div>
+                    <h3>5 Errores Comunes de Seguridad en PYMES</h3>
+                    <p class="service-description">
+                        Descubre los errores más frecuentes que comprometen la seguridad de pequeñas y medianas empresas en México.
+                    </p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <span style="color: #64748b; font-size: 0.9rem;">📅 15 min lectura</span>
+                        <a href="blog/index.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">
+                            Leer artículo →
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🛡️</div>
+                    <h3>Guía Completa de Hardening para Servidores</h3>
+                    <p class="service-description">
+                        Paso a paso para fortalecer la seguridad de tus servidores Apache/Nginx con configuración profesional.
+                    </p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <span style="color: #64748b; font-size: 0.9rem;">📅 25 min lectura</span>
+                        <a href="blog/index.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">
+                            Leer artículo →
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🌐</div>
+                    <h3>OWASP Top 10 2024: Vulnerabilidades Críticas</h3>
+                    <p class="service-description">
+                        Análisis detallado de las 10 vulnerabilidades web más críticas según OWASP, con ejemplos prácticos.
+                    </p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                        <span style="color: #64748b; font-size: 0.9rem;">📅 20 min lectura</span>
+                        <a href="blog/index.html" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">
+                            Leer artículo →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="blog/index.html" class="whatsapp-button" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); display: inline-flex; align-items: center; gap: 10px;">
+                    <span>📰</span> Ver todos los artículos del blog
+                </a>
+            </div>
+        </section>
+
         <!-- ========== FORMULARIO DE CONTACTO PROFESIONAL ========== -->
         <section id="contacto" class="contact-form-section">
-            <h2 class="section-title" style="margin-top: 0;">Contacto Profesional</h2>
+            <h2 class="section-title" style="margin-top: 0;">📬 Contacto Profesional</h2>
             <p style="text-align: center; color: var(--text-gray); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
                 Completa este formulario y un especialista se comunicará contigo en menos de 24 horas.
             </p>
@@ -661,23 +1113,72 @@
             </form>
         </section>
 
-        <!-- ========== FOOTER ========== -->
+        <!-- ========== FOOTER MEJORADO ========== -->
         <footer class="footer">
-            <div class="footer-content">
-                <div class="logo-container" style="justify-content: flex-start;">
-                    <div class="logo-icon">🛡️</div>
-                    <h3 style="font-size: 1.5rem;">FalconMX Security</h3>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                            <div style="font-size: 2rem; color: var(--accent-cyan);">🛡️</div>
+                            <h3 style="margin: 0; font-size: 1.5rem; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); -webkit-background-clip: text; background-clip: text; color: transparent;">
+                                FalconMX Security
+                            </h3>
+                        </div>
+                        <p style="color: var(--text-gray); line-height: 1.6;">
+                            Consultoría especializada en ciberseguridad ética, pentesting y desarrollo seguro para empresas mexicanas.
+                        </p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Servicios</h3>
+                        <ul class="footer-links">
+                            <li><a href="#servicios">🔍 Auditoría de Seguridad</a></li>
+                            <li><a href="#servicios">💻 Desarrollo Seguro</a></li>
+                            <li><a href="#servicios">🚨 Respuesta a Incidentes</a></li>
+                            <li><a href="#servicios">🎓 Capacitación</a></li>
+                            <li><a href="#servicios">🛡️ Protección Activa</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Recursos</h3>
+                        <ul class="footer-links">
+                            <li><a href="blog/index.html">📚 Blog Técnico</a></li>
+                            <li><a href="portafolio/index.html">🏆 Casos de Éxito</a></li>
+                            <li><a href="recursos/index.html">🛠️ Recursos Gratuitos</a></li>
+                            <li><a href="etica.html">⚖️ Código Ético</a></li>
+                            <li><a href="#contacto">📞 Contacto</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Contacto</h3>
+                        <p style="color: var(--text-gray); margin-bottom: 15px;">
+                            <strong>📞 Teléfono:</strong><br>
+                            <a href="tel:+525561264662" style="color: var(--accent-cyan);">+52 55 6126 4662</a>
+                        </p>
+                        <p style="color: var(--text-gray); margin-bottom: 15px;">
+                            <strong>✉️ Email:</strong><br>
+                            <a href="mailto:mariofalcon030901@gmail.com" style="color: var(--accent-cyan);">mariofalcon030901@gmail.com</a>
+                        </p>
+                        <p style="color: var(--text-gray);">
+                            <strong>🕐 Horario:</strong><br>
+                            Lunes a Viernes: 9:00 - 18:00
+                        </p>
+                    </div>
                 </div>
                 
-                <div class="footer-links">
-                    <a href="etica.html" title="Nuestro Código Ético">Ética Profesional</a>
-                    <a href="#servicios" title="Nuestros Servicios">Servicios</a>
-                    <a href="#contacto" title="Contacto">Contacto</a>
-                </div>
-                
-                <div class="copyright">
-                    © 2024 FalconMX Security. Todos los derechos reservados.<br>
-                    Especialistas en Ciberseguridad Ética.
+                <div class="footer-bottom">
+                    <div class="copyright">
+                        © 2024 FalconMX Security. Todos los derechos reservados.<br>
+                        Especialistas en Ciberseguridad Ética.
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link">LinkedIn</a>
+                        <a href="#" class="social-link">GitHub</a>
+                        <a href="#" class="social-link">Twitter</a>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -732,6 +1233,52 @@
             setTimeout(() => {
                 alert('✅ ¡Gracias! Tu consulta ha sido enviada. Un especialista se comunicará contigo en menos de 24 horas.');
             }, 500);
+        });
+        
+        // Menú móvil
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (mobileMenuBtn && navMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic en un enlace
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                });
+            });
+        }
+        
+        // Smooth scroll para enlaces internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.main-nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(10, 25, 47, 0.98)';
+                nav.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                nav.style.background = 'rgba(10, 25, 47, 0.95)';
+                nav.style.boxShadow = 'none';
+            }
         });
     </script>
 </body>
