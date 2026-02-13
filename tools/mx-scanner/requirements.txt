@@ -1,0 +1,3 @@
+# MX-SCANNER - Dependencias
+# Solo usa la librería estándar de Python, no requiere instalación adicional
+# Python 3.8+ recomendado
