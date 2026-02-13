@@ -1,3 +1,5 @@
-# MX-ENCRYPT - Dependencias
-cryptography>=3.4.8
-pycryptodome>=3.10.1
+# MX-ENCRYPT v1.0 - Dependencias oficiales
+# Instalar con: pip install -r requirements.txt
+
+cryptography>=3.4.8          # Para AES-256 y Fernet
+pycryptodome>=3.10.1        # Para RSA y cifrado asimétrico
