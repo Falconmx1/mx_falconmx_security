@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Run security tests
+      run: |
+        if [ -f "run_all_tests.sh" ]; then
+          chmod +x run_all_tests.sh
+          ./run_all_tests.sh
+        else
+          echo "No tests found, skipping..."
+        fi
+    
+    - name: Check HTML files
+      run: |
+        echo "Validando archivos HTML..."
+        for file in $(find . -name "*.html"); do
+          if ! grep -q "<title>" "$file"; then
+            echo "⚠️ $file no tiene título SEO"
+          fi
+        done
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        publish_branch: gh-pages
