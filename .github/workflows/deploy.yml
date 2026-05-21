@@ -1,0 +1,72 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  # Permitir ejecución manual también
+  workflow_dispatch:
+
+# Permisos necesarios para GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Concurrency group para evitar despliegues simultáneos
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Job de prueba (opcional, no bloqueará el deploy si falla)
+  test:
+    runs-on: ubuntu-latest
+    continue-on-error: true  # No falla si las pruebas fallan
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Run basic tests (if any)
+      run: |
+        echo "✅ Verificando estructura de archivos..."
+        # Verificar que index.html existe
+        if [ -f "index.html" ]; then
+          echo "✅ index.html encontrado"
+        else
+          echo "⚠️ index.html no encontrado"
+        fi
+        
+        # Verificar que la carpeta tools existe
+        if [ -d "tools" ]; then
+          echo "✅ Carpeta tools encontrada"
+        else
+          echo "⚠️ Carpeta tools no encontrada (opcional)"
+        fi
+
+  # Job de despliegue a GitHub Pages
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test  # Espera a que test termine, pero continúa aunque falle
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+    
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.'  # Sube todo el repositorio
+    
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
