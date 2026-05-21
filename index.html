@@ -6,12 +6,18 @@
     <title>FalconMX Security + MFH TOOLS - Ciberseguridad Ética y Herramientas Python</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     
-    <!-- ========== META TAGS PROFESIONALES ========== -->
-    <meta name="description" content="Consultoría profesional en ciberseguridad ética + MFH TOOLS: Suite de herramientas de seguridad hechas en México. Pentesting, desarrollo seguro y software Python.">
-    <meta name="keywords" content="ciberseguridad, pentesting ético, desarrollo seguro, herramientas python, mfh tools, escáner de puertos, kali linux mexicano, hacking ético, seguridad informática">
+    <!-- ========== META TAGS PROFESIONALES + SEO LOCAL ========== -->
+    <meta name="description" content="Consultoría profesional en ciberseguridad ética + MFH TOOLS: Suite de herramientas de seguridad hechas en México. Pentesting, desarrollo seguro y software Python. Especialistas en CDMX y Guadalajara.">
+    <meta name="keywords" content="ciberseguridad méxico, consultoría seguridad CDMX, pentesting Guadalajara, ethical hacking méxico, seguridad informática empresas méxico, MFH Tools, FalconMX Security, herramientas python, escáner de puertos, kali linux mexicano">
     <meta name="author" content="Mario Alberto Falcón Hernández - FalconMX Security & MFH TOOLS">
     <meta name="robots" content="index, follow">
     <meta name="language" content="Spanish">
+    
+    <!-- Geo Tags para SEO Local (CDMX y GDL) -->
+    <meta name="geo.region" content="MX-DIF" />
+    <meta name="geo.placename" content="Ciudad de México" />
+    <meta name="geo.position" content="19.432608;-99.133209" />
+    <meta name="ICBM" content="19.432608, -99.133209" />
     
     <!-- Open Graph / Redes Sociales -->
     <meta property="og:title" content="FalconMX Security + MFH TOOLS - Hecho en México 🇲🇽">
@@ -20,6 +26,7 @@
     <meta property="og:url" content="https://falconmx1.github.io/mx_falconmx_security/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_MX">
+    <meta property="og:site_name" content="FalconMX Security - Ciberseguridad Profesional México">
     
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary">
@@ -27,13 +34,13 @@
     <meta name="twitter:description" content="Ciberseguridad profesional + herramientas Python de clase mundial. Hecho en México.">
     <meta name="twitter:image" content="https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png">
     
-    <!-- Schema.org Structured Data ACTUALIZADO con MFH TOOLS -->
+    <!-- Schema.org Structured Data ACTUALIZADO con SEO Local -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
         "name": "FalconMX Security & MFH TOOLS",
-        "description": "Consultoría en ciberseguridad ética y desarrollo de herramientas de seguridad en Python",
+        "description": "Consultoría en ciberseguridad ética y desarrollo de herramientas de seguridad en Python. Servicios en CDMX, Guadalajara y todo México.",
         "url": "https://falconmx1.github.io/mx_falconmx_security/",
         "logo": "https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png",
         "telephone": "+52-55-6126-4662",
@@ -47,8 +54,9 @@
         "priceRange": "$$",
         "address": {
             "@type": "PostalAddress",
-            "addressCountry": "MX",
-            "addressRegion": "Ciudad de México"
+            "addressLocality": "Ciudad de México",
+            "addressRegion": "CDMX",
+            "addressCountry": "MX"
         },
         "serviceType": [
             "Pentesting Ético",
@@ -61,7 +69,7 @@
             "MX-ENCRYPT"
         ],
         "ethicsPolicy": "https://falconmx1.github.io/mx_falconmx_security/etica.html",
-        "areaServed": ["MX", "US", "ES", "CO", "AR"],
+        "areaServed": ["Ciudad de México", "Guadalajara", "Monterrey", "Todo México"],
         "founder": {
             "@type": "Person",
             "name": "Mario Alberto Falcón Hernández",
@@ -569,6 +577,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .mfh-price {
@@ -1071,7 +1081,6 @@
     </style>
     
     <!-- Security Headers (mejor práctica) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -1097,6 +1106,7 @@
                 <li><a href="calendario.html" class="nav-link">📅 Agendar</a></li>
                 <li><a href="tickets.html" class="nav-link">🎫 Tickets</a></li>
                 <li><a href="dashboard.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="tools/mfh-suite.html" class="nav-link" style="color: #06b6d4;">🛠️ Tienda Tools</a></li>
                 <li><a href="#contacto" class="nav-link">Contacto</a></li>
             </ul>
             
@@ -1219,7 +1229,7 @@
                     <li>Plan de recuperación</li>
                 </ul>
                 <div class="price-tag">$15,000 MXN (emergencia)</div>
-                <a href="https://wa.me/525561264662?text=🚨%20NE%20SITO%20SU%20RESPUESTA%20INMEDIATA%20POR%20INCIDENTE%20DE%20SEGURIDAD" 
+                <a href="https://wa.me/525561264662?text=🚨%20NECESITO%20SU%20RESPUESTA%20INMEDIATA%20POR%20INCIDENTE%20DE%20SEGURIDAD" 
                    class="whatsapp-button" 
                    style="display: block; text-align: center; margin-top: 20px; background: linear-gradient(135deg, #ef4444, #dc2626);"
                    target="_blank">
@@ -1269,13 +1279,12 @@
                     <div class="mfh-card-icon">🔍</div>
                     <div class="mfh-card-title">
                         MX-SCANNER
-                        <span class="mfh-beta">v1.0</span>
+                        <span class="mfh-beta">v1.0 BETA</span>
                     </div>
                     <p class="mfh-card-desc">Escáner de puertos multihilo con detección de servicios y banner grabbing. 100x más rápido que nmap en pruebas locales.</p>
                     <div class="mfh-price-row">
                         <span class="mfh-price">GRATIS</span>
                         <div>
-                            <a href="https://github.com/Falconmx1/mx_falconmx_security/tree/main/tools/mx-scanner" class="mfh-btn mfh-btn-secondary" style="margin-right: 10px;" target="_blank">📄 Docs</a>
                             <a href="https://github.com/Falconmx1/mx_falconmx_security/raw/refs/heads/main/tools/mx-scanner/mx_scanner.py" class="mfh-btn mfh-btn-primary" download>⬇️ DESCARGAR .PY</a>
                         </div>
                     </div>
@@ -1296,10 +1305,7 @@
                     <p class="mfh-card-desc">Suite de cifrado profesional AES-256 + RSA. Cifra archivos, mensajes y genera llaves asimétricas como dios manda.</p>
                     <div class="mfh-price-row">
                         <span class="mfh-price">$10 USD</span>
-                        <div>
-                            <a href="https://github.com/Falconmx1/mx_falconmx_security/tree/main/tools/mx-encrypt" class="mfh-btn mfh-btn-secondary" style="margin-right: 10px;" target="_blank">📄 Docs</a>
-                            <a href="https://github.com/Falconmx1/mx_falconmx_security/raw/refs/heads/main/tools/mx-encrypt/mx-encrypt.zip" class="mfh-btn mfh-btn-primary" download>🔒 PRE-VENTA</a>
-                        </div>
+                        <a href="#" class="mfh-btn mfh-btn-primary" onclick="processPayment('MX-ENCRYPT', 10)">💳 COMPRAR</a>
                     </div>
                     <div class="mfh-card-footer">
                         <span>🐍 Python 3.8+</span>
@@ -1318,10 +1324,7 @@
                     <p class="mfh-card-desc">Escáner OWASP Top 10 automatizado. SQLi, XSS, LFI, SSRF y más. Reportes en PDF.</p>
                     <div class="mfh-price-row">
                         <span class="mfh-price">$15 USD</span>
-                        <div>
-                            <a href="https://github.com/Falconmx1/mx_falconmx_security/tree/main/tools/mx-webscan" class="mfh-btn mfh-btn-secondary" style="margin-right: 10px;" target="_blank">📄 Docs</a>
-                            <a href="https://github.com/Falconmx1/mx_falconmx_security/raw/refs/heads/main/tools/mx-webscan/mx-webscan.zip" class="mfh-btn mfh-btn-primary" download>🌐 BETA</a>
-                        </div>
+                        <a href="#" class="mfh-btn mfh-btn-primary" onclick="processPayment('MX-WEBSCAN', 15)">💳 COMPRAR</a>
                     </div>
                     <div class="mfh-card-footer">
                         <span>🌐 Web</span>
@@ -1373,6 +1376,13 @@
                         <span class="mfh-btn mfh-btn-disabled">📅 Q4 2024</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- BOTÓN PARA VER LA TIENDA COMPLETA -->
+            <div style="text-align: center; margin: 20px 0 40px;">
+                <a href="tools/mfh-suite.html" class="mfh-btn mfh-btn-primary" style="font-size: 18px; padding: 15px 35px;">
+                    🛒 VER TIENDA COMPLETA DE HERRAMIENTAS
+                </a>
             </div>
 
             <!-- CALLOUT Y CTA FINAL -->
@@ -1651,6 +1661,7 @@
                             <li><a href="#mfh-tools">🌐 MX-WEBSCAN (Beta)</a></li>
                             <li><a href="#mfh-tools">⚔️ MX-PENTEST</a></li>
                             <li><a href="#mfh-tools">🛡️ MX-DEFENDER</a></li>
+                            <li><a href="tools/mfh-suite.html">🛠️ Tienda de Herramientas</a></li>
                         </ul>
                     </div>
                     
@@ -1709,6 +1720,12 @@
 
     <!-- ========== SCRIPT DEL CHATBOT ========== -->
     <script>
+        // Función para procesar pagos (simulada por ahora)
+        function processPayment(toolName, price) {
+            alert(`🚀 Redirigiendo a pago seguro para ${toolName} - $${price} USD\n\nEn producción, aquí se integraría PayPal/Stripe.`);
+            // window.location.href = `https://www.paypal.com/checkout?product=${toolName}&price=${price}`;
+        }
+        
         // Cargar chatbot después de 3 segundos
         setTimeout(() => {
             // Cargar CSS del chatbot
@@ -1727,26 +1744,29 @@
         }, 3000);
         
         // Form submission handler
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            const telefono = document.getElementById('telefono').value;
-            if (!telefono.match(/^\+?[0-9\s\-\(\)]{10,}$/)) {
-                alert('Por favor ingresa un número de teléfono válido');
-                e.preventDefault();
-                return;
-            }
-            
-            // Google Analytics event
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'contact_form_submit', {
-                    'event_category': 'engagement',
-                    'event_label': 'contact_form'
-                });
-            }
-            
-            setTimeout(() => {
-                alert('✅ ¡Gracias! Tu consulta ha sido enviada. Un especialista se comunicará contigo en menos de 24 horas.');
-            }, 500);
-        });
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                const telefono = document.getElementById('telefono').value;
+                if (!telefono.match(/^\+?[0-9\s\-\(\)]{10,}$/)) {
+                    alert('Por favor ingresa un número de teléfono válido');
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Google Analytics event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'contact_form_submit', {
+                        'event_category': 'engagement',
+                        'event_label': 'contact_form'
+                    });
+                }
+                
+                setTimeout(() => {
+                    alert('✅ ¡Gracias! Tu consulta ha sido enviada. Un especialista se comunicará contigo en menos de 24 horas.');
+                }, 500);
+            });
+        }
         
         // Menú móvil
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
