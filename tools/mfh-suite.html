@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFH Tools Suite - Herramientas de Ciberseguridad Hechas en México 🇲🇽 | FalconMX Security</title>
+    <meta name="description" content="Suite profesional de ciberseguridad mexicana. MX-Scanner, MX-Encrypt, MX-Webscan y más. Pentesting, cifrado y hardening. Descarga gratis o compra con PayPal/Stripe.">
+    <meta name="keywords" content="herramientas ciberseguridad México, pentesting mexicano, MFH Tools, MX-Scanner, seguridad informática CDMX, ethical hacking tools">
+    <meta name="author" content="FalconMX Security">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://falconmx1.github.io/mx_falconmx_security/tools/mfh-suite.html">
+    <link rel="stylesheet" href="/mx_falconmx_security/estilo.css">
+    <style>
+        /* Estilos adicionales para la página de herramientas */
+        .tools-hero {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 3px solid #00ff88;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .tool-card {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .tool-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .tool-header.free {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        .tool-header.premium {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .tool-header.enterprise {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .tool-title {
+            font-size: 1.8rem;
+            margin: 0;
+            font-weight: bold;
+        }
+        .tool-version {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+        .tool-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #333;
+        }
+        .tool-price small {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .tool-description {
+            padding: 1.5rem;
+            color: #555;
+            line-height: 1.6;
+            min-height: 120px;
+        }
+        .tool-features {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        .tool-features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .tool-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .tool-features li:before {
+            content: "✓";
+            color: #00ff88;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        .tool-actions {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .btn-download, .btn-buy, .btn-demo {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .btn-download {
+            background: #28a745;
+            color: white;
+        }
+        .btn-download:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+        .btn-buy {
+            background: #007bff;
+            color: white;
+        }
+        .btn-buy:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .btn-demo {
+            background: #ffc107;
+            color: #333;
+        }
+        .btn-demo:hover {
+            background: #e0a800;
+            transform: scale(1.05);
+        }
+        .demo-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .demo-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        .demo-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar similar a tu index.html -->
+    <nav class="navbar" style="background: #0a0e27; padding: 1rem;">
+        <div class="nav-container" style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <div class="logo">
+                <a href="/mx_falconmx_security/" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: bold;">
+                    🛡️ FalconMX Security
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/mx_falconmx_security/" style="color: white; margin: 0 1rem;">Inicio</a>
+                <a href="/mx_falconmx_security/tools/mfh-suite.html" style="color: #00ff88; margin: 0 1rem;">Herramientas</a>
+                <a href="/mx_falconmx_security/portafolio/index.html" style="color: white; margin: 0 1rem;">Portafolio</a>
+                <a href="/mx_falconmx_security/blog/index.html" style="color: white; margin: 0 1rem;">Blog</a>
+                <a href="/mx_falconmx_security/contacto.html" style="color: white; margin: 0 1rem;">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="tools-hero">
+        <h1 style="color: white; font-size: 3rem; margin-bottom: 1rem;">🇲🇽 MFH TOOLS SUITE</h1>
+        <p style="color: #ccc; font-size: 1.2rem; max-width: 800px; margin: 0 auto;">
+            Las herramientas de ciberseguridad más cabronas hechas en México. <br>
+            Como Kali Linux, pero con huevos 🥚🔥
+        </p>
+    </div>
+
+    <!-- Tools Grid -->
+    <div class="tools-grid">
+        <!-- MX-SCANNER - Free -->
+        <div class="tool-card">
+            <div class="tool-header free">
+                <div class="tool-icon">🔍</div>
+                <h2 class="tool-title">MX-SCANNER</h2>
+                <div class="tool-version">Versión 1.0 BETA</div>
+            </div>
+            <div class="tool-price">Gratis <small>· Open Source</small></div>
+            <div class="tool-description">
+                Escáner de puertos multihilo con detección de servicios y banner grabbing. 100x más rápido que nmap en pruebas locales.
+            </div>
+            <div class="tool-features">
+                <ul>
+                    <li>Escaneo multihilo (1000+ puertos/segundo)</li>
+                    <li>Banner grabbing automático</li>
+                    <li>Detección de servicios y versiones</li>
+                    <li>Exportación a JSON/CSV</li>
+                    <li>Compatible Linux/Windows/Mac</li>
+                </ul>
+            </div>
+            <div class="tool-actions">
+                <a href="https://github.com/Falconmx1/mx_falconmx_security/releases" class="btn-download" target="_blank">⬇️ Descargar Gratis</a>
+                <button class="btn-demo" onclick="showDemo('MX-SCANNER')">🎮 Probar Demo</button>
+            </div>
+        </div>
+
+        <!-- MX-ENCRYPT - Premium -->
+        <div class="tool-card">
+            <div class="tool-header premium">
+                <div class="tool-icon">🔒</div>
+                <h2 class="tool-title">MX-ENCRYPT</h2>
+                <div class="tool-version">Pre-venta · Marzo 2024</div>
+            </div>
+            <div class="tool-price">$10 USD <small>· Licencia perpetua</small></div>
+            <div class="tool-description">
+                Suite de cifrado profesional AES-256 + RSA. Cifra archivos, mensajes y genera llaves asimétricas como dios manda.
+            </div>
+            <div class="tool-features">
+                <ul>
+                    <li>Cifrado AES-256/GCM para archivos</li>
+                    <li>RSA-4096 para llaves asimétricas</li>
+                    <li>Hash cracking básico (MD5, SHA1, SHA256)</li>
+                    <li>Generador de contraseñas seguras</li>
+                    <li>Interfaz CLI + GUI básica</li>
+                </ul>
+            </div>
+            <div class="tool-actions">
+                <button class="btn-buy" onclick="processPayment('MX-ENCRYPT', 10)">💳 Comprar $10 USD</button>
+                <button class="btn-demo" onclick="showDemo('MX-ENCRYPT')">🔓 Probar Demo</button>
+            </div>
+        </div>
+
+        <!-- MX-WEBSCAN - Premium -->
+        <div class="tool-card">
+            <div class="tool-header premium">
+                <div class="tool-icon">🌐</div>
+                <h2 class="tool-title">MX-WEBSCAN</h2>
+                <div class="tool-version">Early Access · Abril 2024</div>
+            </div>
+            <div class="tool-price">$15 USD <small>· Actualizaciones 1 año</small></div>
+            <div class="tool-description">
+                Escáner OWASP Top 10 automatizado. SQLi, XSS, LFI, SSRF y más. Reportes profesionales en PDF.
+            </div>
+            <div class="tool-features">
+                <ul>
+                    <li>OWASP Top 10 completo</li>
+                    <li>SQLi, XSS, LFI, SSRF, CSRF</li>
+                    <li>Reportes PDF ejecutivos</li>
+                    <li>Modo headless browser</li>
+                    <li>Integración CI/CD</li>
+                </ul>
+            </div>
+            <div class="tool-actions">
+                <button class="btn-buy" onclick="processPayment('MX-WEBSCAN', 15)">💳 Comprar $15 USD</button>
+                <button class="btn-demo" onclick="showDemo('MX-WEBSCAN')">🌐 Probar Demo</button>
+            </div>
+        </div>
+
+        <!-- MX-PENTEST - Enterprise -->
+        <div class="tool-card">
+            <div class="tool-header enterprise">
+                <div class="tool-icon">⚔️</div>
+                <h2 class="tool-title">MX-PENTEST</h2>
+                <div class="tool-version">Próximamente · Junio 2024</div>
+            </div>
+            <div class="tool-price">$30 USD <small>· Suite completa</small></div>
+            <div class="tool-description">
+                25+ herramientas en una suite: reconocimiento, explotación, post-explotación y pivoteo. El kit definitivo.
+            </div>
+            <div class="tool-features">
+                <ul>
+                    <li>Reconocimiento avanzado (OSINT, Shodan)</li>
+                    <li>Explotación automatizada (Metasploit integrado)</li>
+                    <li>Post-explotación y persistencia</li>
+                    <li>Pivoting y tunneling</li>
+                    <li>Reporting automático</li>
+                </ul>
+            </div>
+            <div class="tool-actions">
+                <button class="btn-buy" onclick="showPreorder()">⚡ Pre-reservar $30 USD</button>
+                <button class="btn-demo" onclick="showDemo('MX-PENTEST')">🎯 Ver Demo</button>
+            </div>
+        </div>
+
+        <!-- MX-DEFENDER - New -->
+        <div class="tool-card">
+            <div class="tool-header enterprise">
+                <div class="tool-icon">🛡️</div>
+                <h2 class="tool-title">MX-DEFENDER</h2>
+                <div class="tool-version">Q3 2024</div>
+            </div>
+            <div class="tool-price">$25 USD <small>· Hardening automático</small></div>
+            <div class="tool-description">
+                Hardening automático para Linux/Windows. Aplica CIS benchmarks con 1 comando y fortalece tu infraestructura.
+            </div>
+            <div class="tool-features">
+                <ul>
+                    <li>CIS Benchmarks automatizados</li>
+                    <li>Hardening para Ubuntu, Debian, CentOS</li>
+                    <li>Configuración de firewalls (iptables, nftables)</li>
+                    <li>Detección de vulnerabilidades</li>
+                    <li>Rollback de configuraciones</li>
+                </ul>
+            </div>
+            <div class="tool-actions">
+                <button class="btn-buy" onclick="notifyMe('MX-DEFENDER')">🔔 Notificarme</button>
+            </div>
+        </div>
+
+        <!-- MX-OSINT - New -->
+        <div class="tool-card">
+            <div class="tool-header premium">
+                <div class="tool-icon">🕵️</div>
+                <h2 class="tool-title">MX-OSINT</h2>
+                <div class="tool-version">Q4 2024</div>
+            </div>
+            <div class="tool-price">$20 USD <small>· Intelligence gathering</small></div>
+            <div class="tool-description">
+                Recopilación de información de fuentes abiertas. Emails, dominios, redes sociales y dark web.
+            </div>
+            <div class="tool-features">
+                <ul>
+                    <li>Búsqueda de emails y leaks</li>
+                    <li>WHOIS y subdominios</li>
+                    <li>Análisis de redes sociales</li>
+                    <li>Detección de data breaches</li>
+                    <li>Reportes OSINT</li>
+                </ul>
+            </div>
+            <div class="tool-actions">
+                <button class="btn-buy" onclick="notifyMe('MX-OSINT')">🔔 Notificarme</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="demo-modal">
+        <div class="demo-content">
+            <h3 id="demoTitle">Demo Interactiva</h3>
+            <p id="demoDescription">Ingresa un dominio o IP para probar la herramienta:</p>
+            <input type="text" id="demoInput" class="demo-input" placeholder="ejemplo: google.com o 192.168.1.1">
+            <button class="btn-download" onclick="runDemo()">Ejecutar Prueba</button>
+            <button class="btn-demo" onclick="closeDemo()" style="margin-top: 1rem;">Cerrar</button>
+            <div id="demoResult" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 5px; display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentTool = '';
+        
+        function showDemo(toolName) {
+            currentTool = toolName;
+            const modal = document.getElementById('demoModal');
+            const title = document.getElementById('demoTitle');
+            const description = document.getElementById('demoDescription');
+            
+            if (toolName === 'MX-SCANNER') {
+                title.textContent = '🔍 MX-SCANNER Demo';
+                description.textContent = 'Ingresa una IP o dominio para escanear puertos comunes (simulado):';
+            } else if (toolName === 'MX-ENCRYPT') {
+                title.textContent = '🔒 MX-ENCRYPT Demo';
+                description.textContent = 'Ingresa un texto para cifrar con AES-256 (demo simulada):';
+            } else if (toolName === 'MX-WEBSCAN') {
+                title.textContent = '🌐 MX-WEBSCAN Demo';
+                description.textContent = 'Ingresa una URL para escanear vulnerabilidades OWASP (simulado):';
+            } else if (toolName === 'MX-PENTEST') {
+                title.textContent = '⚔️ MX-PENTEST Demo';
+                description.textContent = 'Demo en desarrollo. Próximamente podrás probar la suite completa.';
+                document.getElementById('demoInput').style.display = 'none';
+            }
+            
+            modal.style.display = 'flex';
+            document.getElementById('demoResult').style.display = 'none';
+            document.getElementById('demoInput').value = '';
+            document.getElementById('demoInput').style.display = 'block';
+        }
+        
+        function runDemo() {
+            const input = document.getElementById('demoInput').value;
+            const resultDiv = document.getElementById('demoResult');
+            
+            if (!input && currentTool !== 'MX-PENTEST') {
+                alert('Por favor ingresa un dominio, IP o texto para probar');
+                return;
+            }
+            
+            resultDiv.style.display = 'block';
+            
+            if (currentTool === 'MX-SCANNER') {
+                resultDiv.innerHTML = `
+                    <strong>Resultados del escaneo para ${input}:</strong><br>
+                    ✅ Puerto 80 (HTTP) - Abierto<br>
+                    ✅ Puerto 443 (HTTPS) - Abierto<br>
+                    ✅ Puerto 22 (SSH) - Filtrado<br>
+                    ✅ Puerto 3306 (MySQL) - Cerrado<br>
+                    📊 4 puertos escaneados en 0.32 segundos<br><br>
+                    <em>¿Quieres el escaneo completo? Descarga MX-SCANNER gratis.</em>
+                `;
+            } else if (currentTool === 'MX-ENCRYPT') {
+                const encrypted = btoa(input); // Simulación simple
+                resultDiv.innerHTML = `
+                    <strong>Texto original:</strong> ${input}<br>
+                    <strong>Texto cifrado (AES-256 simulado):</strong> ${encrypted}<br>
+                    <strong>Hash MD5:</strong> ${Math.random().toString(36).substring(2, 15)}<br><br>
+                    <em>Obtén MX-ENCRYPT por solo $10 USD para cifrado real.</em>
+                `;
+            } else if (currentTool === 'MX-WEBSCAN') {
+                resultDiv.innerHTML = `
+                    <strong>Escaneo OWASP para ${input}:</strong><br>
+                    🔴 SQL Injection (SQLi) - Potencialmente vulnerable<br>
+                    🟡 Cross-Site Scripting (XSS) - No detectado<br>
+                    🟢 LFI/RFI - Seguro<br>
+                    🔴 Security Headers - Missing CSP header<br><br>
+                    <em>Descarga MX-WEBSCAN ($15 USD) para análisis completo con reporte PDF.</em>
+                `;
+            } else if (currentTool === 'MX-PENTEST') {
+                resultDiv.innerHTML = `
+                    <strong>🚀 MX-PENTEST Demo en desarrollo</strong><br>
+                    Próximamente podrás probar:<br>
+                    - Escaneo de vulnerabilidades avanzado<br>
+                    - Explotación controlada<br>
+                    - Post-explotación simulada<br><br>
+                    <button class="btn-buy" onclick="window.location.href='#contact'">Pre-reservar ahora ($30 USD)</button>
+                `;
+            }
+        }
+        
+        function closeDemo() {
+            document.getElementById('demoModal').style.display = 'none';
+        }
+        
+        function processPayment(toolName, price) {
+            // Integración con PayPal/Stripe - Simulación por ahora
+            alert(`🚀 Redirigiendo a pago seguro para ${toolName} - $${price} USD\n\nEn producción, aquí se integraría PayPal/Stripe.`);
+            // window.location.href = `https://www.paypal.com/checkout?product=${toolName}&price=${price}`;
+        }
+        
+        function showPreorder() {
+            alert(`⚡ Pre-reserva de MX-PENTEST\n\nPrecio: $30 USD\nIncluye 1 año de actualizaciones.\n\nPróximamente habilitaremos pagos.`);
+        }
+        
+        function notifyMe(toolName) {
+            const email = prompt(`🔔 Déjanos tu correo y te avisaremos cuando ${toolName} esté disponible:`);
+            if (email && email.includes('@')) {
+                alert(`✅ ¡Gracias! Te notificaremos a ${email} cuando ${toolName} sea lanzado.`);
+                // Aquí podrías guardar el email en un Google Sheet
+            } else if (email) {
+                alert('❌ Por favor ingresa un correo válido.');
+            }
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('demoModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer style="background: #0a0e27; color: white; padding: 3rem 2rem; text-align: center; margin-top: 3rem;">
+        <p>🇲🇽 MFH TOOLS SECURITY MX - Hecho en México, diseñado para el mundo</p>
+        <p>¿Quieres contribuir o reportar bugs? Gana regalías del 10-20% por herramienta vendida.</p>
+        <p>© 2024 FalconMX Security. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
