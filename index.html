@@ -2,752 +2,363 @@
 <html lang="es-MX">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FalconMX Security + MFH TOOLS - Ciberseguridad Ética y Herramientas Python</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
-    <!-- ========== META TAGS PROFESIONALES + SEO LOCAL ========== -->
-    <meta name="description" content="Consultoría profesional en ciberseguridad ética + MFH TOOLS: Suite de herramientas de seguridad hechas en México. Pentesting, desarrollo seguro y software Python. Especialistas en CDMX y Guadalajara.">
-    <meta name="keywords" content="ciberseguridad méxico, consultoría seguridad CDMX, pentesting Guadalajara, ethical hacking méxico, seguridad informática empresas méxico, MFH Tools, FalconMX Security, herramientas python, escáner de puertos, kali linux mexicano">
-    <meta name="author" content="Mario Alberto Falcón Hernández - FalconMX Security & MFH TOOLS">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="Spanish">
-    
-    <!-- Geo Tags para SEO Local -->
-    <meta name="geo.region" content="MX-DIF" />
-    <meta name="geo.placename" content="Ciudad de México" />
-    <meta name="geo.position" content="19.432608;-99.133209" />
-    <meta name="ICBM" content="19.432608, -99.133209" />
-    
-    <!-- Open Graph / Redes Sociales -->
-    <meta property="og:title" content="FalconMX Security + MFH TOOLS - Hecho en México 🇲🇽">
-    <meta property="og:description" content="Consultoría en ciberseguridad + Suite de herramientas estilo Kali Linux desarrolladas en Python. Hecho en México para el mundo.">
-    <meta property="og:image" content="https://falconmx1.github.io/mx_falconmx_security/favicon-32x32.png">
-    <meta property="og:url" content="https://falconmx1.github.io/mx_falconmx_security/">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="es_MX">
-    
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="FalconMX Security + MFH TOOLS">
-    <meta name="twitter:description" content="Ciberseguridad profesional + herramientas Python de clase mundial. Hecho en México.">
-    
-    <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FalconMX Security + MFH TOOLS | Hecho en México 🇲🇽</title>
+    <meta name="description" content="La suite de ciberseguridad más cabrona hecha en México. Consultoría ética, pentesting, y herramientas como MX-SCANNER, MX-ENCRYPT, MX-WEBSCAN. Precios en MXN.">
+    <link rel="icon" type="image/png" href="favicon-32x32.png">
+    <link rel="stylesheet" href="estilo.css">
     <style>
-        /* ========== RESET Y VARIABLES ========== */
-        :root {
-            --primary-dark: #0a192f;
-            --primary-blue: #1e40af;
-            --primary-darker: #0f172a;
-            --accent-cyan: #06b6d4;
-            --accent-green: #10b981;
-            --warning-orange: #f59e0b;
-            --alert-red: #ef4444;
-            --text-light: #f8fafc;
-            --text-gray: #94a3b8;
-            --card-bg: #1e293b;
-            --border-color: #334155;
-            --mfh-orange: #ff6b00;
-            --mfh-dark: #0a0f1e;
-            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --glow-cyan: 0 0 15px rgba(6, 182, 212, 0.5);
+        /* Ajustes extras para la nueva funcionalidad del carrito y mejoras visuales */
+        .tool-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: var(--primary-dark);
-            color: var(--text-light);
-            line-height: 1.7;
-            transition: background 0.3s, color 0.3s;
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
         }
-        
-        /* Modo claro */
-        body.light-mode {
-            background: #f0f4f8;
-            color: #1e293b;
+        .btn-carrito {
+            background: #ff6600;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+            width: 100%;
         }
-        body.light-mode .service-card,
-        body.light-mode .mfh-card,
-        body.light-mode .contact-bar,
-        body.light-mode .contact-form-section {
-            background: white;
-            border-color: #e2e8f0;
+        .btn-carrito:hover {
+            background: #e65c00;
         }
-        body.light-mode .price-tag {
-            background: #e0f2fe;
+        .btn-carrito:active {
+            transform: scale(0.98);
         }
-        
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Navegación */
-        .main-nav {
+        .carrito-sidebar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(10, 25, 47, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
+            right: 1rem;
+            top: 5rem;
+            background: #1e1e2f;
+            border-radius: 1rem;
+            padding: 1rem;
+            width: 260px;
             z-index: 1000;
-            padding: 15px 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            border-left: 4px solid #ff6600;
+            backdrop-filter: blur(5px);
         }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        @media (max-width: 768px) {
+            .carrito-sidebar { display: none; }
+        }
+        .carrito-sidebar h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+            color: #ff6600;
+        }
+        .carrito-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .carrito-sidebar li {
+            font-size: 0.8rem;
+            border-bottom: 1px solid #333;
+            padding: 0.3rem 0;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-        .nav-logo-icon { font-size: 1.8rem; color: var(--accent-cyan); }
-        .nav-logo-text {
-            font-size: 1.2rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .nav-menu {
-            display: flex;
-            gap: 25px;
-            list-style: none;
-        }
-        .nav-link {
-            color: var(--text-gray);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        .nav-link:hover { color: var(--accent-cyan); }
-        .nav-cta {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue));
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-        .nav-cta:hover { transform: translateY(-2px); }
-        
-        /* Hero */
-        .hero-section {
-            text-align: center;
-            padding: 120px 20px 80px;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
-            border-bottom: 1px solid var(--border-color);
-            margin-top: 60px;
-        }
-        .header-title {
-            font-size: 3.5rem;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 800;
-        }
-        .badge-ethical {
-            display: inline-block;
-            background: var(--accent-green);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin: 15px 0;
-        }
-        
-        /* Contacto */
-        .contact-bar {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 40px 0;
-            border: 1px solid var(--border-color);
-        }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            align-items: center;
-        }
-        .whatsapp-button {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: transform 0.3s;
-        }
-        .whatsapp-button:hover { transform: translateY(-2px); }
-        
-        /* Servicios */
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin: 60px 0 40px;
-        }
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
-            margin: 15px auto;
-            border-radius: 2px;
-        }
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-        .service-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s;
-        }
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-cyan);
-        }
-        .price-tag {
-            display: inline-block;
-            background: rgba(6, 182, 212, 0.1);
-            color: var(--accent-cyan);
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: 600;
-            margin: 15px 0;
-        }
-        
-        /* MFH TOOLS */
-        .mfh-section {
-            background: linear-gradient(135deg, #0a0f1e 0%, #0e1a2b 100%);
-            padding: 80px 20px;
-            margin: 40px 0;
-            border-top: 4px solid #ff6b00;
-            border-bottom: 4px solid #ff6b00;
-        }
-        .mfh-title {
-            font-size: 48px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .mfh-title span { color: #ff6b00; }
-        .mfh-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto 50px;
-        }
-        .mfh-card {
-            background: #111827;
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid #2d3748;
-            transition: all 0.3s;
-        }
-        .mfh-card:hover {
-            transform: translateY(-10px);
-            border-color: #ff6b00;
-        }
-        .mfh-card-title {
-            font-size: 28px;
-            margin: 0 0 10px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .mfh-beta {
-            background: #ff6b00;
-            color: black;
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 50px;
+        .carrito-total {
             font-weight: bold;
+            text-align: right;
+            border-top: 1px solid #ff6600;
+            padding-top: 0.5rem;
         }
-        .mfh-soon {
-            background: #6b7280;
-            color: white;
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 50px;
-        }
-        .mfh-price {
-            color: #ff6b00;
-            font-weight: bold;
-            font-size: 22px;
-        }
-        .mfh-price-mxn {
-            color: #9ca3af;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-        .mfh-btn {
-            padding: 12px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-            display: inline-block;
-            cursor: pointer;
+        .vaciar-carrito {
+            background: #aa2e2e;
             border: none;
-        }
-        .mfh-btn-primary {
-            background: #ff6b00;
-            color: black;
-        }
-        .mfh-btn-primary:hover {
-            background: transparent;
-            border: 2px solid #ff6b00;
             color: white;
-        }
-        .copy-btn {
-            background: #2d3748;
-            color: #ff6b00;
-            padding: 8px 15px;
-            font-size: 12px;
-        }
-        .copy-btn:hover { background: #ff6b00; color: black; }
-        
-        /* Demo Scanner */
-        .scanner-demo {
-            background: #000000;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            font-family: monospace;
-        }
-        .scanner-output {
-            background: #0a0f1e;
-            padding: 15px;
-            border-radius: 10px;
-            height: 150px;
-            overflow-y: auto;
-            font-size: 12px;
-            color: #10b981;
-        }
-        
-        /* Calculadora de riesgo */
-        .risk-calculator {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 40px 0;
-        }
-        .risk-question {
-            margin-bottom: 20px;
-        }
-        .risk-question label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        .risk-question select, .risk-question input {
+            padding: 0.3rem;
             width: 100%;
-            padding: 10px;
-            background: var(--primary-darker);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-light);
-        }
-        .risk-result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .risk-high { background: #dc2626; color: white; }
-        .risk-medium { background: #f59e0b; color: black; }
-        .risk-low { background: #10b981; color: white; }
-        
-        /* Tooltips */
-        [data-tooltip] {
-            position: relative;
-            cursor: help;
-        }
-        [data-tooltip]:before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            white-space: nowrap;
-            display: none;
-            z-index: 100;
-        }
-        [data-tooltip]:hover:before { display: block; }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-menu { display: none; }
-            .header-title { font-size: 2rem; }
-            .mfh-title { font-size: 32px; }
-        }
-        
-        .footer {
-            background: var(--primary-darker);
-            padding: 60px 20px 30px;
-            margin-top: 80px;
-            border-top: 1px solid var(--border-color);
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        .social-links { display: flex; gap: 15px; flex-wrap: wrap; }
-        .social-link {
-            color: var(--text-gray);
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: 0.3s;
-        }
-        .social-link:hover { color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); }
-        
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #25D366;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: transform 0.3s;
-            text-decoration: none;
-        }
-        .whatsapp-float:hover { transform: scale(1.1); }
-        
-        .theme-toggle {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            padding: 8px 15px;
-            border-radius: 20px;
+            border-radius: 1rem;
             cursor: pointer;
-            margin-left: 15px;
+            margin-top: 0.5rem;
+        }
+        .checkout-btn {
+            background: #2e8b57;
+            margin-top: 0.5rem;
+        }
+        .badge-beta {
+            background: #ffaa00;
+            color: #1e1e1e;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+            font-weight: bold;
+        }
+        .badge-gratis {
+            background: #00aa55;
+        }
+        .precio-oferta {
+            text-decoration: line-through;
+            color: #aaa;
+            font-size: 0.8rem;
         }
     </style>
 </head>
 <body>
-    <nav class="main-nav">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <div class="nav-logo-icon">🛡️</div>
-                <div class="nav-logo-text">FalconMX Security</div>
-            </a>
-            <ul class="nav-menu">
-                <li><a href="#" class="nav-link">Inicio</a></li>
-                <li><a href="#servicios" class="nav-link">Servicios</a></li>
-                <li><a href="#mfh-tools" class="nav-link" style="color:#ff6b00;">🔥 MFH TOOLS</a></li>
-                <li><a href="#contacto" class="nav-link">Contacto</a></li>
-            </ul>
-            <div style="display: flex; gap: 10px;">
-                <button class="theme-toggle" onclick="document.body.classList.toggle('light-mode')">🌓</button>
-                <a href="#contacto" class="nav-cta">Auditoría Gratuita</a>
-            </div>
-        </div>
-    </nav>
 
-    <section class="hero-section">
+    <!-- Sidebar del carrito (visible solo en desktop) -->
+    <div class="carrito-sidebar" id="carritoSidebar">
+        <h3>🛒 Mis herramientas</h3>
+        <ul id="listaCarrito">
+            <li>✨ Vacío, agrega algo cabrón</li>
+        </ul>
+        <div class="carrito-total" id="totalCarrito">Total: $0 MXN</div>
+        <button id="vaciarCarritoBtn" class="vaciar-carrito">🗑 Vaciar</button>
+        <button id="checkoutBtn" class="vaciar-carrito checkout-btn">📦 Solicitar cotización</button>
+        <small style="display:block; margin-top:0.5rem; text-align:center;">Pago seguro por WhatsApp</small>
+    </div>
+
+    <header>
         <div class="container">
-            <div class="badge-ethical">🟢 Certificación Ética Asegurada</div>
-            <h1 class="header-title">FalconMX Security</h1>
-            <p class="tagline" style="color: var(--text-gray); max-width: 600px; margin: 20px auto;">
-                Protección avanzada para empresas y desarrolladores. Consultoría especializada en ciberseguridad 
-                con metodología ética y resultados tangibles.
-            </p>
-            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="#servicios" class="whatsapp-button" style="background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue));">📋 Ver Servicios</a>
-                <a href="#mfh-tools" class="whatsapp-button" style="background: #ff6b00; color: black;">🔥 MFH TOOLS</a>
+            <h1>🇲🇽 FalconMX Security + MFH TOOLS</h1>
+            <p class="tagline">Protección avanzada para empresas y desarrolladores. <strong>Hecho en México, con huevos 🥚🔥</strong></p>
+            <div class="contacto-rapido">
+                <span>📞 +52 55 6126 4662</span>
+                <span>✉️ mariofalcon030901@gmail.com</span>
             </div>
         </div>
-    </section>
+    </header>
 
-    <div class="container">
-        <div class="contact-bar">
-            <div class="contact-grid">
-                <div class="contact-item">
-                    <div class="contact-icon">📞</div>
-                    <div><h3>Teléfono Directo</h3><p style="color: var(--accent-cyan);">+52 55 6126 4662</p></div>
+    <main class="container">
+        <!-- Servicios profesionales -->
+        <section>
+            <h2>🛡️ Servicios especializados</h2>
+            <div class="servicios-grid">
+                <div class="servicio-card">
+                    <h3>🔍 Auditoría de Seguridad Completa</h3>
+                    <ul>
+                        <li>✓ Pentesting ético controlado</li>
+                        <li>✓ Análisis OWASP Top 10</li>
+                        <li>✓ Reporte ejecutivo + técnico (PDF)</li>
+                    </ul>
+                    <p><span class="precio-oferta">$8,000 MXN</span> <strong>$7,200 MXN 🔥</strong></p>
+                    <button class="btn-solicitar" data-servicio="Auditoría Completa">Solicitar Auditoría</button>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-icon">✉️</div>
-                    <div><h3>Correo Electrónico</h3><p>mariofalcon030901@gmail.com</p></div>
+                <div class="servicio-card">
+                    <h3>💻 Desarrollo Seguro (DevSecOps)</h3>
+                    <ul>
+                        <li>✓ Code Review especializado</li>
+                        <li>✓ Implementación SAST/DAST</li>
+                        <li>✓ Hardening de aplicaciones</li>
+                    </ul>
+                    <p>Desde <strong>$10,800 MXN/mes</strong></p>
+                    <button class="btn-solicitar" data-servicio="DevSecOps">Consultar Planes</button>
                 </div>
-                <div><a href="https://wa.me/525561264662" class="whatsapp-button">📱 Contactar por WhatsApp</a></div>
-            </div>
-        </div>
-
-        <h2 class="section-title" id="servicios">Servicios Especializados</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">🔍</div>
-                <h3>Auditoría de Seguridad Completa</h3>
-                <ul class="service-features" style="list-style: none;">
-                    <li>✓ Pentesting ético controlado</li>
-                    <li>✓ Análisis OWASP Top 10</li>
-                    <li>✓ Reporte ejecutivo + técnico</li>
-                </ul>
-                <div class="price-tag">Desde $7,200 MXN <span style="text-decoration: line-through; font-size:12px;">$8,000</span> 🔥</div>
-                <a href="#contacto" class="whatsapp-button" style="display: block; text-align: center;">Solicitar Auditoría</a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">💻</div>
-                <h3>Desarrollo Seguro (DevSecOps)</h3>
-                <ul class="service-features" style="list-style: none;">
-                    <li>✓ Code Review especializado</li>
-                    <li>✓ Implementación SAST/DAST</li>
-                    <li>✓ Hardening de aplicaciones</li>
-                </ul>
-                <div class="price-tag">Desde $10,800 MXN/mes</div>
-                <a href="#contacto" class="whatsapp-button" style="display: block; text-align: center;">Consultar Planes</a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">🚨</div>
-                <h3>Respuesta a Incidentes</h3>
-                <ul class="service-features" style="list-style: none;">
-                    <li>✓ Respuesta 24/7 para emergencias</li>
-                    <li>✓ Contención de daños</li>
-                    <li>✓ Análisis forense digital</li>
-                </ul>
-                <div class="price-tag">$13,500 MXN (emergencia)</div>
-                <a href="https://wa.me/525561264662?text=🚨%20INCIDENTE%20DE%20SEGURIDAD" class="whatsapp-button" style="background: #ef4444; display: block; text-align: center;">🚨 EMERGENCIA</a>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">🎓</div>
-                <h3>Capacitación en Ciberseguridad</h3>
-                <ul class="service-features" style="list-style: none;">
-                    <li>✓ Simulaciones de phishing</li>
-                    <li>✓ Talleres de hardening</li>
-                    <li>✓ Certificación interna</li>
-                </ul>
-                <div class="price-tag">Desde $4,500 MXN/sesión</div>
-                <a href="#contacto" class="whatsapp-button" style="display: block; text-align: center;">Solicitar Programa</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- MFH TOOLS COMPLETA -->
-    <section id="mfh-tools" class="mfh-section">
-        <div class="mfh-container" style="max-width:1200px; margin:0 auto;">
-            <div style="text-align: center; margin-bottom: 50px;">
-                <span style="background:#ff6b00; padding:8px 20px; border-radius:50px;">🇲🇽 HECHO EN MÉXICO</span>
-                <h2 class="mfh-title">MFH TOOLS <span>SECURITY MX</span></h2>
-                <p>La suite de ciberseguridad más cabrona hecha en México. Como Kali Linux, pero con huevos 🥚🔥</p>
-            </div>
-
-            <!-- FILA 1 -->
-            <div class="mfh-grid">
-                <div class="mfh-card">
-                    <div class="mfh-card-icon">🔍</div>
-                    <div class="mfh-card-title">MX-SCANNER <span class="mfh-beta">v1.0 BETA</span></div>
-                    <p>Escáner de puertos multihilo con detección de servicios. 100x más rápido que nmap.</p>
-                    <div class="mfh-price-row" style="margin:15px 0;"><span class="mfh-price">GRATIS</span></div>
-                    <button class="mfh-btn mfh-btn-primary copy-btn" onclick="copyCommand('git clone https://github.com/Falconmx1/mx_scanner.git')">📋 Copiar comando</button>
-                    <div class="scanner-demo">
-                        <div style="display:flex; gap:10px; margin-bottom:10px;">
-                            <input type="text" id="scanTarget" placeholder="Ej: scanme.nmap.org" style="flex:1; padding:8px; border-radius:5px; border:none;">
-                            <button onclick="runDemoScan()" style="background:#ff6b00; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;">Escanear</button>
-                        </div>
-                        <div id="scanOutput" class="scanner-output">[MX-SCANNER] Listo para escanear. Ingresa un objetivo...</div>
-                    </div>
+                <div class="servicio-card">
+                    <h3>🚨 Respuesta a Incidentes 24/7</h3>
+                    <ul>
+                        <li>✓ Contención de daños inmediata</li>
+                        <li>✓ Análisis forense digital</li>
+                        <li>✓ Reporte ejecutable</li>
+                    </ul>
+                    <p><strong>$13,500 MXN</strong> (emergencia)</p>
+                    <button class="btn-solicitar" data-servicio="Respuesta a Incidentes">🚨 EMERGENCIA</button>
                 </div>
-                <div class="mfh-card">
-                    <div class="mfh-card-icon">🔒</div>
-                    <div class="mfh-card-title">MX-ENCRYPT <span class="mfh-beta">PRE-VENTA</span></div>
-                    <p>Suite de cifrado AES-256 + RSA. Cifra archivos, mensajes y genera llaves asimétricas.</p>
-                    <div class="mfh-price-row"><span class="mfh-price">$12 USD</span><span class="mfh-price-mxn">($216 MXN)</span></div>
-                    <button class="mfh-btn mfh-btn-primary" onclick="addToCart('MX-ENCRYPT', 12)">💳 COMPRAR</button>
-                    <button class="mfh-btn copy-btn" onclick="copyCommand('pip install mx-encrypt')">📋 Copiar comando</button>
-                </div>
-                <div class="mfh-card">
-                    <div class="mfh-card-icon">🌐</div>
-                    <div class="mfh-card-title">MX-WEBSCAN <span class="mfh-soon">BETA</span></div>
-                    <p>Escáner OWASP Top 10 automatizado. SQLi, XSS, LFI, SSRF. Reportes en PDF.</p>
-                    <div class="mfh-price-row"><span class="mfh-price">$18 USD</span><span class="mfh-price-mxn">($324 MXN)</span></div>
-                    <button class="mfh-btn mfh-btn-primary" onclick="addToCart('MX-WEBSCAN', 18)">💳 COMPRAR</button>
+                <div class="servicio-card">
+                    <h3>🎓 Capacitación en Ciberseguridad</h3>
+                    <ul>
+                        <li>✓ Simulaciones de phishing</li>
+                        <li>✓ Talleres de hardening</li>
+                        <li>✓ Certificación interna</li>
+                    </ul>
+                    <p>Desde <strong>$4,500 MXN/sesión</strong></p>
+                    <button class="btn-solicitar" data-servicio="Capacitación">Solicitar Programa</button>
                 </div>
             </div>
-
-            <!-- FILA 2 -->
-            <div class="mfh-grid">
-                <div class="mfh-card"><div class="mfh-card-icon">⚔️</div><div class="mfh-card-title">MX-PENTEST <span class="mfh-soon">PRÓXIMAMENTE</span></div><p>25+ herramientas: reconocimiento, explotación, post-explotación.</p><div class="mfh-price-row"><span class="mfh-price">$35 USD</span><span class="mfh-price-mxn">($630 MXN)</span></div><span class="mfh-btn mfh-btn-disabled" style="background:#2d3748;">⚡ EN DESARROLLO</span></div>
-                <div class="mfh-card"><div class="mfh-card-icon">🛡️</div><div class="mfh-card-title">MX-DEFENDER</div><p>Hardening automático para Linux/Windows. CIS benchmarks en 1 comando.</p><div class="mfh-price-row"><span class="mfh-price">$28 USD</span><span class="mfh-price-mxn">($504 MXN)</span></div><span class="mfh-btn mfh-btn-disabled">📅 PRONTO</span></div>
-                <div class="mfh-card"><div class="mfh-card-icon">🕵️</div><div class="mfh-card-title">MX-OSINT</div><p>OSINT: emails, dominios, redes sociales. Recopilación de fuentes abiertas.</p><div class="mfh-price-row"><span class="mfh-price">$22 USD</span><span class="mfh-price-mxn">($396 MXN)</span></div><span class="mfh-btn mfh-btn-disabled">📅 PRONTO</span></div>
-            </div>
-
-            <!-- NUEVAS HERRAMIENTAS -->
-            <div class="mfh-grid">
-                <div class="mfh-card"><div class="mfh-card-icon">🔍</div><div class="mfh-card-title">MX-RECON <span class="mfh-beta">NUEVO</span></div><p>OSINT + fingerprinting de activos. Escaneo de subdominios y metadatos.</p><div class="mfh-price-row"><span class="mfh-price">$15 USD</span><span class="mfh-price-mxn">($270 MXN)</span></div><button class="mfh-btn mfh-btn-primary" onclick="addToCart('MX-RECON', 15)">💳 COMPRAR</button></div>
-                <div class="mfh-card"><div class="mfh-card-icon">🎣</div><div class="mfh-card-title">MX-PHISH <span class="mfh-beta">NUEVO</span></div><p>Simulador de phishing para empresas. Campañas y reportes.</p><div class="mfh-price-row"><span class="mfh-price">$40 USD</span><span class="mfh-price-mxn">($720 MXN)</span></div><button class="mfh-btn mfh-btn-primary" onclick="addToCart('MX-PHISH', 40)">💳 COMPRAR</button></div>
-                <div class="mfh-card"><div class="mfh-card-icon">🔬</div><div class="mfh-card-title">MX-FORENSIC <span class="mfh-beta">NUEVO</span></div><p>Análisis forense de memoria y discos. Recuperación de evidencia.</p><div class="mfh-price-row"><span class="mfh-price">$45 USD</span><span class="mfh-price-mxn">($810 MXN)</span></div><button class="mfh-btn mfh-btn-primary" onclick="addToCart('MX-FORENSIC', 45)">💳 COMPRAR</button></div>
-            </div>
-            <div class="mfh-grid">
-                <div class="mfh-card"><div class="mfh-card-icon">⚙️</div><div class="mfh-card-title">MX-REVERSING <span class="mfh-beta">NUEVO</span></div><p>Ingeniería inversa de binarios. Desensamblador y debugger.</p><div class="mfh-price-row"><span class="mfh-price">$50 USD</span><span class="mfh-price-mxn">($900 MXN)</span></div><button class="mfh-btn mfh-btn-primary" onclick="addToCart('MX-REVERSING', 50)">💳 COMPRAR</button></div>
-                <div class="mfh-card"><div class="mfh-card-icon">🛡️</div><div class="mfh-card-title">MX-ANTIDDOS <span class="mfh-beta">NUEVO</span></div><p>Mitigación DDoS capa 7. Rate limiting y detección de bots.</p><div class="mfh-price-row"><span class="mfh-price">$25 USD</span><span class="mfh-price-mxn">($450 MXN)</span></div><button class="mfh-btn mfh-btn-primary" onclick="addToCart('MX-ANTIDDOS', 25)">💳 COMPRAR</button></div>
-                <div class="mfh-card" style="background: linear-gradient(135deg,#1a2a3a,#0a0f1e);"><div class="mfh-card-icon">🛒</div><div class="mfh-card-title">Ver Carrito</div><p id="cartCount">0 herramientas en carrito</p><button class="mfh-btn mfh-btn-primary" onclick="viewCart()">🛍️ Ver Carrito</button></div>
-            </div>
-
-            <div class="mfh-callout" style="background:#000; border-radius:30px; padding:50px; text-align:center; margin-top:40px;">
-                <span style="font-size:50px;">🥚🔥</span>
-                <h3>¿Quieres contribuir o reportar bugs?</h3>
-                <p>Proyecto open source. Gana regalías del 10-20% por herramienta vendida.</p>
-                <div style="display:flex; gap:20px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
-                    <a href="https://github.com/Falconmx1" class="mfh-btn" style="background:white; color:black; padding:15px 30px;">⭐ STAR EN GITHUB</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Calculadora de Riesgo -->
-    <div class="container">
-        <div class="risk-calculator">
-            <h3 style="text-align:center;">📊 Calculadora de Riesgo de Ciberseguridad</h3>
-            <div class="risk-question"><label>¿Cuántos empleados tiene tu empresa?</label><select id="employees"><option value="1">1-10</option><option value="2">11-50</option><option value="3">51-200</option><option value="4">200+</option></select></div>
-            <div class="risk-question"><label>¿Tienen políticas de seguridad implementadas?</label><select id="policies"><option value="0">No</option><option value="1">Sí, básicas</option><option value="2">Sí, certificadas</option></select></div>
-            <div class="risk-question"><label>¿Han sufrido un ciberataque en el último año?</label><select id="attack"><option value="1">Sí</option><option value="0">No</option></select></div>
-            <button onclick="calculateRisk()" class="whatsapp-button" style="width:100%; justify-content:center;">Calcular Riesgo</button>
-            <div id="riskResult" class="risk-result" style="margin-top:20px;"></div>
-        </div>
-    </div>
-
-    <div class="container">
-        <section id="contacto" style="background: var(--card-bg); border-radius:12px; padding:50px; margin:60px 0;">
-            <h2 class="section-title" style="margin-top:0;">📬 Contacto Profesional</h2>
-            <form action="https://formspree.io/f/xvgeqowg" method="POST">
-                <div class="form-group" style="margin-bottom:20px;"><input type="text" name="nombre" placeholder="Nombre completo" class="form-control" style="width:100%; padding:12px; background: var(--primary-darker); border:1px solid var(--border-color); border-radius:8px; color:white;" required></div>
-                <div class="form-group" style="margin-bottom:20px;"><input type="email" name="email" placeholder="Correo electrónico" class="form-control" style="width:100%; padding:12px; background: var(--primary-darker); border:1px solid var(--border-color); border-radius:8px; color:white;" required></div>
-                <div class="form-group" style="margin-bottom:20px;"><textarea name="mensaje" rows="5" placeholder="Cuéntanos tu proyecto..." class="form-control" style="width:100%; padding:12px; background: var(--primary-darker); border:1px solid var(--border-color); border-radius:8px; color:white;"></textarea></div>
-                <button type="submit" class="submit-btn" style="background:linear-gradient(135deg,var(--accent-cyan),var(--primary-blue)); width:100%; padding:15px; border:none; border-radius:8px; color:white; font-weight:bold;">📨 Enviar Consulta</button>
-            </form>
         </section>
 
-        <footer class="footer">
-            <div class="footer-grid">
-                <div><h3>FalconMX Security</h3><p>Consultoría en ciberseguridad ética. Creadores de MFH TOOLS.</p></div>
-                <div><h3>Contacto</h3><p>📞 +52 55 6126 4662<br>✉️ mariofalcon030901@gmail.com</p></div>
-                <div><h3>Legal</h3><p><a href="#" style="color:var(--accent-cyan);">Política de Ética</a><br><a href="#" style="color:var(--accent-cyan);">Términos y Condiciones</a></p></div>
+        <!-- MFH TOOLS SECURITY MX -->
+        <section>
+            <h2>⚔️ MFH TOOLS SECURITY MX <span style="font-size:0.8rem;">— Como Kali Linux, pero con huevos 🥚🔥</span></h2>
+            <p>La suite de ciberseguridad más cabrona hecha en México. Herramientas éticas, en español y a precio de barrio.</p>
+            <div class="tools-grid" id="toolsGrid">
+                <!-- Cada tool se genera desde JS para facilitar mantenimiento, pero también podrías escribirlas en HTML -->
             </div>
-            <div class="footer-bottom" style="text-align:center; padding-top:30px; border-top:1px solid var(--border-color);">
-                <p>© 2024-2025 FalconMX Security & MFH TOOLS - Hecho en México 🇲🇽</p>
-                <div class="social-links" style="justify-content:center;"><a href="https://github.com/Falconmx1" class="social-link">GitHub</a><a href="https://www.instagram.com/mxfalconmx/" class="social-link">Instagram</a></div>
-            </div>
-        </footer>
-    </div>
+        </section>
 
-    <a href="https://wa.me/525561264662" class="whatsapp-float" target="_blank"><svg viewBox="0 0 32 32" width="35" height="35" fill="white"><path d="M16 0C7.163 0 0 7.163 0 16c0 3.033.855 5.863 2.332 8.276L.512 31.488l7.212-1.82C10.137 31.145 12.967 32 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.942 22.892c-.402 1.132-2.007 2.073-3.277 2.345-.735.157-1.697.282-4.973-.602-3.785-1.017-6.207-4.507-6.397-4.737-.19-.23-1.545-2.032-1.545-3.877s.972-2.797 1.357-3.272c.385-.475.833-.595 1.112-.595.285 0 .57 0 .82.007.25.008.642-.098.997.73.355.827 1.212 2.865 1.317 3.072.105.207.175.475.052.73-.122.255-.175.415-.35.652-.175.237-.367.527-.525.707-.16.18-.327.38-.14.73.188.35.827 1.507 1.777 2.442 1.215 1.215 2.252 1.807 2.587 2.007.335.2.53.172.73-.105.2-.277.855-1.115 1.08-1.497.225-.382.45-.32.73-.18.28.14 1.767.93 2.072 1.102.305.172.508.257.585.402.077.145.077.842-.325 1.975z"/></svg></a>
+        <div style="text-align: center; margin-top: 2rem;">
+            <p>🥚🔥 <strong>¿Quieres contribuir o reportar bugs?</strong> Proyecto open source. Gana regalías del 10-20% por herramienta vendida. <a href="https://github.com/Falconmx1/mx_falconmx_security" target="_blank">GitHub</a></p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>🇲🇽 FalconMX Security + MFH TOOLS — Hecho en México. Uso ético y autorizado solamente. Los precios no incluyen IVA.</p>
+            <p>Última actualización: Mayo 2026 | <a href="/etica.html">Código de ética</a> | <a href="/afiliados.html">Afiliados</a></p>
+        </div>
+    </footer>
 
     <script>
-        // Carrito de compras
-        let cart = JSON.parse(localStorage.getItem('mfh_cart') || '[]');
-        function updateCartDisplay() {
-            document.getElementById('cartCount').innerText = cart.length + (cart.length === 1 ? ' herramienta' : ' herramientas') + ' en carrito';
-        }
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            localStorage.setItem('mfh_cart', JSON.stringify(cart));
-            updateCartDisplay();
-            alert(`✅ ${name} agregado al carrito. Total: $${cart.reduce((s,i)=>s+i.price,0)} USD`);
-        }
-        function viewCart() {
-            if(cart.length === 0) return alert('Carrito vacío');
-            let msg = '🛒 TU CARRITO MFH:\n';
-            cart.forEach((item,i)=> msg += `${i+1}. ${item.name} - $${item.price} USD\n`);
-            msg += `\nTOTAL: $${cart.reduce((s,i)=>s+i.price,0)} USD\n\n¿Proceder al pago?`;
-            if(confirm(msg + '\n\nClick OK para simular pago')) {
-                alert('🚀 Redirigiendo a pasarela de pago (PayPal/Stripe)\nEn producción aquí iría el checkout real.');
-                // Aquí integrarías Stripe o PayPal
-            }
-        }
-        updateCartDisplay();
+        // ---------- CATÁLOGO DE HERRAMIENTAS (datos unificados) ----------
+        const toolsCatalog = [
+            { id: "mx-scanner", nombre: "MX-SCANNER v1.0", desc: "Escáner de puertos multihilo + detección de servicios. 100x más rápido que nmap.", precioMXN: 0, precioUSD: 0, estado: "🔥 BETA · GRATIS", badge: "beta-gratis", disponible: true, demo: true },
+            { id: "mx-encrypt", nombre: "MX-ENCRYPT", desc: "Suite de cifrado AES-256 + RSA. Cifra archivos, mensajes y llaves asimétricas.", precioMXN: 216, precioUSD: 12, estado: "Pre-venta", badge: "preventa", disponible: true },
+            { id: "mx-webscan", nombre: "MX-WEBSCAN", desc: "Escáner OWASP Top 10 automatizado. SQLi, XSS, LFI, SSRF. Reportes PDF.", precioMXN: 324, precioUSD: 18, estado: "BETA", badge: "beta", disponible: true },
+            { id: "mx-pentest", nombre: "MX-PENTEST", desc: "25+ herramientas: reconocimiento, explotación, post-explotación.", precioMXN: 630, precioUSD: 35, estado: "⚡ PRÓXIMAMENTE", badge: "proximo", disponible: false },
+            { id: "mx-defender", nombre: "MX-DEFENDER", desc: "Hardening automático para Linux/Windows. CIS benchmarks en 1 comando.", precioMXN: 504, precioUSD: 28, estado: "📅 PRONTO", badge: "proximo", disponible: false },
+            { id: "mx-osint", nombre: "MX-OSINT", desc: "OSINT: emails, dominios, redes sociales. Fuentes abiertas.", precioMXN: 396, precioUSD: 22, estado: "📅 PRONTO", badge: "proximo", disponible: false },
+            { id: "mx-recon", nombre: "MX-RECON", desc: "OSINT + fingerprinting de activos. Subdominios y metadatos.", precioMXN: 270, precioUSD: 15, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-phish", nombre: "MX-PHISH", desc: "Simulador de phishing para empresas. Campañas y reportes.", precioMXN: 720, precioUSD: 40, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-forensic", nombre: "MX-FORENSIC", desc: "Análisis forense de memoria y discos. Recuperación de evidencia.", precioMXN: 810, precioUSD: 45, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-reversing", nombre: "MX-REVERSING", desc: "Ingeniería inversa de binarios. Desensamblador y debugger.", precioMXN: 900, precioUSD: 50, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-antiddos", nombre: "MX-ANTIDDOS", desc: "Mitigación DDoS capa 7. Rate limiting y detección de bots.", precioMXN: 450, precioUSD: 25, estado: "NUEVO", badge: "nuevo", disponible: true }
+        ];
 
-        // Demo escáner
-        function runDemoScan() {
-            let target = document.getElementById('scanTarget').value;
-            if(!target) { alert('Ingresa un objetivo (ej: scanme.nmap.org)'); return; }
-            let output = document.getElementById('scanOutput');
-            output.innerHTML = '[MX-SCANNER] Iniciando escaneo a ' + target + '...\n';
-            let ports = [21,22,23,25,80,443,3306,8080];
-            let i = 0;
-            let interval = setInterval(() => {
-                if(i >= ports.length) {
-                    output.innerHTML += '\n✅ Escaneo completado. 3 puertos abiertos detectados.';
-                    clearInterval(interval);
-                    return;
-                }
-                let status = Math.random() > 0.7 ? 'ABIERTO' : 'CERRADO';
-                output.innerHTML += `Puerto ${ports[i]}: ${status}\n`;
-                i++;
-                output.scrollTop = output.scrollHeight;
-            }, 300);
-        }
-
-        // Calculadora de riesgo
-        function calculateRisk() {
-            let employees = parseInt(document.getElementById('employees').value);
-            let policies = parseInt(document.getElementById('policies').value);
-            let attack = parseInt(document.getElementById('attack').value);
-            let score = (employees * 5) + ((2 - policies) * 20) + (attack * 30);
-            let resultDiv = document.getElementById('riskResult');
-            if(score > 50) {
-                resultDiv.innerHTML = '⚠️ RIESGO ALTO - Recomendamos auditoría inmediata';
-                resultDiv.className = 'risk-result risk-high';
-            } else if(score > 25) {
-                resultDiv.innerHTML = '📊 RIESGO MEDIO - Considere implementar MFH TOOLS';
-                resultDiv.className = 'risk-result risk-medium';
-            } else {
-                resultDiv.innerHTML = '✅ RIESGO BAJO - Mantenga buenas prácticas';
-                resultDiv.className = 'risk-result risk-low';
-            }
-        }
-
-        function copyCommand(cmd) {
-            navigator.clipboard.writeText(cmd);
-            alert('✅ Comando copiado: ' + cmd);
-        }
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                let target = document.querySelector(this.getAttribute('href'));
-                if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Renderizar herramientas en el grid
+        function renderTools() {
+            const grid = document.getElementById('toolsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            toolsCatalog.forEach(tool => {
+                const card = document.createElement('div');
+                card.className = 'tool-card';
+                const badgeClass = tool.badge === 'beta-gratis' ? 'badge-gratis' : (tool.badge === 'beta' ? 'badge-beta' : '');
+                const disponibilidad = tool.disponible ? '' : '<span class="badge-beta">🔒 No disponible aún</span>';
+                const botonCarrito = tool.disponible && tool.precioMXN > 0 ? `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="${tool.precioMXN}">➕ Añadir al carrito · $${tool.precioMXN} MXN</button>` : 
+                                    (tool.disponible && tool.precioMXN === 0 ? `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="0">⬇️ Descargar gratis</button>` : 
+                                    `<button class="btn-carrito" disabled style="background:#555;">⚡ Próximamente</button>`);
+                card.innerHTML = `
+                    <h3>🔧 ${tool.nombre}</h3>
+                    <p>${tool.desc}</p>
+                    <div><span class="${badgeClass} badge-beta">${tool.estado}</span> ${disponibilidad}</div>
+                    <p><strong>${tool.precioMXN === 0 ? 'GRATIS' : `$${tool.precioMXN} MXN ($${tool.precioUSD} USD)`}</strong></p>
+                    ${botonCarrito}
+                    ${tool.demo && tool.precioMXN === 0 ? `<small style="display:block; margin-top:0.3rem;">🧪 Demo interactiva · escaneo simulado</small>` : ''}
+                `;
+                grid.appendChild(card);
             });
+            // Reasignar eventos después de renderizar dinámicamente
+            document.querySelectorAll('.btn-carrito[data-id]').forEach(btn => {
+                btn.removeEventListener('click', agregarAlCarritoHandler);
+                btn.addEventListener('click', agregarAlCarritoHandler);
+            });
+        }
+
+        // -------- CARRITO (localStorage) ----------
+        let carrito = [];
+
+        function guardarCarrito() {
+            localStorage.setItem('mfh_carrito', JSON.stringify(carrito));
+            actualizarUIcarrito();
+        }
+
+        function cargarCarrito() {
+            const guardado = localStorage.getItem('mfh_carrito');
+            if (guardado) {
+                try {
+                    carrito = JSON.parse(guardado);
+                } catch(e) { carrito = []; }
+            } else {
+                carrito = [];
+            }
+            actualizarUIcarrito();
+        }
+
+        function agregarAlCarritoHandler(e) {
+            const btn = e.currentTarget;
+            const id = btn.getAttribute('data-id');
+            const nombre = btn.getAttribute('data-nombre');
+            const precio = parseInt(btn.getAttribute('data-precio'));
+            if (!id) return;
+            // Evitar duplicados por simplicidad (puedes permitir cantidad después)
+            const existe = carrito.find(item => item.id === id);
+            if (existe) {
+                alert(`🔥 ${nombre} ya está en tu carrito.`);
+                return;
+            }
+            carrito.push({ id, nombre, precio, cantidad: 1 });
+            guardarCarrito();
+            alert(`✅ ${nombre} agregado al carrito. Total parcial: $${calcularTotal()} MXN`);
+        }
+
+        function calcularTotal() {
+            return carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+        }
+
+        function actualizarUIcarrito() {
+            const lista = document.getElementById('listaCarrito');
+            const totalSpan = document.getElementById('totalCarrito');
+            if (!lista) return;
+            if (carrito.length === 0) {
+                lista.innerHTML = '<li>✨ Vacío, agrega algo cabrón</li>';
+                if(totalSpan) totalSpan.innerText = 'Total: $0 MXN';
+                return;
+            }
+            lista.innerHTML = carrito.map(item => `<li>${item.nombre} <strong>$${item.precio} MXN</strong></li>`).join('');
+            if(totalSpan) totalSpan.innerText = `Total: $${calcularTotal()} MXN`;
+        }
+
+        function vaciarCarrito() {
+            carrito = [];
+            guardarCarrito();
+            alert('Carrito vaciado 🧹');
+        }
+
+        function solicitarCotizacion() {
+            if(carrito.length === 0) {
+                alert('Agrega herramientas al carrito primero.');
+                return;
+            }
+            const total = calcularTotal();
+            const mensaje = `Hola, quiero cotizar las herramientas MFH: ${carrito.map(i=>i.nombre).join(', ')}. Total: $${total} MXN.`;
+            const url = `https://wa.me/525561264662?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        // Eventos para botones de servicios (simular cotización)
+        function initServicios() {
+            document.querySelectorAll('.btn-solicitar').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const servicio = btn.getAttribute('data-servicio') || 'servicio';
+                    const mensaje = `Hola, quiero información sobre el servicio "${servicio}" de FalconMX Security.`;
+                    window.open(`https://wa.me/525561264662?text=${encodeURIComponent(mensaje)}`, '_blank');
+                });
+            });
+        }
+
+        // Demo de MX-SCANNER (simulación ética)
+        function initDemoScanner() {
+            // Si quieres agregar un modal o simulación, aquí puedes inyectarlo, pero lo dejamos opcional
+            const scannerCard = document.querySelector('[data-id="mx-scanner"]')?.closest('.tool-card');
+            if(scannerCard && !scannerCard.querySelector('.demo-scanner')) {
+                const demoDiv = document.createElement('div');
+                demoDiv.className = 'demo-scanner';
+                demoDiv.style.marginTop = '0.5rem';
+                demoDiv.innerHTML = `<input type="text" id="objetivoScan" placeholder="ej. falconmx1.github.io" style="width:70%; padding:0.2rem;"> <button id="simularScan">Escanear</button>
+                                    <p id="resultScan" style="font-size:0.7rem;"></p>`;
+                scannerCard.appendChild(demoDiv);
+                const btnScan = demoDiv.querySelector('#simularScan');
+                btnScan.addEventListener('click', () => {
+                    const objetivo = document.getElementById('objetivoScan').value;
+                    if(!objetivo) return;
+                    document.getElementById('resultScan').innerHTML = `🔍 Escaneando ${objetivo}... (simulación ética) Puertos abiertos: 22 (SSH), 80 (HTTP), 443 (HTTPS). Servicios detectados: nginx, OpenSSH. ✅ Demo sin almacenamiento real.`;
+                });
+            }
+        }
+
+        // Inicialización completa
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTools();
+            cargarCarrito();
+            initServicios();
+            setTimeout(initDemoScanner, 200); // esperar a que se monte el scanner en DOM
+            const vaciarBtn = document.getElementById('vaciarCarritoBtn');
+            if(vaciarBtn) vaciarBtn.addEventListener('click', vaciarCarrito);
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if(checkoutBtn) checkoutBtn.addEventListener('click', solicitarCotizacion);
         });
     </script>
 </body>
