@@ -2,279 +2,656 @@
 <html lang="es-MX">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🇲🇽 FalconMX Security + MFH TOOLS | Seguridad con huevos 🥚🔥</title>
-    <meta name="description" content="Auditoría de seguridad, pentesting ético y suite de herramientas MFH. Hecho en México, como Kali Linux pero con huevos.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    
+    <!-- ========== META TAGS DE SEGURIDAD ========== -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://formspree.io;">
+    
+    <title>FalconMX Security + MFH TOOLS | Hecho en México 🇲🇽</title>
+    <meta name="description" content="La suite de ciberseguridad más cabrona hecha en México. Consultoría ética, pentesting, y herramientas como MX-SCANNER, MX-ENCRYPT, MX-WEBSCAN. Precios en MXN.">
+    
+    <!-- ========== FAVICON ========== -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    
     <link rel="stylesheet" href="estilo.css">
     <style>
-        /* Poquito de CSS extra para el formulario y mensajes - no afecta el diseño original */
-        .contacto-directo form {
-            max-width: 600px;
-            margin: 2rem auto;
-            background: #1e1e2e;
-            padding: 2rem;
-            border-radius: 16px;
+        /* ========== MEJORAS RESPONSIVE CON CLAMP ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .contacto-directo input, .contacto-directo select, .contacto-directo textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            background: #2a2a3a;
-            border: 1px solid #3a3a4a;
-            color: white;
-            border-radius: 8px;
-            font-family: inherit;
+        
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.5;
         }
-        .contacto-directo button {
-            background: #10b981;
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(1rem, 5vw, 2rem);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2a 100%);
+            border-bottom: 3px solid #ff6600;
+            padding: clamp(1.5rem, 6vw, 3rem) 0;
+        }
+        
+        h1 {
+            font-size: clamp(1.75rem, 6vw, 2.5rem);
+            margin-bottom: clamp(0.5rem, 2vw, 1rem);
+        }
+        
+        h2 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin: clamp(1.5rem, 4vw, 2rem) 0 clamp(1rem, 3vw, 1.5rem);
+            border-left: 4px solid #ff6600;
+            padding-left: clamp(0.75rem, 3vw, 1rem);
+        }
+        
+        .servicios-grid, .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            gap: clamp(1rem, 3vw, 1.5rem);
+            margin: clamp(1rem, 3vw, 2rem) 0;
+        }
+        
+        .servicio-card, .tool-card {
+            background: #12121a;
+            border-radius: clamp(0.75rem, 2vw, 1rem);
+            padding: clamp(1rem, 3vw, 1.5rem);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #2a2a3a;
+        }
+        
+        .servicio-card:hover, .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+            border-color: #ff6600;
+        }
+        
+        .tool-card h3, .servicio-card h3 {
+            color: #ff6600;
+            margin-bottom: 0.75rem;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        }
+        
+        .servicio-card ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        
+        .servicio-card li {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .contacto-rapido {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.75rem, 3vw, 1.5rem);
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        
+        .btn-solicitar, .btn-carrito, .btn-enviar {
+            background: #ff6600;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem);
+            border-radius: 2rem;
             font-weight: bold;
-            border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 0.5rem;
         }
-        .contacto-directo button:hover {
+        
+        .btn-solicitar:hover, .btn-carrito:hover, .btn-enviar:hover {
+            background: #e65c00;
             transform: scale(1.02);
-            background: #059669;
         }
-        .form-status {
-            margin-top: 1rem;
+        
+        /* Formulario de contacto */
+        .contact-form {
+            background: #12121a;
+            border-radius: 1rem;
+            padding: clamp(1rem, 4vw, 2rem);
+            margin: 2rem 0;
+            border: 1px solid #2a2a3a;
+        }
+        
+        .contact-form h3 {
+            color: #ff6600;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .contact-form input, .contact-form textarea {
+            width: 100%;
             padding: 0.75rem;
-            border-radius: 8px;
+            background: #1e1e2a;
+            border: 1px solid #3a3a4a;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .contact-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: #ff6600;
+        }
+        
+        #formStatus {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
             text-align: center;
-            display: none;
         }
-        .form-status.success {
-            background-color: #10b981;
+        
+        /* Carrito Sidebar */
+        .carrito-sidebar {
+            position: fixed;
+            right: 1rem;
+            top: 5rem;
+            background: #1e1e2f;
+            border-radius: 1rem;
+            padding: clamp(0.75rem, 2vw, 1rem);
+            width: 280px;
+            z-index: 1000;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            border-left: 4px solid #ff6600;
+            backdrop-filter: blur(10px);
+        }
+        
+        @media (max-width: 768px) {
+            .carrito-sidebar { 
+                display: none; 
+            }
+        }
+        
+        .carrito-sidebar h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+            color: #ff6600;
+        }
+        
+        .carrito-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .carrito-sidebar li {
+            font-size: 0.8rem;
+            border-bottom: 1px solid #333;
+            padding: 0.3rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .carrito-total {
+            font-weight: bold;
+            text-align: right;
+            border-top: 1px solid #ff6600;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .vaciar-carrito {
+            background: #aa2e2e;
+            border: none;
             color: white;
-            display: block;
+            padding: 0.3rem;
+            width: 100%;
+            border-radius: 1rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
         }
-        .form-status.error {
-            background-color: #ef4444;
-            color: white;
-            display: block;
+        
+        .checkout-btn {
+            background: #2e8b57;
+            margin-top: 0.5rem;
         }
-        .spinner {
+        
+        .badge-beta {
+            background: #ffaa00;
+            color: #1e1e1e;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+            font-weight: bold;
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            vertical-align: middle;
-            margin-left: 8px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        button:disabled { opacity: 0.7; cursor: not-allowed; }
+        
+        .badge-gratis {
+            background: #00aa55;
+        }
+        
+        .precio-oferta {
+            text-decoration: line-through;
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+        
+        footer {
+            background: #0a0a0f;
+            text-align: center;
+            padding: clamp(1rem, 4vw, 2rem);
+            margin-top: clamp(2rem, 6vw, 3rem);
+            border-top: 1px solid #2a2a3a;
+        }
+        
+        a {
+            color: #ff6600;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .demo-scanner {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #2a2a3a;
+        }
+        
+        .demo-scanner input {
+            width: 65%;
+            padding: 0.3rem;
+            background: #1e1e2a;
+            border: 1px solid #3a3a4a;
+            border-radius: 0.3rem;
+            color: white;
+        }
+        
         .demo-scanner button {
-            background: #6366f1;
-            margin-top: 1rem;
+            width: 30%;
+            padding: 0.3rem;
+            background: #ff6600;
+            border: none;
+            border-radius: 0.3rem;
+            color: white;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 480px) {
+            .contacto-rapido {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER / NAV (exactamente igual a como lo tienes) -->
-    <header class="main-header">
-        <nav class="nav-container">
-            <div class="logo">
-                <h1>🇲🇽 FalconMX Security <span class="mfh-tag">+ MFH TOOLS</span></h1>
-                <p class="tagline">Protección avanzada para empresas y desarrolladores. Hecho en México, con huevos 🥚🔥</p>
-            </div>
+    <!-- Sidebar del carrito (visible solo en desktop) -->
+    <div class="carrito-sidebar" id="carritoSidebar">
+        <h3>🛒 Mis herramientas</h3>
+        <ul id="listaCarrito">
+            <li>✨ Vacío, agrega algo cabrón</li>
+        </ul>
+        <div class="carrito-total" id="totalCarrito">Total: $0 MXN</div>
+        <button id="vaciarCarritoBtn" class="vaciar-carrito">🗑 Vaciar</button>
+        <button id="checkoutBtn" class="vaciar-carrito checkout-btn">📦 Solicitar cotización</button>
+        <small style="display:block; margin-top:0.5rem; text-align:center;">Pago seguro por WhatsApp</small>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1>🇲🇽 FalconMX Security + MFH TOOLS</h1>
+            <p class="tagline">Protección avanzada para empresas y desarrolladores. <strong>Hecho en México, con huevos 🥚🔥</strong></p>
             <div class="contacto-rapido">
-                <a href="tel:+525561264662" class="btn-phone">📞 +52 55 6126 4662</a>
-                <a href="mailto:mariofalcon030901@gmail.com" class="btn-email">✉️ mariofalcon030901@gmail.com</a>
+                <span>📞 +52 55 6126 4662</span>
+                <span>✉️ mariofalcon030901@gmail.com</span>
             </div>
-        </nav>
+        </div>
     </header>
 
-    <main>
-        <!-- SECCIÓN SERVICIOS (original) -->
-        <section class="servicios">
+    <main class="container">
+        <!-- Servicios profesionales -->
+        <section>
             <h2>🛡️ Servicios especializados</h2>
-            <div class="grid-servicios">
-                <div class="card">
+            <div class="servicios-grid">
+                <div class="servicio-card">
                     <h3>🔍 Auditoría de Seguridad Completa</h3>
                     <ul>
                         <li>✓ Pentesting ético controlado</li>
                         <li>✓ Análisis OWASP Top 10</li>
                         <li>✓ Reporte ejecutivo + técnico (PDF)</li>
                     </ul>
-                    <p class="precio"><span class="antes">$8,000 MXN</span> <strong class="oferta">$7,200 MXN 🔥</strong></p>
+                    <p><span class="precio-oferta">$8,000 MXN</span> <strong>$7,200 MXN 🔥</strong></p>
+                    <button class="btn-solicitar" data-servicio="Auditoría Completa">Solicitar Auditoría</button>
                 </div>
-                <div class="card">
+                <div class="servicio-card">
                     <h3>💻 Desarrollo Seguro (DevSecOps)</h3>
                     <ul>
                         <li>✓ Code Review especializado</li>
                         <li>✓ Implementación SAST/DAST</li>
                         <li>✓ Hardening de aplicaciones</li>
                     </ul>
-                    <p class="precio">Desde <strong>$10,800 MXN/mes</strong></p>
+                    <p>Desde <strong>$10,800 MXN/mes</strong></p>
+                    <button class="btn-solicitar" data-servicio="DevSecOps">Consultar Planes</button>
                 </div>
-                <div class="card">
+                <div class="servicio-card">
                     <h3>🚨 Respuesta a Incidentes 24/7</h3>
                     <ul>
                         <li>✓ Contención de daños inmediata</li>
                         <li>✓ Análisis forense digital</li>
                         <li>✓ Reporte ejecutable</li>
                     </ul>
-                    <p class="precio"><strong>$13,500 MXN</strong> (emergencia)</p>
+                    <p><strong>$13,500 MXN</strong> (emergencia)</p>
+                    <button class="btn-solicitar" data-servicio="Respuesta a Incidentes">🚨 EMERGENCIA</button>
                 </div>
-                <div class="card">
+                <div class="servicio-card">
                     <h3>🎓 Capacitación en Ciberseguridad</h3>
                     <ul>
                         <li>✓ Simulaciones de phishing</li>
                         <li>✓ Talleres de hardening</li>
                         <li>✓ Certificación interna</li>
                     </ul>
-                    <p class="precio">Desde <strong>$4,500 MXN/sesión</strong></p>
+                    <p>Desde <strong>$4,500 MXN/sesión</strong></p>
+                    <button class="btn-solicitar" data-servicio="Capacitación">Solicitar Programa</button>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN MFH TOOLS (original) -->
-        <section class="mfh-tools">
-            <h2>⚔️ MFH TOOLS SECURITY MX — Como Kali Linux, pero con huevos 🥚🔥</h2>
+        <!-- MFH TOOLS SECURITY MX -->
+        <section>
+            <h2>⚔️ MFH TOOLS SECURITY MX <span style="font-size:0.8rem;">— Como Kali Linux, pero con huevos 🥚🔥</span></h2>
             <p>La suite de ciberseguridad más cabrona hecha en México. Herramientas éticas, en español y a precio de barrio.</p>
-            <div class="grid-tools">
-                <div class="tool-item"><strong>🔧 MX-SCANNER v1.0</strong> - Escáner de puertos multihilo. <span class="gratis">🔥 BETA · GRATIS</span></div>
-                <div class="tool-item"><strong>🔧 MX-ENCRYPT</strong> - AES-256 + RSA. <span class="precio-tool">$216 MXN ($12 USD)</span></div>
-                <div class="tool-item"><strong>🔧 MX-WEBSCAN</strong> - Escáner OWASP Top 10. <span class="precio-tool">$324 MXN ($18 USD)</span></div>
-                <div class="tool-item"><strong>🔧 MX-PENTEST</strong> - 25+ herramientas. <span class="prox">⚡ PRÓXIMAMENTE 🔒 No disponible aún</span></div>
-                <div class="tool-item"><strong>🔧 MX-DEFENDER</strong> - Hardening automático. <span class="prox">📅 PRONTO 🔒 No disponible aún</span></div>
-                <div class="tool-item"><strong>🔧 MX-OSINT</strong> - OSINT de emails y dominios. <span class="prox">📅 PRONTO 🔒 No disponible aún</span></div>
-                <div class="tool-item"><strong>🔧 MX-RECON</strong> - OSINT + fingerprinting. <span class="precio-tool">$270 MXN ($15 USD)</span> <span class="nuevo">NUEVO</span></div>
-                <div class="tool-item"><strong>🔧 MX-PHISH</strong> - Simulador de phishing. <span class="precio-tool">$720 MXN ($40 USD)</span> <span class="nuevo">NUEVO</span></div>
-                <div class="tool-item"><strong>🔧 MX-FORENSIC</strong> - Análisis forense. <span class="precio-tool">$810 MXN ($45 USD)</span> <span class="nuevo">NUEVO</span></div>
-                <div class="tool-item"><strong>🔧 MX-REVERSING</strong> - Ingeniería inversa. <span class="precio-tool">$900 MXN ($50 USD)</span> <span class="nuevo">NUEVO</span></div>
-                <div class="tool-item"><strong>🔧 MX-ANTIDDOS</strong> - Mitigación DDoS capa 7. <span class="precio-tool">$450 MXN ($25 USD)</span> <span class="nuevo">NUEVO</span></div>
-            </div>
-            <div class="demo-scanner">
-                <p>🧪 <strong>Demo interactiva de MX-SCANNER:</strong> disponible abajo</p>
-                <button id="btnDemoScanner" class="btn-demo">Probar escáner de puertos (simulación)</button>
-                <pre id="outputDemo" style="display:none; background:#1e1e2e; padding:1rem; margin-top:1rem; border-radius:8px;"></pre>
-            </div>
+            <div class="tools-grid" id="toolsGrid"></div>
         </section>
 
-        <!-- FORMULARIO DE CONTACTO CON TU ID DE FORMSPREE (FUNCIONAL) -->
-        <section class="contacto-directo" id="contacto">
-            <h2>📬 Contáctanos directo</h2>
-            <p>🔒 Tus datos están seguros. Te contactamos en menos de 24 horas.</p>
-            
-            <form id="contactForm" action="https://formspree.io/f/xvgeqowg" method="POST">
-                <input type="text" name="name" placeholder="Tu nombre completo" required>
-                <input type="email" name="email" placeholder="Tu correo electrónico" required>
-                <input type="tel" name="phone" placeholder="Tu teléfono (opcional)">
-                <select name="service" required>
-                    <option value="">Selecciona un servicio o herramienta</option>
-                    <option>Auditoría de Seguridad</option>
-                    <option>Desarrollo Seguro (DevSecOps)</option>
-                    <option>Respuesta a Incidentes</option>
-                    <option>Capacitación en Ciberseguridad</option>
-                    <option>MX-SCANNER (gratis)</option>
-                    <option>MX-ENCRYPT</option>
-                    <option>MX-WEBSCAN</option>
-                    <option>Otro - Especificar</option>
-                </select>
-                <textarea name="message" rows="4" placeholder="Cuéntanos tu proyecto o duda..." required></textarea>
-                <input type="hidden" name="_next" value="https://falconmx1.github.io/mx_falconmx_security/gracias.html">
-                <input type="hidden" name="_subject" value="Nuevo contacto desde FalconMX Security">
-                <button type="submit" id="submitBtn">Enviar mensaje 🚀</button>
-                <div id="formStatus" class="form-status"></div>
+        <!-- ========== FORMULARIO DE CONTACTO REAL ========== -->
+        <section class="contact-form">
+            <h3>📬 Contáctanos directo</h3>
+            <form action="https://formspree.io/f/xjvqykwk" method="POST" id="contactForm">
+                <div class="form-group">
+                    <input type="text" name="nombre" placeholder="Tu nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Tu correo electrónico" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="telefono" placeholder="Tu teléfono (opcional)">
+                </div>
+                <div class="form-group">
+                    <textarea name="mensaje" placeholder="¿Qué servicio o herramienta te interesa? Cuéntanos..." required></textarea>
+                </div>
+                <button type="submit" class="btn-enviar">✉️ Enviar mensaje seguro</button>
+                <div id="formStatus"></div>
             </form>
-            <p class="fallback-email">⚠️ ¿Problemas con el formulario? Escríbenos directamente a <strong>mariofalcon030901@gmail.com</strong></p>
+            <p style="font-size: 0.75rem; margin-top: 0.5rem; text-align: center;">🔒 Tus datos están seguros. Te contactamos en menos de 24 horas.</p>
         </section>
 
-        <footer>
-            <p>🥚🔥 ¿Quieres contribuir o reportar bugs? Proyecto open source. Gana regalías del 10-20% por herramienta vendida. 
-            <a href="https://github.com/Falconmx1/mx_falconmx_security" target="_blank">GitHub</a></p>
-            <p>© 2025 FalconMX Security + MFH TOOLS — Hecho en México 🇲🇽</p>
-        </footer>
+        <div style="text-align: center; margin-top: 2rem;">
+            <p>🥚🔥 <strong>¿Quieres contribuir o reportar bugs?</strong> Proyecto open source. Gana regalías del 10-20% por herramienta vendida. <a href="https://github.com/Falconmx1/mx_falconmx_security" target="_blank">GitHub</a></p>
+        </div>
     </main>
 
-    <script>
-        // ========== MANEJO DEL FORMULARIO CON FORMSPREE ==========
-        const form = document.getElementById('contactForm');
-        const statusDiv = document.getElementById('formStatus');
-        const submitBtn = document.getElementById('submitBtn');
-        const originalBtnText = submitBtn.innerHTML;
+    <footer>
+        <div class="container">
+            <p>🇲🇽 FalconMX Security + MFH TOOLS — Hecho en México. Uso ético y autorizado solamente. Los precios no incluyen IVA.</p>
+            <p>Última actualización: Mayo 2026 | <a href="/etica.html">Código de ética</a> | <a href="/afiliados.html">Afiliados</a></p>
+        </div>
+    </footer>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // Validación simple
-            const name = form.name.value.trim();
-            const email = form.email.value.trim();
-            const service = form.service.value;
-            const message = form.message.value.trim();
-            
-            if (!name || !email || !service || !message) {
-                statusDiv.innerHTML = '❌ Por favor completa todos los campos obligatorios.';
-                statusDiv.classList.add('error');
-                setTimeout(() => { statusDiv.classList.remove('error'); statusDiv.innerHTML = ''; }, 4000);
-                return;
-            }
-            
-            if (!email.includes('@') || !email.includes('.')) {
-                statusDiv.innerHTML = '❌ Ingresa un correo electrónico válido.';
-                statusDiv.classList.add('error');
-                setTimeout(() => { statusDiv.classList.remove('error'); statusDiv.innerHTML = ''; }, 4000);
-                return;
-            }
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `Enviando... <span class="spinner"></span>`;
-            statusDiv.classList.remove('success', 'error');
-            statusDiv.innerHTML = '';
-            
-            try {
-                const formData = new FormData(form);
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                });
+    <script>
+        // ========== CATÁLOGO DE HERRAMIENTAS ==========
+        const toolsCatalog = [
+            { id: "mx-scanner", nombre: "MX-SCANNER v1.0", desc: "Escáner de puertos multihilo + detección de servicios. 100x más rápido que nmap.", precioMXN: 0, precioUSD: 0, estado: "🔥 BETA · GRATIS", badge: "beta-gratis", disponible: true, demo: true },
+            { id: "mx-encrypt", nombre: "MX-ENCRYPT", desc: "Suite de cifrado AES-256 + RSA. Cifra archivos, mensajes y llaves asimétricas.", precioMXN: 216, precioUSD: 12, estado: "Pre-venta", badge: "preventa", disponible: true },
+            { id: "mx-webscan", nombre: "MX-WEBSCAN", desc: "Escáner OWASP Top 10 automatizado. SQLi, XSS, LFI, SSRF. Reportes PDF.", precioMXN: 324, precioUSD: 18, estado: "BETA", badge: "beta", disponible: true },
+            { id: "mx-pentest", nombre: "MX-PENTEST", desc: "25+ herramientas: reconocimiento, explotación, post-explotación.", precioMXN: 630, precioUSD: 35, estado: "⚡ PRÓXIMAMENTE", badge: "proximo", disponible: false },
+            { id: "mx-defender", nombre: "MX-DEFENDER", desc: "Hardening automático para Linux/Windows. CIS benchmarks en 1 comando.", precioMXN: 504, precioUSD: 28, estado: "📅 PRONTO", badge: "proximo", disponible: false },
+            { id: "mx-osint", nombre: "MX-OSINT", desc: "OSINT: emails, dominios, redes sociales. Fuentes abiertas.", precioMXN: 396, precioUSD: 22, estado: "📅 PRONTO", badge: "proximo", disponible: false },
+            { id: "mx-recon", nombre: "MX-RECON", desc: "OSINT + fingerprinting de activos. Subdominios y metadatos.", precioMXN: 270, precioUSD: 15, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-phish", nombre: "MX-PHISH", desc: "Simulador de phishing para empresas. Campañas y reportes.", precioMXN: 720, precioUSD: 40, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-forensic", nombre: "MX-FORENSIC", desc: "Análisis forense de memoria y discos. Recuperación de evidencia.", precioMXN: 810, precioUSD: 45, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-reversing", nombre: "MX-REVERSING", desc: "Ingeniería inversa de binarios. Desensamblador y debugger.", precioMXN: 900, precioUSD: 50, estado: "NUEVO", badge: "nuevo", disponible: true },
+            { id: "mx-antiddos", nombre: "MX-ANTIDDOS", desc: "Mitigación DDoS capa 7. Rate limiting y detección de bots.", precioMXN: 450, precioUSD: 25, estado: "NUEVO", badge: "nuevo", disponible: true }
+        ];
+
+        // Renderizar herramientas
+        function renderTools() {
+            const grid = document.getElementById('toolsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            toolsCatalog.forEach(tool => {
+                const card = document.createElement('div');
+                card.className = 'tool-card';
+                const badgeClass = tool.badge === 'beta-gratis' ? 'badge-gratis' : (tool.badge === 'beta' ? 'badge-beta' : '');
+                const disponibilidad = tool.disponible ? '' : '<span class="badge-beta">🔒 No disponible aún</span>';
+                const botonCarrito = tool.disponible && tool.precioMXN > 0 ? 
+                    `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="${tool.precioMXN}">➕ Añadir al carrito · $${tool.precioMXN} MXN</button>` : 
+                    (tool.disponible && tool.precioMXN === 0 ? 
+                    `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="0">⬇️ Descargar gratis (Demo)</button>` : 
+                    `<button class="btn-carrito" disabled style="background:#555;">⚡ Próximamente</button>`);
                 
-                if (response.ok) {
-                    // Redirige a gracias.html (lo maneja el _next, pero si falla la redirección mostramos mensaje)
-                    window.location.href = "https://falconmx1.github.io/mx_falconmx_security/gracias.html";
-                } else {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Error en el servidor');
-                }
-            } catch (error) {
-                console.error('Formspree error:', error);
-                statusDiv.innerHTML = '⚠️ Error al enviar. Escríbenos directamente a mariofalcon030901@gmail.com';
-                statusDiv.classList.add('error');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
+                card.innerHTML = `
+                    <h3>🔧 ${tool.nombre}</h3>
+                    <p>${tool.desc}</p>
+                    <div><span class="${badgeClass} badge-beta">${tool.estado}</span> ${disponibilidad}</div>
+                    <p><strong>${tool.precioMXN === 0 ? 'GRATIS' : `$${tool.precioMXN} MXN ($${tool.precioUSD} USD)`}</strong></p>
+                    ${botonCarrito}
+                    ${tool.demo && tool.precioMXN === 0 ? '<small style="display:block; margin-top:0.3rem;">🧪 Demo interactiva disponible abajo</small>' : ''}
+                `;
+                grid.appendChild(card);
+            });
+            
+            document.querySelectorAll('.btn-carrito[data-id]').forEach(btn => {
+                btn.removeEventListener('click', agregarAlCarritoHandler);
+                btn.addEventListener('click', agregarAlCarritoHandler);
+            });
+        }
+
+        // ========== CARRITO ==========
+        let carrito = [];
+
+        function guardarCarrito() {
+            localStorage.setItem('mfh_carrito', JSON.stringify(carrito));
+            actualizarUIcarrito();
+        }
+
+        function cargarCarrito() {
+            const guardado = localStorage.getItem('mfh_carrito');
+            if (guardado) {
+                try {
+                    carrito = JSON.parse(guardado);
+                } catch(e) { carrito = []; }
+            } else {
+                carrito = [];
             }
-        });
-        
+            actualizarUIcarrito();
+        }
+
+        function agregarAlCarritoHandler(e) {
+            const btn = e.currentTarget;
+            const id = btn.getAttribute('data-id');
+            const nombre = btn.getAttribute('data-nombre');
+            const precio = parseInt(btn.getAttribute('data-precio'));
+            if (!id) return;
+            
+            const existe = carrito.find(item => item.id === id);
+            if (existe) {
+                alert(`🔥 ${nombre} ya está en tu carrito.`);
+                return;
+            }
+            
+            carrito.push({ id, nombre, precio, cantidad: 1 });
+            guardarCarrito();
+            
+            if(precio === 0) {
+                alert(`✅ ${nombre} agregado al carrito como descarga gratuita. Revisa el demo abajo.`);
+                iniciarDemoScanner();
+            } else {
+                alert(`✅ ${nombre} agregado al carrito. Total parcial: $${calcularTotal()} MXN`);
+            }
+        }
+
+        function calcularTotal() {
+            return carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+        }
+
+        function actualizarUIcarrito() {
+            const lista = document.getElementById('listaCarrito');
+            const totalSpan = document.getElementById('totalCarrito');
+            if (!lista) return;
+            
+            if (carrito.length === 0) {
+                lista.innerHTML = '<li>✨ Vacío, agrega algo cabrón</li>';
+                if(totalSpan) totalSpan.innerText = 'Total: $0 MXN';
+                return;
+            }
+            
+            lista.innerHTML = carrito.map(item => `<li>${item.nombre} <strong>$${item.precio} MXN</strong></li>`).join('');
+            if(totalSpan) totalSpan.innerText = `Total: $${calcularTotal()} MXN`;
+        }
+
+        function vaciarCarrito() {
+            carrito = [];
+            guardarCarrito();
+            alert('Carrito vaciado 🧹');
+        }
+
+        function solicitarCotizacion() {
+            if(carrito.length === 0) {
+                alert('Agrega herramientas al carrito primero.');
+                return;
+            }
+            const total = calcularTotal();
+            const herramientas = carrito.map(i => i.nombre).join(', ');
+            const mensaje = `Hola, quiero cotizar las herramientas MFH: ${herramientas}. Total: $${total} MXN.`;
+            const url = `https://wa.me/525561264662?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
         // ========== DEMO DE MX-SCANNER ==========
-        const demoBtn = document.getElementById('btnDemoScanner');
-        const outputDemo = document.getElementById('outputDemo');
-        
-        if (demoBtn) {
-            demoBtn.addEventListener('click', () => {
-                outputDemo.style.display = 'block';
-                outputDemo.innerHTML = '🔍 Escaneando puertos comunes (22, 80, 443, 3306, 8080)...\n';
-                let ports = [22, 80, 443, 3306, 8080];
-                ports.forEach((port, idx) => {
-                    setTimeout(() => {
-                        const estado = (port === 80 || port === 443) ? 'ABIERTO' : 'CERRADO/FILTRADO';
-                        outputDemo.innerHTML += `Puerto ${port}: ${estado}\n`;
-                        if (idx === ports.length-1) {
-                            outputDemo.innerHTML += '\n✅ Escaneo simulado completado. En la versión real, MX-SCANNER es 100x más rápido que nmap.';
-                        }
-                    }, idx * 800);
+        function iniciarDemoScanner() {
+            const scannerCard = document.querySelector('[data-id="mx-scanner"]')?.closest('.tool-card');
+            if(scannerCard && !scannerCard.querySelector('.demo-scanner')) {
+                const demoDiv = document.createElement('div');
+                demoDiv.className = 'demo-scanner';
+                demoDiv.innerHTML = `
+                    <input type="text" id="objetivoScan" placeholder="ej. falconmx1.github.io" value="falconmx1.github.io">
+                    <button id="simularScan">🔍 Escanear</button>
+                    <p id="resultScan" style="font-size:0.75rem; margin-top:0.5rem;"></p>
+                `;
+                scannerCard.appendChild(demoDiv);
+                
+                const btnScan = demoDiv.querySelector('#simularScan');
+                btnScan.addEventListener('click', () => {
+                    const objetivo = document.getElementById('objetivoScan').value;
+                    if(!objetivo) {
+                        document.getElementById('resultScan').innerHTML = '⚠️ Escribe un dominio o IP para escanear.';
+                        return;
+                    }
+                    document.getElementById('resultScan').innerHTML = `🔍 Escaneando ${objetivo}... (simulación ética)<br>
+                    ✅ Puertos abiertos: 22 (SSH), 80 (HTTP), 443 (HTTPS)<br>
+                    🛡️ Servicios detectados: nginx, OpenSSH 8.9<br>
+                    📊 Escaneo rápido completado. Demo sin almacenamiento real.`;
+                });
+            }
+        }
+
+        // ========== SERVICIOS ==========
+        function initServicios() {
+            document.querySelectorAll('.btn-solicitar').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const servicio = btn.getAttribute('data-servicio') || 'servicio';
+                    const mensaje = `Hola, quiero información sobre el servicio "${servicio}" de FalconMX Security.`;
+                    window.open(`https://wa.me/525561264662?text=${encodeURIComponent(mensaje)}`, '_blank');
                 });
             });
         }
+
+        // ========== FORMULARIO CON VALIDACIÓN ==========
+        function initContactForm() {
+            const form = document.getElementById('contactForm');
+            if(!form) return;
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = form.querySelector('input[type="email"]').value;
+                const nombre = form.querySelector('input[name="nombre"]').value;
+                const statusDiv = document.getElementById('formStatus');
+                
+                if (!email.includes('@') || !email.includes('.')) {
+                    statusDiv.innerHTML = '❌ Correo electrónico inválido';
+                    statusDiv.style.color = '#ff6666';
+                    return;
+                }
+                
+                if (nombre.trim().length < 2) {
+                    statusDiv.innerHTML = '❌ Ingresa un nombre válido';
+                    statusDiv.style.color = '#ff6666';
+                    return;
+                }
+                
+                statusDiv.innerHTML = '📨 Enviando mensaje...';
+                statusDiv.style.color = '#ffaa00';
+                
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        statusDiv.innerHTML = '✅ ¡Mensaje enviado! Te contactaremos pronto.';
+                        statusDiv.style.color = '#00aa55';
+                        form.reset();
+                    } else {
+                        statusDiv.innerHTML = '⚠️ Error al enviar. Escríbenos directamente a mariofalcon030901@gmail.com';
+                        statusDiv.style.color = '#ffaa00';
+                    }
+                } catch(error) {
+                    statusDiv.innerHTML = '⚠️ Error de conexión. Usa nuestro WhatsApp o correo.';
+                    statusDiv.style.color = '#ff6666';
+                }
+                
+                setTimeout(() => {
+                    if(statusDiv.innerHTML.includes('enviado')) statusDiv.innerHTML = '';
+                }, 5000);
+            });
+        }
+
+        // ========== INICIALIZACIÓN COMPLETA ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTools();
+            cargarCarrito();
+            initServicios();
+            initContactForm();
+            iniciarDemoScanner();
+            
+            const vaciarBtn = document.getElementById('vaciarCarritoBtn');
+            if(vaciarBtn) vaciarBtn.addEventListener('click', vaciarCarrito);
+            
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if(checkoutBtn) checkoutBtn.addEventListener('click', solicitarCotizacion);
+        });
     </script>
 </body>
 </html>
