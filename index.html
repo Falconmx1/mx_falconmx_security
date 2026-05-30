@@ -3,58 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    
+    <!-- ========== META TAGS DE SEGURIDAD ========== -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://formspree.io;">
+    
     <title>FalconMX Security + MFH TOOLS | Hecho en México 🇲🇽</title>
     <meta name="description" content="La suite de ciberseguridad más cabrona hecha en México. Consultoría ética, pentesting, y herramientas como MX-SCANNER, MX-ENCRYPT, MX-WEBSCAN. Precios en MXN.">
-    <link rel="icon" type="image/png" href="favicon-32x32.png">
+    
+    <!-- ========== FAVICON ========== -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    
     <link rel="stylesheet" href="estilo.css">
     <style>
-        /* Ajustes extras para la nueva funcionalidad del carrito y mejoras visuales */
-        .tool-card {
+        /* ========== MEJORAS RESPONSIVE CON CLAMP ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(1rem, 5vw, 2rem);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2a 100%);
+            border-bottom: 3px solid #ff6600;
+            padding: clamp(1.5rem, 6vw, 3rem) 0;
+        }
+        
+        h1 {
+            font-size: clamp(1.75rem, 6vw, 2.5rem);
+            margin-bottom: clamp(0.5rem, 2vw, 1rem);
+        }
+        
+        h2 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin: clamp(1.5rem, 4vw, 2rem) 0 clamp(1rem, 3vw, 1.5rem);
+            border-left: 4px solid #ff6600;
+            padding-left: clamp(0.75rem, 3vw, 1rem);
+        }
+        
+        .servicios-grid, .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            gap: clamp(1rem, 3vw, 1.5rem);
+            margin: clamp(1rem, 3vw, 2rem) 0;
+        }
+        
+        .servicio-card, .tool-card {
+            background: #12121a;
+            border-radius: clamp(0.75rem, 2vw, 1rem);
+            padding: clamp(1rem, 3vw, 1.5rem);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #2a2a3a;
         }
-        .tool-card:hover {
+        
+        .servicio-card:hover, .tool-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+            border-color: #ff6600;
         }
-        .btn-carrito {
+        
+        .tool-card h3, .servicio-card h3 {
+            color: #ff6600;
+            margin-bottom: 0.75rem;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        }
+        
+        .servicio-card ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        
+        .servicio-card li {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .contacto-rapido {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.75rem, 3vw, 1.5rem);
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        
+        .btn-solicitar, .btn-carrito, .btn-enviar {
             background: #ff6600;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem);
             border-radius: 2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 0.5rem;
+            transition: all 0.2s;
             width: 100%;
+            margin-top: 0.5rem;
         }
-        .btn-carrito:hover {
+        
+        .btn-solicitar:hover, .btn-carrito:hover, .btn-enviar:hover {
             background: #e65c00;
+            transform: scale(1.02);
         }
-        .btn-carrito:active {
-            transform: scale(0.98);
+        
+        /* Formulario de contacto */
+        .contact-form {
+            background: #12121a;
+            border-radius: 1rem;
+            padding: clamp(1rem, 4vw, 2rem);
+            margin: 2rem 0;
+            border: 1px solid #2a2a3a;
         }
+        
+        .contact-form h3 {
+            color: #ff6600;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1e1e2a;
+            border: 1px solid #3a3a4a;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .contact-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: #ff6600;
+        }
+        
+        #formStatus {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+        
+        /* Carrito Sidebar */
         .carrito-sidebar {
             position: fixed;
             right: 1rem;
             top: 5rem;
             background: #1e1e2f;
             border-radius: 1rem;
-            padding: 1rem;
-            width: 260px;
+            padding: clamp(0.75rem, 2vw, 1rem);
+            width: 280px;
             z-index: 1000;
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
             border-left: 4px solid #ff6600;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
         }
+        
         @media (max-width: 768px) {
-            .carrito-sidebar { display: none; }
+            .carrito-sidebar { 
+                display: none; 
+            }
         }
+        
         .carrito-sidebar h3 {
             margin: 0 0 0.5rem 0;
             font-size: 1.2rem;
             color: #ff6600;
         }
+        
         .carrito-sidebar ul {
             list-style: none;
             padding: 0;
@@ -62,6 +198,7 @@
             max-height: 300px;
             overflow-y: auto;
         }
+        
         .carrito-sidebar li {
             font-size: 0.8rem;
             border-bottom: 1px solid #333;
@@ -69,12 +206,15 @@
             display: flex;
             justify-content: space-between;
         }
+        
         .carrito-total {
             font-weight: bold;
             text-align: right;
             border-top: 1px solid #ff6600;
             padding-top: 0.5rem;
+            margin-top: 0.5rem;
         }
+        
         .vaciar-carrito {
             background: #aa2e2e;
             border: none;
@@ -85,10 +225,12 @@
             cursor: pointer;
             margin-top: 0.5rem;
         }
+        
         .checkout-btn {
             background: #2e8b57;
             margin-top: 0.5rem;
         }
+        
         .badge-beta {
             background: #ffaa00;
             color: #1e1e1e;
@@ -96,14 +238,67 @@
             padding: 0.2rem 0.5rem;
             border-radius: 1rem;
             font-weight: bold;
+            display: inline-block;
         }
+        
         .badge-gratis {
             background: #00aa55;
         }
+        
         .precio-oferta {
             text-decoration: line-through;
             color: #aaa;
             font-size: 0.8rem;
+        }
+        
+        footer {
+            background: #0a0a0f;
+            text-align: center;
+            padding: clamp(1rem, 4vw, 2rem);
+            margin-top: clamp(2rem, 6vw, 3rem);
+            border-top: 1px solid #2a2a3a;
+        }
+        
+        a {
+            color: #ff6600;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .demo-scanner {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #2a2a3a;
+        }
+        
+        .demo-scanner input {
+            width: 65%;
+            padding: 0.3rem;
+            background: #1e1e2a;
+            border: 1px solid #3a3a4a;
+            border-radius: 0.3rem;
+            color: white;
+        }
+        
+        .demo-scanner button {
+            width: 30%;
+            padding: 0.3rem;
+            background: #ff6600;
+            border: none;
+            border-radius: 0.3rem;
+            color: white;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 480px) {
+            .contacto-rapido {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -184,9 +379,29 @@
         <section>
             <h2>⚔️ MFH TOOLS SECURITY MX <span style="font-size:0.8rem;">— Como Kali Linux, pero con huevos 🥚🔥</span></h2>
             <p>La suite de ciberseguridad más cabrona hecha en México. Herramientas éticas, en español y a precio de barrio.</p>
-            <div class="tools-grid" id="toolsGrid">
-                <!-- Cada tool se genera desde JS para facilitar mantenimiento, pero también podrías escribirlas en HTML -->
-            </div>
+            <div class="tools-grid" id="toolsGrid"></div>
+        </section>
+
+        <!-- ========== FORMULARIO DE CONTACTO REAL ========== -->
+        <section class="contact-form">
+            <h3>📬 Contáctanos directo</h3>
+            <form action="https://formspree.io/f/xjvqykwk" method="POST" id="contactForm">
+                <div class="form-group">
+                    <input type="text" name="nombre" placeholder="Tu nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Tu correo electrónico" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="telefono" placeholder="Tu teléfono (opcional)">
+                </div>
+                <div class="form-group">
+                    <textarea name="mensaje" placeholder="¿Qué servicio o herramienta te interesa? Cuéntanos..." required></textarea>
+                </div>
+                <button type="submit" class="btn-enviar">✉️ Enviar mensaje seguro</button>
+                <div id="formStatus"></div>
+            </form>
+            <p style="font-size: 0.75rem; margin-top: 0.5rem; text-align: center;">🔒 Tus datos están seguros. Te contactamos en menos de 24 horas.</p>
         </section>
 
         <div style="text-align: center; margin-top: 2rem;">
@@ -202,7 +417,7 @@
     </footer>
 
     <script>
-        // ---------- CATÁLOGO DE HERRAMIENTAS (datos unificados) ----------
+        // ========== CATÁLOGO DE HERRAMIENTAS ==========
         const toolsCatalog = [
             { id: "mx-scanner", nombre: "MX-SCANNER v1.0", desc: "Escáner de puertos multihilo + detección de servicios. 100x más rápido que nmap.", precioMXN: 0, precioUSD: 0, estado: "🔥 BETA · GRATIS", badge: "beta-gratis", disponible: true, demo: true },
             { id: "mx-encrypt", nombre: "MX-ENCRYPT", desc: "Suite de cifrado AES-256 + RSA. Cifra archivos, mensajes y llaves asimétricas.", precioMXN: 216, precioUSD: 12, estado: "Pre-venta", badge: "preventa", disponible: true },
@@ -217,7 +432,7 @@
             { id: "mx-antiddos", nombre: "MX-ANTIDDOS", desc: "Mitigación DDoS capa 7. Rate limiting y detección de bots.", precioMXN: 450, precioUSD: 25, estado: "NUEVO", badge: "nuevo", disponible: true }
         ];
 
-        // Renderizar herramientas en el grid
+        // Renderizar herramientas
         function renderTools() {
             const grid = document.getElementById('toolsGrid');
             if (!grid) return;
@@ -227,27 +442,30 @@
                 card.className = 'tool-card';
                 const badgeClass = tool.badge === 'beta-gratis' ? 'badge-gratis' : (tool.badge === 'beta' ? 'badge-beta' : '');
                 const disponibilidad = tool.disponible ? '' : '<span class="badge-beta">🔒 No disponible aún</span>';
-                const botonCarrito = tool.disponible && tool.precioMXN > 0 ? `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="${tool.precioMXN}">➕ Añadir al carrito · $${tool.precioMXN} MXN</button>` : 
-                                    (tool.disponible && tool.precioMXN === 0 ? `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="0">⬇️ Descargar gratis</button>` : 
-                                    `<button class="btn-carrito" disabled style="background:#555;">⚡ Próximamente</button>`);
+                const botonCarrito = tool.disponible && tool.precioMXN > 0 ? 
+                    `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="${tool.precioMXN}">➕ Añadir al carrito · $${tool.precioMXN} MXN</button>` : 
+                    (tool.disponible && tool.precioMXN === 0 ? 
+                    `<button class="btn-carrito" data-id="${tool.id}" data-nombre="${tool.nombre}" data-precio="0">⬇️ Descargar gratis (Demo)</button>` : 
+                    `<button class="btn-carrito" disabled style="background:#555;">⚡ Próximamente</button>`);
+                
                 card.innerHTML = `
                     <h3>🔧 ${tool.nombre}</h3>
                     <p>${tool.desc}</p>
                     <div><span class="${badgeClass} badge-beta">${tool.estado}</span> ${disponibilidad}</div>
                     <p><strong>${tool.precioMXN === 0 ? 'GRATIS' : `$${tool.precioMXN} MXN ($${tool.precioUSD} USD)`}</strong></p>
                     ${botonCarrito}
-                    ${tool.demo && tool.precioMXN === 0 ? `<small style="display:block; margin-top:0.3rem;">🧪 Demo interactiva · escaneo simulado</small>` : ''}
+                    ${tool.demo && tool.precioMXN === 0 ? '<small style="display:block; margin-top:0.3rem;">🧪 Demo interactiva disponible abajo</small>' : ''}
                 `;
                 grid.appendChild(card);
             });
-            // Reasignar eventos después de renderizar dinámicamente
+            
             document.querySelectorAll('.btn-carrito[data-id]').forEach(btn => {
                 btn.removeEventListener('click', agregarAlCarritoHandler);
                 btn.addEventListener('click', agregarAlCarritoHandler);
             });
         }
 
-        // -------- CARRITO (localStorage) ----------
+        // ========== CARRITO ==========
         let carrito = [];
 
         function guardarCarrito() {
@@ -273,15 +491,22 @@
             const nombre = btn.getAttribute('data-nombre');
             const precio = parseInt(btn.getAttribute('data-precio'));
             if (!id) return;
-            // Evitar duplicados por simplicidad (puedes permitir cantidad después)
+            
             const existe = carrito.find(item => item.id === id);
             if (existe) {
                 alert(`🔥 ${nombre} ya está en tu carrito.`);
                 return;
             }
+            
             carrito.push({ id, nombre, precio, cantidad: 1 });
             guardarCarrito();
-            alert(`✅ ${nombre} agregado al carrito. Total parcial: $${calcularTotal()} MXN`);
+            
+            if(precio === 0) {
+                alert(`✅ ${nombre} agregado al carrito como descarga gratuita. Revisa el demo abajo.`);
+                iniciarDemoScanner();
+            } else {
+                alert(`✅ ${nombre} agregado al carrito. Total parcial: $${calcularTotal()} MXN`);
+            }
         }
 
         function calcularTotal() {
@@ -292,11 +517,13 @@
             const lista = document.getElementById('listaCarrito');
             const totalSpan = document.getElementById('totalCarrito');
             if (!lista) return;
+            
             if (carrito.length === 0) {
                 lista.innerHTML = '<li>✨ Vacío, agrega algo cabrón</li>';
                 if(totalSpan) totalSpan.innerText = 'Total: $0 MXN';
                 return;
             }
+            
             lista.innerHTML = carrito.map(item => `<li>${item.nombre} <strong>$${item.precio} MXN</strong></li>`).join('');
             if(totalSpan) totalSpan.innerText = `Total: $${calcularTotal()} MXN`;
         }
@@ -313,12 +540,41 @@
                 return;
             }
             const total = calcularTotal();
-            const mensaje = `Hola, quiero cotizar las herramientas MFH: ${carrito.map(i=>i.nombre).join(', ')}. Total: $${total} MXN.`;
+            const herramientas = carrito.map(i => i.nombre).join(', ');
+            const mensaje = `Hola, quiero cotizar las herramientas MFH: ${herramientas}. Total: $${total} MXN.`;
             const url = `https://wa.me/525561264662?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
         }
 
-        // Eventos para botones de servicios (simular cotización)
+        // ========== DEMO DE MX-SCANNER ==========
+        function iniciarDemoScanner() {
+            const scannerCard = document.querySelector('[data-id="mx-scanner"]')?.closest('.tool-card');
+            if(scannerCard && !scannerCard.querySelector('.demo-scanner')) {
+                const demoDiv = document.createElement('div');
+                demoDiv.className = 'demo-scanner';
+                demoDiv.innerHTML = `
+                    <input type="text" id="objetivoScan" placeholder="ej. falconmx1.github.io" value="falconmx1.github.io">
+                    <button id="simularScan">🔍 Escanear</button>
+                    <p id="resultScan" style="font-size:0.75rem; margin-top:0.5rem;"></p>
+                `;
+                scannerCard.appendChild(demoDiv);
+                
+                const btnScan = demoDiv.querySelector('#simularScan');
+                btnScan.addEventListener('click', () => {
+                    const objetivo = document.getElementById('objetivoScan').value;
+                    if(!objetivo) {
+                        document.getElementById('resultScan').innerHTML = '⚠️ Escribe un dominio o IP para escanear.';
+                        return;
+                    }
+                    document.getElementById('resultScan').innerHTML = `🔍 Escaneando ${objetivo}... (simulación ética)<br>
+                    ✅ Puertos abiertos: 22 (SSH), 80 (HTTP), 443 (HTTPS)<br>
+                    🛡️ Servicios detectados: nginx, OpenSSH 8.9<br>
+                    📊 Escaneo rápido completado. Demo sin almacenamiento real.`;
+                });
+            }
+        }
+
+        // ========== SERVICIOS ==========
         function initServicios() {
             document.querySelectorAll('.btn-solicitar').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -329,34 +585,70 @@
             });
         }
 
-        // Demo de MX-SCANNER (simulación ética)
-        function initDemoScanner() {
-            // Si quieres agregar un modal o simulación, aquí puedes inyectarlo, pero lo dejamos opcional
-            const scannerCard = document.querySelector('[data-id="mx-scanner"]')?.closest('.tool-card');
-            if(scannerCard && !scannerCard.querySelector('.demo-scanner')) {
-                const demoDiv = document.createElement('div');
-                demoDiv.className = 'demo-scanner';
-                demoDiv.style.marginTop = '0.5rem';
-                demoDiv.innerHTML = `<input type="text" id="objetivoScan" placeholder="ej. falconmx1.github.io" style="width:70%; padding:0.2rem;"> <button id="simularScan">Escanear</button>
-                                    <p id="resultScan" style="font-size:0.7rem;"></p>`;
-                scannerCard.appendChild(demoDiv);
-                const btnScan = demoDiv.querySelector('#simularScan');
-                btnScan.addEventListener('click', () => {
-                    const objetivo = document.getElementById('objetivoScan').value;
-                    if(!objetivo) return;
-                    document.getElementById('resultScan').innerHTML = `🔍 Escaneando ${objetivo}... (simulación ética) Puertos abiertos: 22 (SSH), 80 (HTTP), 443 (HTTPS). Servicios detectados: nginx, OpenSSH. ✅ Demo sin almacenamiento real.`;
-                });
-            }
+        // ========== FORMULARIO CON VALIDACIÓN ==========
+        function initContactForm() {
+            const form = document.getElementById('contactForm');
+            if(!form) return;
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = form.querySelector('input[type="email"]').value;
+                const nombre = form.querySelector('input[name="nombre"]').value;
+                const statusDiv = document.getElementById('formStatus');
+                
+                if (!email.includes('@') || !email.includes('.')) {
+                    statusDiv.innerHTML = '❌ Correo electrónico inválido';
+                    statusDiv.style.color = '#ff6666';
+                    return;
+                }
+                
+                if (nombre.trim().length < 2) {
+                    statusDiv.innerHTML = '❌ Ingresa un nombre válido';
+                    statusDiv.style.color = '#ff6666';
+                    return;
+                }
+                
+                statusDiv.innerHTML = '📨 Enviando mensaje...';
+                statusDiv.style.color = '#ffaa00';
+                
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        statusDiv.innerHTML = '✅ ¡Mensaje enviado! Te contactaremos pronto.';
+                        statusDiv.style.color = '#00aa55';
+                        form.reset();
+                    } else {
+                        statusDiv.innerHTML = '⚠️ Error al enviar. Escríbenos directamente a mariofalcon030901@gmail.com';
+                        statusDiv.style.color = '#ffaa00';
+                    }
+                } catch(error) {
+                    statusDiv.innerHTML = '⚠️ Error de conexión. Usa nuestro WhatsApp o correo.';
+                    statusDiv.style.color = '#ff6666';
+                }
+                
+                setTimeout(() => {
+                    if(statusDiv.innerHTML.includes('enviado')) statusDiv.innerHTML = '';
+                }, 5000);
+            });
         }
 
-        // Inicialización completa
+        // ========== INICIALIZACIÓN COMPLETA ==========
         document.addEventListener('DOMContentLoaded', () => {
             renderTools();
             cargarCarrito();
             initServicios();
-            setTimeout(initDemoScanner, 200); // esperar a que se monte el scanner en DOM
+            initContactForm();
+            iniciarDemoScanner();
+            
             const vaciarBtn = document.getElementById('vaciarCarritoBtn');
             if(vaciarBtn) vaciarBtn.addEventListener('click', vaciarCarrito);
+            
             const checkoutBtn = document.getElementById('checkoutBtn');
             if(checkoutBtn) checkoutBtn.addEventListener('click', solicitarCotizacion);
         });
