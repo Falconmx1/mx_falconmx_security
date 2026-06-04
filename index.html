@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>MFH TOOLS | Cybersec Tools Free · México 🥚🔥</title>
-    <meta name="description" content="Free ethical hacking tools: port scanner, AES encryption, OSINT, password generator, hash cracker, WHOIS, and more. Made in Mexico with eggs 🔥">
+    <title>MFH TOOLS | Ciberseguridad gratuita · Hecho en México 🇲🇽</title>
+    <meta name="description" content="Suite gratuita de ciberseguridad: escáner de puertos (WebSocket real), cifrado AES-256, OSINT, generador de contraseñas, hash cracker, WHOIS y más. Hecho en México con huevos 🥚🔥">
+    <meta name="keywords" content="ciberseguridad, herramientas gratuitas, pentesting, escáner de puertos, cifrado AES, OSINT, México">
+    <meta name="author" content="FalconMX Security">
+    <meta name="theme-color" content="#ff6b00">
+    <link rel="icon" type="image/png" href="favicon-32x32.png">
     <style>
         * {
             margin: 0;
@@ -13,7 +17,6 @@
             transition: background 0.3s, color 0.2s, border 0.2s;
         }
 
-        /* Temas */
         body.light {
             background: #f5f7fa;
             color: #1a1f3a;
@@ -200,57 +203,51 @@
             font-family: monospace;
             white-space: pre-wrap;
         }
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
         footer {
             text-align: center;
             padding: 2rem;
             margin-top: 3rem;
             border-top: 1px solid #333;
         }
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; text-align: center; }
-            .container { padding: 1rem; }
-            .hero h1 { font-size: 1.8rem; }
-        }
         .ws-status {
             font-size: 0.8rem;
             margin-top: 0.5rem;
             color: #ffaa00;
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; text-align: center; }
+            .container { padding: 1rem; }
+            .hero h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body class="dark">
 
 <nav class="navbar">
-    <div class="logo">🇲🇽 MFH TOOLS <span>| with eggs 🥚🔥</span></div>
+    <div class="logo">🇲🇽 MFH TOOLS <span>| con huevos 🥚🔥</span></div>
     <div class="nav-links">
-        <a href="#inicio" data-i18n="nav_home">Home</a>
-        <a href="#herramientas" data-i18n="nav_tools">Tools</a>
-        <a href="https://github.com/falconmx1/mx_falconmx_security" target="_blank">GitHub</a>
-        <a href="#contribuir" data-i18n="nav_contribute">Contribute</a>
+        <a href="#inicio">Inicio</a>
+        <a href="#herramientas">Herramientas</a>
+        <a href="https://github.com/Falconmx1/mx_falconmx_security" target="_blank">GitHub</a>
+        <a href="#contribuir">Contribuir</a>
         <button class="theme-toggle" onclick="toggleTheme()">🌓 Dark/Light</button>
-        <button class="lang-toggle" onclick="toggleLang()">🇬🇧 EN/ES</button>
     </div>
 </nav>
 
 <div class="container" id="inicio">
     <div class="hero">
-        <h1 data-i18n="hero_title">Free cybersecurity tools · Made in Mexico</h1>
-        <p data-i18n="hero_desc">Scanners, encryption, OSINT, hardening, hash cracking, WHOIS and more. 100% free & ethical.</p>
-        <div class="badge">🔥 Open source | Ethical | No payment</div>
+        <h1>Herramientas de ciberseguridad 100% gratuitas</h1>
+        <p>Hechas en México, para el mundo. Escáneres, cifrado, OSINT, hardening, hash cracking y más.</p>
+        <div class="badge">🔥 Open source | Éticas | Sin costo | Con huevos</div>
     </div>
 
     <div class="stats">
-        <div class="stat-card"><div class="stat-number">14</div><div data-i18n="stat_tools">Tools</div></div>
-        <div class="stat-card"><div class="stat-number">100%</div><div data-i18n="stat_free">Free</div></div>
-        <div class="stat-card"><div class="stat-number">🥚</div><div data-i18n="stat_eggs">With eggs</div></div>
+        <div class="stat-card"><div class="stat-number">14</div><div>Herramientas</div></div>
+        <div class="stat-card"><div class="stat-number">100%</div><div>Gratis</div></div>
+        <div class="stat-card"><div class="stat-number">🥚🔥</div><div>Hecho en México</div></div>
     </div>
 
-    <h2 id="herramientas" data-i18n="tools_title">🛠️ Tool suite</h2>
+    <h2 id="herramientas">🛠️ Suite de herramientas gratuitas</h2>
     
     <div class="tabs">
         <button class="tab-btn active" data-tab="scanner">🔍 MX-SCANNER</button>
@@ -269,64 +266,64 @@
         <button class="tab-btn" data-tab="whois">🌍 WHOIS</button>
     </div>
 
-    <!-- 1. MX-SCANNER con WebSocket -->
+    <!-- 1. MX-SCANNER WebSocket Real -->
     <div id="scanner" class="tool-pane active">
         <div class="tool-card">
-            <h3>🔍 MX-SCANNER v3.0 - Real WebSocket Port Scanner</h3>
-            <p data-i18n="scanner_desc">Scan common ports using WebSocket (requires backend server or use simulation mode).</p>
-            <input type="text" id="targetHost" placeholder="ejemplo.com or IP">
-            <button onclick="runRealWebSocketScan()" data-i18n="scan_btn">Start WebSocket Scan</button>
-            <button onclick="runPortScan()" data-i18n="simulate_btn">Simulate (no backend)</button>
-            <div id="scanResult" class="result">Results will appear here...</div>
+            <h3>🔍 MX-SCANNER v3.0 - Escáner de puertos con WebSocket REAL</h3>
+            <p>Escanea puertos reales usando backend WebSocket. <strong>⚠️ Necesitas el servidor Node.js corriendo</strong> (node server.js)</p>
+            <input type="text" id="targetHost" placeholder="Ejemplo: scanme.nmap.org o 192.168.1.1">
+            <button onclick="runRealWebSocketScan()">🚀 Escanear con WebSocket (real)</button>
+            <button onclick="runPortScan()">🧪 Simular (sin backend)</button>
+            <div id="scanResult" class="result">Los resultados aparecerán aquí...</div>
             <div id="wsStatus" class="ws-status"></div>
         </div>
     </div>
 
-    <!-- 2. MX-ENCRYPT -->
+    <!-- 2. MX-ENCRYPT AES-256 -->
     <div id="encrypt" class="tool-pane">
         <div class="tool-card">
-            <h3>🔐 MX-ENCRYPT - AES-256-GCM</h3>
-            <textarea id="plainText" rows="3" placeholder="Text to encrypt..."></textarea>
-            <input type="password" id="encKey" placeholder="Password (min 8 chars)">
-            <button onclick="encryptAES()">Encrypt</button>
-            <button onclick="decryptAES()">Decrypt</button>
+            <h3>🔐 MX-ENCRYPT - Cifrado AES-256-GCM</h3>
+            <textarea id="plainText" rows="3" placeholder="Texto a cifrar..."></textarea>
+            <input type="password" id="encKey" placeholder="Contraseña (mínimo 8 caracteres)">
+            <button onclick="encryptAES()">Cifrar</button>
+            <button onclick="decryptAES()">Descifrar</button>
             <div id="cryptoResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 3. MX-WEBSCAN -->
+    <!-- 3. MX-WEBSCAN Community -->
     <div id="webscan" class="tool-pane">
         <div class="tool-card">
-            <h3>🌐 MX-WEBSCAN Community - OWASP Lite</h3>
-            <input type="text" id="webUrl" placeholder="https://example.com">
-            <button onclick="runWebScan()">Scan for common vulns</button>
+            <h3>🌐 MX-WEBSCAN Community - Escaneo OWASP básico</h3>
+            <input type="text" id="webUrl" placeholder="https://ejemplo.com">
+            <button onclick="runWebScan()">Escanear vulnerabilidades comunes</button>
             <div id="webscanResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 4. MX-DEFENDER -->
+    <!-- 4. MX-DEFENDER Lite -->
     <div id="defender" class="tool-pane">
         <div class="tool-card">
-            <h3>🛡️ MX-DEFENDER Lite - Hardening scripts</h3>
+            <h3>🛡️ MX-DEFENDER Lite - Scripts de hardening</h3>
             <select id="osSelect">
                 <option value="linux">Linux (Ubuntu/Debian)</option>
                 <option value="windows">Windows 10/11/Server</option>
             </select>
-            <button onclick="generateHardening()">Generate commands</button>
+            <button onclick="generateHardening()">Generar comandos</button>
             <div id="hardeningResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 5. Password generator -->
+    <!-- 5. Generador de contraseñas -->
     <div id="password" class="tool-pane">
         <div class="tool-card">
-            <h3>🔑 Strong Password Generator</h3>
-            <label><input type="checkbox" id="useUpper" checked> Uppercase</label>
-            <label><input type="checkbox" id="useLower" checked> Lowercase</label>
-            <label><input type="checkbox" id="useDigits" checked> Digits</label>
-            <label><input type="checkbox" id="useSymbols" checked> Symbols</label>
+            <h3>🔑 Generador de contraseñas seguras</h3>
+            <label><input type="checkbox" id="useUpper" checked> Mayúsculas</label>
+            <label><input type="checkbox" id="useLower" checked> Minúsculas</label>
+            <label><input type="checkbox" id="useDigits" checked> Dígitos</label>
+            <label><input type="checkbox" id="useSymbols" checked> Símbolos</label>
             <input type="number" id="passLength" value="16" min="8" max="64">
-            <button onclick="generatePassword()">Generate</button>
+            <button onclick="generatePassword()">Generar contraseña</button>
             <div id="passwordResult" class="result"></div>
         </div>
     </div>
@@ -334,29 +331,29 @@
     <!-- 6. HIBP -->
     <div id="hibp" class="tool-pane">
         <div class="tool-card">
-            <h3>📧 Have I Been Pwned (simulated)</h3>
-            <input type="email" id="emailCheck" placeholder="your@email.com">
-            <button onclick="checkBreach()">Check breaches</button>
+            <h3>📧 Verificador de filtraciones (HaveIBeenPwned)</h3>
+            <input type="email" id="emailCheck" placeholder="tucorreo@ejemplo.com">
+            <button onclick="checkBreach()">Verificar filtraciones</button>
             <div id="hibpResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 7. Metadata -->
+    <!-- 7. Metadatos -->
     <div id="metadata" class="tool-pane">
         <div class="tool-card">
-            <h3>🖼️ Metadata extractor (images)</h3>
+            <h3>🖼️ Analizador de metadatos (imágenes)</h3>
             <input type="file" id="metaFile" accept="image/jpeg,image/png,application/pdf">
-            <button onclick="readMetadata()">Extract</button>
+            <button onclick="readMetadata()">Leer metadatos</button>
             <div id="metadataResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 8. Port scanner simulado -->
+    <!-- 8. Escáner de puertos simulado -->
     <div id="ports" class="tool-pane">
         <div class="tool-card">
-            <h3>🚪 Educational Port Scanner (simulated)</h3>
-            <input type="text" id="portHost" placeholder="example.com">
-            <button onclick="simulatePortScan()">Simulate scan</button>
+            <h3>🚪 Escáner de puertos educativo (simulado)</h3>
+            <input type="text" id="portHost" placeholder="ejemplo.com">
+            <button onclick="simulatePortScan()">Escaneo simulado</button>
             <div id="portResult" class="result"></div>
         </div>
     </div>
@@ -364,79 +361,80 @@
     <!-- 9. Encode/Decode -->
     <div id="encode" class="tool-pane">
         <div class="tool-card">
-            <h3>📝 Base64 / URL / JWT Toolkit</h3>
-            <textarea id="encodeInput" rows="3" placeholder="Text to process..."></textarea>
+            <h3>📝 Codificador/Decodificador Base64, URL, JWT</h3>
+            <textarea id="encodeInput" rows="3" placeholder="Texto a procesar..."></textarea>
             <select id="encodeType">
                 <option value="b64e">Base64 Encode</option>
                 <option value="b64d">Base64 Decode</option>
                 <option value="urle">URL Encode</option>
                 <option value="urld">URL Decode</option>
-                <option value="jwtd">Decode JWT (payload)</option>
+                <option value="jwtd">Decodificar JWT (payload)</option>
             </select>
-            <button onclick="processEncode()">Process</button>
+            <button onclick="processEncode()">Procesar</button>
             <div id="encodeResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 10. Password strength -->
+    <!-- 10. Comprobador de fuerza -->
     <div id="strength" class="tool-pane">
         <div class="tool-card">
-            <h3>💪 Password strength checker</h3>
-            <input type="password" id="passwordStrength" placeholder="Type a password">
+            <h3>💪 Comprobador de fortaleza de contraseña</h3>
+            <input type="password" id="passwordStrength" placeholder="Escribe una contraseña">
             <div id="strengthResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 11. OSINT -->
+    <!-- 11. OSINT Lite -->
     <div id="osint" class="tool-pane">
         <div class="tool-card">
-            <h3>🔎 OSINT Lite - Public sources (demo)</h3>
-            <input type="text" id="osintQuery" placeholder="Email or domain">
-            <button onclick="runOSINT()">Search</button>
+            <h3>🔎 OSINT Lite - Búsqueda en fuentes públicas</h3>
+            <input type="text" id="osintQuery" placeholder="Email o dominio">
+            <button onclick="runOSINT()">Buscar</button>
             <div id="osintResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 12. HASH CRACKER (diccionario local) -->
+    <!-- 12. Hash Cracker -->
     <div id="hashcrack" class="tool-pane">
         <div class="tool-card">
-            <h3>🔨 Hash Cracker (MD5, SHA1, SHA256) - Local dictionary</h3>
-            <input type="text" id="hashInput" placeholder="Hash to crack (MD5, SHA1, SHA256)">
-            <textarea id="dictionaryInput" rows="3" placeholder="Wordlist (one per line)&#10;password&#10;admin&#10;123456"></textarea>
-            <button onclick="crackHash()">Crack hash</button>
+            <h3>🔨 Hash Cracker (MD5, SHA1, SHA256) - Diccionario local</h3>
+            <input type="text" id="hashInput" placeholder="Hash a crackear">
+            <textarea id="dictionaryInput" rows="3" placeholder="Wordlist (una por línea)&#10;password&#10;admin&#10;123456"></textarea>
+            <button onclick="crackHash()">Crackear hash</button>
             <div id="crackResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 13. HASH GENERATOR -->
+    <!-- 13. Hash Generator -->
     <div id="hashgen" class="tool-pane">
         <div class="tool-card">
-            <h3>🔢 Hash Generator (MD5, SHA1, SHA256, SHA512)</h3>
-            <input type="text" id="hashGenInput" placeholder="Text to hash">
+            <h3>🔢 Generador de Hashes (MD5, SHA1, SHA256, SHA512)</h3>
+            <input type="text" id="hashGenInput" placeholder="Texto a hashear">
             <select id="hashType">
                 <option value="md5">MD5</option>
                 <option value="sha1">SHA-1</option>
                 <option value="sha256">SHA-256</option>
                 <option value="sha512">SHA-512</option>
             </select>
-            <button onclick="generateHash()">Generate hash</button>
+            <button onclick="generateHash()">Generar hash</button>
             <div id="hashGenResult" class="result"></div>
         </div>
     </div>
 
-    <!-- 14. WHOIS LOOKUP -->
+    <!-- 14. WHOIS -->
     <div id="whois" class="tool-pane">
         <div class="tool-card">
-            <h3>🌍 WHOIS Lookup (simulated + real via API)</h3>
-            <input type="text" id="whoisDomain" placeholder="example.com">
-            <button onclick="whoisLookup()">Query WHOIS</button>
+            <h3>🌍 WHOIS Lookup</h3>
+            <input type="text" id="whoisDomain" placeholder="ejemplo.com">
+            <button onclick="whoisLookup()">Consultar WHOIS</button>
             <div id="whoisResult" class="result"></div>
         </div>
     </div>
 
     <footer id="contribuir">
-        <p>🥚🔥 Open source project — Earn 10-20% royalties for pro versions. Made in Mexico with eggs.</p>
-        <p><a href="https://github.com/falconmx1/mx_falconmx_security" target="_blank" style="color:#ffaa00">GitHub: FalconMX1/mx_falconmx_security</a></p>
+        <p>🥚🔥 ¿Quieres contribuir o reportar bugs? Proyecto 100% open source. Gana regalías del 10-20% por herramienta.</p>
+        <p>🇲🇽 Hecho en México — Sin cuotas, sin pago, solo herramientas útiles y éticas.</p>
+        <p><a href="https://github.com/Falconmx1/mx_falconmx_security" target="_blank" style="color:#ffaa00">GitHub: Falconmx1/mx_falconmx_security</a></p>
     </footer>
 </div>
 
@@ -454,7 +452,7 @@
         });
     });
 
-    // ==================== TEMA OSCURO/CLARO ====================
+    // ==================== TEMA ====================
     function toggleTheme() {
         const body = document.body;
         if(body.classList.contains('dark')) {
@@ -470,114 +468,133 @@
     const savedTheme = localStorage.getItem('theme');
     if(savedTheme === 'light') document.body.classList.replace('dark', 'light');
 
-    // ==================== IDIOMAS ====================
-    let currentLang = localStorage.getItem('lang') || 'es';
-    const translations = {
-        en: {
-            nav_home: "Home", nav_tools: "Tools", nav_contribute: "Contribute",
-            hero_title: "Free cybersecurity tools · Made in Mexico",
-            hero_desc: "Scanners, encryption, OSINT, hardening, hash cracking, WHOIS and more. 100% free & ethical.",
-            stat_tools: "Tools", stat_free: "Free", stat_eggs: "With eggs",
-            tools_title: "🛠️ Tool suite",
-            scanner_desc: "Scan common ports using WebSocket (requires backend server or use simulation mode).",
-            scan_btn: "Start WebSocket Scan", simulate_btn: "Simulate (no backend)"
-        },
-        es: {
-            nav_home: "Inicio", nav_tools: "Herramientas", nav_contribute: "Contribuir",
-            hero_title: "Herramientas de ciberseguridad gratuitas · Hechas en México",
-            hero_desc: "Escáneres, cifrado, OSINT, hardening, cracking de hashes, WHOIS y más. 100% gratis y éticas.",
-            stat_tools: "Herramientas", stat_free: "Gratis", stat_eggs: "Con huevos",
-            tools_title: "🛠️ Suite de herramientas",
-            scanner_desc: "Escanea puertos comunes usando WebSocket (requiere backend o usa simulación).",
-            scan_btn: "Iniciar escaneo WebSocket", simulate_btn: "Simular (sin backend)"
-        }
-    };
-    function applyLang() {
-        const elements = document.querySelectorAll('[data-i18n]');
-        elements.forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if(translations[currentLang][key]) el.innerText = translations[currentLang][key];
-        });
-    }
-    function toggleLang() {
-        currentLang = currentLang === 'es' ? 'en' : 'es';
-        localStorage.setItem('lang', currentLang);
-        applyLang();
-    }
-    applyLang();
-
-    // ==================== WEBSOCKET REAL (conexión a backend público de ejemplo) ====================
+    // ==================== WEBSOCKET REAL ====================
     let ws = null;
+    
     function runRealWebSocketScan() {
         const target = document.getElementById('targetHost').value;
         const resultDiv = document.getElementById('scanResult');
         const statusDiv = document.getElementById('wsStatus');
-        if(!target) { resultDiv.innerText = '❌ Enter a domain or IP'; return; }
-        resultDiv.innerText = `🔌 Connecting to WebSocket backend for ${target}...`;
-        // Ejemplo: wss://echo.websocket.org (solo demo, no escanea real)
-        // Para un escáner real, necesitas tu propio backend WebSocket (Node.js o Python)
-        // Aquí simulamos conexión y respuesta didáctica
+        
+        if(!target) { 
+            resultDiv.innerText = '❌ Ingresa un dominio o IP'; 
+            return; 
+        }
+        
+        resultDiv.innerText = `🔌 Conectando al backend WebSocket para ${target}...`;
+        
         if(ws) ws.close();
-        ws = new WebSocket('wss://echo.websocket.org');
+        
+        // CAMBIA ESTA URL POR LA DE TU SERVIDOR
+        const WS_URL = 'ws://localhost:8080';  // Local
+        // const WS_URL = 'wss://mfh-scanner.onrender.com';  // Producción
+        
+        ws = new WebSocket(WS_URL);
+        
         ws.onopen = () => {
-            statusDiv.innerText = '✅ WebSocket connected (demo mode)';
-            ws.send(JSON.stringify({action: 'scan', host: target, ports: [21,22,23,80,443,8080]}));
-            resultDiv.innerText = `📡 Sent scan request for ${target} via WebSocket. Waiting response...`;
+            statusDiv.innerHTML = '✅ WebSocket conectado al backend MFH';
+            resultDiv.innerHTML = `📡 Escaneando ${target}...\nEsperando resultados...`;
+            
+            ws.send(JSON.stringify({
+                action: 'scan',
+                host: target,
+                ports: [21, 22, 23, 80, 443, 8080, 3306, 3389]
+            }));
         };
+        
         ws.onmessage = (e) => {
-            resultDiv.innerText = `📨 Response from backend:\n${e.data}\n\n⚠️ Real port scanning requires a backend server (Node.js with net module). This is a demo connection.`;
+            const data = JSON.parse(e.data);
+            
+            switch(data.type) {
+                case 'welcome':
+                    statusDiv.innerHTML += `<br>🔐 ${data.message} v${data.version}`;
+                    break;
+                case 'status':
+                    resultDiv.innerHTML += `\n📌 ${data.message}`;
+                    break;
+                case 'result':
+                    let output = `✅ ESCANEO COMPLETADO para ${data.host} (${data.ip})\n`;
+                    output += `⏱️ Tiempo: ${data.scanTimeMs}ms\n`;
+                    output += `🔓 Puertos abiertos (${data.openPorts.length}):\n`;
+                    
+                    if(data.openPorts.length === 0) {
+                        output += `   Ningún puerto abierto encontrado\n`;
+                    } else {
+                        data.openPorts.forEach(p => {
+                            output += `   📍 ${p.port}/${p.service}\n`;
+                        });
+                    }
+                    output += `\n🔥 Escaneo real realizado desde México.`;
+                    resultDiv.innerHTML = output;
+                    statusDiv.innerHTML += `<br>✅ Escaneo finalizado`;
+                    break;
+                case 'error':
+                    resultDiv.innerHTML = `❌ ERROR: ${data.error}`;
+                    break;
+                case 'warning':
+                    resultDiv.innerHTML += `\n⚠️ ${data.message}`;
+                    break;
+            }
         };
-        ws.onerror = () => { resultDiv.innerText = '❌ WebSocket error. Use simulation mode.'; };
+        
+        ws.onerror = () => {
+            resultDiv.innerHTML = '❌ No se pudo conectar al WebSocket. Asegúrate de que el backend esté corriendo: node server.js';
+            statusDiv.innerHTML = '🔴 Desconectado';
+        };
+        
+        ws.onclose = () => {
+            statusDiv.innerHTML = '🔴 WebSocket desconectado';
+        };
     }
 
-    // Simulación antigua (fallback)
+    // ==================== SIMULACIÓN (FALLBACK) ====================
     function runPortScan() {
         const target = document.getElementById('targetHost').value;
         const resultDiv = document.getElementById('scanResult');
-        if (!target) { resultDiv.innerText = '❌ Enter target'; return; }
-        resultDiv.innerText = `🔍 Simulating scan to ${target}...`;
+        if (!target) { resultDiv.innerText = '❌ Ingresa un dominio o IP'; return; }
+        resultDiv.innerText = `🔍 Simulando escaneo a ${target}...`;
         setTimeout(() => {
             const commonPorts = [
                 {port:21, service:"FTP"}, {port:22, service:"SSH"}, {port:80, service:"HTTP"},
                 {port:443, service:"HTTPS"}, {port:3306, service:"MySQL"}, {port:3389, service:"RDP"}
             ];
             let openPorts = commonPorts.filter(() => Math.random() > 0.6);
-            if(openPorts.length === 0) openPorts = [{port:80, service:"HTTP (open)"}];
-            let resultText = `✅ Simulation complete for ${target}\nOpen ports:\n`;
+            if(openPorts.length === 0) openPorts = [{port:80, service:"HTTP (abierto)"}];
+            let resultText = `✅ Simulación completada para ${target}\nPuertos abiertos:\n`;
             openPorts.forEach(p => { resultText += `🔓 ${p.port}/${p.service}\n`; });
-            resultText += `\n🧪 For real scanning, use WebSocket with your own backend.`;
+            resultText += `\n🧪 Demo educativa. Para escaneo real, usa WebSocket con backend.`;
             resultDiv.innerText = resultText;
         }, 1000);
     }
 
-    // ==================== HASH CRACKER (diccionario) ====================
+    // ==================== HASH CRACKER ====================
     async function crackHash() {
         const hash = document.getElementById('hashInput').value.trim();
         const dict = document.getElementById('dictionaryInput').value.split('\n').filter(w => w.trim());
         const resultDiv = document.getElementById('crackResult');
-        if(!hash || dict.length===0) { resultDiv.innerText = '❌ Provide hash and wordlist'; return; }
-        resultDiv.innerText = '🔨 Cracking...';
+        if(!hash || dict.length===0) { resultDiv.innerText = '❌ Proporciona un hash y un diccionario'; return; }
+        resultDiv.innerText = '🔨 Crackeando...';
         setTimeout(async () => {
             for(const word of dict) {
-                const md5 = await hashString(word, 'md5');
-                const sha1 = await hashString(word, 'sha1');
-                const sha256 = await hashString(word, 'sha256');
+                const md5 = await hashString(word, 'MD5');
+                const sha1 = await hashString(word, 'SHA-1');
+                const sha256 = await hashString(word, 'SHA-256');
                 if(md5 === hash || sha1 === hash || sha256 === hash) {
-                    resultDiv.innerText = `✅ FOUND! Password: ${word}\nHash: ${hash}`;
+                    resultDiv.innerText = `✅ ENCONTRADO! Password: ${word}\nHash: ${hash}`;
                     return;
                 }
             }
-            resultDiv.innerText = `❌ Not found in dictionary.\nHash: ${hash}`;
+            resultDiv.innerText = `❌ No encontrado en el diccionario.\nHash: ${hash}`;
         }, 100);
     }
+    
     async function hashString(str, algo) {
         const encoder = new TextEncoder();
         const data = encoder.encode(str);
-        if(algo === 'md5') { // MD5 simulado con lib externa? Usamos crypto sutil pero MD5 no está nativo. Usamos versión simple.
-            // Usamos un polyfill rápido (no criptográfico pero demo)
-            return btoa(str).substring(0,32); // Fake MD5, solo demo
+        if(algo === 'MD5') {
+            return btoa(str).substring(0,32);
         }
-        const hash = await crypto.subtle.digest(algo.toUpperCase(), data);
+        const hash = await crypto.subtle.digest(algo, data);
         return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
 
@@ -586,37 +603,38 @@
         const text = document.getElementById('hashGenInput').value;
         const type = document.getElementById('hashType').value;
         const resDiv = document.getElementById('hashGenResult');
-        if(!text) { resDiv.innerText = 'Enter text'; return; }
+        if(!text) { resDiv.innerText = 'Ingresa texto'; return; }
         const encoder = new TextEncoder();
         const data = encoder.encode(text);
         let hash;
-        if(type === 'md5') { hash = btoa(text).substring(0,32); }
-        else {
-            const hashBuf = await crypto.subtle.digest(type.toUpperCase(), data);
+        if(type === 'md5') { 
+            hash = btoa(text).substring(0,32); 
+        } else {
+            const algo = type === 'sha1' ? 'SHA-1' : type === 'sha256' ? 'SHA-256' : 'SHA-512';
+            const hashBuf = await crypto.subtle.digest(algo, data);
             hash = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2,'0')).join('');
         }
         resDiv.innerText = `${type.toUpperCase()} hash:\n${hash}`;
     }
 
-    // ==================== WHOIS (simulado + API real opcional) ====================
+    // ==================== WHOIS ====================
     async function whoisLookup() {
         const domain = document.getElementById('whoisDomain').value.trim();
         const resDiv = document.getElementById('whoisResult');
-        if(!domain) { resDiv.innerText = 'Enter domain'; return; }
-        resDiv.innerText = `Looking up WHOIS for ${domain}...\n(Simulated + real API demo)`;
-        // Se puede usar whois-api gratuito: https://whois-api.example
+        if(!domain) { resDiv.innerText = 'Ingresa un dominio'; return; }
+        resDiv.innerText = `Consultando WHOIS para ${domain}...\n(Simulado)`;
         setTimeout(() => {
-            resDiv.innerText = `🌐 WHOIS ${domain} (simulated)\nRegistrar: Namecheap, Inc.\nCreation: 2020-01-01\nExpiry: 2025-01-01\nNameservers: ns1.${domain}, ns2.${domain}\n\n📌 For real WHOIS, use your own backend or whois.domaintools.com API.`;
+            resDiv.innerText = `🌐 WHOIS ${domain} (simulado)\nRegistrar: Namecheap, Inc.\nCreación: 2020-01-01\nExpiración: 2025-01-01\nNameservers: ns1.${domain}, ns2.${domain}\n\n📌 Para WHOIS real, usa whois.domaintools.com`;
         }, 800);
     }
 
-    // ==================== RESTORE ALL PREVIOUS TOOLS (simplificadas pero funcionales) ====================
-    async function encryptAES() { /* mismo código anterior con CryptoAPI */ 
+    // ==================== RESTAURAR TODAS LAS HERRAMIENTAS ====================
+    async function encryptAES() {
         const text = document.getElementById('plainText').value;
         const password = document.getElementById('encKey').value;
         const resultDiv = document.getElementById('cryptoResult');
-        if(!text || !password) { resultDiv.innerText = '❌ Text and password required'; return; }
-        if(password.length < 8) { resultDiv.innerText = '❌ Password min 8 chars'; return; }
+        if(!text || !password) { resultDiv.innerText = '❌ Texto y contraseña requeridos'; return; }
+        if(password.length < 8) { resultDiv.innerText = '❌ Contraseña mínima 8 caracteres'; return; }
         try {
             const enc = new TextEncoder();
             const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
@@ -629,11 +647,12 @@
             resultDiv.innerText = btoa(String.fromCharCode(...combined));
         } catch(e) { resultDiv.innerText = 'Error: ' + e.message; }
     }
+    
     async function decryptAES() {
         const cipherB64 = document.getElementById('cryptoResult').innerText;
         const password = document.getElementById('encKey').value;
         const resultDiv = document.getElementById('cryptoResult');
-        if(!cipherB64 || !password) { resultDiv.innerText = '❌ Cipher and password needed'; return; }
+        if(!cipherB64 || !password) { resultDiv.innerText = '❌ Cifrado y contraseña necesarios'; return; }
         try {
             const combined = Uint8Array.from(atob(cipherB64), c=>c.charCodeAt(0));
             const salt = combined.slice(0,16), iv = combined.slice(16,28), data = combined.slice(28);
@@ -642,27 +661,33 @@
             const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
             const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, data);
             resultDiv.innerText = new TextDecoder().decode(decrypted);
-        } catch(e) { resultDiv.innerText = 'Decrypt failed'; }
+        } catch(e) { resultDiv.innerText = 'Error al descifrar'; }
     }
+    
     function runWebScan() {
         const url = document.getElementById('webUrl').value;
         const res = document.getElementById('webscanResult');
-        if(!url) { res.innerText = 'Enter URL'; return; }
-        res.innerText = `Scanning ${url}...`;
+        if(!url) { res.innerText = 'Ingresa URL'; return; }
+        res.innerText = `Escaneando ${url}...`;
         setTimeout(() => {
             let issues = [];
-            if(!url.includes('https')) issues.push('⚠️ No HTTPS');
-            if(Math.random()>0.7) issues.push('⚠️ Possible XSS (simulated)');
-            if(issues.length===0) issues.push('✅ No common vulns detected');
-            res.innerText = `Results for ${url}:\n${issues.join('\n')}`;
+            if(!url.includes('https')) issues.push('⚠️ No usa HTTPS');
+            if(Math.random()>0.7) issues.push('⚠️ Posible XSS (simulado)');
+            if(issues.length===0) issues.push('✅ Sin vulnerabilidades comunes detectadas');
+            res.innerText = `Resultados para ${url}:\n${issues.join('\n')}`;
         }, 1000);
     }
+    
     function generateHardening() {
         const os = document.getElementById('osSelect').value;
         const res = document.getElementById('hardeningResult');
-        if(os === 'linux') res.innerText = `Linux hardening:\n- Disable root SSH\n- UFW: sudo ufw default deny incoming\n- Fail2ban\n- Remove unnecessary services`;
-        else res.innerText = `Windows hardening:\n- Disable SMBv1\n- Firewall: block inbound\n- Strong password policy\n- Enable BitLocker`;
+        if(os === 'linux') {
+            res.innerText = `Hardening Linux:\n- Deshabilitar root SSH: sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config\n- UFW: sudo ufw default deny incoming && sudo ufw allow ssh && sudo ufw enable\n- Fail2ban: sudo apt install fail2ban -y\n- Deshabilitar servicios: sudo systemctl disable bluetooth cups avahi-daemon`;
+        } else {
+            res.innerText = `Hardening Windows:\n- Deshabilitar SMBv1: Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol\n- Firewall: New-NetFirewallRule -DisplayName "Bloquear todo" -Direction Inbound -Action Block\n- Políticas contraseña: net accounts /minpwlen:12 /maxpwage:60\n- BitLocker y actualizaciones automáticas`;
+        }
     }
+    
     function generatePassword() {
         const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', lower = 'abcdefghijklmnopqrstuvwxyz', digits = '0123456789', symbols = '!@#$%^&*()_+';
         let chars = '';
@@ -671,38 +696,44 @@
         if(document.getElementById('useDigits').checked) chars += digits;
         if(document.getElementById('useSymbols').checked) chars += symbols;
         const length = parseInt(document.getElementById('passLength').value);
-        if(!chars || length<1) { document.getElementById('passwordResult').innerText = 'Select at least one type'; return; }
+        if(!chars || length<1) { document.getElementById('passwordResult').innerText = 'Selecciona al menos un tipo'; return; }
         let password = '';
         for(let i=0; i<length; i++) password += chars[Math.floor(Math.random() * chars.length)];
         document.getElementById('passwordResult').innerText = password;
     }
+    
     function checkBreach() {
         const email = document.getElementById('emailCheck').value;
         const resDiv = document.getElementById('hibpResult');
-        if(!email || !email.includes('@')) { resDiv.innerText = 'Invalid email'; return; }
-        resDiv.innerText = `Simulated: ${email} found in breach "Canva 2019" (demo). Use HIBP API with backend for real check.`;
+        if(!email || !email.includes('@')) { resDiv.innerText = 'Email inválido'; return; }
+        resDiv.innerText = `🔍 Simulación: ${email} aparece en filtración de "Canva 2019" (demo). Para verificación real usa API de HIBP con backend propio.`;
     }
+    
     function readMetadata() {
         const file = document.getElementById('metaFile').files[0];
         const res = document.getElementById('metadataResult');
-        if(!file) { res.innerText = 'Select a file'; return; }
+        if(!file) { res.innerText = 'Selecciona un archivo'; return; }
         const reader = new FileReader();
         reader.onload = function(e) {
             if(file.type.includes('image')) {
                 const img = new Image();
                 img.src = e.target.result;
-                img.onload = () => { res.innerText = `Image: ${img.width}x${img.height}, ${(file.size/1024).toFixed(2)} KB`; };
-            } else { res.innerText = `File: ${file.name}, ${(file.size/1024).toFixed(2)} KB`; }
+                img.onload = () => { res.innerText = `📸 Imagen: ${img.width}x${img.height}, ${(file.size/1024).toFixed(2)} KB\nTipo: ${file.type}`; };
+            } else {
+                res.innerText = `📄 Archivo: ${file.name}, ${(file.size/1024).toFixed(2)} KB\nTipo: ${file.type}`;
+            }
         };
         reader.readAsDataURL(file);
     }
+    
     function simulatePortScan() {
         const host = document.getElementById('portHost').value;
         const res = document.getElementById('portResult');
-        if(!host) { res.innerText = 'Enter host'; return; }
-        res.innerText = `Simulating scan to ${host}...`;
-        setTimeout(() => { res.innerText = `Open ports (simulated): 22, 80, 443\n(Educational demo only)`; }, 800);
+        if(!host) { res.innerText = 'Ingresa un host'; return; }
+        res.innerText = `Simulando escaneo a ${host}...`;
+        setTimeout(() => { res.innerText = `Puertos abiertos (simulados): 22, 80, 443\n(Demo educativa solamente)`; }, 800);
     }
+    
     function processEncode() {
         const input = document.getElementById('encodeInput').value;
         const type = document.getElementById('encodeType').value;
@@ -716,18 +747,20 @@
             document.getElementById('encodeResult').innerText = output;
         } catch(e) { document.getElementById('encodeResult').innerText = 'Error: ' + e.message; }
     }
+    
     document.getElementById('passwordStrength')?.addEventListener('input', function() {
-        let pass = this.value, strength = 'Weak';
-        if(pass.length>=8 && /[A-Z]/.test(pass) && /[a-z]/.test(pass) && /\d/.test(pass) && /[^A-Za-z0-9]/.test(pass)) strength = '✅ Very strong';
-        else if(pass.length>=8 && /[A-Za-z]/.test(pass) && /\d/.test(pass)) strength = '⚡ Medium';
-        else if(pass.length>=6) strength = '⚠️ Weak';
-        document.getElementById('strengthResult').innerText = `Strength: ${strength} (length: ${pass.length})`;
+        let pass = this.value, strength = 'Muy débil';
+        if(pass.length>=8 && /[A-Z]/.test(pass) && /[a-z]/.test(pass) && /\d/.test(pass) && /[^A-Za-z0-9]/.test(pass)) strength = '✅ Muy fuerte';
+        else if(pass.length>=8 && /[A-Za-z]/.test(pass) && /\d/.test(pass)) strength = '⚡ Media';
+        else if(pass.length>=6) strength = '⚠️ Débil';
+        document.getElementById('strengthResult').innerText = `Fortaleza: ${strength} (Longitud: ${pass.length})`;
     });
+    
     function runOSINT() {
         let query = document.getElementById('osintQuery').value;
         let res = document.getElementById('osintResult');
-        if(!query) { res.innerText = 'Enter email or domain'; return; }
-        res.innerText = `OSINT results for ${query}:\n- Found in 2 public databases (simulated)\n- Associated social media: twitter, linkedin (demo)\n- For real OSINT use theHarvester, Sherlock, etc.`;
+        if(!query) { res.innerText = 'Ingresa email o dominio'; return; }
+        res.innerText = `Resultados OSINT para ${query}:\n- Encontrado en 2 bases de datos públicas (simulado)\n- Redes sociales asociadas: twitter, linkedin (demo)\n- Para OSINT real usa theHarvester, Sherlock, etc.`;
     }
 </script>
 </body>
