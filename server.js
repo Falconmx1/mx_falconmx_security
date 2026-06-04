@@ -3,13 +3,14 @@
 /**
  * MFH TOOLS - Real WebSocket Port Scanner Backend
  * Hecho en México 🇲🇽 con huevos 🥚🔥
+ * Versión: 3.0.0
  * 
  * Instalación:
- * npm init -y
  * npm install ws
  * node server.js
  * 
  * El servidor escucha en puerto 8080 por defecto
+ * Para producción en Render/Railway: usa process.env.PORT
  */
 
 const WebSocket = require('ws');
@@ -21,46 +22,32 @@ const lookupPromise = promisify(dns.lookup);
 // ==================== CONFIGURACIÓN ====================
 const WS_PORT = process.env.PORT || 8080;
 const SCAN_TIMEOUT = 2000; // 2 segundos por puerto
-const MAX_PORTS_PER_SCAN = 100; // Limitar para evitar abuso
+const MAX_PORTS_PER_SCAN = 100;
 const RATE_LIMIT = {
-    windowMs: 60000, // 1 minuto
-    maxRequests: 10  // máx 10 escaneos por IP por minuto
+    windowMs: 60000,
+    maxRequests: 10
 };
 
-// Almacenamiento para rate limiting
+// Rate limiting storage
 const requestCounts = new Map();
 
-// Puertos comunes predefinidos
+// Puertos comunes con servicios
 const COMMON_PORTS = [
-    { port: 20, service: "FTP-data" },
-    { port: 21, service: "FTP" },
-    { port: 22, service: "SSH" },
-    { port: 23, service: "Telnet" },
-    { port: 25, service: "SMTP" },
-    { port: 53, service: "DNS" },
-    { port: 80, service: "HTTP" },
-    { port: 110, service: "POP3" },
-    { port: 111, service: "RPCbind" },
-    { port: 135, service: "RPC" },
-    { port: 139, service: "NetBIOS" },
-    { port: 143, service: "IMAP" },
-    { port: 443, service: "HTTPS" },
-    { port: 445, service: "SMB" },
-    { port: 993, service: "IMAPS" },
-    { port: 995, service: "POP3S" },
-    { port: 1433, service: "MSSQL" },
-    { port: 1723, service: "PPTP" },
-    { port: 3306, service: "MySQL" },
-    { port: 3389, service: "RDP" },
-    { port: 5432, service: "PostgreSQL" },
-    { port: 5900, service: "VNC" },
-    { port: 6379, service: "Redis" },
-    { port: 8080, service: "HTTP-Alt" },
-    { port: 8443, service: "HTTPS-Alt" },
-    { port: 27017, service: "MongoDB" }
+    { port: 20, service: "FTP-data" }, { port: 21, service: "FTP" },
+    { port: 22, service: "SSH" }, { port: 23, service: "Telnet" },
+    { port: 25, service: "SMTP" }, { port: 53, service: "DNS" },
+    { port: 80, service: "HTTP" }, { port: 110, service: "POP3" },
+    { port: 111, service: "RPCbind" }, { port: 135, service: "RPC" },
+    { port: 139, service: "NetBIOS" }, { port: 143, service: "IMAP" },
+    { port: 443, service: "HTTPS" }, { port: 445, service: "SMB" },
+    { port: 993, service: "IMAPS" }, { port: 995, service: "POP3S" },
+    { port: 1433, service: "MSSQL" }, { port: 1723, service: "PPTP" },
+    { port: 3306, service: "MySQL" }, { port: 3389, service: "RDP" },
+    { port: 5432, service: "PostgreSQL" }, { port: 5900, service: "VNC" },
+    { port: 6379, service: "Redis" }, { port: 8080, service: "HTTP-Alt" },
+    { port: 8443, service: "HTTPS-Alt" }, { port: 27017, service: "MongoDB" }
 ];
 
-// ==================== UTILERÍAS ====================
 function getClientIp(ws) {
     return ws._socket.remoteAddress.replace(/^::ffff:/, '');
 }
@@ -75,7 +62,6 @@ function isRateLimited(ip) {
     }
     
     if (now - record.firstRequest > RATE_LIMIT.windowMs) {
-        // Resetear ventana
         requestCounts.set(ip, { count: 1, firstRequest: now });
         return false;
     }
@@ -88,7 +74,7 @@ function isRateLimited(ip) {
     return false;
 }
 
-// Limpiar rate limiting cada minuto
+// Limpiar rate limiting
 setInterval(() => {
     const now = Date.now();
     for (const [ip, record] of requestCounts.entries()) {
@@ -98,7 +84,6 @@ setInterval(() => {
     }
 }, RATE_LIMIT.windowMs);
 
-// ==================== ESCÁNER DE PUERTOS ====================
 async function isPortOpen(host, port, timeout = SCAN_TIMEOUT) {
     return new Promise((resolve) => {
         const socket = new net.Socket();
@@ -150,7 +135,7 @@ async function scanPorts(host, ports) {
     const results = [];
     const totalPorts = Math.min(ports.length, MAX_PORTS_PER_SCAN);
     
-    // Escanear en paralelo pero con límite de concurrencia (10 a la vez)
+    // Escanear con concurrencia de 10
     const concurrencyLimit = 10;
     const chunks = [];
     for (let i = 0; i < totalPorts; i += concurrencyLimit) {
@@ -187,11 +172,11 @@ wss.on('connection', (ws, req) => {
     const clientIp = getClientIp(ws);
     console.log(`✅ Nueva conexión desde: ${clientIp}`);
     
-    // Enviar mensaje de bienvenida
     ws.send(JSON.stringify({
         type: 'welcome',
-        message: 'MFH TOOLS Port Scanner Backend v1.0 - Hecho en México 🇲🇽',
-        maxPorts: MAX_PORTS_PER_SCAN
+        message: 'MFH TOOLS Port Scanner Backend v3.0 - Hecho en México 🇲🇽',
+        maxPorts: MAX_PORTS_PER_SCAN,
+        version: '3.0.0'
     }));
     
     ws.on('message', async (data) => {
@@ -201,13 +186,11 @@ wss.on('connection', (ws, req) => {
             const parsed = JSON.parse(data.toString());
             console.log(`📡 [${clientIp}] Solicitud:`, parsed);
             
-            // Verificar rate limiting
             if (isRateLimited(clientIp)) {
                 ws.send(JSON.stringify({
                     type: 'error',
                     error: `Rate limit exceeded. Max ${RATE_LIMIT.maxRequests} scans per minute.`
                 }));
-                console.log(`⚠️ [${clientIp}] Rate limit exceeded`);
                 return;
             }
             
@@ -229,7 +212,6 @@ wss.on('connection', (ws, req) => {
                 return;
             }
             
-            // Usar puertos por defecto si no se especifican
             let portsToScan = ports;
             if (!portsToScan || !Array.isArray(portsToScan) || portsToScan.length === 0) {
                 portsToScan = COMMON_PORTS.map(p => p.port);
@@ -243,7 +225,6 @@ wss.on('connection', (ws, req) => {
                 portsToScan = portsToScan.slice(0, MAX_PORTS_PER_SCAN);
             }
             
-            // Resolver hostname a IP
             ws.send(JSON.stringify({
                 type: 'status',
                 message: `Resolving ${host}...`
@@ -265,11 +246,9 @@ wss.on('connection', (ws, req) => {
                 message: `Scanning ${host} (${ip}) - ${portsToScan.length} ports...`
             }));
             
-            // Realizar escaneo
             const openPorts = await scanPorts(ip, portsToScan);
             const scanTime = Date.now() - startTime;
             
-            // Enviar resultados
             ws.send(JSON.stringify({
                 type: 'result',
                 host: host,
@@ -300,7 +279,6 @@ wss.on('connection', (ws, req) => {
     });
 });
 
-// Manejar cierre del servidor
 process.on('SIGINT', () => {
     console.log('\n🛑 Cerrando servidor...');
     wss.close(() => {
