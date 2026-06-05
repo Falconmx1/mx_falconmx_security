@@ -1,0 +1,18 @@
+FROM node:18-alpine
+
+# Instalar Nmap
+RUN apk add --no-cache nmap
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+
+# Crear directorios necesarios
+RUN mkdir -p database wordlists
+
+EXPOSE 8080
+
+CMD ["node", "server.js"]
