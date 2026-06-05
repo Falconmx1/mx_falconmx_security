@@ -1,23 +1,24 @@
 version: '3.8'
 
 services:
-  mfh-backend:
-    build: .
+  mfh-tools:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     ports:
       - "8080:8080"
     environment:
       - NODE_ENV=production
       - PORT=8080
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
       - SECURITYTRAILS_API_KEY=${SECURITYTRAILS_API_KEY}
     volumes:
-      - ./data:/app/data
+      - ./database:/app/database
+      - ./wordlists:/app/wordlists
     restart: unless-stopped
-
-  mfh-frontend:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./index.html:/usr/share/nginx/html/index.html
-    depends_on:
-      - mfh-backend
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
