@@ -1,8 +1,9 @@
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
-const path = require('path');
 
 async function initDatabase() {
+    console.log('📂 Inicializando base de datos...');
+    
     const db = await open({
         filename: './database/mfh.db',
         driver: sqlite3.Database
@@ -25,24 +26,19 @@ async function initDatabase() {
             target TEXT NOT NULL,
             alert_type TEXT NOT NULL,
             webhook_url TEXT,
-            bot_token TEXT,
-            chat_id TEXT,
             last_triggered DATETIME,
-            is_active BOOLEAN DEFAULT 1
-        );
-        
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            points INTEGER DEFAULT 0,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            is_active INTEGER DEFAULT 1
         );
         
         CREATE INDEX IF NOT EXISTS idx_scans_target ON scans(target);
         CREATE INDEX IF NOT EXISTS idx_scans_timestamp ON scans(timestamp);
     `);
     
-    console.log('✅ Base de datos inicializada correctamente');
+    console.log('✅ Base de datos SQLite inicializada correctamente');
+    
+    const tables = await db.all("SELECT name FROM sqlite_master WHERE type='table'");
+    console.log('📋 Tablas creadas:', tables.map(t => t.name).join(', '));
+    
     await db.close();
 }
 
