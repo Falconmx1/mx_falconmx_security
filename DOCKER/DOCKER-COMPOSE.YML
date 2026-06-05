@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mfh-backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - SECURITYTRAILS_API_KEY=${SECURITYTRAILS_API_KEY}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  mfh-frontend:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html
+    depends_on:
+      - mfh-backend
