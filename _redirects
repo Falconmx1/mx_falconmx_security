@@ -1,8 +1,8 @@
-# SPA routing
-/*    /index.html    200
+# Manejo de SPA - todas las rutas van al index
+/* /index.html 200
 
-# API redirects (si usas backend separado)
-/api/*    https://mfh-tools-backend.up.railway.app/api/:splat    200
+# Redirección de API al backend (si existe)
+/api/* https://mfh-tools-backend.up.railway.app/api/:splat 200
 
-# WebSocket upgrade
-/ws/*    wss://mfh-tools-backend.up.railway.app/:splat    200
+# Redirección de WebSocket (si existe)
+/ws/* wss://mfh-tools-backend.up.railway.app/:splat 200
