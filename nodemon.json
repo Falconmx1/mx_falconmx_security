@@ -1,0 +1,9 @@
+{
+    "watch": ["server.js", "workers/", "scripts/"],
+    "ignore": ["data/*", "node_modules"],
+    "ext": "js,json",
+    "env": {
+        "NODE_ENV": "development",
+        "PORT": 3000
+    }
+}
