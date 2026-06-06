@@ -1,3 +1,8 @@
-# Redirige peticiones de API a tu backend real
-/api/* https://mfh-backend.onrender.com/api/:splat 200
-/ws/* https://mfh-backend.onrender.com/ws/:splat 200
+# SPA routing
+/*    /index.html    200
+
+# API redirects (si usas backend separado)
+/api/*    https://mfh-tools-backend.up.railway.app/api/:splat    200
+
+# WebSocket upgrade
+/ws/*    wss://mfh-tools-backend.up.railway.app/:splat    200
