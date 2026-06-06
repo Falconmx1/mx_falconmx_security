@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MFH - RSA/AES Cipher Tool</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); color: #e0e0e0; font-family: 'Inter', sans-serif; }
+    .tool-card { background: rgba(20,20,20,0.95); border: 2px solid rgba(0,255,0,0.3); border-radius: 20px; padding: 25px; margin-top: 30px; }
+    .output-area { background: #0a0a0a; border: 1px solid #00ff00; border-radius: 10px; font-family: monospace; padding: 15px; min-height: 150px; }
+    .btn-mfh { background: linear-gradient(135deg, #00ff00, #00cc00); border: none; color: #000; font-weight: 600; padding: 10px 25px; border-radius: 8px; }
+    .btn-mfh:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0,255,0,0.5); }
+    .nav-tabs .nav-link { color: #e0e0e0; border: none; }
+    .nav-tabs .nav-link.active { color: #00ff00; background: rgba(0,255,0,0.1); border-bottom: 2px solid #00ff00; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="tool-card">
+    <h2 class="text-center glow-text"><i class="fas fa-lock me-2"></i>RSA/AES Cipher Suite</h2>
+    <p class="text-center">Cifrado y descifrado RSA (asimétrico) y AES (simétrico) - 100% local, tus datos no salen del navegador</p>
+    
+    <ul class="nav nav-tabs mb-4" id="cryptoTab" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#aes">🔐 AES (Simétrico)</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#rsa">🔑 RSA (Asimétrico)</button></li>
+    </ul>
+    
+    <div class="tab-content">
+      <!-- AES Tab -->
+      <div class="tab-pane fade show active" id="aes">
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label">Texto a cifrar/descifrar</label>
+            <textarea id="aesInput" class="form-control" rows="4" placeholder="Ingresa texto aquí..."></textarea>
+            <label class="form-label mt-3">Clave secreta (passphrase)</label>
+            <input type="text" id="aesKey" class="form-control" placeholder="MiClaveSecreta123">
+            <div class="mt-3">
+              <button class="btn-mfh me-2" onclick="aesEncrypt()"><i class="fas fa-lock me-1"></i>Cifrar AES</button>
+              <button class="btn-outline-mfh" onclick="aesDecrypt()"><i class="fas fa-unlock-alt me-1"></i>Descifrar AES</button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Resultado</label>
+            <div id="aesOutput" class="output-area">Esperando acción...</div>
+            <button class="btn-sm btn-mfh mt-2" onclick="copyToClipboard('aesOutput')"><i class="fas fa-copy me-1"></i>Copiar</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- RSA Tab -->
+      <div class="tab-pane fade" id="rsa">
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label">Texto a cifrar/descifrar</label>
+            <textarea id="rsaInput" class="form-control" rows="3" placeholder="Ingresa texto aquí..."></textarea>
+            <label class="form-label mt-3">Llave Pública (RSA)</label>
+            <textarea id="rsaPublicKey" class="form-control" rows="3" placeholder="-----BEGIN PUBLIC KEY-----"></textarea>
+            <label class="form-label mt-3">Llave Privada (RSA)</label>
+            <textarea id="rsaPrivateKey" class="form-control" rows="3" placeholder="-----BEGIN PRIVATE KEY-----"></textarea>
+            <div class="mt-3">
+              <button class="btn-mfh me-2" onclick="generateRSAKeys()"><i class="fas fa-key me-1"></i>Generar Nuevo Par de Llaves</button>
+              <button class="btn-mfh me-2" onclick="rsaEncrypt()"><i class="fas fa-lock me-1"></i>Cifrar RSA</button>
+              <button class="btn-outline-mfh" onclick="rsaDecrypt()"><i class="fas fa-unlock-alt me-1"></i>Descifrar RSA</button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Resultado</label>
+            <div id="rsaOutput" class="output-area">Esperando acción...</div>
+            <button class="btn-sm btn-mfh mt-2" onclick="copyToClipboard('rsaOutput')"><i class="fas fa-copy me-1"></i>Copiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== AES FUNCTIONS ====================
+function aesEncrypt() {
+  const text = document.getElementById('aesInput').value;
+  const key = document.getElementById('aesKey').value;
+  if (!text || !key) { alert('Ingresa texto y clave secreta'); return; }
+  const encrypted = CryptoJS.AES.encrypt(text, key).toString();
+  document.getElementById('aesOutput').innerHTML = `<span class="text-success">🔒 Cifrado AES:</span><br>${encrypted}`;
+}
+
+function aesDecrypt() {
+  const text = document.getElementById('aesInput').value;
+  const key = document.getElementById('aesKey').value;
+  if (!text || !key) { alert('Ingresa texto cifrado y clave secreta'); return; }
+  try {
+    const decrypted = CryptoJS.AES.decrypt(text, key).toString(CryptoJS.enc.Utf8);
+    if (!decrypted) throw new Error('Texto inválido');
+    document.getElementById('aesOutput').innerHTML = `<span class="text-success">🔓 Descifrado AES:</span><br>${decrypted}`;
+  } catch(e) { document.getElementById('aesOutput').innerHTML = `<span class="text-danger">❌ Error: Clave incorrecta o texto inválido</span>`; }
+}
+
+// ==================== RSA FUNCTIONS ====================
+async function generateRSAKeys() {
+  const subtle = window.crypto.subtle;
+  const keyPair = await subtle.generateKey({
+    name: "RSA-OAEP",
+    modulusLength: 2048,
+    publicExponent: new Uint8Array([1, 0, 1]),
+    hash: "SHA-256"
+  }, true, ["encrypt", "decrypt"]);
+  
+  const publicKey = await subtle.exportKey("spki", keyPair.publicKey);
+  const privateKey = await subtle.exportKey("pkcs8", keyPair.privateKey);
+  
+  const publicKeyB64 = btoa(String.fromCharCode(...new Uint8Array(publicKey)));
+  const privateKeyB64 = btoa(String.fromCharCode(...new Uint8Array(privateKey)));
+  
+  document.getElementById('rsaPublicKey').value = `-----BEGIN PUBLIC KEY-----\n${publicKeyB64.match(/.{1,64}/g).join('\n')}\n-----END PUBLIC KEY-----`;
+  document.getElementById('rsaPrivateKey').value = `-----BEGIN PRIVATE KEY-----\n${privateKeyB64.match(/.{1,64}/g).join('\n')}\n-----END PRIVATE KEY-----`;
+  document.getElementById('rsaOutput').innerHTML = '<span class="text-success">✅ Nuevo par de llaves RSA generado</span>';
+}
+
+async function rsaEncrypt() {
+  const text = document.getElementById('rsaInput').value;
+  const publicKeyPem = document.getElementById('rsaPublicKey').value;
+  if (!text || !publicKeyPem) { alert('Ingresa texto y llave pública'); return; }
+  try {
+    const publicKeyB64 = publicKeyPem.replace(/-----BEGIN PUBLIC KEY-----/, '').replace(/-----END PUBLIC KEY-----/, '').replace(/\s/g, '');
+    const publicKeyBuffer = Uint8Array.from(atob(publicKeyB64), c => c.charCodeAt(0));
+    const subtle = window.crypto.subtle;
+    const publicKey = await subtle.importKey("spki", publicKeyBuffer, { name: "RSA-OAEP", hash: "SHA-256" }, true, ["encrypt"]);
+    const encoder = new TextEncoder();
+    const encrypted = await subtle.encrypt({ name: "RSA-OAEP" }, publicKey, encoder.encode(text));
+    const encryptedB64 = btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+    document.getElementById('rsaOutput').innerHTML = `<span class="text-success">🔒 Cifrado RSA:</span><br>${encryptedB64}`;
+  } catch(e) { document.getElementById('rsaOutput').innerHTML = `<span class="text-danger">❌ Error al cifrar: ${e.message}</span>`; }
+}
+
+async function rsaDecrypt() {
+  const encryptedB64 = document.getElementById('rsaInput').value;
+  const privateKeyPem = document.getElementById('rsaPrivateKey').value;
+  if (!encryptedB64 || !privateKeyPem) { alert('Ingresa texto cifrado y llave privada'); return; }
+  try {
+    const privateKeyB64 = privateKeyPem.replace(/-----BEGIN PRIVATE KEY-----/, '').replace(/-----END PRIVATE KEY-----/, '').replace(/\s/g, '');
+    const privateKeyBuffer = Uint8Array.from(atob(privateKeyB64), c => c.charCodeAt(0));
+    const subtle = window.crypto.subtle;
+    const privateKey = await subtle.importKey("pkcs8", privateKeyBuffer, { name: "RSA-OAEP", hash: "SHA-256" }, true, ["decrypt"]);
+    const encryptedBuffer = Uint8Array.from(atob(encryptedB64), c => c.charCodeAt(0));
+    const decrypted = await subtle.decrypt({ name: "RSA-OAEP" }, privateKey, encryptedBuffer);
+    const decryptedText = new TextDecoder().decode(decrypted);
+    document.getElementById('rsaOutput').innerHTML = `<span class="text-success">🔓 Descifrado RSA:</span><br>${decryptedText}`;
+  } catch(e) { document.getElementById('rsaOutput').innerHTML = `<span class="text-danger">❌ Error al descifrar: ${e.message}</span>`; }
+}
+
+function copyToClipboard(elementId) {
+  const text = document.getElementById(elementId).innerText.replace(/^.*?:\s*/, '');
+  navigator.clipboard.writeText(text);
+  alert('Copiado al portapapeles');
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
