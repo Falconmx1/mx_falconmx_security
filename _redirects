@@ -1,0 +1,3 @@
+# Redirige peticiones de API a tu backend real
+/api/* https://mfh-backend.onrender.com/api/:splat 200
+/ws/* https://mfh-backend.onrender.com/ws/:splat 200
