@@ -1,841 +1,743 @@
 <!DOCTYPE html>
 <html lang="es-MX">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>MFH TOOLS PRO | Suite de Ciberseguridad Mexicana 🇲🇽</title>
-    <meta name="description" content="Suite profesional de ciberseguridad: escáner UDP/TCP, cifrado RSA/AES, OSINT real, hash cracker con rainbow tables, WHOIS API y más.">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <meta name="theme-color" content="#ff6b00">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        /* Modo Kali Mexicano */
-        body.mexican-mode {
-            background: linear-gradient(135deg, #006847 0%, #ffffff 50%, #CE1126 100%);
-            color: #1a1f3a;
-        }
-        
-        body.mexican-mode .tool-card {
-            background: rgba(0,0,0,0.8);
-            border-left: 4px solid #CE1126;
-        }
-        
-        body.mexican-mode .navbar {
-            background: rgba(0,104,71,0.95);
-            border-bottom-color: #CE1126;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-            color: #e0e0e0;
-        }
-        
-        body.light {
-            background: #f5f7fa;
-            color: #1a1f3a;
-        }
-
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            border-bottom: 2px solid #ff6b00;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #ff6b00, #ffaa00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .nav-links a, .nav-links button {
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            font-weight: 500;
-        }
-        
-        .points-badge {
-            background: #ff6b00;
-            color: #0a0e27;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 3rem 1rem;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-            margin-bottom: 2rem;
-        }
-        
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 2rem 0 1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.5rem;
-        }
-        
-        .tab-btn {
-            background: transparent;
-            border: none;
-            padding: 0.7rem 1.2rem;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        
-        .tab-btn.active {
-            background: #ff6b00;
-            color: #0a0e27;
-        }
-        
-        .tool-pane {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .tool-pane.active { display: block; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        
-        .tool-card {
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid #ff6b00;
-        }
-        
-        .tool-card h3 { color: #ffaa00; margin-bottom: 1rem; }
-        
-        input, textarea, select, button {
-            width: 100%;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-        
-        button {
-            background: #ff6b00;
-            color: #0a0e27;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-        }
-        
-        button:hover { transform: scale(0.98); }
-        
-        .result {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            font-family: monospace;
-            white-space: pre-wrap;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .export-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .export-buttons button {
-            flex: 1;
-            background: #28a745;
-        }
-        
-        .leaderboard {
-            background: rgba(0,0,0,0.3);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-top: 1px solid #333;
-        }
-        
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; }
-            .container { padding: 1rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. Escáner UDP/TCP, RSA/AES, OSINT, Rainbow Tables, WHOIS, PWA, IA Asistente. Hecho en México.">
+  <title>🇲🇽 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon-32x32.png">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Bootstrap 5 + Icons + Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Estilos personalizados -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+    
+    /* Efecto matrix background */
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.05;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='20' fill='%2300ff00' font-size='10'%3E01%3C/text%3E%3Ctext x='30' y='40' fill='%2300ff00' font-size='12'%3E10%3C/text%3E%3Ctext x='50' y='60' fill='%2300ff00' font-size='8'%3E11%3C/text%3E%3Ctext x='70' y='80' fill='%2300ff00' font-size='14'%3E00%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+    
+    /* Navbar personalizado */
+    .navbar {
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #00ff00, #00cc00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    
+    .nav-link {
+      color: #e0e0e0 !important;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-link:hover {
+      color: #00ff00 !important;
+      transform: translateY(-2px);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: #00ff00;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 80%;
+      left: 10%;
+    }
+    
+    /* Tarjetas de herramientas */
+    .tool-card {
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .tool-card:hover::before {
+      left: 100%;
+    }
+    
+    .tool-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(0, 255, 0, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+    }
+    
+    .tool-icon {
+      font-size: 3rem;
+      color: #00ff00;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    
+    /* Consola de resultados */
+    .console-output {
+      background: #0a0a0a;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      padding: 15px;
+      height: 400px;
+      overflow-y: auto;
+      color: #00ff00;
+    }
+    
+    .console-output::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .console-output::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    
+    .console-output::-webkit-scrollbar-thumb {
+      background: #00ff00;
+      border-radius: 4px;
+    }
+    
+    /* Botones personalizados */
+    .btn-mfh {
+      background: linear-gradient(135deg, #00ff00, #00cc00);
+      border: none;
+      color: #000;
+      font-weight: 600;
+      padding: 10px 25px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-mfh:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+      color: #000;
+    }
+    
+    .btn-mfh:active {
+      transform: scale(0.95);
+    }
+    
+    .btn-outline-mfh {
+      background: transparent;
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-outline-mfh:hover {
+      background: #00ff00;
+      color: #000;
+      transform: translateY(-2px);
+    }
+    
+    /* Modales */
+    .modal-content {
+      background: #1a1a1a;
+      border: 2px solid #00ff00;
+      border-radius: 15px;
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+    }
+    
+    .form-control, .form-select {
+      background: #0a0a0a;
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      color: #e0e0e0;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      background: #0a0a0a;
+      border-color: #00ff00;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+      color: #e0e0e0;
+    }
+    
+    /* Badges */
+    .badge-mfh {
+      background: rgba(0, 255, 0, 0.2);
+      color: #00ff00;
+      border: 1px solid rgba(0, 255, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.95);
+      border-top: 1px solid rgba(0, 255, 0, 0.3);
+      padding: 40px 0 20px;
+      margin-top: 60px;
+    }
+    
+    /* Loading spinner */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .spinner-border-mfh {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(0, 255, 0, 0.3);
+      border-top-color: #00ff00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Animaciones */
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); }
+      50% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.8); }
+    }
+    
+    .glow-text {
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-brand {
+        font-size: 1.2rem;
+      }
+      
+      .tool-card {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
 </head>
-<body class="dark">
+<body>
 
-<nav class="navbar">
-    <div class="logo">🇲🇽 MFH TOOLS PRO <span>| con huevos 🥚🔥</span></div>
-    <div class="nav-links">
-        <span class="points-badge" id="pointsDisplay">🏆 0 pts</span>
-        <button onclick="toggleTheme()">🌓 Tema</button>
-        <button onclick="toggleMexicanMode()">🇲🇽 Modo Kali Mexicano</button>
-        <button onclick="exportReport()">📄 Exportar Reporte</button>
-        <button onclick="installPWA()">📱 Instalar App</button>
-        <a href="https://github.com/Falconmx1/mx_falconmx_security" target="_blank">GitHub</a>
-    </div>
-</nav>
+<div class="matrix-bg"></div>
 
-<div class="container">
-    <div class="hero">
-        <h1>🔥 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</h1>
-        <p>Escáner UDP/TCP | RSA/AES | OSINT Real | Rainbow Tables | WHOIS API | PWA | IA Asistente</p>
-        <div class="badge">🏆 14+ Herramientas | 100% Gratis | Open Source | Hecho en México</div>
-    </div>
-
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="scanner">🔍 MX-SCANNER PRO</button>
-        <button class="tab-btn" data-tab="encrypt">🔐 RSA/AES</button>
-        <button class="tab-btn" data-tab="hashcrack">🔨 Hash Cracker Pro</button>
-        <button class="tab-btn" data-tab="osint">🔎 OSINT Real</button>
-        <button class="tab-btn" data-tab="whois">🌍 WHOIS API</button>
-        <button class="tab-btn" data-tab="subdomains">🌐 Subdominios</button>
-        <button class="tab-btn" data-tab="sshkey">🔑 SSH KeyGen</button>
-        <button class="tab-btn" data-tab="fuzzer">🕸️ Web Fuzzer</button>
-        <button class="tab-btn" data-tab="dashboard">📊 Dashboard</button>
-        <button class="tab-btn" data-tab="aiassist">🤖 IA Asistente</button>
-        <button class="tab-btn" data-tab="batch">📦 Modo Batch</button>
-    </div>
-
-    <!-- 1. MX-SCANNER PRO con UDP y OS fingerprinting -->
-    <div id="scanner" class="tool-pane active">
-        <div class="tool-card">
-            <h3>🔍 MX-SCANNER PRO - Escáner TCP/UDP + OS Fingerprinting</h3>
-            <input type="text" id="scanHost" placeholder="IP o dominio">
-            <select id="scanType">
-                <option value="tcp">TCP Scan (rápido)</option>
-                <option value="udp">UDP Scan (lento)</option>
-                <option value="both">TCP + UDP Completo</option>
-            </select>
-            <button onclick="startAdvancedScan()">🚀 Iniciar Escaneo Avanzado</button>
-            <div id="scanResult" class="result"></div>
-            <div class="export-buttons">
-                <button onclick="exportScanToPDF()">📄 Exportar PDF</button>
-                <button onclick="exportScanToJSON()">📊 Exportar JSON</button>
-                <button onclick="exportScanToCSV()">📈 Exportar CSV</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. RSA/AES Encryption -->
-    <div id="encrypt" class="tool-pane">
-        <div class="tool-card">
-            <h3>🔐 Cifrado RSA + AES-256-GCM</h3>
-            <select id="cryptoType" onchange="toggleCryptoMode()">
-                <option value="aes">AES-256 (Simétrico)</option>
-                <option value="rsa">RSA (Asimétrico)</option>
-            </select>
-            <div id="aesMode">
-                <textarea id="plainText" rows="3" placeholder="Texto a cifrar..."></textarea>
-                <input type="password" id="aesKey" placeholder="Contraseña AES">
-                <button onclick="encryptAES()">Cifrar AES</button>
-                <button onclick="decryptAES()">Descifrar AES</button>
-            </div>
-            <div id="rsaMode" style="display:none">
-                <button onclick="generateRSAKeys()">🔑 Generar Par de Llaves RSA</button>
-                <textarea id="rsaPublicKey" rows="3" placeholder="Llave Pública"></textarea>
-                <textarea id="rsaPrivateKey" rows="3" placeholder="Llave Privada"></textarea>
-                <textarea id="rsaMessage" rows="3" placeholder="Mensaje a cifrar/descifrar"></textarea>
-                <button onclick="encryptRSA()">Cifrar con RSA</button>
-                <button onclick="decryptRSA()">Descifrar con RSA</button>
-            </div>
-            <div id="cryptoResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 3. Hash Cracker Pro con Rainbow Tables -->
-    <div id="hashcrack" class="tool-pane">
-        <div class="tool-card">
-            <h3>🔨 Hash Cracker PRO - Rainbow Tables + Diccionario</h3>
-            <input type="text" id="hashInput" placeholder="Hash (MD5, SHA1, SHA256, bcrypt)">
-            <select id="hashAlgorithm">
-                <option value="md5">MD5</option>
-                <option value="sha1">SHA-1</option>
-                <option value="sha256">SHA-256</option>
-                <option value="bcrypt">bcrypt</option>
-            </select>
-            <button onclick="crackHashWithRainbow()">🌈 Crackear con Rainbow Tables</button>
-            <button onclick="crackHashWithDict()">📚 Crackear con Diccionario</button>
-            <div id="crackResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 4. OSINT Real -->
-    <div id="osint" class="tool-pane">
-        <div class="tool-card">
-            <h3>🔎 OSINT REAL - GitHub, Correos, Redes Sociales</h3>
-            <input type="text" id="osintTarget" placeholder="Email, username o dominio">
-            <button onclick="runRealOSINT()">🔍 Escanear OSINT</button>
-            <div id="osintResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 5. WHOIS API Real -->
-    <div id="whois" class="tool-pane">
-        <div class="tool-card">
-            <h3>🌍 WHOIS API Real (WhoisXML)</h3>
-            <input type="text" id="whoisDomain" placeholder="dominio.com">
-            <button onclick="queryRealWHOIS()">Consultar WHOIS</button>
-            <div id="whoisResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 6. Subdominios Enumerator -->
-    <div id="subdomains" class="tool-pane">
-        <div class="tool-card">
-            <h3>🌐 Subdominios Enumerator (SecurityTrails API)</h3>
-            <input type="text" id="domainSub" placeholder="ejemplo.com">
-            <button onclick="enumSubdomains()">Enumerar Subdominios</button>
-            <div id="subdomainResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 7. SSH Key Generator -->
-    <div id="sshkey" class="tool-pane">
-        <div class="tool-card">
-            <h3>🔑 Generador de Llaves SSH (RSA/Ed25519)</h3>
-            <select id="sshType">
-                <option value="rsa">RSA 4096</option>
-                <option value="ed25519">Ed25519</option>
-            </select>
-            <input type="text" id="sshComment" placeholder="Comentario (ej: usuario@host)">
-            <button onclick="generateSSHKey()">Generar Par de Llaves</button>
-            <div id="sshResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 8. Web Fuzzer -->
-    <div id="fuzzer" class="tool-pane">
-        <div class="tool-card">
-            <h3>🕸️ Web Fuzzer - Directorios/Archivos</h3>
-            <input type="text" id="fuzzUrl" placeholder="https://ejemplo.com/FUZZ">
-            <textarea id="wordlist" rows="3" placeholder="Wordlist (una por línea)&#10;admin&#10;login&#10;backup"></textarea>
-            <button onclick="startFuzzing()">Iniciar Fuzzing</button>
-            <div id="fuzzResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 9. Dashboard Personal -->
-    <div id="dashboard" class="tool-pane">
-        <div class="tool-card">
-            <h3>📊 Dashboard Personal - Historial de Escaneos</h3>
-            <div id="dashboardContent" class="result"></div>
-            <button onclick="clearHistory()">🗑️ Borrar Historial</button>
-        </div>
-    </div>
-
-    <!-- 10. Asistente IA -->
-    <div id="aiassist" class="tool-pane">
-        <div class="tool-card">
-            <h3>🤖 Asistente IA - Explicaciones de Seguridad</h3>
-            <textarea id="aiQuestion" rows="3" placeholder="Ej: ¿Qué es un ataque XSS?"></textarea>
-            <button onclick="askAI()">Consultar IA (local demo)</button>
-            <div id="aiResult" class="result"></div>
-        </div>
-    </div>
-
-    <!-- 11. Modo Batch -->
-    <div id="batch" class="tool-pane">
-        <div class="tool-card">
-            <h3>📦 Modo Batch - Escaneo Masivo</h3>
-            <textarea id="batchTargets" rows="5" placeholder="Una IP/dominio/email por línea&#10;192.168.1.1&#10;google.com&#10;admin@example.com"></textarea>
-            <select id="batchType">
-                <option value="port">Escáner de Puertos</option>
-                <option value="whois">WHOIS Masivo</option>
-                <option value="osint">OSINT Masivo</option>
-            </select>
-            <button onclick="runBatchScan()">🎯 Ejecutar Batch</button>
-            <div id="batchResult" class="result"></div>
-        </div>
-    </div>
-
-    <footer>
-        <p>🥚🔥 MFH TOOLS PRO - Open Source | Hecho en México | Donaciones: GitHub Sponsors</p>
-        <p><a href="https://github.com/Falconmx1/mx_falconmx_security">GitHub Repo</a> | <a href="/api/docs">API Docs</a></p>
-    </footer>
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+  <div class="spinner-border-mfh"></div>
+  <p class="mt-3 text-success">Inicializando MFH TOOLS PRO...</p>
 </div>
 
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-shield-haltered me-2"></i>
+      MFH TOOLS PRO
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#inicio">
+            <i class="fas fa-home me-1"></i> Inicio
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#herramientas">
+            <i class="fas fa-tools me-1"></i> Herramientas
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#escaneo">
+            <i class="fas fa-search me-1"></i> Escáner
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#auth" data-bs-toggle="modal" data-bs-target="#authModal">
+            <i class="fas fa-user me-1"></i> <span id="authStatus">Acceder</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="inicio" class="pt-5 mt-5">
+  <div class="container pt-5">
+    <div class="row align-items-center min-vh-75">
+      <div class="col-lg-6">
+        <h1 class="display-3 fw-bold glow-text">
+          <i class="fas fa-skull me-2"></i>
+          🔥 MFH TOOLS PRO
+        </h1>
+        <p class="lead text-success mt-3">
+          Suite de Ciberseguridad Mexicana
+        </p>
+        <p class="mb-4">
+          Escáner UDP/TCP | RSA/AES | OSINT Real | Rainbow Tables | WHOIS API | PWA | IA Asistente
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+          <span class="badge-mfh">
+            <i class="fas fa-check-circle me-1"></i> 14+ Herramientas
+          </span>
+          <span class="badge-mfh">
+            <i class="fas fa-gem me-1"></i> 100% Gratis
+          </span>
+          <span class="badge-mfh">
+            <i class="fab fa-github me-1"></i> Open Source
+          </span>
+          <span class="badge-mfh">
+            <i class="fas fa-flag me-1"></i> Hecho en México
+          </span>
+        </div>
+        <div class="mt-4">
+          <button class="btn-mfh me-3" onclick="scrollToTools()">
+            <i class="fas fa-play me-2"></i>Explorar Herramientas
+          </button>
+          <button class="btn-outline-mfh" onclick="startDemoScan()">
+            <i class="fas fa-terminal me-2"></i>Demo Rápida
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center">
+        <div class="console-output p-3 mb-3" style="height: auto; background: rgba(0, 0, 0, 0.8);">
+          <div class="text-success">
+            <span class="text-warning">$</span> nmap -sS -p 1-1000 falconmx.security<br>
+            <span class="text-info">[22/tcp]</span> open  → ssh<br>
+            <span class="text-info">[80/tcp]</span> open  → http<br>
+            <span class="text-info">[443/tcp]</span> open → https<br>
+            <span class="text-success glow-text">✅ Escaneo completado: 3 puertos abiertos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Herramientas Section -->
+<section id="herramientas" class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-5 glow-text">
+      <i class="fas fa-tools me-2"></i>
+      Suite de Herramientas
+    </h2>
+    <div class="row g-4" id="toolsGrid">
+      <!-- Las herramientas se cargarán dinámicamente -->
+    </div>
+  </div>
+</section>
+
+<!-- Escáner Section -->
+<section id="escaneo" class="py-5 bg-dark bg-opacity-50">
+  <div class="container">
+    <h2 class="text-center mb-5 glow-text">
+      <i class="fas fa-network-wired me-2"></i>
+      Escáner de Puertos Profesional
+    </h2>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="tool-card p-4">
+          <div class="mb-4">
+            <label class="form-label fw-bold">🎯 Objetivo (IP o Dominio)</label>
+            <input type="text" class="form-control" id="targetInput" placeholder="ej: 192.168.1.1 o google.com">
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-bold">🔌 Rango de Puertos</label>
+            <input type="text" class="form-control" id="portRange" placeholder="ej: 1-1000, 22,80,443" value="1-1000">
+            <small class="text-muted">Formato: rango (1-1000) o lista (22,80,443) o combinado (1-100,443,8080)</small>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-bold">⚙️ Opciones Avanzadas</label>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="useWorkers">
+                  <label class="form-check-label" for="useWorkers">
+                    🚀 Escaneo distribuido (workers)
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="serviceDetection">
+                  <label class="form-check-label" for="serviceDetection">
+                    🔍 Detección de servicios
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button class="btn-mfh" id="scanBtn">
+              <i class="fas fa-play me-2"></i>Iniciar Escaneo
+            </button>
+            <button class="btn-outline-mfh" id="stopScanBtn" disabled>
+              <i class="fas fa-stop me-2"></i>Detener
+            </button>
+          </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mt-4">
+          <div class="progress" style="height: 30px;">
+            <div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
+          </div>
+        </div>
+        
+        <!-- Resultados -->
+        <div class="mt-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">
+              <i class="fas fa-terminal me-2"></i>Resultados en tiempo real
+            </h5>
+            <div>
+              <button class="btn-outline-mfh btn-sm" id="exportJson" disabled>
+                <i class="fas fa-file-code"></i> JSON
+              </button>
+              <button class="btn-outline-mfh btn-sm" id="exportCsv" disabled>
+                <i class="fas fa-file-csv"></i> CSV
+              </button>
+              <button class="btn-outline-mfh btn-sm" id="exportPdf" disabled>
+                <i class="fas fa-file-pdf"></i> PDF
+              </button>
+              <button class="btn-outline-mfh btn-sm" id="clearResults">
+                <i class="fas fa-trash"></i> Limpiar
+              </button>
+            </div>
+          </div>
+          <div id="consoleOutput" class="console-output">
+            <span class="text-warning">[MFH]</span> Listo para escanear. Ingresa un objetivo y haz clic en Iniciar Escaneo.<br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3">
+          <i class="fas fa-chart-line tool-icon"></i>
+          <h5 class="mt-2">Tiempo Real</h5>
+          <small>WebSockets para resultados instantáneos</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3">
+          <i class="fas fa-database tool-icon"></i>
+          <h5 class="mt-2">Historial</h5>
+          <small>SQLite para guardar escaneos previos</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3">
+          <i class="fas fa-download tool-icon"></i>
+          <h5 class="mt-2">Exportación</h5>
+          <small>JSON, CSV, PDF con un solo click</small>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3">
+          <i class="fas fa-mobile-alt tool-icon"></i>
+          <h5 class="mt-2">PWA Offline</h5>
+          <small>Funciona sin internet</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <h5 class="text-success">MFH TOOLS PRO</h5>
+        <p>Suite de ciberseguridad mexicana con herramientas profesionales para pentesting y análisis de vulnerabilidades.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-success"><i class="fab fa-github fa-2x"></i></a>
+          <a href="#" class="text-success"><i class="fab fa-twitter fa-2x"></i></a>
+          <a href="#" class="text-success"><i class="fab fa-linkedin fa-2x"></i></a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h5 class="text-success">Enlaces Rápidos</h5>
+        <ul class="list-unstyled">
+          <li><a href="#inicio" class="text-decoration-none text-light">Inicio</a></li>
+          <li><a href="#herramientas" class="text-decoration-none text-light">Herramientas</a></li>
+          <li><a href="#escaneo" class="text-decoration-none text-light">Escáner</a></li>
+          <li><a href="/blog" class="text-decoration-none text-light">Blog</a></li>
+          <li><a href="/portafolio" class="text-decoration-none text-light">Portafolio</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h5 class="text-success">Contacto</h5>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-envelope me-2"></i> contacto@falconmx.security</li>
+          <li><i class="fas fa-phone me-2"></i> +52 (55) 1234-5678</li>
+          <li><i class="fas fa-map-marker-alt me-2"></i> CDMX, México</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="bg-success">
+    <div class="text-center">
+      <p class="mb-0">© 2025 MFH TOOLS PRO - Hecho con 🧉 y 🌮 en México. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Auth Modal -->
+<div class="modal fade" id="authModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-success" id="authModalLabel">Acceder a MFH TOOLS PRO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="loginForm">
+          <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="loginEmail" placeholder="usuario@ejemplo.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="loginPassword" placeholder="••••••••">
+          </div>
+          <button class="btn-mfh w-100" onclick="loginUser()">Iniciar Sesión</button>
+          <div class="text-center mt-3">
+            <a href="#" onclick="showRegisterForm()">¿No tienes cuenta? Regístrate</a>
+          </div>
+        </div>
+        <div id="registerForm" style="display: none;">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="registerName">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="registerEmail">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="registerPassword">
+          </div>
+          <button class="btn-mfh w-100" onclick="registerUser()">Registrarse</button>
+          <div class="text-center mt-3">
+            <a href="#" onclick="showLoginForm()">¿Ya tienes cuenta? Inicia Sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/script.js"></script>
+
 <script>
-    // ==================== PUNTUACIÓN Y GAMIFICACIÓN ====================
-    let userPoints = localStorage.getItem('mfhPoints') ? parseInt(localStorage.getItem('mfhPoints')) : 0;
-    
-    function addPoints(points) {
-        userPoints += points;
-        localStorage.setItem('mfhPoints', userPoints);
-        document.getElementById('pointsDisplay').innerText = `🏆 ${userPoints} pts`;
-        
-        // Check achievements
-        if(userPoints >= 100) alert('🎉 Logro desbloqueado: ¡Hacker Ético Principiante!');
-        if(userPoints >= 500) alert('🔥 Logro desbloqueado: ¡Maestro del Pentesting!');
-    }
-    
-    function saveToHistory(tool, result) {
-        let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-        history.unshift({ tool, result: result.substring(0, 500), timestamp: new Date().toISOString() });
-        history = history.slice(0, 50);
-        localStorage.setItem('scanHistory', JSON.stringify(history));
-        updateDashboard();
-        addPoints(5);
-    }
-    
-    function updateDashboard() {
-        let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-        let html = '<h4>📜 Historial de Escaneos</h4>';
-        history.forEach(item => {
-            html += `<div style="border-bottom:1px solid #333; padding:10px">
-                        <strong>${item.tool}</strong><br>
-                        <small>${new Date(item.timestamp).toLocaleString()}</small><br>
-                        <pre style="font-size:12px">${item.result}</pre>
-                    </div>`;
-        });
-        document.getElementById('dashboardContent').innerHTML = html || '<p>No hay historial</p>';
-    }
-    
-    function clearHistory() {
-        localStorage.removeItem('scanHistory');
-        updateDashboard();
-        alert('Historial borrado');
-    }
-    
-    // ==================== MEXICAN MODE ====================
-    function toggleMexicanMode() {
-        document.body.classList.toggle('mexican-mode');
-        localStorage.setItem('mexicanMode', document.body.classList.contains('mexican-mode'));
-    }
-    
-    function toggleTheme() {
-        if(document.body.classList.contains('dark')) {
-            document.body.classList.replace('dark', 'light');
-        } else if(document.body.classList.contains('light')) {
-            document.body.classList.replace('light', 'dark');
-        } else {
-            document.body.classList.add('dark');
-        }
-        localStorage.setItem('theme', document.body.className);
-    }
-    
-    // Load saved preferences
-    if(localStorage.getItem('mexicanMode') === 'true') document.body.classList.add('mexican-mode');
-    if(localStorage.getItem('theme')) document.body.className = localStorage.getItem('theme');
-    else document.body.classList.add('dark');
-    
-    // ==================== 1. MX-SCANNER PRO (UDP + OS Fingerprinting) ====================
-    async function startAdvancedScan() {
-        const host = document.getElementById('scanHost').value;
-        const type = document.getElementById('scanType').value;
-        const resultDiv = document.getElementById('scanResult');
-        
-        if(!host) { resultDiv.innerText = '❌ Ingresa un objetivo'; return; }
-        
-        resultDiv.innerText = `🔍 Escaneando ${host} con ${type.toUpperCase()}...\nEsto puede tomar varios minutos...`;
-        
-        // Simular escaneo UDP/TCP
-        setTimeout(() => {
-            let results = `=== ESCANEO COMPLETADO ===\nHost: ${host}\nTipo: ${type.toUpperCase()}\n\n`;
-            
-            if(type === 'tcp' || type === 'both') {
-                results += `🔓 PUERTOS TCP ABIERTOS:\n`;
-                const tcpPorts = [21,22,80,443,8080,3306];
-                results += tcpPorts.map(p => `  📍 ${p}/tcp - ${getServiceName(p)}`).join('\n');
-                results += '\n\n';
-            }
-            
-            if(type === 'udp' || type === 'both') {
-                results += `🌊 PUERTOS UDP ABIERTOS:\n`;
-                const udpPorts = [53,123,161,500];
-                results += udpPorts.map(p => `  📍 ${p}/udp - ${getUDPName(p)}`).join('\n');
-                results += '\n\n';
-            }
-            
-            // OS Fingerprinting
-            results += `🖥️ OS FINGERPRINTING:\n`;
-            const oss = ['Linux 5.x', 'Windows 10/11', 'macOS Ventura'];
-            results += `  🐧 SO Detectado: ${oss[Math.floor(Math.random() * oss.length)]}\n`;
-            results += `  📊 TTL: 64\n  🎯 Precisión: 87%\n\n`;
-            results += `🔥 Escaneo completado por MFH TOOLS PRO`;
-            
-            resultDiv.innerText = results;
-            saveToHistory('MX-SCANNER PRO', results);
-        }, 3000);
-    }
-    
-    function getServiceName(port) {
-        const services = {21:'FTP',22:'SSH',80:'HTTP',443:'HTTPS',8080:'HTTP-Alt',3306:'MySQL'};
-        return services[port] || 'Unknown';
-    }
-    
-    function getUDPName(port) {
-        const services = {53:'DNS',123:'NTP',161:'SNMP',500:'IKE'};
-        return services[port] || 'Unknown';
-    }
-    
-    // ==================== 2. RSA/AES ====================
-    let rsaKeys = {};
-    
-    async function generateRSAKeys() {
-        // Simulación de RSA (en producción usar Web Crypto API con RSA-OAEP)
-        const keyPair = await crypto.subtle.generateKey(
-            { name: "RSA-OAEP", modulusLength: 2048, publicExponent: new Uint8Array([1,0,1]), hash: "SHA-256" },
-            true, ["encrypt", "decrypt"]
-        );
-        
-        const publicKey = await crypto.subtle.exportKey("spki", keyPair.publicKey);
-        const privateKey = await crypto.subtle.exportKey("pkcs8", keyPair.privateKey);
-        
-        rsaKeys.public = btoa(String.fromCharCode(...new Uint8Array(publicKey)));
-        rsaKeys.private = btoa(String.fromCharCode(...new Uint8Array(privateKey)));
-        
-        document.getElementById('rsaPublicKey').value = rsaKeys.public;
-        document.getElementById('rsaPrivateKey').value = rsaKeys.private;
-        document.getElementById('cryptoResult').innerText = '✅ Par de llaves RSA 2048 generadas';
-    }
-    
-    async function encryptRSA() {
-        document.getElementById('cryptoResult').innerText = '✅ (Demo) Mensaje cifrado con RSA';
-        addPoints(10);
-    }
-    
-    async function decryptRSA() {
-        document.getElementById('cryptoResult').innerText = '✅ (Demo) Mensaje descifrado';
-    }
-    
-    async function encryptAES() {
-        const text = document.getElementById('plainText').value;
-        const password = document.getElementById('aesKey').value;
-        if(!text || !password) { alert('Texto y contraseña requeridos'); return; }
-        // Simulación
-        document.getElementById('cryptoResult').innerText = btoa(text + ':' + password);
-        addPoints(5);
-    }
-    
-    async function decryptAES() {
-        document.getElementById('cryptoResult').innerText = 'Texto descifrado (demo)';
-    }
-    
-    function toggleCryptoMode() {
-        const mode = document.getElementById('cryptoType').value;
-        document.getElementById('aesMode').style.display = mode === 'aes' ? 'block' : 'none';
-        document.getElementById('rsaMode').style.display = mode === 'rsa' ? 'block' : 'none';
-    }
-    
-    // ==================== 3. HASH CRACKER PRO (Rainbow Tables) ====================
-    const rainbowTable = {
-        '5f4dcc3b5aa765d61d8327deb882cf99': 'password',
-        '098f6bcd4621d373cade4e832627b4f6': 'test',
-        '21232f297a57a5a743894a0e4a801fc3': 'admin'
-    };
-    
-    async function crackHashWithRainbow() {
-        const hash = document.getElementById('hashInput').value;
-        const resultDiv = document.getElementById('crackResult');
-        
-        resultDiv.innerText = '🌈 Buscando en Rainbow Tables...';
-        setTimeout(() => {
-            if(rainbowTable[hash]) {
-                resultDiv.innerText = `✅ ¡ENCONTRADO!\nHash: ${hash}\nPassword: ${rainbowTable[hash]}\nMétodo: Rainbow Table`;
-                addPoints(20);
-            } else {
-                resultDiv.innerText = `❌ No encontrado en Rainbow Tables.\nHash: ${hash}\nPrueba con diccionario.`;
-            }
-        }, 1000);
-    }
-    
-    async function crackHashWithDict() {
-        const hash = document.getElementById('hashInput').value;
-        const resultDiv = document.getElementById('crackResult');
-        const dict = ['password', 'admin', '123456', 'test', 'root'];
-        
-        resultDiv.innerText = '📚 Probando diccionario...';
-        setTimeout(() => {
-            let found = false;
-            for(let word of dict) {
-                const md5 = btoa(word).substring(0,32);
-                if(md5 === hash) {
-                    resultDiv.innerText = `✅ ENCONTRADO!\nPassword: ${word}`;
-                    found = true;
-                    addPoints(10);
-                    break;
-                }
-            }
-            if(!found) resultDiv.innerText = `❌ No encontrado en diccionario.\nHash: ${hash}`;
-        }, 1500);
-    }
-    
-    // ==================== 4. OSINT REAL (simulado con APIs reales) ====================
-    async function runRealOSINT() {
-        const target = document.getElementById('osintTarget').value;
-        const resultDiv = document.getElementById('osintResult');
-        
-        resultDiv.innerText = `🔍 Escaneando OSINT para ${target}...\nConsultando GitHub, correos y redes sociales...`;
-        
-        setTimeout(() => {
-            let results = `=== OSINT RESULTS ===\nTarget: ${target}\n\n`;
-            results += `📧 Correos encontrados:\n  • ${target.split('@')[0]}+work@gmail.com\n  • ${target.split('@')[0]}@protonmail.com\n\n`;
-            results += `🐙 GitHub:\n  • Usuario: @${target.split('@')[0]}\n  • Repos: 12 repositorios públicos\n  • Último commit: hace 3 días\n\n`;
-            results += `🐦 Twitter/X:\n  • @${target.split('@')[0]}\n  • Seguidores: 1,234\n  • Tweets: 567\n\n`;
-            results += `🔗 LinkedIn:\n  • Perfil: linkedin.com/in/${target.split('@')[0]}\n  • Experiencia: Senior Dev en TechCorp\n\n`;
-            results += `⚠️ Filtraciones:\n  • Data breach en Canva (2019)\n  • Data breach en LinkedIn (2021)\n\n`;
-            results += `🔥 OSINT completado por MFH TOOLS PRO`;
-            
-            resultDiv.innerText = results;
-            saveToHistory('OSINT REAL', results);
-            addPoints(25);
-        }, 2000);
-    }
-    
-    // ==================== 5. WHOIS API REAL ====================
-    async function queryRealWHOIS() {
-        const domain = document.getElementById('whoisDomain').value;
-        const resultDiv = document.getElementById('whoisResult');
-        
-        resultDiv.innerText = `Consultando WHOIS para ${domain}...`;
-        
-        // Simulación con API real (en producción usar whois-api)
-        setTimeout(() => {
-            let results = `=== WHOIS INFORMATION ===\nDomain: ${domain}\n\n`;
-            results += `📅 Registro: 2020-01-15\n`;
-            results += `⏰ Expiración: 2026-01-15\n`;
-            results += `👤 Registrante: REDACTED FOR PRIVACY\n`;
-            results += `🏢 Registrador: Namecheap, Inc.\n`;
-            results += `🌐 Name Servers:\n  • ns1.${domain}\n  • ns2.${domain}\n`;
-            results += `📧 Admin Email: admin@${domain}\n`;
-            results += `🔒 DNSSEC: unsigned\n\n`;
-            results += `📌 Datos obtenidos vía WhoisXML API`;
-            
-            resultDiv.innerText = results;
-            saveToHistory('WHOIS API', results);
-            addPoints(15);
-        }, 1000);
-    }
-    
-    // ==================== 6. SUBDOMINIOS ENUMERATOR ====================
-    async function enumSubdomains() {
-        const domain = document.getElementById('domainSub').value;
-        const resultDiv = document.getElementById('subdomainResult');
-        
-        resultDiv.innerText = `Enumerando subdominios para ${domain}...`;
-        
-        setTimeout(() => {
-            let results = `=== SUBDOMINIOS ENCONTRADOS ===\nDominio: ${domain}\n\n`;
-            const subs = ['www', 'mail', 'admin', 'dev', 'api', 'test', 'vpn', 'ftp', 'blog', 'shop'];
-            for(let sub of subs) {
-                results += `  ✓ ${sub}.${domain}\n`;
-            }
-            results += `\n🔥 Total: ${subs.length} subdominios encontrados\n`;
-            results += `📌 Datos vía SecurityTrails API (simulado)`;
-            
-            resultDiv.innerText = results;
-            saveToHistory('Subdominios Enumerator', results);
-            addPoints(30);
-        }, 2000);
-    }
-    
-    // ==================== 7. SSH KEY GENERATOR ====================
-    async function generateSSHKey() {
-        const type = document.getElementById('sshType').value;
-        const comment = document.getElementById('sshComment').value;
-        const resultDiv = document.getElementById('sshResult');
-        
-        resultDiv.innerText = `Generando llave SSH ${type.toUpperCase()}...`;
-        
-        setTimeout(async () => {
-            const key = await crypto.subtle.generateKey(
-                type === 'rsa' ? { name: "RSASSA-PKCS1-v1_5", modulusLength: 4096, publicExponent: new Uint8Array([1,0,1]), hash: "SHA-256" }
-                              : { name: "Ed25519" },
-                true, ["sign", "verify"]
-            );
-            
-            let results = `=== 🔑 SSH KEYS GENERATED ===\nTipo: ${type.toUpperCase()}\nComentario: ${comment || 'mfh-tools'}\n\n`;
-            results += `📋 LLAVE PRIVADA:\n-----BEGIN ${type.toUpperCase()} PRIVATE KEY-----\n${btoa(Math.random().toString())}\n-----END ${type.toUpperCase()} PRIVATE KEY-----\n\n`;
-            results += `📋 LLAVE PÚBLICA:\nssh-${type} AAAAB3NzaC1yc2EAAAADAQABAAACAQ... ${comment || 'mfh-tools'}\n\n`;
-            results += `⚠️ GUARDA ESTAS LLAVES EN UN LUGAR SEGURO`;
-            
-            resultDiv.innerText = results;
-            saveToHistory('SSH Key Generator', results);
-            addPoints(20);
-        }, 1000);
-    }
-    
-    // ==================== 8. WEB FUZZER ====================
-    async function startFuzzing() {
-        const url = document.getElementById('fuzzUrl').value;
-        const wordlist = document.getElementById('wordlist').value.split('\n').filter(w => w.trim());
-        const resultDiv = document.getElementById('fuzzResult');
-        
-        if(!url || wordlist.length === 0) { alert('URL y wordlist requeridos'); return; }
-        
-        resultDiv.innerText = `🕸️ Fuzzeando ${url} con ${wordlist.length} palabras...\n\n`;
-        
-        let found = [];
-        for(let word of wordlist.slice(0, 20)) {
-            await new Promise(r => setTimeout(r, 100));
-            const fullUrl = url.replace('FUZZ', word);
-            if(Math.random() > 0.8) {
-                found.push(`✅ ${fullUrl} - HTTP 200 (${Math.floor(Math.random() * 5000)} bytes)`);
-                resultDiv.innerText += `✅ ${fullUrl}\n`;
-            }
-        }
-        
-        resultDiv.innerText += `\n=== RESULTADOS ===\nSe encontraron ${found.length} endpoints:\n${found.join('\n')}`;
-        saveToHistory('Web Fuzzer', resultDiv.innerText);
-        addPoints(15);
-    }
-    
-    // ==================== 9. ASISTENTE IA ====================
-    async function askAI() {
-        const question = document.getElementById('aiQuestion').value;
-        const resultDiv = document.getElementById('aiResult');
-        
-        if(!question) { alert('Escribe una pregunta'); return; }
-        
-        resultDiv.innerText = `🤖 Procesando consulta...\n\n`;
-        
-        // Simulación de IA local (ollama o GPT)
-        setTimeout(() => {
-            let answers = {
-                'xss': 'Cross-Site Scripting (XSS) es una vulnerabilidad que permite inyectar scripts maliciosos en páginas web. Prevención: sanitizar entradas, usar CSP, escapado de caracteres.',
-                'sql': 'SQL Injection ocurre cuando datos no confiables se concatenan en consultas SQL. Usa prepared statements y ORMs.',
-                'hash': 'Los hashes son funciones unidireccionales. MD5 y SHA1 están rotos, usa SHA256 o bcrypt.'
-            };
-            
-            let answer = 'Aquí hay una explicación de seguridad:\n\n';
-            if(question.toLowerCase().includes('xss')) answer += answers.xss;
-            else if(question.toLowerCase().includes('sql')) answer += answers.sql;
-            else if(question.toLowerCase().includes('hash')) answer += answers.hash;
-            else answer += `Consulta sobre: "${question}"\n\nLa seguridad informática es fundamental. Revisa OWASP Top 10 para más información.`;
-            
-            answer += '\n\n🔥 Respuesta generada por MFH AI Assistant (demo local)';
-            resultDiv.innerText = answer;
-            addPoints(10);
-        }, 1500);
-    }
-    
-    // ==================== 10. MODO BATCH ====================
-    async function runBatchScan() {
-        const targets = document.getElementById('batchTargets').value.split('\n').filter(t => t.trim());
-        const type = document.getElementById('batchType').value;
-        const resultDiv = document.getElementById('batchResult');
-        
-        if(targets.length === 0) { alert('Ingresa objetivos'); return; }
-        
-        resultDiv.innerText = `📦 Escaneo BATCH iniciado (${type.toUpperCase()})\nObjetivos: ${targets.length}\n\n`;
-        
-        for(let target of targets.slice(0, 10)) {
-            await new Promise(r => setTimeout(r, 500));
-            if(type === 'port') {
-                resultDiv.innerText += `✅ ${target}: Puertos abiertos 22,80,443\n`;
-            } else if(type === 'whois') {
-                resultDiv.innerText += `✅ ${target}: Registrado en 2020\n`;
-            } else {
-                resultDiv.innerText += `✅ ${target}: Correos encontrados: admin@${target}, contact@${target}\n`;
-            }
-        }
-        
-        resultDiv.innerText += `\n🔥 Batch completado para ${targets.length} objetivos`;
-        saveToHistory('Modo Batch', resultDiv.innerText);
-        addPoints(50);
-    }
-    
-    // ==================== EXPORTACIONES ====================
-    function exportReport() {
-        const report = {
-            timestamp: new Date().toISOString(),
-            userPoints: userPoints,
-            history: JSON.parse(localStorage.getItem('scanHistory') || '[]'),
-            tool: 'MFH TOOLS PRO Report'
-        };
-        
-        const dataStr = JSON.stringify(report, null, 2);
-        const blob = new Blob([dataStr], {type: 'application/json'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `mfh-report-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        alert('✅ Reporte exportado');
-    }
-    
-    function exportScanToPDF() { alert('📄 PDF exportado (demo)'); }
-    function exportScanToJSON() { exportReport(); }
-    function exportScanToCSV() { alert('📈 CSV exportado (demo)'); }
-    
-    // ==================== PWA INSTALL ====================
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
+  // Herramientas dinámicas
+  const tools = [
+    { name: "Escáner UDP/TCP", icon: "fa-plug", desc: "Escaneo profesional de puertos", color: "success" },
+    { name: "RSA/AES Cipher", icon: "fa-lock", desc: "Cifrado asimétrico y simétrico", color: "info" },
+    { name: "OSINT Real", icon: "fa-eye", desc: "Recolección de inteligencia OSINT", color: "warning" },
+    { name: "Rainbow Tables", icon: "fa-table", desc: "Búsqueda de hashes precomputados", color: "danger" },
+    { name: "WHOIS API", icon: "fa-globe", desc: "Consulta de dominios en tiempo real", color: "primary" },
+    { name: "IA Asistente", icon: "fa-robot", desc: "Análisis de logs con IA local", color: "secondary" },
+    { name: "Analizador de Malware", icon: "fa-bug", desc: "Detección de amenazas", color: "danger" },
+    { name: "Generador de Reportes", icon: "fa-file-alt", desc: "PDFs profesionales", color: "success" },
+  ];
+  
+  function loadTools() {
+    const container = document.getElementById('toolsGrid');
+    tools.forEach(tool => {
+      const col = document.createElement('div');
+      col.className = 'col-md-3 col-sm-6';
+      col.innerHTML = `
+        <div class="tool-card p-3 text-center" onclick="showToolInfo('${tool.name}')">
+          <i class="fas ${tool.icon} tool-icon text-${tool.color}"></i>
+          <h6 class="mt-2">${tool.name}</h6>
+          <small class="text-muted">${tool.desc}</small>
+        </div>
+      `;
+      container.appendChild(col);
     });
+  }
+  
+  function showToolInfo(toolName) {
+    const output = document.getElementById('consoleOutput');
+    output.innerHTML += `<span class="text-info">[INFO]</span> Herramienta "${toolName}" - Próximamente en versión PRO<br>`;
+    output.scrollTop = output.scrollHeight;
+  }
+  
+  function scrollToTools() {
+    document.getElementById('herramientas').scrollIntoView({ behavior: 'smooth' });
+  }
+  
+  function startDemoScan() {
+    document.getElementById('targetInput').value = 'demo.falconmx.security';
+    document.getElementById('portRange').value = '22,80,443';
+    document.getElementById('scanBtn').click();
+  }
+  
+  function showRegisterForm() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+  }
+  
+  function showLoginForm() {
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
+  }
+  
+  async function loginUser() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
     
-    function installPWA() {
-        if(deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-        } else {
-            alert('La PWA ya está instalada o no es compatible');
-        }
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('jwt_token', data.token);
+        document.getElementById('authStatus').innerHTML = '<i class="fas fa-user-check me-1"></i>' + email.split('@')[0];
+        bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+        addConsoleMessage('✅ Sesión iniciada correctamente', 'success');
+      } else {
+        addConsoleMessage('❌ Error de autenticación', 'danger');
+      }
+    } catch (error) {
+      addConsoleMessage('⚠️ Modo offline: Inicio de sesión simulado', 'warning');
+      document.getElementById('authStatus').innerHTML = '<i class="fas fa-user-check me-1"></i>Demo User';
+      bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
     }
+  }
+  
+  async function registerUser() {
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
     
-    // ==================== TABS ====================
-    const tabs = document.querySelectorAll('.tab-btn');
-    const panes = document.querySelectorAll('.tool-pane');
-    tabs.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabId = btn.getAttribute('data-tab');
-            tabs.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            panes.forEach(pane => pane.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-        });
-    });
-    
-    updateDashboard();
-    addPoints(0); // Initialize display
+    try {
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      
+      if (response.ok) {
+        addConsoleMessage('✅ Registro exitoso. Ahora inicia sesión.', 'success');
+        showLoginForm();
+      } else {
+        addConsoleMessage('❌ Error en el registro', 'danger');
+      }
+    } catch (error) {
+      addConsoleMessage('⚠️ Modo offline: Registro simulado', 'warning');
+      showLoginForm();
+    }
+  }
+  
+  function addConsoleMessage(message, type) {
+    const output = document.getElementById('consoleOutput');
+    const colors = { success: 'success', danger: 'danger', warning: 'warning', info: 'info' };
+    output.innerHTML += `<span class="text-${colors[type] || 'info'}">[MFH]</span> ${message}<br>`;
+    output.scrollTop = output.scrollHeight;
+  }
+  
+  // Inicialización
+  document.addEventListener('DOMContentLoaded', () => {
+    loadTools();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('✅ Service Worker registrado:', reg);
+      }).catch(err => {
+        console.log('❌ Service Worker error:', err);
+      });
+    }
+  });
 </script>
 </body>
 </html>
