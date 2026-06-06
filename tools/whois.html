@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MFH - WHOIS Domain Lookup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); color: #e0e0e0; font-family: 'Inter', sans-serif; }
+    .tool-card { background: rgba(20,20,20,0.95); border: 2px solid rgba(0,255,0,0.3); border-radius: 20px; padding: 25px; margin-top: 30px; }
+    .whois-output { background: #0a0a0a; border: 1px solid #00ff00; border-radius: 10px; padding: 15px; font-family: monospace; font-size: 0.85rem; max-height: 500px; overflow-y: auto; }
+    .btn-mfh { background: linear-gradient(135deg, #00ff00, #00cc00); border: none; color: #000; font-weight: 600; padding: 10px 25px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="tool-card">
+    <h2 class="text-center glow-text"><i class="fas fa-globe me-2"></i>WHOIS Domain Lookup</h2>
+    <p class="text-center">Consulta información WHOIS de dominios en tiempo real</p>
+    
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="input-group mb-3">
+          <input type="text" id="domainInput" class="form-control" placeholder="ejemplo.com">
+          <button class="btn-mfh" onclick="lookupDomain()"><i class="fas fa-search me-1"></i>Consultar WHOIS</button>
+        </div>
+        
+        <div id="loading" class="text-center mt-3" style="display: none;">
+          <div class="spinner-border text-success"></div>
+          <p>Consultando WHOIS...</p>
+        </div>
+        
+        <div id="result" style="display: none;">
+          <h5><i class="fas fa-info-circle me-2"></i>Información del Dominio</h5>
+          <div id="whoisData" class="whois-output"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://mfh-backend.onrender.com/api';
+
+async function lookupDomain() {
+  const domain = document.getElementById('domainInput').value.trim();
+  if (!domain) {
+    alert('Ingresa un dominio válido (ejemplo: google.com)');
+    return;
+  }
+  
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('result').style.display = 'none';
+  
+  try {
+    const token = localStorage.getItem('jwt_token');
+    const response = await fetch(`${API_URL}/whois/${domain}`, {
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+    });
+    
+    if (!response.ok) throw new Error('Error al consultar WHOIS');
+    
+    const data = await response.json();
+    
+    document.getElementById('whoisData').innerHTML = `
+      <p><strong>📋 Dominio:</strong> ${data.domain}</p>
+      <p><strong>🏢 Registrador:</strong> ${data.registrar || 'No disponible'}</p>
+      <p><strong>📅 Fecha de creación:</strong> ${data.creationDate || 'No disponible'}</p>
+      <p><strong>⏰ Fecha de expiración:</strong> ${data.expiryDate || 'No disponible'}</p>
+      <p><strong>🔄 Servidores DNS:</strong> ${data.nameServers || 'No disponible'}</p>
+      <p><strong>📊 Estado:</strong> ${data.status || 'No disponible'}</p>
+      <hr>
+      <details>
+        <summary><strong>📄 WHOIS Completo</strong></summary>
+        <pre style="white-space: pre-wrap;">${data.raw || 'No disponible'}</pre>
+      </details>
+    `;
+    
+    document.getElementById('result').style.display = 'block';
+  } catch(error) {
+    document.getElementById('whoisData').innerHTML = `
+      <div class="text-danger">
+        ❌ Error al consultar WHOIS: ${error.message}<br>
+        Verifica tu conexión o que el dominio exista.
+      </div>
+    `;
+    document.getElementById('result').style.display = 'block';
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+  }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
