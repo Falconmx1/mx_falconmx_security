@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MFH - Hash Generator & Verifier</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); color: #e0e0e0; font-family: 'Inter', sans-serif; }
+    .tool-card { background: rgba(20,20,20,0.95); border: 2px solid rgba(0,255,0,0.3); border-radius: 20px; padding: 25px; margin-top: 30px; }
+    .hash-output { background: #0a0a0a; border: 1px solid #00ff00; border-radius: 10px; padding: 15px; font-family: monospace; word-break: break-all; }
+    .btn-mfh { background: linear-gradient(135deg, #00ff00, #00cc00); border: none; color: #000; font-weight: 600; padding: 10px 25px; border-radius: 8px; }
+    .match-success { background: rgba(0,255,0,0.2); border: 1px solid #00ff00; }
+    .match-error { background: rgba(220,53,69,0.2); border: 1px solid #dc3545; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="tool-card">
+    <h2 class="text-center glow-text"><i class="fas fa-hashtag me-2"></i>Hash Generator & Verifier</h2>
+    <p class="text-center">Genera hashes MD5, SHA1, SHA256, SHA512 y verifica integridad de archivos</p>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <h5><i class="fas fa-plus-circle me-2"></i>Generar Hash</h5>
+        <textarea id="textInput" class="form-control" rows="4" placeholder="Ingresa texto para generar hash..."></textarea>
+        <select id="hashTypeGen" class="form-select mt-2">
+          <option value="md5">MD5</option>
+          <option value="sha1">SHA1</option>
+          <option value="sha256" selected>SHA256</option>
+          <option value="sha512">SHA512</option>
+        </select>
+        <button class="btn-mfh mt-2 w-100" onclick="generateHash()"><i class="fas fa-cogs me-1"></i>Generar</button>
+        <div id="generatedHash" class="hash-output mt-2">Esperando entrada...</div>
+      </div>
+      
+      <div class="col-md-6">
+        <h5><i class="fas fa-check-circle me-2"></i>Verificar Hash</h5>
+        <textarea id="originalText" class="form-control" rows="2" placeholder="Texto original..."></textarea>
+        <input type="text" id="hashToVerify" class="form-control mt-2" placeholder="Hash a verificar...">
+        <button class="btn-mfh mt-2 w-100" onclick="verifyHash()"><i class="fas fa-check-double me-1"></i>Verificar</button>
+        <div id="verificationResult" class="hash-output mt-2">Esperando verificación...</div>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <div class="col-12">
+        <h5><i class="fas fa-file-alt me-2"></i>Hash de Archivos (local)</h5>
+        <input type="file" id="fileInput" class="form-control" accept="*/*">
+        <button class="btn-mfh mt-2" onclick="hashFile()"><i class="fas fa-file me-1"></i>Calcular Hash de Archivo</button>
+        <div id="fileHash" class="hash-output mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function generateHash() {
+  const text = document.getElementById('textInput').value;
+  const type = document.getElementById('hashTypeGen').value;
+  
+  if (!text) {
+    document.getElementById('generatedHash').innerHTML = '<span class="text-warning">⚠️ Ingresa texto para generar hash</span>';
+    return;
+  }
+  
+  let hash = '';
+  if (type === 'md5') hash = CryptoJS.MD5(text).toString();
+  else if (type === 'sha1') hash = CryptoJS.SHA1(text).toString();
+  else if (type === 'sha256') hash = CryptoJS.SHA256(text).toString();
+  else if (type === 'sha512') hash = CryptoJS.SHA512(text).toString();
+  
+  document.getElementById('generatedHash').innerHTML = `
+    <span class="text-success">🔐 Hash ${type.toUpperCase()}:</span><br>
+    ${hash}
+    <button class="btn-sm btn-mfh mt-2" onclick="copyToClipboard('${hash}')"><i class="fas fa-copy"></i> Copiar</button>
+  `;
+}
+
+function verifyHash() {
+  const originalText = document.getElementById('originalText').value;
+  const hashToVerify = document.getElementById('hashToVerify').value.trim();
+  const type = document.getElementById('hashTypeGen').value;
+  
+  if (!originalText || !hashToVerify) {
+    document.getElementById('verificationResult').innerHTML = '<span class="text-warning">⚠️ Ingresa texto original y hash a verificar</span>';
+    return;
+  }
+  
+  const computedHash = CryptoJS[type.toUpperCase()](originalText).toString();
+  const matches = computedHash === hashToVerify;
+  
+  document.getElementById('verificationResult').innerHTML = matches
+    ? `<span class="text-success">✅ ¡Verificación exitosa! El hash coincide.</span><br>Hash calculado: ${computedHash}`
+    : `<span class="text-danger">❌ Verificación fallida. Los hashes no coinciden.</span><br>Hash calculado: ${computedHash}<br>Hash proporcionado: ${hashToVerify}`;
+  
+  document.getElementById('verificationResult').className = `hash-output mt-2 ${matches ? 'match-success' : 'match-error'}`;
+}
+
+function hashFile() {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) {
+    document.getElementById('fileHash').innerHTML = '<span class="text-warning">⚠️ Selecciona un archivo primero</span>';
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const wordArray = CryptoJS.lib.WordArray.create(e.target.result);
+    const md5 = CryptoJS.MD5(wordArray).toString();
+    const sha1 = CryptoJS.SHA1(wordArray).toString();
+    const sha256 = CryptoJS.SHA256(wordArray).toString();
+    
+    document.getElementById('fileHash').innerHTML = `
+      <span class="text-success">📁 Hash del archivo "${file.name}":</span><br>
+      <strong>MD5:</strong> ${md5}<br>
+      <strong>SHA1:</strong> ${sha1}<br>
+      <strong>SHA256:</strong> ${sha256}
+    `;
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text);
+  alert('Hash copiado al portapapeles');
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
