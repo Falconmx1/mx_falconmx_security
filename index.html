@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. Escáner UDP/TCP, RSA/AES, OSINT, Rainbow Tables, WHOIS, Hash Tools, IA Asistente. Hecho en México.">
+  <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. Escáner UDP/TCP, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain Finder, Hash Tools, IA Asistente. Hecho en México.">
   <title>🔥 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,12 +15,15 @@
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
       color: #e0e0e0;
       transition: all 0.3s ease;
     }
+    
+    /* Modo claro */
     body.light-mode {
       background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
       color: #1a1a1a;
@@ -32,7 +35,9 @@
     body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
     body.light-mode .modal-content { background: #fff; border-color: #00aa00; }
     body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
+    body.light-mode .stat-card { background: rgba(0,0,0,0.05); }
     
+    /* Navbar */
     .navbar {
       background: rgba(0,0,0,0.95);
       backdrop-filter: blur(10px);
@@ -57,21 +62,42 @@
     }
     .theme-toggle:hover { transform: rotate(180deg); }
     
+    /* Tool Cards */
     .tool-card {
       background: rgba(20,20,20,0.95);
       border: 1px solid rgba(0,255,0,0.2);
       border-radius: 15px;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       cursor: pointer;
       overflow: hidden;
+      position: relative;
     }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,255,0,0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    .tool-card:hover::before { left: 100%; }
     .tool-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px) scale(1.02);
       border-color: #00ff00;
-      box-shadow: 0 10px 30px rgba(0,255,0,0.2);
+      box-shadow: 0 20px 40px rgba(0,255,0,0.3);
     }
-    .tool-icon { font-size: 2.5rem; color: #00ff00; }
+    .tool-icon {
+      font-size: 2.5rem;
+      color: #00ff00;
+      transition: all 0.3s ease;
+    }
+    .tool-card:hover .tool-icon {
+      transform: rotate(360deg) scale(1.1);
+    }
     
+    /* Consola */
     .console-output {
       background: #0a0a0a;
       border: 2px solid #00ff00;
@@ -82,17 +108,34 @@
       overflow-y: auto;
       font-size: 0.85rem;
     }
+    .console-output::-webkit-scrollbar { width: 8px; }
+    .console-output::-webkit-scrollbar-track { background: #1a1a1a; }
+    .console-output::-webkit-scrollbar-thumb { background: #00ff00; border-radius: 4px; }
     
+    /* Botones */
     .btn-mfh {
       background: linear-gradient(135deg, #00ff00, #00cc00);
       border: none;
       color: #000;
       font-weight: 600;
-      padding: 8px 20px;
+      padding: 10px 25px;
       border-radius: 8px;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-mfh:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(0,255,0,0.4); }
+    .btn-mfh::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    .btn-mfh:hover::before { left: 100%; }
+    .btn-mfh:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(0,255,0,0.5); }
     .btn-outline-mfh {
       background: transparent;
       border: 2px solid #00ff00;
@@ -100,62 +143,98 @@
       font-weight: 600;
       padding: 6px 15px;
       border-radius: 8px;
+      transition: all 0.3s ease;
     }
-    .btn-outline-mfh:hover { background: #00ff00; color: #000; }
+    .btn-outline-mfh:hover { background: #00ff00; color: #000; transform: translateY(-2px); }
     
+    /* Badges */
     .badge-mfh {
       background: rgba(0,255,0,0.2);
       color: #00ff00;
       border: 1px solid rgba(0,255,0,0.5);
-      padding: 5px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
       font-size: 0.75rem;
+      transition: all 0.3s ease;
     }
+    .badge-mfh:hover { transform: translateY(-2px); box-shadow: 0 0 10px rgba(0,255,0,0.3); }
     
+    /* Tabs */
+    .nav-tabs { border-bottom: none; gap: 5px; flex-wrap: wrap; }
     .nav-tabs .nav-link {
       color: #e0e0e0;
       border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
       transition: all 0.3s ease;
     }
-    .nav-tabs .nav-link:hover { color: #00ff00; transform: translateY(-2px); }
+    .nav-tabs .nav-link:hover { color: #00ff00; transform: translateY(-3px); background: rgba(0,255,0,0.1); }
     .nav-tabs .nav-link.active {
       color: #00ff00;
-      background: rgba(0,255,0,0.1);
+      background: rgba(0,255,0,0.15);
       border-bottom: 2px solid #00ff00;
     }
     body.light-mode .nav-tabs .nav-link { color: #333; }
-    body.light-mode .nav-tabs .nav-link.active { color: #00aa00; }
+    body.light-mode .nav-tabs .nav-link.active { color: #00aa00; background: rgba(0,170,0,0.1); }
     
+    /* Forms */
     .form-control, .form-select {
       background: #0a0a0a;
       border: 1px solid rgba(0,255,0,0.3);
       color: #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
     }
-    .form-control:focus {
+    .form-control:focus, .form-select:focus {
       border-color: #00ff00;
       box-shadow: 0 0 10px rgba(0,255,0,0.3);
+      outline: none;
     }
     
-    .progress { background: #1a1a1a; border-radius: 10px; }
-    .progress-bar { background: #00ff00; transition: width 0.3s ease; }
+    /* Progress */
+    .progress { background: #1a1a1a; border-radius: 10px; overflow: hidden; height: 25px; }
+    .progress-bar { background: #00ff00; transition: width 0.3s ease; font-weight: bold; }
     
-    footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.3); padding: 30px 0 20px; margin-top: 40px; }
+    /* Stats Cards */
+    .stat-card {
+      background: rgba(20,20,20,0.8);
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,255,0,0.2); }
     
+    /* Footer */
+    footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.3); padding: 40px 0 20px; margin-top: 60px; }
+    
+    /* Animaciones */
     @keyframes glow {
       0%,100% { text-shadow: 0 0 5px rgba(0,255,0,0.5); }
       50% { text-shadow: 0 0 20px rgba(0,255,0,0.8); }
     }
-    .glow-text { animation: glow 2s ease-in-out infinite; }
-    
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .tool-card { animation: fadeInUp 0.5s ease-out; }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .glow-text { animation: glow 2s ease-in-out infinite; }
+    .tool-card { animation: fadeInUp 0.6s ease-out; }
+    .scanning { animation: pulse 1s ease-in-out infinite; }
+    .rotate-icon:hover { animation: spin 0.5s ease; }
     
+    /* Responsive */
     @media (max-width: 768px) {
       .navbar-brand { font-size: 1.2rem; }
       .tool-card { margin-bottom: 15px; }
+      .nav-tabs .nav-link { padding: 6px 12px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -174,7 +253,8 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" href="#herramientas">Herramientas</a></li>
-        <li class="nav-item"><a class="nav-link" href="#tools-panel">Panel de Herramientas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#tools-panel">Panel</a></li>
+        <li class="nav-item"><a class="nav-link" href="#graficas">Gráficas</a></li>
       </ul>
     </div>
   </div>
@@ -187,9 +267,9 @@
       <div class="col-lg-7">
         <h1 class="display-3 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS PRO</h1>
         <p class="lead text-success">Suite de Ciberseguridad Mexicana</p>
-        <p class="mb-4">Escáner UDP/TCP | RSA/AES | OSINT | Rainbow Tables | WHOIS | Hash Tools | IA Asistente</p>
+        <p class="mb-4">Escáner UDP/TCP | RSA/AES | OSINT | Rainbow Tables | WHOIS | Wappalyzer | Subdomain Finder | Hash Tools | IA Asistente</p>
         <div class="d-flex gap-2 flex-wrap mb-4">
-          <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 14+ Herramientas</span>
+          <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 16+ Herramientas</span>
           <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
           <span class="badge-mfh"><i class="fab fa-github me-1"></i> Open Source</span>
           <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
@@ -197,12 +277,12 @@
         <button class="btn-mfh" onclick="document.getElementById('tools-panel').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play me-2"></i>Usar Herramientas</button>
       </div>
       <div class="col-lg-5">
-        <div class="console-output" style="height: auto;">
+        <div class="console-output" style="height: auto; background: rgba(0,0,0,0.8);">
           <span class="text-warning">$</span> nmap -sS -p 1-1000 falconmx.security<br>
           <span class="text-info">[22/tcp]</span> open → ssh<br>
           <span class="text-info">[80/tcp]</span> open → http<br>
           <span class="text-info">[443/tcp]</span> open → https<br>
-          <span class="text-success">✅ 3 puertos abiertos</span>
+          <span class="text-success glow-text">✅ 3 puertos abiertos</span>
         </div>
       </div>
     </div>
@@ -219,9 +299,10 @@
       <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('osint')"><i class="fas fa-eye tool-icon"></i><h6 class="mt-2">OSINT Recon</h6><small>Recolección de inteligencia</small></div></div>
       <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('rainbow')"><i class="fas fa-table tool-icon"></i><h6 class="mt-2">Rainbow Tables</h6><small>Descifrado de hashes</small></div></div>
       <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('whois')"><i class="fas fa-globe tool-icon"></i><h6 class="mt-2">WHOIS Lookup</h6><small>Info de dominios</small></div></div>
+      <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('wappalyzer')"><i class="fab fa-codepen tool-icon"></i><h6 class="mt-2">Wappalyzer</h6><small>Tecnologías web</small></div></div>
+      <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('subdomain')"><i class="fas fa-sitemap tool-icon"></i><h6 class="mt-2">Subdomain Finder</h6><small>Encuentra subdominios</small></div></div>
       <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('hash')"><i class="fas fa-hashtag tool-icon"></i><h6 class="mt-2">Hash Tools</h6><small>Generador y verificador</small></div></div>
       <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('ai')"><i class="fas fa-robot tool-icon"></i><h6 class="mt-2">IA Asistente</h6><small>Análisis de logs con IA</small></div></div>
-      <div class="col-md-3 col-sm-6"><div class="tool-card p-3 text-center" onclick="showTool('subdomain')"><i class="fas fa-sitemap tool-icon"></i><h6 class="mt-2">Subdomain Finder</h6><small>Encuentra subdominios</small></div></div>
     </div>
   </div>
 </section>
@@ -232,26 +313,27 @@
     <div class="tool-card p-4">
       <h3 class="text-center mb-3"><i class="fas fa-cogs me-2"></i>Panel de Herramientas</h3>
       
-      <ul class="nav nav-tabs justify-content-center mb-4" id="mainTab" role="tablist">
+      <ul class="nav nav-tabs justify-content-center mb-4 flex-wrap" id="mainTab" role="tablist">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#scannerTab"><i class="fas fa-network-wired me-1"></i> Escáner</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cryptoTab"><i class="fas fa-lock me-1"></i> RSA/AES</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#osintTab"><i class="fas fa-eye me-1"></i> OSINT</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#rainbowTab"><i class="fas fa-table me-1"></i> Rainbow Tables</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#rainbowTab"><i class="fas fa-table me-1"></i> Rainbow</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#whoisTab"><i class="fas fa-globe me-1"></i> WHOIS</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wappalyzerTab"><i class="fab fa-codepen me-1"></i> Wappalyzer</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#subdomainTab"><i class="fas fa-sitemap me-1"></i> Subdominios</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#hashTab"><i class="fas fa-hashtag me-1"></i> Hash Tools</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#aiTab"><i class="fas fa-robot me-1"></i> IA Asistente</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#subdomainTab"><i class="fas fa-sitemap me-1"></i> Subdominios</button></li>
       </ul>
       
       <div class="tab-content">
         
-        <!-- ==================== ESCÁNER ==================== -->
+        <!-- ESCÁNER -->
         <div class="tab-pane fade show active" id="scannerTab">
           <h4><i class="fas fa-network-wired me-2"></i>Escáner de Puertos</h4>
           <div class="row mt-3">
             <div class="col-md-6">
               <label class="form-label">🎯 Objetivo (IP o Dominio)</label>
-              <input type="text" class="form-control" id="scanTarget" placeholder="ej: scanme.nmap.org">
+              <input type="text" class="form-control" id="scanTarget" placeholder="ej: scanme.nmap.org" value="scanme.nmap.org">
               <label class="form-label mt-2">🔌 Puertos</label>
               <input type="text" class="form-control" id="scanPorts" value="22,80,443,8080" placeholder="22,80,443">
               <button class="btn-mfh mt-3 w-100" id="startScanBtn"><i class="fas fa-play me-2"></i>Iniciar Escaneo</button>
@@ -259,7 +341,7 @@
             <div class="col-md-6">
               <div class="progress mb-2"><div id="scanProgress" class="progress-bar" style="width:0%">0%</div></div>
               <div id="scanConsole" class="console-output" style="height: 250px;">📡 Esperando escaneo...</div>
-              <div class="mt-2">
+              <div class="mt-2 d-flex gap-2">
                 <button class="btn-outline-mfh btn-sm" id="exportScanJson"><i class="fas fa-file-code"></i> JSON</button>
                 <button class="btn-outline-mfh btn-sm" id="exportScanCsv"><i class="fas fa-file-csv"></i> CSV</button>
                 <button class="btn-outline-mfh btn-sm" id="clearScanConsole"><i class="fas fa-trash"></i> Limpiar</button>
@@ -268,20 +350,20 @@
           </div>
         </div>
         
-        <!-- ==================== RSA/AES ==================== -->
+        <!-- RSA/AES -->
         <div class="tab-pane fade" id="cryptoTab">
           <h4><i class="fas fa-lock me-2"></i>RSA/AES Cipher Suite</h4>
           <div class="row mt-3">
             <div class="col-md-6">
               <label class="form-label">Texto</label>
-              <textarea id="cryptoText" class="form-control" rows="3" placeholder="Texto a cifrar/descifrar"></textarea>
+              <textarea id="cryptoText" class="form-control" rows="3" placeholder="Texto a cifrar/descifrar">Hola mundo, este es un mensaje secreto</textarea>
               <label class="form-label mt-2">Clave AES</label>
               <input type="text" id="aesKey" class="form-control" value="MiClaveSecreta123">
-              <div class="mt-2">
+              <div class="mt-2 d-flex gap-2">
                 <button class="btn-mfh btn-sm" onclick="aesEncrypt()"><i class="fas fa-lock"></i> Cifrar AES</button>
                 <button class="btn-outline-mfh btn-sm" onclick="aesDecrypt()"><i class="fas fa-unlock-alt"></i> Descifrar AES</button>
               </div>
-              <div class="mt-3">
+              <div class="mt-3 d-flex gap-2">
                 <button class="btn-mfh btn-sm" onclick="generateRSAKeys()"><i class="fas fa-key"></i> Generar RSA Keys</button>
                 <button class="btn-mfh btn-sm" onclick="rsaEncryptDemo()"><i class="fas fa-lock"></i> Cifrar RSA</button>
                 <button class="btn-outline-mfh btn-sm" onclick="rsaDecryptDemo()"><i class="fas fa-unlock-alt"></i> Descifrar RSA</button>
@@ -295,12 +377,12 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Resultado</label>
-              <div id="cryptoResult" class="console-output" style="height: 250px;">📝 Esperando acción...</div>
+              <div id="cryptoResult" class="console-output" style="height: 320px;">📝 Esperando acción...</div>
             </div>
           </div>
         </div>
         
-        <!-- ==================== OSINT ==================== -->
+        <!-- OSINT -->
         <div class="tab-pane fade" id="osintTab">
           <h4><i class="fas fa-eye me-2"></i>OSINT Email Reconnaissance</h4>
           <div class="row mt-3">
@@ -316,7 +398,7 @@
           </div>
         </div>
         
-        <!-- ==================== RAINBOW TABLES ==================== -->
+        <!-- RAINBOW TABLES -->
         <div class="tab-pane fade" id="rainbowTab">
           <h4><i class="fas fa-table me-2"></i>Rainbow Tables - Hash Cracker</h4>
           <div class="row mt-3">
@@ -339,7 +421,7 @@
           </div>
         </div>
         
-        <!-- ==================== WHOIS ==================== -->
+        <!-- WHOIS -->
         <div class="tab-pane fade" id="whoisTab">
           <h4><i class="fas fa-globe me-2"></i>WHOIS Domain Lookup</h4>
           <div class="row mt-3">
@@ -355,7 +437,39 @@
           </div>
         </div>
         
-        <!-- ==================== HASH TOOLS ==================== -->
+        <!-- WAPPALYZER -->
+        <div class="tab-pane fade" id="wappalyzerTab">
+          <h4><i class="fab fa-codepen me-2"></i>Wappalyzer - Tecnologías Web</h4>
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input type="text" id="wappalyzerDomain" class="form-control" placeholder="https://github.com">
+                <button class="btn-mfh" onclick="analyzeTechnologies()"><i class="fas fa-cogs"></i> Analizar</button>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <div id="wappalyzerResult" class="console-output" style="height: 280px;">🔍 Ingresa una URL para analizar tecnologías...</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- SUBDOMAIN FINDER -->
+        <div class="tab-pane fade" id="subdomainTab">
+          <h4><i class="fas fa-sitemap me-2"></i>Subdomain Finder</h4>
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input type="text" id="subdomainTarget" class="form-control" placeholder="dominio.com">
+                <button class="btn-mfh" onclick="findSubdomains()"><i class="fas fa-search"></i> Buscar</button>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <div id="subdomainResult" class="console-output" style="height: 280px;">🔍 Ingresa un dominio para buscar subdominios...</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- HASH TOOLS -->
         <div class="tab-pane fade" id="hashTab">
           <h4><i class="fas fa-hashtag me-2"></i>Hash Generator & Verifier</h4>
           <div class="row mt-3">
@@ -381,39 +495,62 @@
           </div>
         </div>
         
-        <!-- ==================== IA ASISTENTE ==================== -->
+        <!-- IA ASISTENTE -->
         <div class="tab-pane fade" id="aiTab">
           <h4><i class="fas fa-robot me-2"></i>IA Asistente - Análisis de Logs</h4>
           <div class="row mt-3">
             <div class="col-md-6">
               <label class="form-label">Log a analizar</label>
-              <textarea id="logInput" class="form-control" rows="6" placeholder="[2025-06-06 14:23:15] SSH: Failed password for root from 192.168.1.100 port 22&#10;[2025-06-06 14:23:18] SSH: Failed password for root from 192.168.1.100 port 22"></textarea>
+              <textarea id="logInput" class="form-control" rows="6" placeholder="[2025-06-06 14:23:15] SSH: Failed password for root from 192.168.1.100 port 22&#10;[2025-06-06 14:23:18] SSH: Failed password for root from 192.168.1.100 port 22&#10;[2025-06-06 14:23:21] SSH: Failed password for root from 192.168.1.100 port 22"></textarea>
               <button class="btn-mfh mt-2 w-100" onclick="analyzeLogWithAI()"><i class="fas fa-brain"></i> Analizar con IA</button>
             </div>
             <div class="col-md-6">
               <label class="form-label">Resultado del análisis</label>
-              <div id="aiResult" class="console-output" style="height: 250px;">🤖 Esperando log para analizar...</div>
-              <div id="aiRecommendations" class="console-output mt-2" style="height: 100px;"></div>
+              <div id="aiResult" class="console-output" style="height: 200px;">🤖 Esperando log para analizar...</div>
+              <label class="form-label mt-2">Recomendaciones</label>
+              <div id="aiRecommendations" class="console-output" style="height: 120px;"></div>
             </div>
           </div>
         </div>
         
-        <!-- ==================== SUBDOMAIN FINDER ==================== -->
-        <div class="tab-pane fade" id="subdomainTab">
-          <h4><i class="fas fa-sitemap me-2"></i>Subdomain Finder</h4>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <div class="input-group">
-                <input type="text" id="subdomainTarget" class="form-control" placeholder="dominio.com">
-                <button class="btn-mfh" onclick="findSubdomains()"><i class="fas fa-search"></i> Buscar</button>
-              </div>
-            </div>
-            <div class="col-md-12 mt-3">
-              <div id="subdomainResult" class="console-output" style="height: 280px;">🔍 Ingresa un dominio para buscar subdominios...</div>
-            </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GRÁFICAS EN TIEMPO REAL -->
+<section id="graficas" class="py-5 bg-dark bg-opacity-50">
+  <div class="container">
+    <h2 class="text-center mb-4 glow-text"><i class="fas fa-chart-line me-2"></i>Estadísticas en Tiempo Real</h2>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="tool-card p-3">
+          <h5><i class="fas fa-chart-bar me-2"></i>Escaneos por Día</h5>
+          <canvas id="dailyChart" height="200"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tool-card p-3">
+          <h5><i class="fas fa-chart-pie me-2"></i>Puertos Más Comunes</h5>
+          <canvas id="portsChart" height="200"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tool-card p-3">
+          <h5><i class="fas fa-chart-line me-2"></i>Tráfico de Red (simulado)</h5>
+          <canvas id="trafficChart" height="200"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tool-card p-3">
+          <h5><i class="fas fa-chart-simple me-2"></i>Alertas de Seguridad</h5>
+          <canvas id="alertsChart" height="200"></canvas>
+          <div class="mt-2 text-center">
+            <span class="badge-mfh"><i class="fas fa-circle me-1" style="color: #dc3545;"></i> Críticas: <span id="critAlerts">0</span></span>
+            <span class="badge-mfh"><i class="fas fa-circle me-1" style="color: #ffc107;"></i> Altas: <span id="highAlerts">0</span></span>
+            <span class="badge-mfh"><i class="fas fa-circle me-1" style="color: #00ff00;"></i> Medias: <span id="medAlerts">0</span></span>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -425,7 +562,7 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <h5 class="text-success">MFH TOOLS PRO</h5>
-        <p>Suite de ciberseguridad mexicana con herramientas profesionales para pentesting.</p>
+        <p>Suite de ciberseguridad mexicana con herramientas profesionales para pentesting y análisis de vulnerabilidades.</p>
       </div>
       <div class="col-md-4 mb-3">
         <h5 class="text-success">Enlaces</h5>
@@ -433,20 +570,22 @@
           <li><a href="#inicio" class="text-decoration-none text-light">Inicio</a></li>
           <li><a href="#herramientas" class="text-decoration-none text-light">Herramientas</a></li>
           <li><a href="#tools-panel" class="text-decoration-none text-light">Panel</a></li>
+          <li><a href="#graficas" class="text-decoration-none text-light">Gráficas</a></li>
         </ul>
       </div>
       <div class="col-md-4 mb-3">
         <h5 class="text-success">Contacto</h5>
         <p><i class="fas fa-envelope me-2"></i> contacto@falconmx.security</p>
-        <p><i class="fab fa-github me-2"></i> Falconmx1</p>
+        <p><i class="fab fa-github me-2"></i> github.com/Falconmx1</p>
+        <p><i class="fab fa-twitter me-2"></i> @FalconMX_Sec</p>
       </div>
     </div>
     <hr class="bg-success">
     <div class="text-center">
-      <p>© 2025 MFH TOOLS PRO - Hecho con 🌮 en México</p>
+      <p>© 2025 MFH TOOLS PRO - Hecho con 🌮 y 🧉 en México</p>
     </div>
   </div>
-</footer>
+</section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -475,8 +614,8 @@ themeToggle.addEventListener('click', () => {
 function showTool(tool) {
   const tabMap = {
     scanner: 'scannerTab', crypto: 'cryptoTab', osint: 'osintTab',
-    rainbow: 'rainbowTab', whois: 'whoisTab', hash: 'hashTab',
-    ai: 'aiTab', subdomain: 'subdomainTab'
+    rainbow: 'rainbowTab', whois: 'whoisTab', wappalyzer: 'wappalyzerTab',
+    subdomain: 'subdomainTab', hash: 'hashTab', ai: 'aiTab'
   };
   const tabId = tabMap[tool];
   if (tabId) {
@@ -613,35 +752,36 @@ async function osintSearch() {
   if (!email) { alert('Ingresa un email'); return; }
   const resultDiv = document.getElementById('osintResult');
   resultDiv.innerHTML = '<span class="text-warning">🔍 Buscando información OSINT...</span>';
-  await new Promise(r => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 1200));
   resultDiv.innerHTML = `
     <span class="text-success">✅ Resultados OSINT para ${email}</span><br>
     📧 Dominio: ${email.split('@')[1]}<br>
-    🔍 Breaches encontrados: 2 (LinkedIn, Adobe)<br>
+    🔍 Breaches encontrados: 3 (LinkedIn, Adobe, Dropbox)<br>
     📅 Último breach: 2023-12-01<br>
     🛡️ Recomendación: Cambiar contraseña y habilitar 2FA<br>
-    <span class="text-muted">ℹ️ Datos simulados - Conecta API real para datos completos</span>
+    🌐 Perfiles sociales encontrados: Twitter, LinkedIn, GitHub<br>
+    <span class="text-muted mt-2 d-block">ℹ️ Datos simulados - Conecta API real para datos completos</span>
   `;
 }
 
 // ==================== RAINBOW TABLES ====================
 const RAINBOW_DB = {
-  md5: { "5d41402abc4b2a76b9719d911017c592": "hello", "098f6bcd4621d373cade4e832627b4f6": "test", "25f9e794323b453885f5181f1b624d0b": "password" },
-  sha1: { "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d": "hello", "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3": "test" },
-  sha256: { "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824": "hello" }
+  md5: { "5d41402abc4b2a76b9719d911017c592": "hello", "098f6bcd4621d373cade4e832627b4f6": "test", "25f9e794323b453885f5181f1b624d0b": "password", "e10adc3949ba59abbe56e057f20f883e": "123456" },
+  sha1: { "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d": "hello", "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3": "test", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8": "password" },
+  sha256: { "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824": "hello", "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08": "test" }
 };
 function crackHashRainbow() {
   const hash = document.getElementById('hashToCrack').value.trim();
   const type = document.getElementById('hashType').value;
   const cracked = RAINBOW_DB[type]?.[hash.toLowerCase()];
-  document.getElementById('hashResultRainbow').innerHTML = cracked ? `✅ Descifrado: ${cracked}` : '❌ Hash no encontrado en rainbow table';
+  document.getElementById('hashResultRainbow').innerHTML = cracked ? `✅ ¡Hash descifrado!<br>Texto original: <span class="text-success">${cracked}</span>` : '❌ Hash no encontrado en la base de datos rainbow table';
 }
 function generateHashRainbow() {
   const text = document.getElementById('plainToHash').value;
   const type = document.getElementById('hashType').value;
   if (!text) { alert('Ingresa texto'); return; }
   let hash = type === 'md5' ? CryptoJS.MD5(text).toString() : type === 'sha1' ? CryptoJS.SHA1(text).toString() : CryptoJS.SHA256(text).toString();
-  document.getElementById('hashResultRainbow').innerHTML = `🔐 Hash ${type.toUpperCase()}:<br>${hash}`;
+  document.getElementById('hashResultRainbow').innerHTML = `🔐 Hash ${type.toUpperCase()}:<br><span class="text-success">${hash}</span>`;
   document.getElementById('hashToCrack').value = hash;
 }
 
@@ -651,16 +791,54 @@ async function whoisLookup() {
   if (!domain) { alert('Ingresa un dominio'); return; }
   const resultDiv = document.getElementById('whoisResult');
   resultDiv.innerHTML = '<span class="text-warning">🔍 Consultando WHOIS...</span>';
-  await new Promise(r => setTimeout(r, 800));
+  await new Promise(r => setTimeout(r, 1000));
   resultDiv.innerHTML = `
     <strong>📋 Dominio:</strong> ${domain}<br>
     <strong>🏢 Registrador:</strong> Namecheap, Inc.<br>
-    <strong>📅 Creación:</strong> 2010-05-15<br>
-    <strong>⏰ Expiración:</strong> 2026-05-15<br>
-    <strong>🔄 DNS:</strong> ns1.digitalocean.com, ns2.digitalocean.com<br>
+    <strong>📅 Fecha de creación:</strong> 2010-05-15<br>
+    <strong>⏰ Fecha de expiración:</strong> 2026-05-15<br>
+    <strong>🔄 Servidores DNS:</strong> ns1.digitalocean.com, ns2.digitalocean.com<br>
     <strong>📍 Estado:</strong> ACTIVE<br>
-    <span class="text-muted">ℹ️ Datos simulados - Conecta API real WHOIS para datos actualizados</span>
+    <strong>👤 Contacto administrativo:</strong> admin@${domain}<br>
+    <span class="text-muted mt-2 d-block">ℹ️ Datos simulados - Conecta API real WHOIS para datos actualizados</span>
   `;
+}
+
+// ==================== WAPPALYZER ====================
+async function analyzeTechnologies() {
+  const domain = document.getElementById('wappalyzerDomain').value;
+  if (!domain) { alert('Ingresa una URL'); return; }
+  const resultDiv = document.getElementById('wappalyzerResult');
+  resultDiv.innerHTML = '<span class="text-warning">🔍 Analizando tecnologías web...</span>';
+  await new Promise(r => setTimeout(r, 1500));
+  resultDiv.innerHTML = `
+    <strong>📊 Tecnologías detectadas en ${domain}:</strong><br>
+    • 🖥️ <strong>Servidor Web:</strong> Nginx/1.22.0<br>
+    • ⚡ <strong>Framework Frontend:</strong> React 18.2.0 / Next.js<br>
+    • 🎨 <strong>CSS Framework:</strong> Tailwind CSS / Bootstrap 5<br>
+    • 📊 <strong>Analytics:</strong> Google Analytics, Facebook Pixel<br>
+    • 🔒 <strong>SSL/TLS:</strong> Let's Encrypt, TLS 1.3<br>
+    • 📧 <strong>Email:</strong> Google Workspace (Gmail)<br>
+    • 🗄️ <strong>CMS:</strong> WordPress (si aplica)<br>
+    • 🌐 <strong>CDN:</strong> Cloudflare / AWS CloudFront<br>
+    <span class="text-muted mt-2 d-block">ℹ️ Datos simulados - Conecta API Wappalyzer real para análisis completo</span>
+  `;
+}
+
+// ==================== SUBDOMAIN FINDER ====================
+async function findSubdomains() {
+  const domain = document.getElementById('subdomainTarget').value;
+  if (!domain) { alert('Ingresa un dominio'); return; }
+  const resultDiv = document.getElementById('subdomainResult');
+  resultDiv.innerHTML = '<span class="text-warning">🔍 Buscando subdominios...</span>';
+  await new Promise(r => setTimeout(r, 1800));
+  const commonSubs = ['www', 'mail', 'admin', 'api', 'dev', 'staging', 'test', 'blog', 'shop', 'ftp', 'vpn', 'ns1', 'ns2', 'webmail', 'cpanel'];
+  const found = [];
+  for (let i = 0; i < 12; i++) {
+    if (Math.random() > 0.6) found.push(commonSubs[Math.floor(Math.random() * commonSubs.length)]);
+  }
+  const unique = [...new Set(found)].slice(0, 10);
+  resultDiv.innerHTML = `<strong>🌐 Subdominios encontrados para ${domain}:</strong><br>${unique.map(s => `• ${s}.${domain}`).join('<br>') || '• No se encontraron subdominios'}<br><br><span class="text-muted">ℹ️ Datos simulados - Conecta API real (SecurityTrails, Chaos) para resultados completos</span>`;
 }
 
 // ==================== HASH TOOLS ====================
@@ -686,7 +864,7 @@ function verifyHashTool() {
   else if (type === 'sha256') computed = CryptoJS.SHA256(text).toString();
   else if (type === 'sha512') computed = CryptoJS.SHA512(text).toString();
   const matches = computed === hashToVerify;
-  document.getElementById('verifyResult').innerHTML = matches ? '✅ Verificación exitosa - Hashes coinciden' : '❌ Verificación fallida - Hashes NO coinciden';
+  document.getElementById('verifyResult').innerHTML = matches ? '✅ Verificación exitosa - Los hashes coinciden' : '❌ Verificación fallida - Los hashes NO coinciden';
 }
 
 // ==================== IA ASISTENTE ====================
@@ -694,42 +872,117 @@ function analyzeLogWithAI() {
   const logText = document.getElementById('logInput').value;
   if (!logText) { alert('Ingresa un log para analizar'); return; }
   const logLower = logText.toLowerCase();
-  const maliciousKeywords = ['failed password', 'brute force', 'attack', 'exploit', 'malware', 'intrusion', 'unauthorized', 'sql injection'];
-  const suspiciousKeywords = ['error', 'timeout', 'denied', 'invalid'];
+  const maliciousKeywords = ['failed password', 'brute force', 'attack', 'exploit', 'malware', 'intrusion', 'unauthorized', 'sql injection', 'xss', 'buffer overflow', 'root', 'backdoor', 'ransomware'];
+  const suspiciousKeywords = ['error', 'timeout', 'denied', 'invalid', 'multiple', 'repeated', 'anomaly'];
   let maliciousScore = 0, suspiciousScore = 0;
-  maliciousKeywords.forEach(kw => { if (logLower.includes(kw)) maliciousScore += 0.15; });
-  suspiciousKeywords.forEach(kw => { if (logLower.includes(kw)) suspiciousScore += 0.1; });
+  maliciousKeywords.forEach(kw => { if (logLower.includes(kw)) maliciousScore += 0.12; });
+  suspiciousKeywords.forEach(kw => { if (logLower.includes(kw)) suspiciousScore += 0.08; });
   
-  let classification = '', recommendation = '';
-  if (maliciousScore > 0.3) {
+  let classification = '', recommendation = '', icon = '';
+  if (maliciousScore > 0.35) {
     classification = '⚠️ MALICIOSO';
-    recommendation = '🔴 Actividad maliciosa detectada. Recomendaciones: Bloquear IP origen, revisar logs relacionados, alertar al equipo de seguridad.';
-  } else if (suspiciousScore > 0.2) {
+    icon = 'fa-skull';
+    recommendation = '🔴 ACTIVIDAD MALICIOSA DETECTADA\n• Bloquear IP origen inmediatamente\n• Revisar logs relacionados\n• Alertar al equipo de seguridad\n• Aislar sistema afectado';
+  } else if (suspiciousScore > 0.25) {
     classification = '⚠️ SOSPECHOSO';
-    recommendation = '🟡 Actividad inusual detectada. Recomendaciones: Monitorear más de cerca, revisar configuración de seguridad.';
+    icon = 'fa-exclamation-triangle';
+    recommendation = '🟡 ACTIVIDAD INUSUAL DETECTADA\n• Monitorear más de cerca\n• Revisar configuración de seguridad\n• Verificar si es comportamiento esperado\n• Aumentar nivel de logging';
   } else {
     classification = '✅ BENIGNO';
-    recommendation = '🟢 Log normal. No se requiere acción inmediata.';
+    icon = 'fa-check-circle';
+    recommendation = '🟢 LOG NORMAL\n• No se requiere acción inmediata\n• Continuar monitoreo estándar';
   }
-  document.getElementById('aiResult').innerHTML = `<span class="text-success">${classification}</span><br>Confianza: ${Math.round((maliciousScore+suspiciousScore)*100)}%<br><br>📝 Log analizado: ${logText.substring(0,200)}...`;
-  document.getElementById('aiRecommendations').innerHTML = recommendation;
+  const confidence = Math.min(Math.round((maliciousScore + suspiciousScore) * 100), 95);
+  document.getElementById('aiResult').innerHTML = `<i class="fas ${icon} me-2"></i><span class="text-success fw-bold">${classification}</span><br>Confianza: ${confidence}%<br><br><strong>📝 Extracto del log:</strong><br>${logText.substring(0, 300)}${logText.length > 300 ? '...' : ''}`;
+  document.getElementById('aiRecommendations').innerHTML = recommendation.replace(/\n/g, '<br>');
 }
 
-// ==================== SUBDOMAIN FINDER ====================
-async function findSubdomains() {
-  const domain = document.getElementById('subdomainTarget').value;
-  if (!domain) { alert('Ingresa un dominio'); return; }
-  const resultDiv = document.getElementById('subdomainResult');
-  resultDiv.innerHTML = '<span class="text-warning">🔍 Buscando subdominios...</span>';
-  await new Promise(r => setTimeout(r, 1500));
-  const subdomains = ['www', 'mail', 'admin', 'api', 'dev', 'staging', 'test', 'blog', 'shop', 'ftp'];
-  const found = [];
-  for (let i = 0; i < 8; i++) {
-    if (Math.random() > 0.5) found.push(subdomains[Math.floor(Math.random() * subdomains.length)]);
+// ==================== GRÁFICAS EN TIEMPO REAL ====================
+let dailyChart, portsChart, trafficChart, alertsChart;
+let alertCounts = { crit: 12, high: 28, med: 45 };
+
+function initCharts() {
+  const ctx1 = document.getElementById('dailyChart')?.getContext('2d');
+  if (ctx1) {
+    dailyChart = new Chart(ctx1, {
+      type: 'line',
+      data: { labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], datasets: [{ label: 'Escaneos', data: [45, 62, 78, 85, 92, 68, 54], borderColor: '#00ff00', backgroundColor: 'rgba(0,255,0,0.1)', tension: 0.4, fill: true }] },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#e0e0e0' } } } }
+    });
   }
-  const unique = [...new Set(found)];
-  resultDiv.innerHTML = `<strong>🌐 Subdominios encontrados para ${domain}:</strong><br>${unique.map(s => `• ${s}.${domain}`).join('<br>') || '• No se encontraron subdominios'}<br><span class="text-muted mt-2 d-block">ℹ️ Datos simulados - Conecta API real para resultados completos</span>`;
+  const ctx2 = document.getElementById('portsChart')?.getContext('2d');
+  if (ctx2) {
+    portsChart = new Chart(ctx2, {
+      type: 'doughnut',
+      data: { labels: ['HTTP (80)', 'HTTPS (443)', 'SSH (22)', 'FTP (21)', 'MySQL (3306)', 'Otros'], datasets: [{ data: [32, 28, 18, 8, 7, 7], backgroundColor: ['#00ff00', '#ffc107', '#dc3545', '#17a2b8', '#6f42c1', '#fd7e14'] }] },
+      options: { responsive: true, plugins: { legend: { labels: { color: '#e0e0e0' } } } }
+    });
+  }
+  const ctx3 = document.getElementById('trafficChart')?.getContext('2d');
+  if (ctx3) {
+    trafficChart = new Chart(ctx3, {
+      type: 'line',
+      data: { labels: ['0:00', '4:00', '8:00', '12:00', '16:00', '20:00', '24:00'], datasets: [{ label: 'Tráfico (Mbps)', data: [120, 45, 230, 450, 380, 520, 200], borderColor: '#00ff00', backgroundColor: 'rgba(0,255,0,0.05)', fill: true }] },
+      options: { responsive: true, plugins: { legend: { labels: { color: '#e0e0e0' } } } }
+    });
+  }
+  const ctx4 = document.getElementById('alertsChart')?.getContext('2d');
+  if (ctx4) {
+    alertsChart = new Chart(ctx4, {
+      type: 'bar',
+      data: { labels: ['Críticas', 'Altas', 'Medias'], datasets: [{ label: 'Alertas', data: [alertCounts.crit, alertCounts.high, alertCounts.med], backgroundColor: ['#dc3545', '#ffc107', '#00ff00'], borderRadius: 8 }] },
+      options: { responsive: true, plugins: { legend: { labels: { color: '#e0e0e0' } } } }
+    });
+  }
+  document.getElementById('critAlerts').textContent = alertCounts.crit;
+  document.getElementById('highAlerts').textContent = alertCounts.high;
+  document.getElementById('medAlerts').textContent = alertCounts.med;
 }
+
+function updateRealTimeCharts() {
+  if (dailyChart) {
+    const newData = dailyChart.data.datasets[0].data.map(() => Math.floor(Math.random() * 80) + 20);
+    dailyChart.data.datasets[0].data = newData;
+    dailyChart.update('none');
+  }
+  if (trafficChart) {
+    const newTraffic = trafficChart.data.datasets[0].data.map(() => Math.floor(Math.random() * 400) + 50);
+    trafficChart.data.datasets[0].data = newTraffic;
+    trafficChart.update('none');
+  }
+  if (alertsChart) {
+    alertCounts.crit = Math.floor(Math.random() * 20) + 5;
+    alertCounts.high = Math.floor(Math.random() * 35) + 15;
+    alertCounts.med = Math.floor(Math.random() * 50) + 30;
+    alertsChart.data.datasets[0].data = [alertCounts.crit, alertCounts.high, alertCounts.med];
+    alertsChart.update('none');
+    document.getElementById('critAlerts').textContent = alertCounts.crit;
+    document.getElementById('highAlerts').textContent = alertCounts.high;
+    document.getElementById('medAlerts').textContent = alertCounts.med;
+  }
+}
+
+// Actualizar colores de gráficas según tema
+function updateChartColors() {
+  const isLight = body.classList.contains('light-mode');
+  const textColor = isLight ? '#333' : '#e0e0e0';
+  if (dailyChart) dailyChart.options.plugins.legend.labels.color = textColor;
+  if (portsChart) portsChart.options.plugins.legend.labels.color = textColor;
+  if (trafficChart) trafficChart.options.plugins.legend.labels.color = textColor;
+  if (alertsChart) alertsChart.options.plugins.legend.labels.color = textColor;
+  if (dailyChart) dailyChart.update();
+  if (portsChart) portsChart.update();
+  if (trafficChart) trafficChart.update();
+  if (alertsChart) alertsChart.update();
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+  initCharts();
+  setInterval(updateRealTimeCharts, 8000);
+  const observer = new MutationObserver(updateChartColors);
+  observer.observe(body, { attributes: true });
+});
 </script>
 </body>
 </html>
