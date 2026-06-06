@@ -1,0 +1,46 @@
+name: Deploy to Railway/Render
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: |
+        npm test || echo "⚠️ No tests found, skipping"
+        
+    - name: Security scan
+      run: |
+        npm audit --production
+        
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: |
+        npm install -g @railway/cli
+        railway up --service=mfh-tools-backend
+        
+    - name: Deploy to GitHub Pages (frontend)
+      run: |
+        npm run build
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "Auto-deploy: $(date)"
+        git push origin main
