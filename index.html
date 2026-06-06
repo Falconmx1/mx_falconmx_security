@@ -19,7 +19,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Estilos personalizados -->
   <style>
     * {
       margin: 0;
@@ -42,13 +41,13 @@
       width: 100%;
       height: 100%;
       z-index: -1;
-      opacity: 0.05;
+      opacity: 0.03;
       pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='20' fill='%2300ff00' font-size='10'%3E01%3C/text%3E%3Ctext x='30' y='40' fill='%2300ff00' font-size='12'%3E10%3C/text%3E%3Ctext x='50' y='60' fill='%2300ff00' font-size='8'%3E11%3C/text%3E%3Ctext x='70' y='80' fill='%2300ff00' font-size='14'%3E00%3C/text%3E%3C/svg%3E");
       background-repeat: repeat;
     }
     
-    /* Navbar personalizado */
+    /* Navbar */
     .navbar {
       background: rgba(0, 0, 0, 0.95);
       backdrop-filter: blur(10px);
@@ -69,28 +68,11 @@
     .nav-link {
       color: #e0e0e0 !important;
       transition: all 0.3s ease;
-      position: relative;
     }
     
     .nav-link:hover {
       color: #00ff00 !important;
       transform: translateY(-2px);
-    }
-    
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 0;
-      height: 2px;
-      background: #00ff00;
-      transition: all 0.3s ease;
-    }
-    
-    .nav-link:hover::after {
-      width: 80%;
-      left: 10%;
     }
     
     /* Tarjetas de herramientas */
@@ -132,7 +114,7 @@
       text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
     }
     
-    /* Consola de resultados */
+    /* Consola */
     .console-output {
       background: #0a0a0a;
       border: 2px solid #00ff00;
@@ -158,7 +140,7 @@
       border-radius: 4px;
     }
     
-    /* Botones personalizados */
+    /* Botones */
     .btn-mfh {
       background: linear-gradient(135deg, #00ff00, #00cc00);
       border: none;
@@ -167,18 +149,12 @@
       padding: 10px 25px;
       border-radius: 8px;
       transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
     }
     
     .btn-mfh:hover {
       transform: scale(1.05);
       box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
       color: #000;
-    }
-    
-    .btn-mfh:active {
-      transform: scale(0.95);
     }
     
     .btn-outline-mfh {
@@ -202,10 +178,6 @@
       background: #1a1a1a;
       border: 2px solid #00ff00;
       border-radius: 15px;
-    }
-    
-    .modal-header {
-      border-bottom: 1px solid rgba(0, 255, 0, 0.3);
     }
     
     .form-control, .form-select {
@@ -239,32 +211,16 @@
       margin-top: 60px;
     }
     
-    /* Loading spinner */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+    /* Progress bar */
+    .progress {
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
     }
     
-    .spinner-border-mfh {
-      width: 60px;
-      height: 60px;
-      border: 4px solid rgba(0, 255, 0, 0.3);
-      border-top-color: #00ff00;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .progress-bar {
+      background: #00ff00;
+      transition: width 0.3s ease;
     }
     
     /* Animaciones */
@@ -279,25 +235,15 @@
     
     /* Responsive */
     @media (max-width: 768px) {
-      .navbar-brand {
-        font-size: 1.2rem;
-      }
-      
-      .tool-card {
-        margin-bottom: 20px;
-      }
+      .navbar-brand { font-size: 1.2rem; }
+      .tool-card { margin-bottom: 20px; }
+      .hero-title { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
 
 <div class="matrix-bg"></div>
-
-<!-- Loading Overlay -->
-<div id="loadingOverlay" class="loading-overlay" style="display: none;">
-  <div class="spinner-border-mfh"></div>
-  <p class="mt-3 text-success">Inicializando MFH TOOLS PRO...</p>
-</div>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg fixed-top">
@@ -311,26 +257,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="#inicio">
-            <i class="fas fa-home me-1"></i> Inicio
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#herramientas">
-            <i class="fas fa-tools me-1"></i> Herramientas
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#escaneo">
-            <i class="fas fa-search me-1"></i> Escáner
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#auth" data-bs-toggle="modal" data-bs-target="#authModal">
-            <i class="fas fa-user me-1"></i> <span id="authStatus">Acceder</span>
-          </a>
-        </li>
+        <li class="nav-item"><a class="nav-link active" href="#inicio"><i class="fas fa-home me-1"></i>Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="#herramientas"><i class="fas fa-tools me-1"></i>Herramientas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#escaneo"><i class="fas fa-search me-1"></i>Escáner</a></li>
+        <li class="nav-item"><a class="nav-link" href="#auth" data-bs-toggle="modal" data-bs-target="#authModal"><i class="fas fa-user me-1"></i><span id="authStatus">Acceder</span></a></li>
       </ul>
     </div>
   </div>
@@ -345,33 +275,17 @@
           <i class="fas fa-skull me-2"></i>
           🔥 MFH TOOLS PRO
         </h1>
-        <p class="lead text-success mt-3">
-          Suite de Ciberseguridad Mexicana
-        </p>
-        <p class="mb-4">
-          Escáner UDP/TCP | RSA/AES | OSINT Real | Rainbow Tables | WHOIS API | PWA | IA Asistente
-        </p>
+        <p class="lead text-success mt-3">Suite de Ciberseguridad Mexicana</p>
+        <p class="mb-4">Escáner UDP/TCP | RSA/AES | OSINT Real | Rainbow Tables | WHOIS API | PWA | IA Asistente</p>
         <div class="d-flex gap-3 flex-wrap">
-          <span class="badge-mfh">
-            <i class="fas fa-check-circle me-1"></i> 14+ Herramientas
-          </span>
-          <span class="badge-mfh">
-            <i class="fas fa-gem me-1"></i> 100% Gratis
-          </span>
-          <span class="badge-mfh">
-            <i class="fab fa-github me-1"></i> Open Source
-          </span>
-          <span class="badge-mfh">
-            <i class="fas fa-flag me-1"></i> Hecho en México
-          </span>
+          <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 14+ Herramientas</span>
+          <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
+          <span class="badge-mfh"><i class="fab fa-github me-1"></i> Open Source</span>
+          <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
         </div>
         <div class="mt-4">
-          <button class="btn-mfh me-3" onclick="scrollToTools()">
-            <i class="fas fa-play me-2"></i>Explorar Herramientas
-          </button>
-          <button class="btn-outline-mfh" onclick="startDemoScan()">
-            <i class="fas fa-terminal me-2"></i>Demo Rápida
-          </button>
+          <button class="btn-mfh me-3" onclick="scrollToTools()"><i class="fas fa-play me-2"></i>Explorar Herramientas</button>
+          <button class="btn-outline-mfh" onclick="startDemoScan()"><i class="fas fa-terminal me-2"></i>Demo Rápida</button>
         </div>
       </div>
       <div class="col-lg-6 text-center">
@@ -392,12 +306,72 @@
 <!-- Herramientas Section -->
 <section id="herramientas" class="py-5">
   <div class="container">
-    <h2 class="text-center mb-5 glow-text">
-      <i class="fas fa-tools me-2"></i>
-      Suite de Herramientas
-    </h2>
-    <div class="row g-4" id="toolsGrid">
-      <!-- Las herramientas se cargarán dinámicamente -->
+    <h2 class="text-center mb-5 glow-text"><i class="fas fa-tools me-2"></i>Suite de Herramientas</h2>
+    <div class="row g-4">
+      <!-- Herramienta 1 - RSA/AES -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="window.location.href='/tools/rsa-aes.html'">
+          <i class="fas fa-lock tool-icon text-success"></i>
+          <h6 class="mt-2">RSA/AES Cipher</h6>
+          <small class="text-muted">Cifrado asimétrico y simétrico</small>
+        </div>
+      </div>
+      <!-- Herramienta 2 - OSINT -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="window.location.href='/tools/osint.html'">
+          <i class="fas fa-eye tool-icon text-info"></i>
+          <h6 class="mt-2">OSINT Recon</h6>
+          <small class="text-muted">Recolección de inteligencia OSINT</small>
+        </div>
+      </div>
+      <!-- Herramienta 3 - Rainbow Tables -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="window.location.href='/tools/rainbow-tables.html'">
+          <i class="fas fa-table tool-icon text-warning"></i>
+          <h6 class="mt-2">Rainbow Tables</h6>
+          <small class="text-muted">Descifrado de hashes</small>
+        </div>
+      </div>
+      <!-- Herramienta 4 - WHOIS -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="window.location.href='/tools/whois.html'">
+          <i class="fas fa-globe tool-icon text-primary"></i>
+          <h6 class="mt-2">WHOIS Lookup</h6>
+          <small class="text-muted">Información de dominios</small>
+        </div>
+      </div>
+      <!-- Herramienta 5 - Hash Tools -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="window.location.href='/tools/hash-tools.html'">
+          <i class="fas fa-hashtag tool-icon text-secondary"></i>
+          <h6 class="mt-2">Hash Tools</h6>
+          <small class="text-muted">Generador y verificador</small>
+        </div>
+      </div>
+      <!-- Herramienta 6 - IA Asistente -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="window.location.href='/ai-assistant.html'">
+          <i class="fas fa-robot tool-icon text-purple" style="color: #9b59b6;"></i>
+          <h6 class="mt-2">IA Asistente</h6>
+          <small class="text-muted">Análisis de logs con IA</small>
+        </div>
+      </div>
+      <!-- Herramienta 7 - Admin Panel -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="window.location.href='/admin.html'">
+          <i class="fas fa-crown tool-icon text-danger" style="color: #ff6b6b;"></i>
+          <h6 class="mt-2">Admin Panel</h6>
+          <small class="text-muted">Gestión y estadísticas</small>
+        </div>
+      </div>
+      <!-- Herramienta 8 - Escáner -->
+      <div class="col-md-3 col-sm-6">
+        <div class="tool-card p-3 text-center" onclick="document.getElementById('escaneo').scrollIntoView({ behavior: 'smooth' })">
+          <i class="fas fa-network-wired tool-icon" style="color: #00ff00;"></i>
+          <h6 class="mt-2">Escáner de Puertos</h6>
+          <small class="text-muted">TCP/UDP con workers</small>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -405,10 +379,7 @@
 <!-- Escáner Section -->
 <section id="escaneo" class="py-5 bg-dark bg-opacity-50">
   <div class="container">
-    <h2 class="text-center mb-5 glow-text">
-      <i class="fas fa-network-wired me-2"></i>
-      Escáner de Puertos Profesional
-    </h2>
+    <h2 class="text-center mb-5 glow-text"><i class="fas fa-network-wired me-2"></i>Escáner de Puertos Profesional</h2>
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="tool-card p-4">
@@ -419,36 +390,28 @@
           <div class="mb-4">
             <label class="form-label fw-bold">🔌 Rango de Puertos</label>
             <input type="text" class="form-control" id="portRange" placeholder="ej: 1-1000, 22,80,443" value="1-1000">
-            <small class="text-muted">Formato: rango (1-1000) o lista (22,80,443) o combinado (1-100,443,8080)</small>
+            <small class="text-muted">Formato: rango (1-1000) o lista (22,80,443) o combinado</small>
           </div>
           <div class="mb-4">
             <label class="form-label fw-bold">⚙️ Opciones Avanzadas</label>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="useWorkers">
-                  <label class="form-check-label" for="useWorkers">
-                    🚀 Escaneo distribuido (workers)
-                  </label>
+                  <input class="form-check-input" type="checkbox" id="useWorkers" checked>
+                  <label class="form-check-label" for="useWorkers">🚀 Escaneo distribuido (workers)</label>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" id="serviceDetection">
-                  <label class="form-check-label" for="serviceDetection">
-                    🔍 Detección de servicios
-                  </label>
+                  <label class="form-check-label" for="serviceDetection">🔍 Detección de servicios</label>
                 </div>
               </div>
             </div>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-            <button class="btn-mfh" id="scanBtn">
-              <i class="fas fa-play me-2"></i>Iniciar Escaneo
-            </button>
-            <button class="btn-outline-mfh" id="stopScanBtn" disabled>
-              <i class="fas fa-stop me-2"></i>Detener
-            </button>
+            <button class="btn-mfh" id="scanBtn"><i class="fas fa-play me-2"></i>Iniciar Escaneo</button>
+            <button class="btn-outline-mfh" id="stopScanBtn" disabled><i class="fas fa-stop me-2"></i>Detener</button>
           </div>
         </div>
         
@@ -461,23 +424,13 @@
         
         <!-- Resultados -->
         <div class="mt-4">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">
-              <i class="fas fa-terminal me-2"></i>Resultados en tiempo real
-            </h5>
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h5 class="mb-0"><i class="fas fa-terminal me-2"></i>Resultados en tiempo real</h5>
             <div>
-              <button class="btn-outline-mfh btn-sm" id="exportJson" disabled>
-                <i class="fas fa-file-code"></i> JSON
-              </button>
-              <button class="btn-outline-mfh btn-sm" id="exportCsv" disabled>
-                <i class="fas fa-file-csv"></i> CSV
-              </button>
-              <button class="btn-outline-mfh btn-sm" id="exportPdf" disabled>
-                <i class="fas fa-file-pdf"></i> PDF
-              </button>
-              <button class="btn-outline-mfh btn-sm" id="clearResults">
-                <i class="fas fa-trash"></i> Limpiar
-              </button>
+              <button class="btn-outline-mfh btn-sm" id="exportJson" disabled><i class="fas fa-file-code"></i> JSON</button>
+              <button class="btn-outline-mfh btn-sm" id="exportCsv" disabled><i class="fas fa-file-csv"></i> CSV</button>
+              <button class="btn-outline-mfh btn-sm" id="exportPdf" disabled><i class="fas fa-file-pdf"></i> PDF</button>
+              <button class="btn-outline-mfh btn-sm" id="clearResults"><i class="fas fa-trash"></i> Limpiar</button>
             </div>
           </div>
           <div id="consoleOutput" class="console-output">
@@ -493,34 +446,10 @@
 <section class="py-5">
   <div class="container">
     <div class="row g-4 text-center">
-      <div class="col-md-3 col-sm-6">
-        <div class="tool-card p-3">
-          <i class="fas fa-chart-line tool-icon"></i>
-          <h5 class="mt-2">Tiempo Real</h5>
-          <small>WebSockets para resultados instantáneos</small>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="tool-card p-3">
-          <i class="fas fa-database tool-icon"></i>
-          <h5 class="mt-2">Historial</h5>
-          <small>SQLite para guardar escaneos previos</small>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="tool-card p-3">
-          <i class="fas fa-download tool-icon"></i>
-          <h5 class="mt-2">Exportación</h5>
-          <small>JSON, CSV, PDF con un solo click</small>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="tool-card p-3">
-          <i class="fas fa-mobile-alt tool-icon"></i>
-          <h5 class="mt-2">PWA Offline</h5>
-          <small>Funciona sin internet</small>
-        </div>
-      </div>
+      <div class="col-md-3 col-sm-6"><div class="tool-card p-3"><i class="fas fa-chart-line tool-icon"></i><h5 class="mt-2">Tiempo Real</h5><small>WebSockets para resultados instantáneos</small></div></div>
+      <div class="col-md-3 col-sm-6"><div class="tool-card p-3"><i class="fas fa-database tool-icon"></i><h5 class="mt-2">Historial</h5><small>SQLite para guardar escaneos previos</small></div></div>
+      <div class="col-md-3 col-sm-6"><div class="tool-card p-3"><i class="fas fa-download tool-icon"></i><h5 class="mt-2">Exportación</h5><small>JSON, CSV, PDF con un solo click</small></div></div>
+      <div class="col-md-3 col-sm-6"><div class="tool-card p-3"><i class="fas fa-mobile-alt tool-icon"></i><h5 class="mt-2">PWA Offline</h5><small>Funciona sin internet</small></div></div>
     </div>
   </div>
 </section>
@@ -533,7 +462,7 @@
         <h5 class="text-success">MFH TOOLS PRO</h5>
         <p>Suite de ciberseguridad mexicana con herramientas profesionales para pentesting y análisis de vulnerabilidades.</p>
         <div class="d-flex gap-3">
-          <a href="#" class="text-success"><i class="fab fa-github fa-2x"></i></a>
+          <a href="https://github.com/Falconmx1/mx_falconmx_security" class="text-success"><i class="fab fa-github fa-2x"></i></a>
           <a href="#" class="text-success"><i class="fab fa-twitter fa-2x"></i></a>
           <a href="#" class="text-success"><i class="fab fa-linkedin fa-2x"></i></a>
         </div>
@@ -544,8 +473,8 @@
           <li><a href="#inicio" class="text-decoration-none text-light">Inicio</a></li>
           <li><a href="#herramientas" class="text-decoration-none text-light">Herramientas</a></li>
           <li><a href="#escaneo" class="text-decoration-none text-light">Escáner</a></li>
-          <li><a href="/blog" class="text-decoration-none text-light">Blog</a></li>
-          <li><a href="/portafolio" class="text-decoration-none text-light">Portafolio</a></li>
+          <li><a href="/tools/rsa-aes.html" class="text-decoration-none text-light">RSA/AES</a></li>
+          <li><a href="/tools/osint.html" class="text-decoration-none text-light">OSINT</a></li>
         </ul>
       </div>
       <div class="col-md-4 mb-4">
@@ -569,41 +498,22 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-success" id="authModalLabel">Acceder a MFH TOOLS PRO</h5>
+        <h5 class="modal-title text-success">Acceder a MFH TOOLS PRO</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <div id="loginForm">
-          <div class="mb-3">
-            <label class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" id="loginEmail" placeholder="usuario@ejemplo.com">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="loginPassword" placeholder="••••••••">
-          </div>
+          <div class="mb-3"><label class="form-label">Correo electrónico</label><input type="email" class="form-control" id="loginEmail" placeholder="usuario@ejemplo.com"></div>
+          <div class="mb-3"><label class="form-label">Contraseña</label><input type="password" class="form-control" id="loginPassword" placeholder="••••••••"></div>
           <button class="btn-mfh w-100" onclick="loginUser()">Iniciar Sesión</button>
-          <div class="text-center mt-3">
-            <a href="#" onclick="showRegisterForm()">¿No tienes cuenta? Regístrate</a>
-          </div>
+          <div class="text-center mt-3"><a href="#" onclick="showRegisterForm()">¿No tienes cuenta? Regístrate</a></div>
         </div>
         <div id="registerForm" style="display: none;">
-          <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="registerName">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" id="registerEmail">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="registerPassword">
-          </div>
+          <div class="mb-3"><label class="form-label">Nombre</label><input type="text" class="form-control" id="registerName"></div>
+          <div class="mb-3"><label class="form-label">Correo electrónico</label><input type="email" class="form-control" id="registerEmail"></div>
+          <div class="mb-3"><label class="form-label">Contraseña</label><input type="password" class="form-control" id="registerPassword"></div>
           <button class="btn-mfh w-100" onclick="registerUser()">Registrarse</button>
-          <div class="text-center mt-3">
-            <a href="#" onclick="showLoginForm()">¿Ya tienes cuenta? Inicia Sesión</a>
-          </div>
+          <div class="text-center mt-3"><a href="#" onclick="showLoginForm()">¿Ya tienes cuenta? Inicia Sesión</a></div>
         </div>
       </div>
     </div>
@@ -612,132 +522,251 @@
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/script.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script>
-  // Herramientas dinámicas
-  const tools = [
-    { name: "Escáner UDP/TCP", icon: "fa-plug", desc: "Escaneo profesional de puertos", color: "success" },
-    { name: "RSA/AES Cipher", icon: "fa-lock", desc: "Cifrado asimétrico y simétrico", color: "info" },
-    { name: "OSINT Real", icon: "fa-eye", desc: "Recolección de inteligencia OSINT", color: "warning" },
-    { name: "Rainbow Tables", icon: "fa-table", desc: "Búsqueda de hashes precomputados", color: "danger" },
-    { name: "WHOIS API", icon: "fa-globe", desc: "Consulta de dominios en tiempo real", color: "primary" },
-    { name: "IA Asistente", icon: "fa-robot", desc: "Análisis de logs con IA local", color: "secondary" },
-    { name: "Analizador de Malware", icon: "fa-bug", desc: "Detección de amenazas", color: "danger" },
-    { name: "Generador de Reportes", icon: "fa-file-alt", desc: "PDFs profesionales", color: "success" },
-  ];
-  
-  function loadTools() {
-    const container = document.getElementById('toolsGrid');
-    tools.forEach(tool => {
-      const col = document.createElement('div');
-      col.className = 'col-md-3 col-sm-6';
-      col.innerHTML = `
-        <div class="tool-card p-3 text-center" onclick="showToolInfo('${tool.name}')">
-          <i class="fas ${tool.icon} tool-icon text-${tool.color}"></i>
-          <h6 class="mt-2">${tool.name}</h6>
-          <small class="text-muted">${tool.desc}</small>
-        </div>
-      `;
-      container.appendChild(col);
+// ==================== CONFIGURACIÓN ====================
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://mfh-backend.onrender.com/api';
+const WS_URL = window.location.hostname === 'localhost' ? 'ws://localhost:3000/ws' : 'wss://mfh-backend.onrender.com/ws';
+
+let currentScanId = null;
+let ws = null;
+let scanResults = [];
+
+// ==================== WEBSOCKET ====================
+function initWebSocket() {
+  ws = new WebSocket(WS_URL);
+  ws.onopen = () => addConsoleMessage('🔌 WebSocket conectado', 'info');
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type === 'scan_progress') {
+      updateProgress(data.port, data.status);
+    } else if (data.type === 'scan_complete') {
+      scanResults = data.results;
+      showResults(data.results);
+      enableExportButtons(true);
+      addConsoleMessage(`✅ Escaneo completado. ${data.results.filter(r => r.status === 'open').length} puertos abiertos.`, 'success');
+    } else if (data.type === 'scan_error') {
+      addConsoleMessage(`❌ Error: ${data.error}`, 'danger');
+      enableExportButtons(false);
+    }
+  };
+  ws.onerror = () => addConsoleMessage('⚠️ Error de WebSocket', 'warning');
+  ws.onclose = () => setTimeout(initWebSocket, 3000);
+}
+
+// ==================== ESCÁNER ====================
+async function startScan(target, ports, useWorkers) {
+  try {
+    const token = localStorage.getItem('jwt_token');
+    const response = await fetch(`${API_URL}/scan`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '' },
+      body: JSON.stringify({ target, ports, useWorkers })
     });
+    if (!response.ok) throw new Error(`Error ${response.status}`);
+    const data = await response.json();
+    currentScanId = data.scanId;
+    return data;
+  } catch (error) {
+    console.error('Error iniciando escaneo:', error);
+    addConsoleMessage(`⚠️ Modo simulación: ${error.message}`, 'warning');
+    simulateScan(target, ports);
+    return null;
   }
-  
-  function showToolInfo(toolName) {
-    const output = document.getElementById('consoleOutput');
-    output.innerHTML += `<span class="text-info">[INFO]</span> Herramienta "${toolName}" - Próximamente en versión PRO<br>`;
-    output.scrollTop = output.scrollHeight;
+}
+
+function simulateScan(target, ports) {
+  addConsoleMessage(`🎮 Modo simulación: Escaneando ${target}...`, 'info');
+  const portList = parsePortRange(ports);
+  let index = 0;
+  const interval = setInterval(() => {
+    if (index >= portList.length) {
+      clearInterval(interval);
+      const mockResults = portList.slice(0, 10).map(p => ({ port: p, status: p % 2 === 0 ? 'open' : 'closed', service: p === 80 ? 'http' : p === 443 ? 'https' : p === 22 ? 'ssh' : null }));
+      scanResults = mockResults;
+      showResults(mockResults);
+      enableExportButtons(true);
+      addConsoleMessage(`✅ Simulación completada. ${mockResults.filter(r => r.status === 'open').length} puertos abiertos.`, 'success');
+      return;
+    }
+    const port = portList[index];
+    updateProgress(port, port % 2 === 0 ? 'open' : 'closed');
+    index++;
+  }, 50);
+}
+
+function parsePortRange(portRange) {
+  const ports = new Set();
+  const parts = portRange.split(',');
+  for (const part of parts) {
+    if (part.includes('-')) {
+      const [start, end] = part.split('-').map(Number);
+      for (let i = start; i <= end; i++) ports.add(i);
+    } else if (part.trim()) {
+      ports.add(Number(part));
+    }
   }
-  
-  function scrollToTools() {
-    document.getElementById('herramientas').scrollIntoView({ behavior: 'smooth' });
+  return Array.from(ports).sort((a, b) => a - b).slice(0, 500);
+}
+
+function updateProgress(port, status) {
+  const statusText = status === 'open' ? '🟢 Abierto' : '🔴 Cerrado';
+  addConsoleMessage(`Puerto ${port}: ${statusText}${status === 'open' ? ' ✅' : ''}`, status === 'open' ? 'success' : 'secondary');
+}
+
+function showResults(results) {
+  const openPorts = results.filter(r => r.status === 'open');
+  if (openPorts.length > 0) {
+    addConsoleMessage(`📊 Resumen: ${openPorts.length} puertos abiertos encontrados`, 'info');
+    openPorts.forEach(p => addConsoleMessage(`  → Puerto ${p.port}: ${p.service || 'desconocido'}`, 'success'));
   }
-  
-  function startDemoScan() {
-    document.getElementById('targetInput').value = 'demo.falconmx.security';
-    document.getElementById('portRange').value = '22,80,443';
-    document.getElementById('scanBtn').click();
+}
+
+function addConsoleMessage(message, type) {
+  const output = document.getElementById('consoleOutput');
+  const colors = { success: 'success', danger: 'danger', warning: 'warning', info: 'info', secondary: 'secondary' };
+  output.innerHTML += `<span class="text-${colors[type] || 'info'}">[MFH]</span> ${message}<br>`;
+  output.scrollTop = output.scrollHeight;
+}
+
+function enableExportButtons(enabled) {
+  document.getElementById('exportJson').disabled = !enabled;
+  document.getElementById('exportCsv').disabled = !enabled;
+  document.getElementById('exportPdf').disabled = !enabled;
+}
+
+// ==================== EXPORTACIONES ====================
+function exportResults(format) {
+  if (!scanResults.length) { alert('No hay resultados para exportar'); return; }
+  if (format === 'json') {
+    const dataStr = JSON.stringify(scanResults, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `scan_results_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } else if (format === 'csv') {
+    let csv = 'Port,Status,Service\n';
+    scanResults.forEach(r => csv += `${r.port},${r.status},${r.service || ''}\n`);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `scan_results_${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } else if (format === 'pdf') {
+    addConsoleMessage('📄 Generando PDF...', 'info');
+    setTimeout(() => {
+      const content = scanResults.map(r => `Puerto ${r.port}: ${r.status}${r.service ? ` (${r.service})` : ''}`).join('\n');
+      const win = window.open();
+      win.document.write(`
+        <html><head><title>MFH Scan Report</title>
+        <style>body { font-family: monospace; padding: 20px; } h1 { color: #00ff00; }</style>
+        </head><body>
+        <h1>MFH TOOLS PRO - Reporte de Escaneo</h1>
+        <p>Fecha: ${new Date().toLocaleString()}</p>
+        <p>Total puertos: ${scanResults.length}</p>
+        <p>Puertos abiertos: ${scanResults.filter(r => r.status === 'open').length}</p>
+        <pre>${content}</pre>
+        </body></html>
+      `);
+      win.document.close();
+      win.print();
+    }, 100);
   }
-  
-  function showRegisterForm() {
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('registerForm').style.display = 'block';
-  }
-  
-  function showLoginForm() {
-    document.getElementById('registerForm').style.display = 'none';
-    document.getElementById('loginForm').style.display = 'block';
-  }
-  
-  async function loginUser() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('jwt_token', data.token);
-        document.getElementById('authStatus').innerHTML = '<i class="fas fa-user-check me-1"></i>' + email.split('@')[0];
-        bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
-        addConsoleMessage('✅ Sesión iniciada correctamente', 'success');
-      } else {
-        addConsoleMessage('❌ Error de autenticación', 'danger');
-      }
-    } catch (error) {
-      addConsoleMessage('⚠️ Modo offline: Inicio de sesión simulado', 'warning');
-      document.getElementById('authStatus').innerHTML = '<i class="fas fa-user-check me-1"></i>Demo User';
+  addConsoleMessage(`📁 Exportación ${format.toUpperCase()} completada`, 'success');
+}
+
+// ==================== AUTENTICACIÓN ====================
+async function loginUser() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('jwt_token', data.token);
+      document.getElementById('authStatus').innerHTML = '<i class="fas fa-user-check me-1"></i>' + email.split('@')[0];
       bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+      addConsoleMessage('✅ Sesión iniciada correctamente', 'success');
+    } else {
+      addConsoleMessage('❌ Error de autenticación', 'danger');
     }
+  } catch (error) {
+    addConsoleMessage('⚠️ Modo offline: Inicio de sesión simulado', 'warning');
+    document.getElementById('authStatus').innerHTML = '<i class="fas fa-user-check me-1"></i>Demo User';
+    bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
   }
-  
-  async function registerUser() {
-    const name = document.getElementById('registerName').value;
-    const email = document.getElementById('registerEmail').value;
-    const password = document.getElementById('registerPassword').value;
-    
-    try {
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
-      
-      if (response.ok) {
-        addConsoleMessage('✅ Registro exitoso. Ahora inicia sesión.', 'success');
-        showLoginForm();
-      } else {
-        addConsoleMessage('❌ Error en el registro', 'danger');
-      }
-    } catch (error) {
-      addConsoleMessage('⚠️ Modo offline: Registro simulado', 'warning');
+}
+
+async function registerUser() {
+  const name = document.getElementById('registerName').value;
+  const email = document.getElementById('registerEmail').value;
+  const password = document.getElementById('registerPassword').value;
+  try {
+    const response = await fetch(`${API_URL}/auth/register`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    if (response.ok) {
+      addConsoleMessage('✅ Registro exitoso. Ahora inicia sesión.', 'success');
       showLoginForm();
+    } else {
+      addConsoleMessage('❌ Error en el registro', 'danger');
     }
+  } catch (error) {
+    addConsoleMessage('⚠️ Modo offline: Registro simulado', 'warning');
+    showLoginForm();
   }
-  
-  function addConsoleMessage(message, type) {
-    const output = document.getElementById('consoleOutput');
-    const colors = { success: 'success', danger: 'danger', warning: 'warning', info: 'info' };
-    output.innerHTML += `<span class="text-${colors[type] || 'info'}">[MFH]</span> ${message}<br>`;
-    output.scrollTop = output.scrollHeight;
-  }
-  
-  // Inicialización
-  document.addEventListener('DOMContentLoaded', () => {
-    loadTools();
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(reg => {
-        console.log('✅ Service Worker registrado:', reg);
-      }).catch(err => {
-        console.log('❌ Service Worker error:', err);
-      });
-    }
+}
+
+function showRegisterForm() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'block';
+}
+function showLoginForm() {
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'block';
+}
+function scrollToTools() { document.getElementById('herramientas').scrollIntoView({ behavior: 'smooth' }); }
+function startDemoScan() {
+  document.getElementById('targetInput').value = 'scanme.nmap.org';
+  document.getElementById('portRange').value = '22,80,443';
+  document.getElementById('scanBtn').click();
+}
+
+// ==================== EVENT LISTENERS ====================
+document.addEventListener('DOMContentLoaded', () => {
+  initWebSocket();
+  document.getElementById('scanBtn').addEventListener('click', async () => {
+    const target = document.getElementById('targetInput').value;
+    const ports = document.getElementById('portRange').value;
+    const useWorkers = document.getElementById('useWorkers')?.checked || true;
+    if (!target) { addConsoleMessage('❌ Ingresa un objetivo (IP o dominio)', 'danger'); return; }
+    document.getElementById('consoleOutput').innerHTML = '';
+    addConsoleMessage(`🔍 Iniciando escaneo a ${target}...`, 'info');
+    addConsoleMessage(`📡 Rango de puertos: ${ports}`, 'info');
+    document.getElementById('progressBar').style.width = '0%';
+    await startScan(target, ports, useWorkers);
   });
+  document.getElementById('exportJson').addEventListener('click', () => exportResults('json'));
+  document.getElementById('exportCsv').addEventListener('click', () => exportResults('csv'));
+  document.getElementById('exportPdf').addEventListener('click', () => exportResults('pdf'));
+  document.getElementById('clearResults').addEventListener('click', () => {
+    document.getElementById('consoleOutput').innerHTML = '<span class="text-warning">[MFH]</span> Consola limpiada.<br>';
+    scanResults = [];
+    enableExportButtons(false);
+  });
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW error:', err));
+  }
+});
 </script>
 </body>
 </html>
