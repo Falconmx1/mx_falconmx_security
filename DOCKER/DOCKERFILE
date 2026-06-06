@@ -1,18 +1,26 @@
 FROM node:18-alpine
 
-# Instalar Nmap
-RUN apk add --no-cache nmap
-
 WORKDIR /app
 
+# Instalar dependencias del sistema para quienis y dig
+RUN apk add --no-cache whois bind-tools
+
+# Copiar archivos de configuración
 COPY package*.json ./
 RUN npm ci --only=production
 
+# Copiar código fuente
 COPY . .
 
-# Crear directorios necesarios
-RUN mkdir -p database wordlists
+# Crear directorio para datos
+RUN mkdir -p /app/data
 
-EXPOSE 8080
+# Exponer puerto
+EXPOSE 3000
 
-CMD ["node", "server.js"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {r.statusCode === 200 ? process.exit(0) : process.exit(1)})"
+
+# Iniciar servidor
+CMD ["npm", "start"]
