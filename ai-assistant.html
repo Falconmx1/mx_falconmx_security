@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MFH AI Assistant - Análisis de Logs</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); color: #e0e0e0; font-family: 'Inter', sans-serif; }
+    .ai-card { background: rgba(20,20,20,0.95); border: 2px solid rgba(0,255,0,0.3); border-radius: 20px; padding: 30px; margin-top: 30px; }
+    .log-input { background: #0a0a0a; border: 1px solid #00ff00; color: #00ff00; font-family: monospace; }
+    .prediction-badge { font-size: 1.2rem; padding: 10px 20px; border-radius: 10px; display: inline-block; }
+    .malicious { background: rgba(220,53,69,0.2); border: 1px solid #dc3545; color: #dc3545; }
+    .benign { background: rgba(0,255,0,0.2); border: 1px solid #00ff00; color: #00ff00; }
+    .suspicious { background: rgba(255,193,7,0.2); border: 1px solid #ffc107; color: #ffc107; }
+    .training-status { position: fixed; bottom: 20px; right: 20px; background: #000; border: 1px solid #00ff00; border-radius: 10px; padding: 10px; z-index: 1000; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="ai-card">
+    <h1 class="text-center glow-text"><i class="fas fa-robot me-2"></i>MFH AI Security Assistant</h1>
+    <p class="text-center">Análisis de logs en tiempo real con TensorFlow.js - 100% local, 0% nube</p>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <h5><i class="fas fa-file-alt me-2"></i>Log a analizar</h5>
+        <textarea id="logInput" class="form-control log-input" rows="10" placeholder="Pega aquí un log de sistema, firewall o aplicación...&#10;&#10;Ejemplo:&#10;[2025-06-06 14:23:15] SSH: Failed password for root from 192.168.1.100 port 22&#10;[2025-06-06 14:23:18] SSH: Failed password for root from 192.168.1.100 port 22&#10;[2025-06-06 14:23:21] SSH: Failed password for root from 192.168.1.100 port 22"></textarea>
+        <button class="btn-mfh w-100 mt-3" onclick="analyzeLog()"><i class="fas fa-brain me-2"></i>Analizar con IA</button>
+      </div>
+      <div class="col-md-6">
+        <h5><i class="fas fa-chart-line me-2"></i>Resultado del Análisis</h5>
+        <div id="resultArea" class="p-3 bg-dark rounded" style="min-height: 300px;">
+          <p class="text-muted">Esperando entrada de log...</p>
+        </div>
+        <h5 class="mt-3"><i class="fas fa-lightbulb me-2"></i>Recomendaciones</h5>
+        <div id="recommendations" class="p-3 bg-dark rounded"></div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12">
+        <h5><i class="fas fa-chart-simple me-2"></i>Estadísticas de la Sesión</h5>
+        <div class="row text-center">
+          <div class="col-md-3"><div class="stat-card p-2"><span id="totalAnalyzed">0</span><br>Logs Analizados</div></div>
+          <div class="col-md-3"><div class="stat-card p-2"><span id="maliciousCount">0</span><br>Maliciosos</div></div>
+          <div class="col-md-3"><div class="stat-card p-2"><span id="benignCount">0</span><br>Benignos</div></div>
+          <div class="col-md-3"><div class="stat-card p-2"><span id="accuracy">0</span><br>Precisión del Modelo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="training-status" id="trainingStatus" style="display: none;">
+  <i class="fas fa-spinner fa-spin me-2"></i>Entrenando modelo local...
+</div>
+
+<script>
+// Modelo de IA para clasificación de logs (Red Neuronal Simple)
+let model = null;
+let totalAnalyzed = 0;
+let maliciousTotal = 0;
+let benignTotal = 0;
+
+// Features para extraer de logs
+function extractFeatures(logText) {
+  const features = [];
+  const text = logText.toLowerCase();
+  
+  // Palabras clave maliciosas
+  const maliciousKeywords = ['failed password', 'brute force', 'attack', 'exploit', 'malware', 'intrusion', 'unauthorized', 'sql injection', 'xss', 'buffer overflow', 'rootkit', 'backdoor', 'ransomware', 'phishing', 'ddos', 'port scan', 'nmap'];
+  // Palabras clave benignas
+  const benignKeywords = ['success', 'connected', 'authorized', 'authenticated', 'normal', 'completed', 'ok', 'successful'];
+  
+  let maliciousScore = 0;
+  let benignScore = 0;
+  
+  maliciousKeywords.forEach(kw => { if(text.includes(kw)) maliciousScore += 1; });
+  benignKeywords.forEach(kw => { if(text.includes(kw)) benignScore += 1; });
+  
+  // Features adicionales
+  const hasIP = /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(text);
+  const hasPort = /:\d{1,5}/.test(text);
+  const hasTimestamp = /\d{4}-\d{2}-\d{2}/.test(text);
+  const length = Math.min(text.length / 1000, 1);
+  const exclamationCount = (text.match(/!/g) || []).length / 10;
+  const errorCount = (text.match(/error|fail|denied|invalid/g) || []).length;
+  
+  features.push(maliciousScore / 10, benignScore / 10, hasIP ? 1 : 0, hasPort ? 1 : 0, hasTimestamp ? 1 : 0, length, exclamationCount, errorCount / 10);
+  return features;
+}
+
+// Crear y entrenar modelo
+async function createAndTrainModel() {
+  document.getElementById('trainingStatus').style.display = 'block';
+  
+  // Dataset de entrenamiento (ejemplos)
+  const trainingData = [
+    { text: "SSH: Failed password for root from 192.168.1.100 port 22", label: 1 },
+    { text: "HTTP 200 OK - Request successful", label: 0 },
+    { text: "SQL Injection detected in parameter id", label: 1 },
+    { text: "User admin logged in successfully", label: 0 },
+    { text: "Port scan detected from 10.0.0.5", label: 1 },
+    { text: "Backup completed successfully", label: 0 },
+    { text: "Brute force attack on WordPress login", label: 1 },
+    { text: "Email sent to user@example.com", label: 0 },
+    { text: "Malware detected in file upload", label: 1 },
+    { text: "Cron job finished normally", label: 0 }
+  ];
+  
+  const features = trainingData.map(d => extractFeatures(d.text));
+  const labels = trainingData.map(d => d.label);
+  
+  // Crear modelo secuencial
+  model = tf.sequential();
+  model.add(tf.layers.dense({ units: 16, activation: 'relu', inputShape: [8] }));
+  model.add(tf.layers.dense({ units: 8, activation: 'relu' }));
+  model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+  
+  model.compile({ optimizer: tf.train.adam(0.01), loss: 'binaryCrossentropy', metrics: ['accuracy'] });
+  
+  const xs = tf.tensor2d(features);
+  const ys = tf.tensor2d(labels, [labels.length, 1]);
+  
+  await model.fit(xs, ys, { epochs: 100, verbose: 0 });
+  
+  document.getElementById('trainingStatus').style.display = 'none';
+  console.log('Modelo entrenado');
+  
+  // Evaluar precisión
+  const evalResult = model.evaluate(xs, ys);
+  const accuracy = evalResult[1].dataSync()[0];
+  document.getElementById('accuracy').textContent = Math.round(accuracy * 100) + '%';
+}
+
+// Analizar log
+async function analyzeLog() {
+  const logText = document.getElementById('logInput').value;
+  if (!logText.trim()) {
+    alert('Por favor ingresa un log para analizar');
+    return;
+  }
+  
+  if (!model) await createAndTrainModel();
+  
+  const features = extractFeatures(logText);
+  const inputTensor = tf.tensor2d([features]);
+  const prediction = await model.predict(inputTensor);
+  const probability = prediction.dataSync()[0];
+  
+  totalAnalyzed++;
+  let classification = '';
+  let recommendation = '';
+  
+  if (probability > 0.7) {
+    classification = '⚠️ MALICIOSO';
+    maliciousTotal++;
+    recommendation = '🔴 Este log muestra actividad sospechosa. Recomendaciones: bloquear IP origen, revisar logs relacionados, alertar al equipo de seguridad.';
+  } else if (probability > 0.3) {
+    classification = '⚠️ SOSPECHOSO';
+    recommendation = '🟡 Actividad inusual detectada. Recomendaciones: monitorear más de cerca, revisar si es comportamiento esperado, aumentar logging.';
+  } else {
+    classification = '✅ BENIGNO';
+    benignTotal++;
+    recommendation = '🟢 Log normal. No se requiere acción inmediata.';
+  }
+  
+  const resultHtml = `
+    <div class="prediction-badge ${probability > 0.7 ? 'malicious' : (probability > 0.3 ? 'suspicious' : 'benign')} w-100 text-center mb-3">
+      <i class="fas ${probability > 0.7 ? 'fa-skull' : (probability > 0.3 ? 'fa-exclamation-triangle' : 'fa-check-circle')} me-2"></i>
+      ${classification} (${Math.round(probability * 100)}% de confianza)
+    </div>
+    <div class="mt-3">
+      <strong>Features extraídas:</strong><br>
+      • Score malicioso: ${features[0].toFixed(2)}<br>
+      • Score benigno: ${features[1].toFixed(2)}<br>
+      • Contiene IP: ${features[2] ? 'Sí' : 'No'}<br>
+      • Contiene puerto: ${features[3] ? 'Sí' : 'No'}<br>
+      • Longitud normalizada: ${features[5].toFixed(2)}<br>
+      • Errores detectados: ${features[7]}
+    </div>
+  `;
+  
+  document.getElementById('resultArea').innerHTML = resultHtml;
+  document.getElementById('recommendations').innerHTML = `<div class="alert alert-${probability > 0.7 ? 'danger' : (probability > 0.3 ? 'warning' : 'success')}">${recommendation}</div>`;
+  
+  // Actualizar estadísticas
+  document.getElementById('totalAnalyzed').textContent = totalAnalyzed;
+  document.getElementById('maliciousCount').textContent = maliciousTotal;
+  document.getElementById('benignCount').textContent = benignTotal;
+  
+  // Limpiar tensores
+  inputTensor.dispose();
+  prediction.dispose();
+}
+
+// Inicializar modelo al cargar
+window.onload = () => { createAndTrainModel(); };
+</script>
+
+<style>
+.btn-mfh { background: linear-gradient(135deg, #00ff00, #00cc00); border: none; color: #000; font-weight: 600; padding: 10px 25px; border-radius: 8px; transition: all 0.3s ease; }
+.btn-mfh:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+.glow-text { animation: glow 2s ease-in-out infinite; }
+@keyframes glow { 0%, 100% { text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); } 50% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.8); } }
+.stat-card { background: rgba(0,0,0,0.5); border-radius: 10px; padding: 10px; margin: 5px; }
+</style>
+</body>
+</html>
