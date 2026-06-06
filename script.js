@@ -1,245 +1,193 @@
-// Efecto de escritura tipo terminal
-function typeWriter(element, text, speed = 50) {
-    let i = 0;
-    element.innerHTML = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        } else {
-            element.classList.add('typing-effect');
-        }
-    }
-    type();
+// MFH TOOLS PRO - Frontend con API real
+// Conecta automáticamente a backend en localhost:3000 o variable de entorno
+
+const API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api'
+  : 'https://mfh-backend.onrender.com/api'; // Cambia después por tu URL real
+
+const WS_URL = window.location.hostname === 'localhost'
+  ? 'ws://localhost:3000/ws'
+  : 'wss://mfh-backend.onrender.com/ws';
+
+// Estado global
+let currentScanId = null;
+let ws = null;
+
+// Elementos del DOM
+const scanBtn = document.getElementById('scanBtn');
+const targetInput = document.getElementById('targetInput');
+const portRangeInput = document.getElementById('portRange');
+const resultsDiv = document.getElementById('results');
+const progressBar = document.getElementById('progressBar');
+const exportJsonBtn = document.getElementById('exportJson');
+const exportCsvBtn = document.getElementById('exportCsv');
+const exportPdfBtn = document.getElementById('exportPdf');
+
+// Inicializar WebSocket
+function initWebSocket() {
+  ws = new WebSocket(WS_URL);
+  
+  ws.onopen = () => console.log('🔌 WebSocket conectado');
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    handleWebSocketMessage(data);
+  };
+  ws.onerror = (error) => console.error('WS Error:', error);
+  ws.onclose = () => setTimeout(initWebSocket, 3000); // Reconectar automático
 }
 
-// Scroll suave
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-// Efectos de scroll y animaciones
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
-        }
-    });
-}, observerOptions);
-
-// Inicializar cuando cargue la página
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Inicializando efectos...');
-    
-    // Efecto de escritura en el título
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const originalText = "Mario Alberto Falcón Hernández";
-        console.log('🎯 Activando efecto typing...');
-        typeWriter(heroTitle, originalText, 80);
-    } else {
-        console.log('❌ No se encontró .hero-title');
-    }
-    
-    // Configurar elementos para animaciones de scroll
-    const animatedElements = document.querySelectorAll('.service-card, .testimonial-card, .about-content');
-    console.log(`🎯 Encontrados ${animatedElements.length} elementos para animar`);
-    
-    animatedElements.forEach(el => {
-        el.style.opacity = "0";
-        el.style.transform = "translateY(30px)";
-        el.style.transition = "all 0.6s ease-out";
-        observer.observe(el);
-    });
-
-    // Formulario de contacto MEJORADO
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const message = formData.get('message');
-            
-            // Envío REAL por email
-            const mailtoLink = `mailto:mariofalcon030901@gmail.com?subject=Consulta de ${name}&body=Nombre: ${name}%0AEmail: ${email}%0A%0AMensaje:%0A${message}`;
-            
-            window.location.href = mailtoLink;
-            
-            console.log('📧 Email enviado:', { name, email, message });
-            
-            // Mensaje de confirmación
-            setTimeout(() => {
-                alert('✅ Mensaje listo para enviar. Revisa tu cliente de email.');
-                this.reset();
-            }, 1000);
-        });
-    }
-
-    // Efecto de glitch aleatorio en títulos
-    setInterval(() => {
-        const titles = document.querySelectorAll('.section-title, .hero-title');
-        titles.forEach(title => {
-            if (Math.random() > 0.8) {
-                title.style.textShadow = '0 0 20px #ff0000';
-                setTimeout(() => {
-                    title.style.textShadow = '0 0 20px #00ff41';
-                }, 100);
-            }
-        });
-    }, 3000);
-
-    // Contador de estadísticas
-    const stats = document.querySelectorAll('.stat-number');
-    console.log(`📊 Animando ${stats.length} estadísticas`);
-    
-    stats.forEach(stat => {
-        const originalText = stat.textContent;
-        const target = parseInt(originalText.replace('+', ''));
-        const duration = 2000;
-        const step = target / (duration / 16);
-        let current = 0;
-        
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                stat.textContent = originalText;
-                clearInterval(timer);
-            } else {
-                stat.textContent = Math.floor(current) + (originalText.includes('+') ? '+' : '');
-            }
-        }, 16);
-    });
-
-    // Inicializar partículas Matrix
-    createMatrixParticles();
-});
-
-// Efecto de partículas Matrix
-function createMatrixParticles() {
-    const matrixBg = document.querySelector('.matrix-bg');
-    if (!matrixBg) {
-        console.log('❌ No se encontró .matrix-bg');
-        return;
-    }
-
-    console.log('🌌 Creando partículas Matrix...');
-    
-    for (let i = 0; i < 25; i++) {
-        const particle = document.createElement('div');
-        particle.style.position = 'fixed';
-        particle.style.width = '2px';
-        particle.style.height = Math.random() * 30 + 10 + 'px';
-        particle.style.background = 'linear-gradient(transparent, #00ff41, transparent)';
-        particle.style.left = Math.random() * 100 + 'vw';
-        particle.style.top = '-50px';
-        particle.style.opacity = '0';
-        particle.style.zIndex = '-1';
-        particle.style.borderRadius = '1px';
-        matrixBg.appendChild(particle);
-
-        // Animación
-        animateParticle(particle);
-    }
+// Manejar mensajes del backend
+function handleWebSocketMessage(data) {
+  switch(data.type) {
+    case 'scan_progress':
+      updateProgress(data.port, data.status);
+      break;
+    case 'scan_complete':
+      showResults(data.results);
+      enableExportButtons(data.results);
+      break;
+    case 'scan_error':
+      showError(data.message);
+      break;
+  }
 }
 
-function animateParticle(particle) {
-    const speed = Math.random() * 3 + 2;
-    const delay = Math.random() * 8000;
+// Escaneo de puertos con API REST + WebSocket
+async function startScan(target, ports) {
+  try {
+    const token = localStorage.getItem('jwt_token');
+    const response = await fetch(`${API_URL}/scan`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : ''
+      },
+      body: JSON.stringify({ target, ports, useWorkers: true })
+    });
     
+    if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+    
+    const { scanId } = await response.json();
+    currentScanId = scanId;
+    return scanId;
+  } catch (error) {
+    console.error('Error iniciando escaneo:', error);
+    showError(`No se pudo iniciar escaneo: ${error.message}. ¿Backend corriendo?`);
+    return null;
+  }
+}
+
+// Exportar resultados
+async function exportResults(format, results) {
+  const token = localStorage.getItem('jwt_token');
+  const response = await fetch(`${API_URL}/export/${format}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : ''
+    },
+    body: JSON.stringify({ results, scanId: currentScanId })
+  });
+  
+  if (!response.ok) throw new Error(`Error exportando a ${format}`);
+  
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `scan_results_${currentScanId}.${format === 'pdf' ? 'pdf' : format}`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// UI Helpers
+function updateProgress(port, status) {
+  const statusText = status === 'open' ? '🟢 Abierto' : '🔴 Cerrado';
+  const logLine = document.createElement('div');
+  logLine.textContent = `Puerto ${port}: ${statusText}`;
+  resultsDiv.appendChild(logLine);
+  resultsDiv.scrollTop = resultsDiv.scrollHeight;
+}
+
+function showResults(results) {
+  const resume = document.createElement('div');
+  resume.className = 'alert alert-success mt-3';
+  const openPorts = results.filter(p => p.status === 'open').length;
+  resume.innerHTML = `<strong>✅ Escaneo completado</strong><br>Puertos abiertos: ${openPorts}/${results.length}`;
+  resultsDiv.appendChild(resume);
+}
+
+function enableExportButtons(results) {
+  exportJsonBtn.disabled = false;
+  exportCsvBtn.disabled = false;
+  exportPdfBtn.disabled = false;
+  
+  exportJsonBtn.onclick = () => exportResults('json', results);
+  exportCsvBtn.onclick = () => exportResults('csv', results);
+  exportPdfBtn.onclick = () => exportResults('pdf', results);
+}
+
+function showError(message) {
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'alert alert-danger mt-3';
+  errorDiv.textContent = `❌ ${message}`;
+  resultsDiv.appendChild(errorDiv);
+}
+
+// Event Listeners
+scanBtn?.addEventListener('click', async () => {
+  const target = targetInput?.value;
+  const ports = portRangeInput?.value || '1-1000';
+  
+  if (!target) {
+    showError('Ingresa una IP o dominio objetivo');
+    return;
+  }
+  
+  resultsDiv.innerHTML = '<div class="spinner-border text-primary" role="status"></div> Escaneando...';
+  progressBar.style.width = '0%';
+  
+  const scanId = await startScan(target, ports);
+  if (scanId) {
+    progressBar.style.width = '100%';
+  }
+});
+
+// Modo offline / simulación si no hay backend
+async function checkBackendHealth() {
+  try {
+    const response = await fetch(`${API_URL}/health`, { timeout: 2000 });
+    if (response.ok) return true;
+  } catch (error) {
+    console.warn('Backend no disponible, usando modo simulación');
+    enableSimulationMode();
+    return false;
+  }
+}
+
+function enableSimulationMode() {
+  const simBtn = document.createElement('button');
+  simBtn.textContent = '🎮 Modo Simulación Activo (Demo Local)';
+  simBtn.className = 'btn btn-warning w-100 mb-3';
+  simBtn.disabled = true;
+  document.querySelector('.card-body').prepend(simBtn);
+  
+  // Override startScan con simulación
+  window.startScan = async (target, ports) => {
+    showError('⚠️ Backend no disponible. Modo simulación: muestra datos de prueba.');
     setTimeout(() => {
-        particle.style.opacity = Math.random() * 0.5 + 0.3;
-        particle.style.transition = `top ${speed}s linear, opacity ${speed}s linear`;
-        particle.style.top = '100vh';
-        
-        setTimeout(() => {
-            particle.style.opacity = '0';
-            particle.style.top = '-50px';
-            setTimeout(() => animateParticle(particle), Math.random() * 2000 + 1000);
-        }, speed * 1000);
-    }, delay);
+      const mockResults = [
+        { port: 22, status: 'open', service: 'ssh' },
+        { port: 80, status: 'open', service: 'http' },
+        { port: 443, status: 'open', service: 'https' }
+      ];
+      showResults(mockResults);
+      enableExportButtons(mockResults);
+    }, 1500);
+    return 'sim_123';
+  };
 }
 
-// Efecto de sonido al hacer hover en botones
-document.querySelectorAll('.btn, .service-card, .whatsapp-btn').forEach(element => {
-    element.addEventListener('mouseenter', function() {
-        // Crear sonido de terminal (beep)
-        try {
-            const context = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = context.createOscillator();
-            const gainNode = context.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(context.destination);
-            
-            oscillator.frequency.value = 600 + Math.random() * 400;
-            oscillator.type = 'sine';
-            gainNode.gain.value = 0.05;
-            
-            oscillator.start();
-            setTimeout(() => {
-                oscillator.stop();
-            }, 50);
-        } catch (error) {
-            console.log('🔇 Audio no soportado');
-        }
-    });
-});
-
-// Tracking de clicks en servicios
-document.querySelectorAll('.service-card .btn, .whatsapp-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        let serviceName = 'General';
-        
-        if (this.classList.contains('whatsapp-btn')) {
-            serviceName = 'WhatsApp Consulta';
-        } else {
-            const serviceCard = this.closest('.service-card');
-            if (serviceCard) {
-                serviceName = serviceCard.querySelector('h3').textContent;
-            }
-        }
-        
-        console.log(`📊 Servicio clickeado: ${serviceName}`);
-        
-        // Google Analytics tracking
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'service_click', {
-                'event_category': 'engagement',
-                'event_label': serviceName,
-                'value': 1
-            });
-        }
-    });
-});
-
-// Efecto de parpadeo en consola
-console.log(`%c
-╔══════════════════════════════════╗
-║    FALCONMX SECURITY ACTIVADO    ║
-║                                  ║
-║    🚀 Sistemas: ONLINE           ║
-║    🔒 Seguridad: ACTIVADA        ║
-║    📊 Analytics: CONECTADO       ║
-║    💰 Pagos: LISTOS              ║
-╚══════════════════════════════════╝
-`, 'color: #00ff41; font-family: Courier; font-weight: bold;');
+// Inicializar
+initWebSocket();
+checkBackendHealth();
