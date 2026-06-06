@@ -1,0 +1,14 @@
+name: ☁️ Deploy Backend (Optional)
+
+on:
+  workflow_dispatch:  # Solo manual, no automático
+
+jobs:
+  deploy-backend:
+    name: Deploy to Railway
+    runs-on: ubuntu-latest
+    if: false  # Deshabilitado por ahora
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy
+        run: echo "Backend deployment disabled - usando herramientas locales"
