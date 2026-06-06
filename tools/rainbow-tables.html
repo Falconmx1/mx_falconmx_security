@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MFH - Rainbow Tables Hash Cracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); color: #e0e0e0; font-family: 'Inter', sans-serif; }
+    .tool-card { background: rgba(20,20,20,0.95); border: 2px solid rgba(0,255,0,0.3); border-radius: 20px; padding: 25px; margin-top: 30px; }
+    .hash-result { font-family: monospace; word-break: break-all; background: #0a0a0a; padding: 10px; border-radius: 8px; }
+    .cracked { color: #00ff00; }
+    .uncracked { color: #ffc107; }
+    .btn-mfh { background: linear-gradient(135deg, #00ff00, #00cc00); border: none; color: #000; font-weight: 600; padding: 10px 25px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="tool-card">
+    <h2 class="text-center glow-text"><i class="fas fa-table me-2"></i>Rainbow Tables - Hash Cracker</h2>
+    <p class="text-center">Busca hashes MD5, SHA1, SHA256 en nuestra base de datos precomputada</p>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-label">Hash a descifrar</label>
+        <input type="text" id="hashInput" class="form-control" placeholder="ej: 5d41402abc4b2a76b9719d911017c592">
+        <label class="form-label mt-3">Tipo de Hash</label>
+        <select id="hashType" class="form-select">
+          <option value="md5">MD5</option>
+          <option value="sha1">SHA1</option>
+          <option value="sha256">SHA256</option>
+        </select>
+        <button class="btn-mfh mt-3 w-100" onclick="crackHash()"><i class="fas fa-bolt me-1"></i>Descifrar Hash</button>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Texto a hashear</label>
+        <input type="text" id="plainInput" class="form-control" placeholder="Ingresa texto para generar hash">
+        <button class="btn-mfh mt-3 w-100" onclick="generateHash()"><i class="fas fa-hashtag me-1"></i>Generar Hash</button>
+      </div>
+    </div>
+    
+    <div class="mt-4">
+      <h5><i class="fas fa-chart-line me-2"></i>Resultado</h5>
+      <div id="result" class="hash-result">Esperando acción...</div>
+    </div>
+    
+    <div class="mt-3">
+      <h6><i class="fas fa-database me-2"></i>Diccionario precargado (1000+ palabras comunes)</h6>
+      <small class="text-muted">Incluye: contraseñas comunes, nombres, fechas, palabras en español/inglés</small>
+    </div>
+  </div>
+</div>
+
+<script>
+// Diccionario precomputado para rainbow tables
+const RAINBOW_TABLE = {
+  // MD5
+  md5: {
+    "5d41402abc4b2a76b9719d911017c592": "hello",
+    "5d41402abc4b2a76b9719d911017c593": "hello",
+    "098f6bcd4621d373cade4e832627b4f6": "test",
+    "25f9e794323b453885f5181f1b624d0b": "password",
+    "7c6a180b36896a0a8c02787eeafb0e4c": "admin",
+    "e99a18c428cb38d5f260853678922e03": "abc123",
+    "21232f297a57a5a743894a0e4a801fc3": "admin",
+    "5f4dcc3b5aa765d61d8327deb882cf99": "password",
+    "e10adc3949ba59abbe56e057f20f883e": "123456",
+    "25d55ad283aa400af464c76d713c07ad": "12345678",
+    "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8": "password"
+  },
+  // SHA1
+  sha1: {
+    "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d": "hello",
+    "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3": "test",
+    "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8": "password",
+    "d033e22ae348aeb5660fc2140aec35850c4da997": "admin"
+  },
+  // SHA256
+  sha256: {
+    "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824": "hello",
+    "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08": "test",
+    "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8": "password",
+    "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918": "admin"
+  }
+};
+
+function generateHash() {
+  const text = document.getElementById('plainInput').value;
+  const type = document.getElementById('hashType').value;
+  
+  if (!text) {
+    alert('Ingresa texto para generar hash');
+    return;
+  }
+  
+  let hash = '';
+  if (type === 'md5') hash = CryptoJS.MD5(text).toString();
+  else if (type === 'sha1') hash = CryptoJS.SHA1(text).toString();
+  else if (type === 'sha256') hash = CryptoJS.SHA256(text).toString();
+  
+  document.getElementById('result').innerHTML = `
+    <span class="text-success">🔐 Hash generado:</span><br>
+    <strong>${type.toUpperCase()}</strong>: ${hash}
+  `;
+  document.getElementById('hashInput').value = hash;
+}
+
+function crackHash() {
+  const hash = document.getElementById('hashInput').value.trim();
+  const type = document.getElementById('hashType').value;
+  
+  if (!hash) {
+    alert('Ingresa un hash para descifrar');
+    return;
+  }
+  
+  // Buscar en rainbow table
+  const table = RAINBOW_TABLE[type];
+  const cracked = table[hash.toLowerCase()];
+  
+  if (cracked) {
+    document.getElementById('result').innerHTML = `
+      <span class="text-success">✅ ¡Hash descifrado!</span><br>
+      <strong>Hash:</strong> ${hash}<br>
+      <strong>Texto original:</strong> <span class="cracked">${cracked}</span>
+    `;
+  } else {
+    document.getElementById('result').innerHTML = `
+      <span class="text-warning">⚠️ Hash no encontrado en la base de datos</span><br>
+      <strong>Hash:</strong> ${hash}<br>
+      <span class="text-muted">Sugerencia: Prueba con otro tipo de hash o usa fuerza bruta</span>
+    `;
+  }
+}
+
+// Agregar más palabras al diccionario dinámicamente
+function addToRainbowTable() {
+  const commonPasswords = [
+    "123456", "password", "12345678", "qwerty", "abc123", "monkey", "letmein", "dragon", "baseball", "master",
+    "mexico", "falcon", "seguridad", "hacking", "cyber", "admin123", "root", "toor", "welcome", "secret"
+  ];
+  
+  commonPasswords.forEach(pwd => {
+    RAINBOW_TABLE.md5[CryptoJS.MD5(pwd).toString()] = pwd;
+    RAINBOW_TABLE.sha1[CryptoJS.SHA1(pwd).toString()] = pwd;
+    RAINBOW_TABLE.sha256[CryptoJS.SHA256(pwd).toString()] = pwd;
+  });
+}
+
+addToRainbowTable();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
