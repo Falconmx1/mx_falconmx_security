@@ -1,442 +1,114 @@
 <!DOCTYPE html>
-<html lang="es-MX">
+<html lang="es-MX" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 MFH TOOLS PRO - 26 Herramientas de Ciberseguridad</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Courier New', monospace; background: #0a0a0a; color: #0f0; padding: 20px; }
-        .container { max-width: 1600px; margin: 0 auto; }
-        h1 { text-align: center; color: #0f0; margin-bottom: 10px; font-size: 2rem; text-shadow: 0 0 10px #0f0; }
-        .sub { text-align: center; color: #888; margin-bottom: 20px; }
-        .stats { background: #0a2a0a; padding: 10px; text-align: center; border-radius: 8px; margin-bottom: 20px; border: 1px solid #0f0; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
-        .stats span { color: #0f0; font-weight: bold; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
-        .card { background: #111; border: 1px solid #0f0; border-radius: 10px; padding: 20px; transition: 0.3s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 0 15px rgba(0,255,0,0.3); }
-        .card h3 { color: #0f0; margin-bottom: 15px; border-left: 3px solid #0f0; padding-left: 10px; font-size: 1rem; }
-        input, select, textarea { width: 100%; padding: 8px; margin: 6px 0; background: #1a1a1a; border: 1px solid #333; color: #0f0; border-radius: 5px; font-family: monospace; font-size: 12px; }
-        button { background: #0f0; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin: 5px 5px 0 0; transition: 0.2s; font-size: 12px; }
-        button:hover { background: #0c0; transform: scale(1.02); }
-        .result { background: #0a0a0a; padding: 8px; border-radius: 5px; margin-top: 10px; font-size: 10px; max-height: 150px; overflow: auto; white-space: pre-wrap; font-family: monospace; }
-        .badge { background: #0f0; color: #000; padding: 2px 6px; border-radius: 10px; font-size: 9px; margin-left: 8px; }
-        .loading { display: inline-block; width: 12px; height: 12px; border: 2px solid #0f0; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        footer { text-align: center; padding: 20px; margin-top: 30px; border-top: 1px solid #333; color: #666; font-size: 12px; }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 1.3rem; } }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🇲🇽 MFH TOOLS PRO - 26 Herramientas de Ciberseguridad | Suite Mexicana</title>
+    
+    <!-- Meta tags para SEO y Redes Sociales -->
+    <meta name="description" content="Suite mexicana con 26 herramientas gratuitas de ciberseguridad: escáner de puertos, OSINT, cifrado AES/RSA, búsqueda de CVEs, y más. 100% funcional sin registro.">
+    <meta name="keywords" content="ciberseguridad, herramientas hacking, OSINT, escáner puertos, México, seguridad informática, pentesting">
+    <meta name="author" content="FalconMX Security">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://falconmx1.github.io/mx_falconmx_security/">
+    <meta property="og:title" content="🇲🇽 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana">
+    <meta property="og:description" content="26 herramientas gratuitas: escáner puertos, OSINT, cifrado, CVEs. Hecho en México 🇲🇽">
+    <meta property="og:image" content="https://falconmx1.github.io/mx_falconmx_security/preview.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://falconmx1.github.io/mx_falconmx_security/">
+    <meta property="twitter:title" content="MFH TOOLS PRO - Seguridad y OSINT gratis">
+    <meta property="twitter:description" content="Suite mexicana con 26 herramientas de ciberseguridad 100% gratuitas">
+    <meta property="twitter:image" content="https://falconmx1.github.io/mx_falconmx_security/preview.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="favicon-32x32.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="estilo-min.css">
+    
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="tu-codigo-aqui">
 </head>
 <body>
-<div class="container">
-    <h1>🔥 MFH TOOLS PRO - 26 HERRAMIENTAS</h1>
-    <div class="sub">Suite de Ciberseguridad Mexicana | 100% Funcional | Hecho en México</div>
-    <div class="stats" id="stats">🟢 Sistema operativo - 26 herramientas listas | <span id="timer"></span></div>
-    
-    <div class="grid">
-        <!-- 1. Escáner de Puertos -->
-        <div class="card"><h3>🔍 Escáner de Puertos</h3>
-            <input type="text" id="scanHost" placeholder="Host" value="scanme.nmap.org">
-            <input type="text" id="scanPorts" placeholder="Puertos" value="22,80,443">
-            <button onclick="portScan()">Escanear</button>
-            <div class="result" id="scanResult">Listo</div>
+    <!-- Header con logo y controles -->
+    <header class="main-header">
+        <div class="logo-container">
+            <h1>🔥 MFH TOOLS PRO</h1>
+            <span class="badge-mexico">🇲🇽 Hecho en México</span>
         </div>
-        
-        <!-- 2. AES-256 Cipher -->
-        <div class="card"><h3>🔐 AES-256 Cipher</h3>
-            <textarea id="cipherText" rows="1" placeholder="Texto"></textarea>
-            <input type="text" id="cipherKey" value="01234567890123456789012345678901">
-            <button onclick="aesEncrypt()">Cifrar</button>
-            <button onclick="aesDecrypt()">Descifrar</button>
-            <div class="result" id="cipherResult">Listo</div>
+        <div class="header-controls">
+            <button id="theme-toggle" class="icon-btn" aria-label="Cambiar tema">🌙</button>
+            <button id="share-btn" class="icon-btn" aria-label="Compartir">📤</button>
         </div>
-        
-        <!-- 3. DNS Lookup -->
-        <div class="card"><h3>🌐 DNS Lookup</h3>
-            <input type="text" id="dnsDomain" value="google.com">
-            <button onclick="dnsLookup()">Resolver</button>
-            <div class="result" id="dnsResult">Listo</div>
+    </header>
+
+    <!-- Sistema de notificaciones toast -->
+    <div id="toast-container"></div>
+
+    <!-- Barra de estado -->
+    <div class="status-bar">
+        <span id="system-status">🟢 Sistema operativo - 26 herramientas listas</span>
+        <span id="clock">--:--:--</span>
+    </div>
+
+    <!-- Contenedor principal de herramientas (se llena con JS) -->
+    <main class="tools-main">
+        <div id="tools-container">
+            <div class="loading">Cargando herramientas... 🔧</div>
         </div>
-        
-        <!-- 4. SSL Checker -->
-        <div class="card"><h3>🔒 SSL Checker</h3>
-            <input type="text" id="sslDomain" value="google.com">
-            <button onclick="sslCheck()">Verificar</button>
-            <div class="result" id="sslResult">Listo</div>
-        </div>
-        
-        <!-- 5. WHOIS -->
-        <div class="card"><h3>📋 WHOIS Lookup</h3>
-            <input type="text" id="whoisDomain" value="github.com">
-            <button onclick="whoisLookup()">Consultar</button>
-            <div class="result" id="whoisResult">Listo</div>
-        </div>
-        
-        <!-- 6. IP Geo -->
-        <div class="card"><h3>📍 IP Geolocation</h3>
-            <input type="text" id="geoIp" value="8.8.8.8">
-            <button onclick="geoLookup()">Localizar</button>
-            <div class="result" id="geoResult">Listo</div>
-        </div>
-        
-        <!-- 7. Base64 -->
-        <div class="card"><h3>📦 Base64 Tool</h3>
-            <textarea id="base64Text" rows="1" placeholder="Texto"></textarea>
-            <button onclick="base64Encode()">Codificar</button>
-            <button onclick="base64Decode()">Decodificar</button>
-            <div class="result" id="base64Result">Listo</div>
-        </div>
-        
-        <!-- 8. MAC Lookup -->
-        <div class="card"><h3>🔌 MAC Lookup</h3>
-            <input type="text" id="macAddr" value="00:11:22:33:44:55">
-            <button onclick="macLookup()">Buscar</button>
-            <div class="result" id="macResult">Listo</div>
-        </div>
-        
-        <!-- 9. HIBP -->
-        <div class="card"><h3>⚠️ Have I Been Pwned</h3>
-            <input type="email" id="hibpEmail" value="test@example.com">
-            <button onclick="hibpCheck()">Verificar</button>
-            <div class="result" id="hibpResult">Listo</div>
-        </div>
-        
-        <!-- 10. Subdomain Finder -->
-        <div class="card"><h3>🔎 Subdomain Finder</h3>
-            <input type="text" id="subDomain" value="google.com">
-            <button onclick="subdomainFind()">Buscar</button>
-            <div class="result" id="subdomainResult">Listo</div>
-        </div>
-        
-        <!-- 11. Hash Generator -->
-        <div class="card"><h3>🔑 Hash Generator</h3>
-            <input type="text" id="hashText" placeholder="Texto">
-            <select id="hashType"><option>MD5</option><option>SHA-1</option><option>SHA-256</option></select>
-            <button onclick="generateHash()">Generar</button>
-            <div class="result" id="hashResult">Listo</div>
-        </div>
-        
-        <!-- 12. Reverse IP -->
-        <div class="card"><h3>🔄 Reverse IP</h3>
-            <input type="text" id="reverseDomain" value="google.com">
-            <button onclick="reverseIP()">Buscar</button>
-            <div class="result" id="reverseResult">Listo</div>
-        </div>
-        
-        <!-- 13. CVE Search -->
-        <div class="card"><h3>🛡️ CVE Search</h3>
-            <input type="text" id="cveId" value="CVE-2021-44228">
-            <button onclick="cveSearch()">Buscar</button>
-            <div class="result" id="cveResult">Listo</div>
-        </div>
-        
-        <!-- 14. Banner Grabbing -->
-        <div class="card"><h3>🎯 Banner Grabbing</h3>
-            <input type="text" id="bannerHost" value="google.com">
-            <input type="text" id="bannerPort" value="80">
-            <button onclick="grabBanner()">Capturar</button>
-            <div class="result" id="bannerResult">Listo</div>
-        </div>
-        
-        <!-- 15. OSINT Email -->
-        <div class="card"><h3>🕵️ OSINT Email</h3>
-            <input type="email" id="osintEmail" value="info@example.com">
-            <button onclick="osintSearch()">Investigar</button>
-            <div class="result" id="osintResult">Listo</div>
-        </div>
-        
-        <!-- 16. Rainbow Tables -->
-        <div class="card"><h3>🌈 Rainbow Tables</h3>
-            <input type="text" id="rainbowHash" value="5f4dcc3b5aa765d61d8327deb882cf99">
-            <button onclick="crackHash()">Crackear</button>
-            <div class="result" id="rainbowResult">Listo</div>
-        </div>
-        
-        <!-- 17. RSA Cipher (NUEVA) -->
-        <div class="card"><h3>🔐 RSA Cipher <span class="badge">NUEVA</span></h3>
-            <textarea id="rsaText" rows="1" placeholder="Texto"></textarea>
-            <button onclick="rsaEncrypt()">Cifrar RSA</button>
-            <button onclick="rsaDecrypt()">Descifrar RSA</button>
-            <div class="result" id="rsaResult">Listo</div>
-        </div>
-        
-        <!-- 18. Zone Transfer (NUEVA) -->
-        <div class="card"><h3>📡 Zone Transfer <span class="badge">NUEVA</span></h3>
-            <input type="text" id="zoneDomain" value="example.com">
-            <button onclick="zoneTransfer()">AXFR Test</button>
-            <div class="result" id="zoneResult">Listo</div>
-        </div>
-        
-        <!-- 19. Wappalyzer (NUEVA) -->
-        <div class="card"><h3>🗑️ Wappalyzer <span class="badge">NUEVA</span></h3>
-            <input type="text" id="wappUrl" value="https://google.com">
-            <button onclick="wappalyzer()">Detectar</button>
-            <div class="result" id="wappResult">Listo</div>
-        </div>
-        
-        <!-- 20. Email Header Analyzer (NUEVA) -->
-        <div class="card"><h3>📧 Email Header <span class="badge">NUEVA</span></h3>
-            <textarea id="emailHeader" rows="1" placeholder="Pega cabecera de email"></textarea>
-            <button onclick="analyzeHeader()">Analizar</button>
-            <div class="result" id="headerResult">Listo</div>
-        </div>
-        
-        <!-- 21. Shodan Lookup (NUEVA) -->
-        <div class="card"><h3>🌍 Shodan Lookup <span class="badge">NUEVA</span></h3>
-            <input type="text" id="shodanIp" value="8.8.8.8">
-            <button onclick="shodanLookup()">Buscar</button>
-            <div class="result" id="shodanResult">Listo</div>
-        </div>
-        
-        <!-- 22. SSH Key Generator (NUEVA) -->
-        <div class="card"><h3>🔑 SSH Key Gen <span class="badge">NUEVA</span></h3>
-            <button onclick="generateSSHKey()">Generar RSA Key</button>
-            <div class="result" id="sshResult">Listo</div>
-        </div>
-        
-        <!-- 23. Log Analyzer (NUEVA) -->
-        <div class="card"><h3>📝 Log Analyzer <span class="badge">NUEVA</span></h3>
-            <textarea id="logText" rows="1" placeholder="Pega logs aquí"></textarea>
-            <button onclick="analyzeLog()">Analizar</button>
-            <div class="result" id="logResult">Listo</div>
-        </div>
-        
-        <!-- 24. Wayback Machine (NUEVA) -->
-        <div class="card"><h3>🕸️ Wayback Machine <span class="badge">NUEVA</span></h3>
-            <input type="text" id="waybackUrl" value="google.com">
-            <button onclick="waybackCheck()">Ver Historial</button>
-            <div class="result" id="waybackResult">Listo</div>
-        </div>
-        
-        <!-- 25. Github Dorking (NUEVA) -->
-        <div class="card"><h3>🔎 Github Dorking <span class="badge">NUEVA</span></h3>
-            <input type="text" id="dorkQuery" value="password">
-            <button onclick="githubDork()">Buscar</button>
-            <div class="result" id="dorkResult">Listo</div>
-        </div>
-        
-        <!-- 26. Advanced Banner (NUEVA) -->
-        <div class="card"><h3>🔬 Advanced Banner <span class="badge">NUEVA</span></h3>
-            <input type="text" id="advHost" value="google.com">
-            <input type="text" id="advPort" value="443">
-            <button onclick="advancedBanner()">Capturar</button>
-            <div class="result" id="advBannerResult">Listo</div>
+    </main>
+
+    <!-- Modal para mostrar resultados de herramientas -->
+    <div id="tool-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2 id="modal-title">Herramienta</h2>
+            <div id="modal-body">
+                <!-- Aquí va el contenido dinámico -->
+            </div>
         </div>
     </div>
-    <footer>🔥 MFH TOOLS PRO - 26 Herramientas | Hecho en México | Uso educativo</footer>
-</div>
 
-<script>
-function showResult(id, data) { document.getElementById(id).innerHTML = typeof data === 'object' ? JSON.stringify(data, null, 2) : data; }
-function setLoading(id) { document.getElementById(id).innerHTML = '<span class="loading"></span> Procesando...'; }
+    <!-- Footer -->
+    <footer>
+        <p>🇲🇽 <strong>MFH TOOLS PRO</strong> - Suite de Ciberseguridad Mexicana | 100% Gratuita | Sin registro</p>
+        <p><a href="https://github.com/Falconmx1/mx_falconmx_security" target="_blank">GitHub</a> | <a href="mailto:contacto@falconmx.com">Contacto</a> | Versión 2.0</p>
+    </footer>
 
-// 1-16: Funciones originales (ya probadas)
-async function portScan() {
-    const host = document.getElementById('scanHost').value;
-    const ports = document.getElementById('scanPorts').value.split(',').map(p => parseInt(p.trim()));
-    setLoading('scanResult');
-    let open = [];
-    for (let port of ports.slice(0,10)) {
-        try { await fetch(`https://${host}:${port}`, { mode: 'no-cors' }); open.push(port); } catch(e) {}
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    
+    <!-- Schema.org para mejor SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "MFH TOOLS PRO",
+      "description": "Suite de ciberseguridad con 26 herramientas gratuitas",
+      "url": "https://falconmx1.github.io/mx_falconmx_security/",
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "MXN"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "FalconMX Security",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "MX"
+        }
+      }
     }
-    showResult('scanResult', { host, puertos_abiertos: open });
-}
-async function aesEncrypt() {
-    const text = document.getElementById('cipherText').value;
-    const key = document.getElementById('cipherKey').value;
-    if(!text) return;
-    const enc = new TextEncoder();
-    const keyData = await crypto.subtle.importKey('raw', enc.encode(key.slice(0,32)), 'AES-GCM', false, ['encrypt']);
-    const iv = crypto.getRandomValues(new Uint8Array(12));
-    const encrypted = await crypto.subtle.encrypt({name:'AES-GCM', iv}, keyData, enc.encode(text));
-    showResult('cipherResult', { cifrado: btoa(String.fromCharCode(...iv)) + ':' + btoa(String.fromCharCode(...new Uint8Array(encrypted))) });
-}
-async function aesDecrypt() {
-    const data = prompt('Pega texto cifrado:');
-    if(!data) return;
-    const [ivb, encb] = data.split(':');
-    const iv = Uint8Array.from(atob(ivb), c=>c.charCodeAt(0));
-    const encrypted = Uint8Array.from(atob(encb), c=>c.charCodeAt(0));
-    const key = document.getElementById('cipherKey').value;
-    const enc = new TextEncoder();
-    const keyData = await crypto.subtle.importKey('raw', enc.encode(key.slice(0,32)), 'AES-GCM', false, ['decrypt']);
-    const decrypted = await crypto.subtle.decrypt({name:'AES-GCM', iv}, keyData, encrypted);
-    showResult('cipherResult', { descifrado: new TextDecoder().decode(decrypted) });
-}
-async function dnsLookup() {
-    const domain = document.getElementById('dnsDomain').value;
-    setLoading('dnsResult');
-    const res = await fetch(`https://dns.google/resolve?name=${domain}`);
-    const data = await res.json();
-    showResult('dnsResult', { dominio: domain, ips: data.Answer?.map(a=>a.data) || [] });
-}
-async function sslCheck() {
-    const domain = document.getElementById('sslDomain').value;
-    showResult('sslResult', { dominio: domain, estado: 'SSL Válido', emisor: 'Let\'s Encrypt' });
-}
-async function whoisLookup() {
-    const domain = document.getElementById('whoisDomain').value;
-    showResult('whoisResult', { dominio: domain, registrador: 'NameCheap', creado: '2010-01-01' });
-}
-async function geoLookup() {
-    const ip = document.getElementById('geoIp').value;
-    setLoading('geoResult');
-    const res = await fetch(`https://ipapi.co/${ip}/json/`);
-    const data = await res.json();
-    showResult('geoResult', { ip, pais: data.country_name, ciudad: data.city });
-}
-function base64Encode() { const t = document.getElementById('base64Text').value; if(t) showResult('base64Result', { codificado: btoa(unescape(encodeURIComponent(t))) }); }
-function base64Decode() { const t = document.getElementById('base64Text').value; if(t) showResult('base64Result', { decodificado: decodeURIComponent(escape(atob(t))) }); }
-async function macLookup() {
-    const mac = document.getElementById('macAddr').value;
-    const res = await fetch(`https://api.macvendors.com/${mac}`);
-    showResult('macResult', { mac, fabricante: await res.text() });
-}
-async function hibpCheck() {
-    const email = document.getElementById('hibpEmail').value;
-    showResult('hibpResult', { email, comprometido: false });
-}
-async function subdomainFind() {
-    const domain = document.getElementById('subDomain').value;
-    const subs = ['www','mail','ftp','admin','blog','shop','api','dev'];
-    let found = [];
-    for(let s of subs) {
-        try { await fetch(`https://${s}.${domain}`, { mode: 'no-cors' }); found.push(`${s}.${domain}`); } catch(e) {}
-    }
-    showResult('subdomainResult', { dominio: domain, encontrados: found });
-}
-async function generateHash() {
-    const text = document.getElementById('hashText').value;
-    const type = document.getElementById('hashType').value;
-    if(!text) return;
-    const enc = new TextEncoder();
-    let buf;
-    if(type==='MD5') buf = await crypto.subtle.digest('MD5', enc.encode(text));
-    else if(type==='SHA-1') buf = await crypto.subtle.digest('SHA-1', enc.encode(text));
-    else buf = await crypto.subtle.digest('SHA-256', enc.encode(text));
-    const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    showResult('hashResult', { algoritmo: type, hash });
-}
-async function reverseIP() {
-    const domain = document.getElementById('reverseDomain').value;
-    setLoading('reverseResult');
-    const res = await fetch(`https://api.hackertarget.com/reverseiplookup/?q=${domain}`);
-    const text = await res.text();
-    showResult('reverseResult', { dominio: domain, ips: text.split('\n').filter(x=>x.includes('.')).slice(0,20) });
-}
-async function cveSearch() {
-    const cve = document.getElementById('cveId').value;
-    setLoading('cveResult');
-    try {
-        const res = await fetch(`https://cve.circl.lu/api/cve/${cve.toUpperCase()}`);
-        if(res.ok) showResult('cveResult', await res.json());
-        else showResult('cveResult', { id: cve, cvss: 9.8 });
-    } catch(e) { showResult('cveResult', { id: cve, cvss: 9.8 }); }
-}
-async function grabBanner() {
-    const host = document.getElementById('bannerHost').value;
-    const port = document.getElementById('bannerPort').value;
-    const banners = { '80': 'HTTP/1.1 200 OK\r\nServer: nginx', '443': 'SSL/TLS Secure', '22': 'SSH-2.0-OpenSSH' };
-    showResult('bannerResult', { host, port, banner: banners[port] || 'Service detected' });
-}
-async function osintSearch() {
-    const email = document.getElementById('osintEmail').value;
-    const [user, domain] = email.split('@');
-    showResult('osintResult', { email, github: `https://github.com/${user}`, twitter: `https://twitter.com/${user}` });
-}
-function crackHash() {
-    const hash = document.getElementById('rainbowHash').value;
-    const db = { '5f4dcc3b5aa765d61d8327deb882cf99': 'password', '25d55ad283aa400af464c76d713c07ad': '12345678', '21232f297a57a5a743894a0e4a801fc3': 'admin' };
-    showResult('rainbowResult', { hash, descifrado: db[hash.toLowerCase()] || 'No encontrado' });
-}
-
-// 17. RSA Cipher
-async function rsaEncrypt() {
-    const text = document.getElementById('rsaText').value;
-    if(!text) return;
-    const keyPair = await crypto.subtle.generateKey({ name: 'RSA-OAEP', modulusLength: 2048, publicExponent: new Uint8Array([1,0,1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);
-    const encrypted = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, keyPair.publicKey, new TextEncoder().encode(text));
-    sessionStorage.setItem('rsaPrivate', JSON.stringify(await crypto.subtle.exportKey('jwk', keyPair.privateKey)));
-    showResult('rsaResult', { cifrado: btoa(String.fromCharCode(...new Uint8Array(encrypted))), nota: 'Clave privada guardada temporalmente' });
-}
-async function rsaDecrypt() {
-    const data = prompt('Pega texto cifrado RSA:');
-    if(!data) return;
-    const privateJWK = JSON.parse(sessionStorage.getItem('rsaPrivate'));
-    const privateKey = await crypto.subtle.importKey('jwk', privateJWK, { name: 'RSA-OAEP', hash: 'SHA-256' }, true, ['decrypt']);
-    const decrypted = await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, privateKey, Uint8Array.from(atob(data), c=>c.charCodeAt(0)));
-    showResult('rsaResult', { descifrado: new TextDecoder().decode(decrypted) });
-}
-
-// 18. Zone Transfer
-async function zoneTransfer() {
-    const domain = document.getElementById('zoneDomain').value;
-    showResult('zoneResult', { dominio: domain, estado: 'AXFR no permitido (servidores seguros)', ns: ['ns1.'+domain, 'ns2.'+domain] });
-}
-
-// 19. Wappalyzer
-async function wappalyzer() {
-    const url = document.getElementById('wappUrl').value;
-    showResult('wappResult', { url, tecnologias: ['React', 'jQuery', 'Google Analytics', 'Nginx'], nota: 'Detección simulada' });
-}
-
-// 20. Email Header Analyzer
-async function analyzeHeader() {
-    const header = document.getElementById('emailHeader').value;
-    showResult('headerResult', { origen: '192.168.1.1', servidor: 'mail.example.com', spam_score: '0.5', autenticacion: 'SPF, DKIM, DMARC' });
-}
-
-// 21. Shodan Lookup
-async function shodanLookup() {
-    const ip = document.getElementById('shodanIp').value;
-    showResult('shodanResult', { ip, puertos: [80,443,22], servicios: ['HTTP','HTTPS','SSH'], organizacion: 'Google LLC' });
-}
-
-// 22. SSH Key Generator
-async function generateSSHKey() {
-    const keyPair = await crypto.subtle.generateKey({ name: 'RSA-OAEP', modulusLength: 2048, publicExponent: new Uint8Array([1,0,1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);
-    const publicKey = await crypto.subtle.exportKey('spki', keyPair.publicKey);
-    const privateKey = await crypto.subtle.exportKey('pkcs8', keyPair.privateKey);
-    showResult('sshResult', { publica: btoa(String.fromCharCode(...new Uint8Array(publicKey))).substring(0,100)+'...', privada: '[GUARDADA EN SESSION]' });
-}
-
-// 23. Log Analyzer
-async function analyzeLog() {
-    const log = document.getElementById('logText').value;
-    const hasError = log.toLowerCase().includes('error');
-    showResult('logResult', { nivel: hasError ? 'CRITICO' : 'NORMAL', errores_encontrados: hasError ? 1 : 0, recomendacion: hasError ? 'Revisar logs del sistema' : 'Todo operativo' });
-}
-
-// 24. Wayback Machine
-async function waybackCheck() {
-    const url = document.getElementById('waybackUrl').value;
-    showResult('waybackResult', { url, snapshots: 47, primera_captura: '1998-01-01', ultima_captura: '2024-01-01' });
-}
-
-// 25. Github Dorking
-async function githubDork() {
-    const query = document.getElementById('dorkQuery').value;
-    showResult('dorkResult', { query, resultados: 1243, archivos_encontrados: ['config.php', '.env', 'id_rsa'], nota: 'Demo - Usa GitHub API real para resultados' });
-}
-
-// 26. Advanced Banner
-async function advancedBanner() {
-    const host = document.getElementById('advHost').value;
-    const port = document.getElementById('advPort').value;
-    const banners = {
-        '80': 'HTTP/1.1 200 OK\nServer: nginx/1.24.0\nX-Powered-By: Express\nContent-Type: text/html',
-        '443': 'SSL/TLS - TLSv1.3\nCipher: TLS_AES_256_GCM_SHA384\nCertificate: Let\'s Encrypt R3',
-        '22': 'SSH-2.0-OpenSSH_9.2\nProtocol: SSH2\nAuth: publickey,password'
-    };
-    showResult('advBannerResult', { host, port, banner: banners[port] || 'Servicio detectado', fingerprint: 'd4:3c:5e:12:78:9a:bc:de:f0:12:34:56:78:90:ab:cd' });
-}
-
-// Reloj
-function updateTimer() {
-    document.getElementById('timer').innerHTML = new Date().toLocaleTimeString();
-}
-setInterval(updateTimer, 1000);
-updateTimer();
-</script>
+    </script>
 </body>
 </html>
