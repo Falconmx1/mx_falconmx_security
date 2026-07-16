@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - MFH TOOLS PRO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #1a1a1a;
+        }
+        body.light-mode .navbar { background: rgba(255,255,255,0.95); border-bottom: 1px solid rgba(0,0,0,0.1); }
+        body.light-mode .card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
+        body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
+        body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
+        body.light-mode .badge-mfh { background: rgba(0,170,0,0.1); color: #008800; }
+        
+        .navbar {
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,255,0,0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 8px 0;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .navbar .nav-link { color: #e0e0e0 !important; font-size: 0.85rem; }
+        .navbar .nav-link:hover { color: #00ff00 !important; }
+        .theme-toggle { cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; }
+        .theme-toggle:hover { transform: rotate(180deg); }
+        
+        .card {
+            background: rgba(20,20,20,0.95);
+            border: 1px solid rgba(0,255,0,0.15);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff00;
+            box-shadow: 0 10px 25px rgba(0,255,0,0.15);
+        }
+        .badge-mfh {
+            background: rgba(0,255,0,0.15);
+            color: #00ff00;
+            border: 1px solid rgba(0,255,0,0.3);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+        }
+        .btn-mfh {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            border: none;
+            color: #000;
+            font-weight: 600;
+            padding: 6px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-mfh:hover { transform: scale(1.02); box-shadow: 0 0 12px rgba(0,255,0,0.4); }
+        .btn-donate {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 6px 18px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            animation: pulse-donate 2s ease-in-out infinite;
+        }
+        .btn-donate:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(238,90,36,0.5); color: #fff; }
+        @keyframes pulse-donate {
+            0%,100% { box-shadow: 0 0 10px rgba(238,90,36,0.3); }
+            50% { box-shadow: 0 0 25px rgba(238,90,36,0.6); }
+        }
+        
+        footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.2); padding: 20px 0 15px; margin-top: 30px; }
+        footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; }
+        footer a:hover { color: #00ff00; }
+        
+        @media (max-width: 768px) { .navbar-brand { font-size: 1rem; } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-shield-haltered me-2"></i>MFH TOOLS PRO</a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <a href="/contacto.html" class="btn btn-sm btn-outline-mfh d-none d-md-inline"><i class="fas fa-envelope me-1"></i>Contacto</a>
+            <a href="/aviso-legal.html" class="btn btn-sm btn-outline-mfh d-none d-md-inline"><i class="fas fa-gavel me-1"></i>Legal</a>
+            <a href="/donar.html" class="btn btn-sm btn-donate"><i class="fas fa-heart me-1"></i>Donar</a>
+            <i class="fas fa-sun theme-toggle" id="themeToggle"></i>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="/#herramientas">Herramientas</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/marketplace.html">Marketplace</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <h1 class="text-center glow-text"><i class="fas fa-store me-2"></i>Marketplace de Herramientas</h1>
+    <p class="text-center text-muted">Scripts, plugins y herramientas adicionales para tu suite de ciberseguridad</p>
+    
+    <div class="row g-4 mt-3">
+        <!-- Plugin 1 -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between">
+                    <span class="badge-mfh"><i class="fas fa-star me-1"></i> 4.8</span>
+                    <span class="badge-mfh">Gratis</span>
+                </div>
+                <h5 class="mt-2"><i class="fas fa-bolt text-warning me-2"></i>Massive Port Scanner</h5>
+                <p class="small text-muted">Escanea hasta 10,000 puertos en paralelo usando workers. Ideal para pentesting de redes grandes.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small><i class="fas fa-download me-1"></i> 245 descargas</small>
+                    <button class="btn-mfh btn-sm" onclick="alert('Descargando Massive Port Scanner...')">Descargar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Plugin 2 -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between">
+                    <span class="badge-mfh"><i class="fas fa-star me-1"></i> 4.6</span>
+                    <span class="badge-mfh">Gratis</span>
+                </div>
+                <h5 class="mt-2"><i class="fas fa-shield-alt text-danger me-2"></i>Vuln Scanner Lite</h5>
+                <p class="small text-muted">Detecta vulnerabilidades comunes en servicios web: SQLi, XSS, LFI, y más.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small><i class="fas fa-download me-1"></i> 189 descargas</small>
+                    <button class="btn-mfh btn-sm" onclick="alert('Descargando Vuln Scanner Lite...')">Descargar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Plugin 3 -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between">
+                    <span class="badge-mfh"><i class="fas fa-star me
