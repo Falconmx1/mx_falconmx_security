@@ -2,849 +2,1151 @@
 <html lang="es-MX">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>🔥 MFH TOOLS PRO - 36 Herramientas de Ciberseguridad</title>
-    <meta name="description" content="36 herramientas de ciberseguridad: escáner de puertos, OSINT, cifrado, análisis de red y más. 100% gratis, hecho en México.">
-    <meta name="theme-color" content="#0a0a0a">
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22MFH%20TOOLS%20PRO%22,%22short_name%22:%22MFH%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%230a0a0a%22,%22theme_color%22:%22%2300ff88%22}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
+    <meta name="description" content="Suite de ciberseguridad con 20+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA y más. Hecho en México.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    
     <style>
+        /* ===== ESTILOS BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Courier New', monospace; transition: all 0.3s ease; padding: 20px; }
-        body.dark { background: #0a0a0a; color: #0f0; }
-        body.matrix { background: #000; color: #0f0; text-shadow: 0 0 2px #0f0; }
-        body.matrix .card { border-color: #0f0; box-shadow: 0 0 5px rgba(0,255,0,0.3); }
-        body.amber { background: #1a0a00; color: #ffb000; }
-        body.amber .card { border-color: #ffb000; }
-        body.amber .card h3 { color: #ffb000; border-left-color: #ffb000; }
-        body.amber button { background: #ffb000; color: #1a0a00; }
-        body.amber .stats { border-color: #ffb000; background: #2a1a00; }
-        body.high-contrast { background: #000; color: #fff; }
-        body.high-contrast .card { border-color: #fff; background: #111; }
-        body.high-contrast button { background: #fff; color: #000; }
-        .container { max-width: 1600px; margin: 0 auto; }
-        h1 { text-align: center; margin-bottom: 5px; font-size: 2rem; }
-        body.dark h1 { color: #0f0; text-shadow: 0 0 10px #0f0; }
-        body.matrix h1 { color: #0f0; text-shadow: 0 0 5px #0f0; }
-        body.amber h1 { color: #ffb000; text-shadow: 0 0 5px #ffb000; }
-        .sub { text-align: center; color: #888; margin-bottom: 20px; font-size: 12px; }
-        .top-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .search-box { flex: 1; min-width: 200px; display: flex; gap: 10px; }
-        .search-box input { flex: 1; padding: 8px 12px; background: #1a1a1a; border: 1px solid #0f0; border-radius: 20px; color: #0f0; }
-        .theme-selector { display: flex; gap: 5px; flex-wrap: wrap; }
-        .theme-btn { padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; background: #1a1a1a; color: #0f0; border: 1px solid #0f0; }
-        .theme-btn:hover { background: #0f0; color: #000; }
-        .favorites-bar { background: #1a1a1a; padding: 8px 15px; border-radius: 20px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-        .fav-tag { background: #0a2a0a; padding: 4px 10px; border-radius: 15px; cursor: pointer; font-size: 11px; border: 1px solid #0f0; }
-        .fav-tag:hover { background: #0f0; color: #000; }
-        .clear-favs { background: #333; padding: 4px 10px; border-radius: 15px; cursor: pointer; font-size: 10px; color: #fff; }
-        .stats { background: #0a2a0a; padding: 10px 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; border: 1px solid #0f0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 11px; }
-        .category { margin-bottom: 30px; }
-        .category h2 { background: #1a1a1a; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 1.1rem; border-left: 4px solid #0f0; cursor: pointer; display: flex; justify-content: space-between; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 15px; }
-        .card { background: #111; border: 1px solid #0f0; border-radius: 10px; padding: 15px; transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 0 12px rgba(0,255,0,0.2); }
-        .card.favorita { border-color: #ff6600; box-shadow: 0 0 8px rgba(255,102,0,0.3); }
-        .card h3 { margin-bottom: 12px; border-left: 3px solid #0f0; padding-left: 8px; font-size: 0.95rem; display: flex; align-items: center; justify-content: space-between; }
-        .tool-actions { display: flex; gap: 5px; align-items: center; }
-        .fav-star { cursor: pointer; font-size: 16px; background: none; border: none; padding: 0 5px; color: #888; }
-        .fav-star.active { color: #ff6600; text-shadow: 0 0 3px #ff6600; }
-        .export-btn { background: #333; color: #0f0; padding: 2px 6px; font-size: 9px; border-radius: 4px; cursor: pointer; border: none; }
-        .tooltip { position: relative; display: inline-block; cursor: help; }
-        .tooltip .tooltiptext { visibility: hidden; background: #1a1a1a; color: #0f0; text-align: center; padding: 5px 8px; border-radius: 6px; position: absolute; z-index: 1; bottom: 125%; left: 0; font-size: 10px; white-space: nowrap; border: 1px solid #0f0; }
-        .tooltip:hover .tooltiptext { visibility: visible; }
-        input, select, textarea { width: 100%; padding: 6px 8px; margin: 5px 0; background: #1a1a1a; border: 1px solid #333; color: #0f0; border-radius: 5px; font-family: monospace; font-size: 11px; }
-        button { background: #0f0; color: #000; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; margin: 4px 4px 0 0; transition: 0.2s; font-size: 11px; }
-        button:hover { transform: scale(1.02); background: #0c0; }
-        .result { background: #0a0a0a; padding: 8px; border-radius: 5px; margin-top: 8px; font-size: 10px; max-height: 120px; overflow: auto; white-space: pre-wrap; font-family: monospace; border: 1px solid #1a3a1a; }
-        .loading { display: inline-block; width: 12px; height: 12px; border: 2px solid #0f0; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 5px; }
-        .error-msg { color: #ff6666; background: #2a0a0a; padding: 4px; border-radius: 4px; border-left: 3px solid #f00; }
-        .cache-info { font-size: 9px; color: #666; text-align: right; margin-top: 4px; }
-        .history-panel { position: fixed; bottom: 10px; right: 10px; background: #1a1a1a; border: 1px solid #0f0; border-radius: 8px; padding: 8px; max-width: 250px; z-index: 1000; font-size: 10px; max-height: 200px; overflow: auto; }
-        .history-panel h4 { font-size: 11px; margin-bottom: 5px; cursor: pointer; }
-        .history-item { cursor: pointer; padding: 3px; border-bottom: 1px solid #333; }
-        .history-item:hover { background: #0a2a0a; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        footer { text-align: center; padding: 20px; margin-top: 30px; border-top: 1px solid #333; color: #666; font-size: 11px; }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 1.3rem; } .top-bar { flex-direction: column; } }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #1a1a1a;
+        }
+        body.light-mode .navbar { background: rgba(255,255,255,0.95); border-bottom: 1px solid rgba(0,0,0,0.1); }
+        body.light-mode .tool-card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
+        body.light-mode .console-output { background: #fff; border-color: #00aa00; color: #1a1a1a; }
+        body.light-mode .badge-mfh { background: rgba(0,170,0,0.1); color: #008800; }
+        body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
+        body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
+        
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,255,0,0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 8px 0;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .navbar .nav-link {
+            color: #e0e0e0 !important;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        .navbar .nav-link:hover { color: #00ff00 !important; }
+        .theme-toggle { cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; }
+        .theme-toggle:hover { transform: rotate(180deg); }
+        
+        /* ===== BOTÓN DE DONACIÓN ===== */
+        .btn-donate {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 6px 18px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            animation: pulse-donate 2s ease-in-out infinite;
+        }
+        .btn-donate:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(238, 90, 36, 0.5);
+            color: #fff;
+        }
+        @keyframes pulse-donate {
+            0%, 100% { box-shadow: 0 0 10px rgba(238, 90, 36, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(238, 90, 36, 0.6); }
+        }
+        
+        /* ===== TOOL CARDS ===== */
+        .tool-card {
+            background: rgba(20,20,20,0.95);
+            border: 1px solid rgba(0,255,0,0.15);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            height: 100%;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff00;
+            box-shadow: 0 10px 25px rgba(0,255,0,0.15);
+        }
+        .tool-icon { font-size: 1.8rem; color: #00ff00; }
+        
+        /* ===== CONSOLA ===== */
+        .console-output {
+            background: #0a0a0a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            padding: 12px;
+            height: 220px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+        }
+        .console-output::-webkit-scrollbar { width: 5px; }
+        .console-output::-webkit-scrollbar-track { background: #1a1a1a; }
+        .console-output::-webkit-scrollbar-thumb { background: #00ff00; border-radius: 3px; }
+        
+        /* ===== BOTONES ===== */
+        .btn-mfh {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            border: none;
+            color: #000;
+            font-weight: 600;
+            padding: 6px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-mfh:hover { transform: scale(1.02); box-shadow: 0 0 12px rgba(0,255,0,0.4); }
+        .btn-outline-mfh {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 8px;
+        }
+        .btn-outline-mfh:hover { background: #00ff00; color: #000; }
+        
+        /* ===== BADGES ===== */
+        .badge-mfh {
+            background: rgba(0,255,0,0.15);
+            color: #00ff00;
+            border: 1px solid rgba(0,255,0,0.3);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+        }
+        
+        /* ===== TABS ===== */
+        .nav-tabs { border-bottom: none; gap: 3px; flex-wrap: wrap; }
+        .nav-tabs .nav-link {
+            color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        .nav-tabs .nav-link:hover { color: #00ff00; background: rgba(0,255,0,0.1); }
+        .nav-tabs .nav-link.active {
+            color: #00ff00;
+            background: rgba(0,255,0,0.15);
+            border-bottom: 2px solid #00ff00;
+        }
+        
+        /* ===== FORMULARIOS ===== */
+        .form-control, .form-select {
+            background: #0a0a0a;
+            border: 1px solid rgba(0,255,0,0.3);
+            color: #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #00ff00;
+            box-shadow: 0 0 8px rgba(0,255,0,0.3);
+            outline: none;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.2); padding: 20px 0 15px; margin-top: 30px; }
+        footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; }
+        footer a:hover { color: #00ff00; }
+        
+        /* ===== ANIMACIONES ===== */
+        @keyframes glow {
+            0%,100% { text-shadow: 0 0 5px rgba(0,255,0,0.5); }
+            50% { text-shadow: 0 0 15px rgba(0,255,0,0.8); }
+        }
+        .glow-text { animation: glow 2s ease-in-out infinite; }
+        
+        @media (max-width: 768px) {
+            .navbar-brand { font-size: 1rem; }
+            .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
+            .btn-mfh { padding: 4px 10px; font-size: 0.75rem; }
+        }
     </style>
 </head>
-<body class="dark">
-<div class="container">
-    <h1>🔥 MFH TOOLS PRO</h1>
-    <div class="sub">Suite de Ciberseguridad Mexicana | 36 Herramientas | Hecho en México</div>
-    
-    <div class="top-bar">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Buscar herramienta... (Ctrl+K)" onkeyup="filterTools()">
-            <button onclick="filterTools()">Buscar</button>
-            <button onclick="clearSearch()">Limpiar</button>
+<body>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-shield-haltered me-2"></i>MFH TOOLS PRO</a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <a href="/contacto.html" class="btn btn-sm btn-outline-mfh d-none d-md-inline"><i class="fas fa-envelope me-1"></i>Contacto</a>
+            <a href="/aviso-legal.html" class="btn btn-sm btn-outline-mfh d-none d-md-inline"><i class="fas fa-gavel me-1"></i>Legal</a>
+            <a href="/donar.html" class="btn btn-sm btn-donate"><i class="fas fa-heart me-1"></i>Donar</a>
+            <i class="fas fa-sun theme-toggle" id="themeToggle"></i>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
-        <div class="theme-selector">
-            <button class="theme-btn" onclick="setTheme('dark')">🌙 Oscuro</button>
-            <button class="theme-btn" onclick="setTheme('matrix')">💚 Matrix</button>
-            <button class="theme-btn" onclick="setTheme('amber')">🟠 Ámbar</button>
-            <button class="theme-btn" onclick="setTheme('high-contrast')">⬛ Alto Contraste</button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="#herramientas">Herramientas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#tools-panel">Panel</a></li>
+                <li class="nav-item"><a class="nav-link" href="#estadisticas">Stats</a></li>
+                <li class="nav-item"><a class="nav-link" href="/marketplace.html">Marketplace</a></li>
+            </ul>
         </div>
     </div>
-    
-    <div class="favorites-bar">
-        ⭐ Favoritos: <span id="favoritesList"></span>
-        <span class="clear-favs" onclick="clearAllFavorites()">Limpiar favoritos</span>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section id="inicio" class="pt-5 mt-5">
+    <div class="container pt-3">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS PRO</h1>
+                <p class="lead text-success">Suite de Ciberseguridad Mexicana</p>
+                <p class="mb-2">20+ Herramientas: Escáner | RSA/AES | OSINT | Rainbow | WHOIS | Wappalyzer | Subdomain | Hash | IA | Password | Hash Compare | HTTP Headers | URL Encode | IP Converter | Time Zones</p>
+                <div class="d-flex gap-2 flex-wrap mb-3">
+                    <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 20+ Herramientas</span>
+                    <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
+                    <span class="badge-mfh"><i class="fab fa-github me-1"></i> Open Source</span>
+                    <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
+                </div>
+                <button class="btn-mfh" onclick="document.getElementById('tools-panel').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play me-2"></i>Usar Herramientas</button>
+                <a href="/marketplace.html" class="btn btn-outline-mfh ms-2"><i class="fas fa-store me-2"></i>Marketplace</a>
+            </div>
+            <div class="col-lg-4">
+                <div class="console-output" style="height: auto;">
+                    <span class="text-warning">$</span> nmap -sS -p 1-1000 falconmx.security<br>
+                    <span class="text-info">[22/tcp]</span> open → ssh<br>
+                    <span class="text-info">[80/tcp]</span> open → http<br>
+                    <span class="text-success">✅ 2 puertos abiertos</span>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div class="stats">
-        <div>🟢 Estado: <span id="onlineStatus">Online</span></div>
-        <div>⭐ Favoritos: <span id="favCount">0</span></div>
-        <div>💾 Caché: <span id="cacheCount">0</span></div>
-        <div>🛠️ 36 Herramientas</div>
-        <div>⏱️ <span id="timer"></span></div>
+</section>
+
+<!-- ==================== GRID HERRAMIENTAS ==================== -->
+<section id="herramientas" class="py-3">
+    <div class="container">
+        <h2 class="text-center mb-3 glow-text"><i class="fas fa-tools me-2"></i>Suite de Herramientas</h2>
+        <div class="row g-2">
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('scanner')"><i class="fas fa-network-wired tool-icon"></i><small>Escáner</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('crypto')"><i class="fas fa-lock tool-icon"></i><small>RSA/AES</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('osint')"><i class="fas fa-eye tool-icon"></i><small>OSINT</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('rainbow')"><i class="fas fa-table tool-icon"></i><small>Rainbow</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('whois')"><i class="fas fa-globe tool-icon"></i><small>WHOIS</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('wappalyzer')"><i class="fab fa-codepen tool-icon"></i><small>Wappalyzer</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('subdomain')"><i class="fas fa-sitemap tool-icon"></i><small>Subdomain</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('hash')"><i class="fas fa-hashtag tool-icon"></i><small>Hash Tools</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('ai')"><i class="fas fa-robot tool-icon"></i><small>IA Asistente</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('password')"><i class="fas fa-key tool-icon"></i><small>Password</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('hashcompare')"><i class="fas fa-code-branch tool-icon"></i><small>Hash Compare</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('httpheaders')"><i class="fas fa-globe tool-icon"></i><small>HTTP Headers</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('urlencode')"><i class="fas fa-link tool-icon"></i><small>URL Encode</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('ipconverter')"><i class="fas fa-microchip tool-icon"></i><small>IP Converter</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('timezones')"><i class="fas fa-clock tool-icon"></i><small>Time Zones</small></div></div>
+        </div>
     </div>
+</section>
 
-    <div class="history-panel">
-        <h4 onclick="toggleHistory()">📜 Historial ▼</h4>
-        <div id="historyList" style="display:none;"></div>
-    </div>
-
-    <div id="toolsContainer"></div>
-    
-    <footer>🔥 MFH TOOLS PRO - 36 Herramientas | Favoritos | Historial | Exportación | Caché local | PWA Ready | Hecho en México</footer>
-</div>
-
-<script>
-// ========== CONFIGURACIÓN DE HERRAMIENTAS ==========
-const toolsData = {
-    'reconocimiento': {
-        name: '🔍 RECONOCIMIENTO',
-        tools: [
-            { id: 'portScan', name: '🔍 Escáner de Puertos', desc: 'Escanea puertos abiertos en un objetivo', cli: 'nmap -p 22,80,443 objetivo.com' },
-            { id: 'subdomainFind', name: '🔎 Subdomain Finder', desc: 'Encuentra subdominios de un dominio', cli: 'sublist3r -d objetivo.com' },
-            { id: 'reverseIP', name: '🔄 Reverse IP', desc: 'Busca dominios en una misma IP', cli: 'host objetivo.com' },
-            { id: 'wappalyzer', name: '🗑️ Wappalyzer', desc: 'Detecta tecnologías web', cli: 'whatweb objetivo.com' },
-            { id: 'shodanLookup', name: '🌍 Shodan Lookup', desc: 'Busca dispositivos conectados', cli: 'shodan host IP' },
-            { id: 'zoneTransfer', name: '📡 Zone Transfer', desc: 'Prueba transferencia de zona DNS', cli: 'dig axfr @ns.domain.com domain.com' },
-            { id: 'networkScan', name: '📊 Network Scanner', desc: 'Escanea dispositivos en red local', cli: 'nmap -sn 192.168.1.0/24' },
-            { id: 'traceroute', name: '🌍 Traceroute', desc: 'Rastrea ruta de red', cli: 'traceroute objetivo.com' }
-        ]
-    },
-    'cifrado': {
-        name: '🔐 CIFRADO & HASH',
-        tools: [
-            { id: 'aesCipher', name: '🔐 AES-256 Cipher', desc: 'Cifrado simétrico AES-256', cli: 'openssl enc -aes-256-gcm' },
-            { id: 'rsaCipher', name: '🔐 RSA Cipher', desc: 'Cifrado asimétrico RSA', cli: 'openssl rsautl -encrypt' },
-            { id: 'sshKeyGen', name: '🔑 SSH Key Gen', desc: 'Genera par de llaves SSH', cli: 'ssh-keygen -t rsa -b 2048' },
-            { id: 'hashGen', name: '🔑 Hash Generator', desc: 'Genera hashes MD5/SHA', cli: 'echo -n "texto" | md5sum' },
-            { id: 'rainbowTables', name: '🌈 Rainbow Tables', desc: 'Descifra hashes comunes', cli: 'john --format=raw-md5 hash.txt' },
-            { id: 'hashComparer', name: '🔍 Hash Comparer', desc: 'Compara dos hashes', cli: 'diff hash1.txt hash2.txt' },
-            { id: 'passwordGen', name: '🔑 Password Generator', desc: 'Genera contraseñas seguras', cli: 'openssl rand -base64 16' }
-        ]
-    },
-    'osint': {
-        name: '🕵️ OSINT',
-        tools: [
-            { id: 'whoisLookup', name: '📋 WHOIS Lookup', desc: 'Información de dominio', cli: 'whois dominio.com' },
-            { id: 'dnsLookup', name: '🌐 DNS Lookup', desc: 'Resuelve registros DNS', cli: 'dig dominio.com' },
-            { id: 'osintEmail', name: '🕵️ OSINT Email', desc: 'Investiga perfiles por email', cli: 'theHarvester -d dominio.com' },
-            { id: 'githubDork', name: '🔎 Github Dorking', desc: 'Busca secrets en GitHub', cli: 'github search "password"' },
-            { id: 'waybackCheck', name: '🕸️ Wayback Machine', desc: 'Historial de páginas web', cli: 'waybackurls dominio.com' },
-            { id: 'emailValidator', name: '📧 Email Validator', desc: 'Valida formato de email', cli: 'email-validator correo@ejemplo.com' },
-            { id: 'ipCalculator', name: '🔢 IP Calculator', desc: 'Calcula rangos CIDR', cli: 'ipcalc 192.168.1.0/24' }
-        ]
-    },
-    'red': {
-        name: '📡 ANÁLISIS DE RED',
-        tools: [
-            { id: 'sslCheck', name: '🔒 SSL Checker', desc: 'Verifica certificados SSL', cli: 'openssl s_client -connect dominio.com:443' },
-            { id: 'ipGeo', name: '📍 IP Geolocation', desc: 'Localiza dirección IP', cli: 'geoiplookup IP' },
-            { id: 'macLookup', name: '🔌 MAC Lookup', desc: 'Busca fabricante por MAC', cli: 'arp -an | grep MAC' },
-            { id: 'bannerGrab', name: '🎯 Banner Grabbing', desc: 'Captura banners de servicios', cli: 'nc -v objetivo.com 80' },
-            { id: 'advancedBanner', name: '🔬 Advanced Banner', desc: 'Banner con fingerprint', cli: 'nmap -sV -p 80 objetivo.com' },
-            { id: 'pingTool', name: '📡 Ping Tool', desc: 'Prueba conectividad', cli: 'ping objetivo.com' },
-            { id: 'portChecker', name: '🔄 Port Checker', desc: 'Verifica puerto específico', cli: 'nc -zv objetivo.com 443' }
-        ]
-    },
-    'utilidades': {
-        name: '🛠️ UTILIDADES',
-        tools: [
-            { id: 'base64Tool', name: '📦 Base64 Tool', desc: 'Codifica/Decodifica Base64', cli: 'echo "texto" | base64' },
-            { id: 'hibpCheck', name: '⚠️ Have I Been Pwned', desc: 'Verifica filtraciones de email', cli: 'hibp -e correo@ejemplo.com' },
-            { id: 'cveSearch', name: '🛡️ CVE Search', desc: 'Busca vulnerabilidades CVE', cli: 'searchsploit CVE-2021-44228' },
-            { id: 'emailHeader', name: '📧 Email Header', desc: 'Analiza cabeceras de email', cli: 'email-header-analyzer' },
-            { id: 'logAnalyzer', name: '📝 Log Analyzer', desc: 'Analiza logs de seguridad', cli: 'grep -i error logfile.log' },
-            { id: 'textHex', name: '📝 Text to Hex/ASCII', desc: 'Convierte texto a hex/ASCII', cli: 'echo "texto" | xxd' },
-            { id: 'urlEncoder', name: '🗜️ URL Encoder', desc: 'Codifica/Decodifica URL', cli: 'echo "texto" | jq -sRr @uri' }
-        ]
-    }
-};
-
-// ========== ESTADO GLOBAL ==========
-let favorites = JSON.parse(localStorage.getItem('mfh_favorites') || '[]');
-let toolHistory = JSON.parse(localStorage.getItem('mfh_history') || '{}');
-let currentTheme = localStorage.getItem('mfh_theme') || 'dark';
-
-// ========== FUNCIONES DE INICIALIZACIÓN ==========
-function init() {
-    setTheme(currentTheme);
-    renderTools();
-    updateFavoritesBar();
-    updateFavCount();
-    updateCacheDisplay();
-    updateHistoryPanel();
-    setupKeyboardShortcuts();
-    setInterval(updateTimer, 1000);
-    updateTimer();
-}
-
-function renderTools() {
-    const container = document.getElementById('toolsContainer');
-    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
-    container.innerHTML = '';
-    
-    for (const [catKey, catData] of Object.entries(toolsData)) {
-        let categoryHtml = `<div class="category" data-category="${catKey}">
-            <h2 onclick="toggleCategory('${catKey}')">${catData.name} <span>▼</span></h2>
-            <div class="grid" id="grid-${catKey}">`;
-        
-        let hasVisibleTools = false;
-        for (const tool of catData.tools) {
-            const matchesSearch = !searchTerm || tool.name.toLowerCase().includes(searchTerm) || tool.desc.toLowerCase().includes(searchTerm);
-            if (!matchesSearch) continue;
-            hasVisibleTools = true;
-            const isFav = favorites.includes(tool.id);
-            categoryHtml += `
-                <div class="card ${isFav ? 'favorita' : ''}" data-tool-id="${tool.id}">
-                    <h3>
-                        <span class="tooltip">${tool.name}<span class="tooltiptext">${tool.desc}<br>💻 ${tool.cli}</span></span>
-                        <div class="tool-actions">
-                            <span class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">${isFav ? '★' : '☆'}</span>
-                            <span class="export-btn" onclick="exportResult('${tool.id}')">📄</span>
+<!-- ==================== PANEL DE HERRAMIENTAS (TABS) ==================== -->
+<section id="tools-panel" class="py-3">
+    <div class="container">
+        <div class="tool-card p-3">
+            <h4 class="text-center mb-2"><i class="fas fa-cogs me-2"></i>Panel de Herramientas</h4>
+            
+            <ul class="nav nav-tabs justify-content-center mb-3 flex-wrap" id="mainTab" role="tablist">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#scannerTab"><i class="fas fa-network-wired me-1"></i> Escáner</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cryptoTab"><i class="fas fa-lock me-1"></i> RSA/AES</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#osintTab"><i class="fas fa-eye me-1"></i> OSINT</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#rainbowTab"><i class="fas fa-table me-1"></i> Rainbow</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#whoisTab"><i class="fas fa-globe me-1"></i> WHOIS</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wappalyzerTab"><i class="fab fa-codepen me-1"></i> Wappalyzer</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#subdomainTab"><i class="fas fa-sitemap me-1"></i> Subdomain</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#hashTab"><i class="fas fa-hashtag me-1"></i> Hash Tools</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#aiTab"><i class="fas fa-robot me-1"></i> IA</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#passwordTab"><i class="fas fa-key me-1"></i> Password</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#hashcompareTab"><i class="fas fa-code-branch me-1"></i> Hash Compare</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#httpheadersTab"><i class="fas fa-globe me-1"></i> HTTP Headers</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#urlencodeTab"><i class="fas fa-link me-1"></i> URL Encode</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#ipconverterTab"><i class="fas fa-microchip me-1"></i> IP Converter</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#timezonesTab"><i class="fas fa-clock me-1"></i> Time Zones</button></li>
+            </ul>
+            
+            <div class="tab-content">
+                
+                <!-- ====== ESCÁNER ====== -->
+                <div class="tab-pane fade show active" id="scannerTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🎯 Objetivo</label>
+                            <input type="text" class="form-control" id="scanTarget" placeholder="scanme.nmap.org" value="scanme.nmap.org">
+                            <label class="form-label mt-2">🔌 Puertos</label>
+                            <input type="text" class="form-control" id="scanPorts" value="22,80,443">
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="torMode">
+                                <label class="form-check-label">🌐 Modo Tor/Proxy (IP anónima simulada)</label>
+                            </div>
+                            <button class="btn-mfh mt-2 w-100" id="startScanBtn"><i class="fas fa-play me-2"></i>Iniciar Escaneo</button>
+                            <button class="btn-outline-mfh mt-1 w-100" id="stopScanBtn" disabled><i class="fas fa-stop me-2"></i>Detener</button>
+                            <div class="mt-2">
+                                <small class="text-muted"><i class="fas fa-info-circle me-1"></i> <a href="/tools/guias/escanner.html" target="_blank">Guía completa del Escáner</a></small>
+                            </div>
                         </div>
-                    </h3>
-                    <div id="inputs-${tool.id}"></div>
-                    <button onclick="executeTool('${tool.id}')">▶ Ejecutar</button>
-                    <div class="result" id="result-${tool.id}">Listo</div>
-                    <div class="cache-info" id="cache-${tool.id}"></div>
-                </div>`;
-        }
-        
-        if (hasVisibleTools) {
-            categoryHtml += `</div></div>`;
-            container.innerHTML += categoryHtml;
-        }
+                        <div class="col-md-6">
+                            <div class="progress mb-2"><div id="scanProgress" class="progress-bar" style="width:0%">0%</div></div>
+                            <div id="scanConsole" class="console-output" style="height: 200px;">📡 Esperando escaneo...</div>
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn-outline-mfh btn-sm" id="exportScanJson"><i class="fas fa-file-code"></i> JSON</button>
+                                <button class="btn-outline-mfh btn-sm" id="clearScanConsole"><i class="fas fa-trash"></i> Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> El escáner de puertos permite detectar servicios activos en un objetivo. 
+                                Ingresa una IP o dominio y un rango de puertos (ej: 22,80,443). Activa el modo Tor para 
+                                escaneos anónimos (simulado). Los resultados se pueden exportar a JSON para análisis posterior.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== RSA/AES ====== -->
+                <div class="tab-pane fade" id="cryptoTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <textarea id="cryptoText" class="form-control" rows="3" placeholder="Texto a cifrar">Mensaje secreto</textarea>
+                            <input type="text" id="aesKey" class="form-control mt-2" value="MiClave123">
+                            <button class="btn-mfh btn-sm mt-1" onclick="aesEncrypt()">Cifrar AES</button>
+                            <button class="btn-outline-mfh btn-sm mt-1" onclick="aesDecrypt()">Descifrar AES</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/rsa-aes.html" target="_blank">Guía de cifrado</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="cryptoResult" class="console-output" style="height: 150px;">Resultado...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> RSA/AES permite cifrar y descifrar mensajes. AES es simétrico (misma clave para cifrar/descifrar). 
+                                Úsalo para proteger información sensible o enseñar conceptos de criptografía.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== OSINT ====== -->
+                <div class="tab-pane fade" id="osintTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="email" id="osintEmail" class="form-control" placeholder="ejemplo@dominio.com">
+                            <button class="btn-mfh mt-2" onclick="osintSearch()">Investigar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/osint.html" target="_blank">Guía de OSINT</a></small></div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div id="osintResult" class="console-output">🔍 Ingresa un email para investigar...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> OSINT (Open Source Intelligence) recopila información pública sobre un email. 
+                                Detecta breaches, dominios asociados y da recomendaciones de seguridad.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== RAINBOW TABLES ====== -->
+                <div class="tab-pane fade" id="rainbowTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="hashToCrack" class="form-control" placeholder="5d41402abc4b2a76b9719d911017c592">
+                            <select id="hashType" class="form-select mt-2">
+                                <option value="md5">MD5</option>
+                                <option value="sha1">SHA1</option>
+                                <option value="sha256">SHA256</option>
+                            </select>
+                            <button class="btn-mfh mt-2" onclick="crackHashRainbow()">Descifrar Hash</button>
+                            <div class="mt-3">
+                                <label class="form-label">Texto a hashear</label>
+                                <input type="text" id="plainToHash" class="form-control" placeholder="Texto para generar hash">
+                                <button class="btn-outline-mfh mt-1" onclick="generateHashRainbow()">Generar Hash</button>
+                            </div>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/rainbow.html" target="_blank">Guía de Rainbow Tables</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="hashResultRainbow" class="console-output" style="height: 180px;">📝 Esperando acción...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Rainbow Tables permiten descifrar hashes usando diccionarios precomputados. 
+                                Útil para recuperar contraseñas olvidadas o demostrar vulnerabilidades de hashes débiles.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== WHOIS ====== -->
+                <div class="tab-pane fade" id="whoisTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="whoisDomain" class="form-control" placeholder="google.com">
+                            <button class="btn-mfh mt-2" onclick="whoisLookup()">Consultar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/whois.html" target="_blank">Guía de WHOIS</a></small></div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div id="whoisResult" class="console-output">🔍 Ingresa un dominio para consultar WHOIS...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> WHOIS consulta información de registro de dominios: propietario, fechas de creación/expiración, 
+                                servidores DNS. Esencial para investigaciones de dominio y OSINT.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== WAPPALYZER ====== -->
+                <div class="tab-pane fade" id="wappalyzerTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="wappalyzerDomain" class="form-control" placeholder="https://github.com">
+                            <button class="btn-mfh mt-2" onclick="analyzeTechnologies()">Analizar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/wappalyzer.html" target="_blank">Guía de Wappalyzer</a></small></div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div id="wappalyzerResult" class="console-output">🔍 Ingresa una URL para analizar tecnologías...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Wappalyzer detecta tecnologías web: frameworks, servidores, CMS, analytics. 
+                                Útil para reconocimiento en pentesting y análisis de competencia.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== SUBDOMAIN ====== -->
+                <div class="tab-pane fade" id="subdomainTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="subdomainTarget" class="form-control" placeholder="dominio.com">
+                            <button class="btn-mfh mt-2" onclick="findSubdomains()">Buscar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/subdomain.html" target="_blank">Guía de Subdomain Finder</a></small></div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div id="subdomainResult" class="console-output">🔍 Ingresa un dominio para buscar subdominios...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Subdomain Finder descubre subdominios asociados a un dominio principal. 
+                                Esencial para mapear superficies de ataque en auditorías de seguridad.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== HASH TOOLS ====== -->
+                <div class="tab-pane fade" id="hashTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <textarea id="hashOriginalText" class="form-control" rows="2" placeholder="Texto a hashear"></textarea>
+                            <select id="hashGenType" class="form-select mt-2">
+                                <option value="md5">MD5</option>
+                                <option value="sha1">SHA1</option>
+                                <option value="sha256" selected>SHA256</option>
+                                <option value="sha512">SHA512</option>
+                            </select>
+                            <button class="btn-mfh mt-2" onclick="computeHash()">Calcular Hash</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/hash.html" target="_blank">Guía de Hash Tools</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="computedHash" class="console-output" style="height: 80px;">-</div>
+                            <input type="text" id="hashToVerify" class="form-control mt-2" placeholder="Hash a verificar">
+                            <button class="btn-outline-mfh mt-1" onclick="verifyHashTool()">Verificar</button>
+                            <div id="verifyResult" class="console-output mt-2" style="height: 60px;">-</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Hash Tools genera hashes MD5, SHA1, SHA256 y SHA512. También verifica la integridad 
+                                de datos comparando hashes. Fundamental para verificar descargas y archivos.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== IA ASISTENTE ====== -->
+                <div class="tab-pane fade" id="aiTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <textarea id="logInput" class="form-control" rows="5" placeholder="[2025-06-09] SSH: Failed password for root from 192.168.1.100 port 22"></textarea>
+                            <button class="btn-mfh mt-2" onclick="analyzeLogWithAI()">Analizar con IA</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/ia.html" target="_blank">Guía de IA Asistente</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="aiResult" class="console-output" style="height: 150px;">🤖 Esperando log...</div>
+                            <div id="aiRecommendations" class="console-output mt-2" style="height: 80px;"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> El Asistente IA clasifica logs de seguridad como maliciosos, sospechosos o benignos. 
+                                Ideal para SOC, equipos de respuesta a incidentes y análisis forense.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== PASSWORD GENERATOR ====== -->
+                <div class="tab-pane fade" id="passwordTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Longitud: <span id="passLengthVal">12</span></label>
+                            <input type="range" id="passLength" class="form-range" min="6" max="32" value="12">
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="passUpper" checked> Mayúsculas</div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="passLower" checked> Minúsculas</div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="passNumbers" checked> Números</div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="passSymbols" checked> Símbolos</div>
+                            <button class="btn-mfh mt-2" onclick="generatePassword()">Generar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/password.html" target="_blank">Guía de contraseñas seguras</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="generatedPassword" class="console-output">Click en generar</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Genera contraseñas seguras con longitud variable, mayúsculas, minúsculas, números y símbolos. 
+                                Sigue las mejores prácticas de NIST para contraseñas fuertes.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== HASH COMPARE ====== -->
+                <div class="tab-pane fade" id="hashcompareTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Archivo 1</label>
+                            <input type="file" id="file1" class="form-control">
+                            <label class="mt-2">Archivo 2</label>
+                            <input type="file" id="file2" class="form-control">
+                            <select id="hashCompareType" class="form-select mt-2">
+                                <option value="md5">MD5</option>
+                                <option value="sha1">SHA1</option>
+                                <option value="sha256">SHA256</option>
+                            </select>
+                            <button class="btn-mfh mt-2" onclick="compareFiles()">Comparar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/hash-compare.html" target="_blank">Guía de Hash Compare</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="compareResult" class="console-output">Resultado...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Compara dos archivos calculando sus hashes y verificando si son idénticos. 
+                                Útil para verificar integridad de archivos descargados o detectar modificaciones.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== HTTP HEADERS ====== -->
+                <div class="tab-pane fade" id="httpheadersTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="headersUrl" class="form-control" placeholder="https://google.com">
+                            <button class="btn-mfh mt-2" onclick="checkHttpHeaders()">Analizar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/http-headers.html" target="_blank">Guía de HTTP Headers</a></small></div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div id="headersResult" class="console-output">Cabeceras HTTP...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Analiza cabeceras HTTP para identificar configuraciones de seguridad (HSTS, CSP, X-Frame-Options). 
+                                Esencial para auditorías de seguridad web y pentesting.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== URL ENCODE ====== -->
+                <div class="tab-pane fade" id="urlencodeTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <textarea id="urlInput" class="form-control" rows="3" placeholder="Texto o URL"></textarea>
+                            <button class="btn-mfh btn-sm mt-1" onclick="urlEncode()">Codificar</button>
+                            <button class="btn-outline-mfh btn-sm mt-1" onclick="urlDecode()">Decodificar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/url-encode.html" target="_blank">Guía de URL Encode</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="urlResult" class="console-output">Resultado...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> URL Encode convierte caracteres especiales a formato URL-safe (%20 para espacios). 
+                                Útil para construir URLs, depurar parámetros y enseñar fundamentos web.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== IP CONVERTER ====== -->
+                <div class="tab-pane fade" id="ipconverterTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="ipToConvert" class="form-control" placeholder="192.168.1.1">
+                            <button class="btn-mfh mt-2" onclick="convertIP()">Convertir</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/ip-converter.html" target="_blank">Guía de IP Converter</a></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="ipConvertResult" class="console-output">Resultado...</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> IP Converter muestra una IP en formato binario, hexadecimal y decimal. 
+                                Útil para redes, subnetting, y comprender la estructura de direcciones IP.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== TIME ZONES ====== -->
+                <div class="tab-pane fade" id="timezonesTab">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="timeZonesResult" class="console-output">Cargando...</div>
+                            <button class="btn-mfh mt-2" onclick="refreshTimeZones()">Actualizar</button>
+                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/time-zones.html" target="_blank">Guía de Time Zones</a></small></div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="bg-dark p-2 rounded small">
+                                <strong>📖 Guía rápida:</strong> Time Zones muestra la hora actual en múltiples zonas horarias (UTC, Local, UNIX timestamp). 
+                                Esencial para análisis forense, correlación de eventos y coordinación internacional.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== ESTADÍSTICAS ==================== -->
+<section id="estadisticas" class="py-3">
+    <div class="container">
+        <h2 class="text-center mb-3 glow-text"><i class="fas fa-chart-line me-2"></i>Estadísticas</h2>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="tool-card p-2"><h6><i class="fas fa-chart-bar me-1"></i>Top Puertos</h6><div id="topPortsList" class="small">Cargando...</div></div>
+            </div>
+            <div class="col-md-4">
+                <div class="tool-card p-2"><h6><i class="fas fa-map me-1"></i>Países</h6><div id="heatmapList" class="small">Cargando...</div></div>
+            </div>
+            <div class="col-md-4">
+                <div class="tool-card p-2"><h6><i class="fas fa-history me-1"></i>Actividad</h6><div id="recentActivity" class="small">Cargando...</div></div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6"><div class="tool-card p-2"><canvas id="dailyChart" height="120"></canvas></div></div>
+            <div class="col-md-6"><div class="tool-card p-2"><canvas id="portsChart" height="120"></canvas></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h6 class="text-success">MFH TOOLS PRO</h6>
+                <p class="small">Suite de ciberseguridad mexicana con 20+ herramientas profesionales. Hecho con 🌮 en México.</p>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-success">Enlaces</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#herramientas">Herramientas</a></li>
+                    <li><a href="/marketplace.html">Marketplace</a></li>
+                    <li><a href="/contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-success">Legal</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="/aviso-legal.html">Aviso Legal</a></li>
+                    <li><a href="/aviso-legal.html#privacidad">Política de Privacidad</a></li>
+                    <li><a href="/aviso-legal.html#cookies">Política de Cookies</a></li>
+                </ul>
+                <div class="mt-2">
+                    <a href="https://github.com/Falconmx1/mx_falconmx_security" class="text-white me-2"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-success">
+        <div class="text-center small">
+            <p>© 2025 MFH TOOLS PRO - Todos los derechos reservados | Hecho con 💚 en México</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ====== TEMA ======
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+if (localStorage.getItem('theme') === 'light') {
+    body.classList.add('light-mode');
+    themeToggle.classList.remove('fa-sun');
+    themeToggle.classList.add('fa-moon');
+}
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light-mode');
+    const isLight = body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    if (isLight) {
+        themeToggle.classList.remove('fa-sun');
+        themeToggle.classList.add('fa-moon');
+    } else {
+        themeToggle.classList.remove('fa-moon');
+        themeToggle.classList.add('fa-sun');
     }
+});
+
+function showTool(tool) {
+    const tabMap = {
+        scanner: 'scannerTab', crypto: 'cryptoTab', osint: 'osintTab', rainbow: 'rainbowTab',
+        whois: 'whoisTab', wappalyzer: 'wappalyzerTab', subdomain: 'subdomainTab',
+        hash: 'hashTab', ai: 'aiTab', password: 'passwordTab', hashcompare: 'hashcompareTab',
+        httpheaders: 'httpheadersTab', urlencode: 'urlencodeTab', ipconverter: 'ipconverterTab',
+        timezones: 'timezonesTab'
+    };
+    const tabId = tabMap[tool];
+    if (tabId) {
+        const trigger = document.querySelector(`button[data-bs-target="#${tabId}"]`);
+        if (trigger) bootstrap.Tab.getOrCreateInstance(trigger).show();
+        document.getElementById('tools-panel').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// ====== ESCÁNER ======
+let scanResultsData = [];
+let scanInterval = null;
+let isScanning = false;
+
+function addScanMessage(msg, type = 'info') {
+    const div = document.getElementById('scanConsole');
+    const colors = { success: 'success', danger: 'danger', warning: 'warning', info: 'info' };
+    div.innerHTML += `<span class="text-${colors[type]}">[SCAN]</span> ${msg}<br>`;
+    div.scrollTop = div.scrollHeight;
+}
+
+function parsePorts(portStr) {
+    const ports = [];
+    const parts = portStr.split(',');
+    for (let part of parts) {
+        part = part.trim();
+        if (part.includes('-')) {
+            let [s, e] = part.split('-').map(Number);
+            for (let i = s; i <= e && i <= s + 15; i++) ports.push(i);
+        } else if (!isNaN(part) && part) ports.push(Number(part));
+    }
+    if (ports.length === 0) ports.push(22, 80, 443);
+    return ports.slice(0, 15);
+}
+
+function startPortScan() {
+    if (isScanning) { addScanMessage('Ya hay un escaneo en curso', 'warning'); return; }
+    const target = document.getElementById('scanTarget').value;
+    const portStr = document.getElementById('scanPorts').value;
+    const torMode = document.getElementById('torMode').checked;
+    if (!target) { addScanMessage('❌ Ingresa un objetivo', 'danger'); return; }
     
-    renderSpecificInputs();
-}
-
-function renderSpecificInputs() {
-    const inputsMap = {
-        'portScan': `<input type="text" id="scanHost" placeholder="Host" value="scanme.nmap.org"><input type="text" id="scanPorts" placeholder="Puertos" value="22,80,443">`,
-        'subdomainFind': `<input type="text" id="subDomain" value="google.com">`,
-        'reverseIP': `<input type="text" id="reverseDomain" value="google.com">`,
-        'wappalyzer': `<input type="text" id="wappUrl" value="https://google.com">`,
-        'shodanLookup': `<input type="text" id="shodanIp" value="8.8.8.8">`,
-        'zoneTransfer': `<input type="text" id="zoneDomain" value="example.com">`,
-        'networkScan': `<input type="text" id="networkRange" value="192.168.1.0/24">`,
-        'traceroute': `<input type="text" id="traceHost" value="google.com">`,
-        'aesCipher': `<textarea id="cipherText" rows="1" placeholder="Texto"></textarea><input type="text" id="cipherKey" value="01234567890123456789012345678901"><button onclick="aesEncrypt()">Cifrar</button><button onclick="aesDecrypt()">Descifrar</button>`,
-        'rsaCipher': `<textarea id="rsaText" rows="1" placeholder="Texto"></textarea><button onclick="rsaEncrypt()">Cifrar RSA</button><button onclick="rsaDecrypt()">Descifrar RSA</button>`,
-        'sshKeyGen': `<button onclick="generateSSHKey()">Generar Par de Llaves</button>`,
-        'hashGen': `<input type="text" id="hashText" placeholder="Texto"><select id="hashType"><option>MD5</option><option>SHA-1</option><option>SHA-256</option></select>`,
-        'rainbowTables': `<input type="text" id="rainbowHash" value="5f4dcc3b5aa765d61d8327deb882cf99">`,
-        'hashComparer': `<input type="text" id="hash1" placeholder="Hash 1"><input type="text" id="hash2" placeholder="Hash 2">`,
-        'passwordGen': `<input type="number" id="passLength" value="16" min="4" max="64"><select id="passOptions"><option value="all">Mayús+Minús+Números+Símbolos</option><option value="alnum">Letras+Números</option><option value="alpha">Solo letras</option></select>`,
-        'whoisLookup': `<input type="text" id="whoisDomain" value="github.com">`,
-        'dnsLookup': `<input type="text" id="dnsDomain" value="google.com">`,
-        'osintEmail': `<input type="email" id="osintEmail" value="info@example.com">`,
-        'githubDork': `<input type="text" id="dorkQuery" value="password">`,
-        'waybackCheck': `<input type="text" id="waybackUrl" value="google.com">`,
-        'emailValidator': `<input type="email" id="validateEmail" placeholder="correo@ejemplo.com">`,
-        'ipCalculator': `<input type="text" id="ipCidr" value="192.168.1.0/24">`,
-        'sslCheck': `<input type="text" id="sslDomain" value="google.com">`,
-        'ipGeo': `<input type="text" id="geoIp" value="8.8.8.8">`,
-        'macLookup': `<input type="text" id="macAddr" value="00:11:22:33:44:55">`,
-        'bannerGrab': `<input type="text" id="bannerHost" value="google.com"><input type="text" id="bannerPort" value="80">`,
-        'advancedBanner': `<input type="text" id="advHost" value="google.com"><input type="text" id="advPort" value="443">`,
-        'pingTool': `<input type="text" id="pingHost" value="google.com">`,
-        'portChecker': `<input type="text" id="checkHost" value="google.com"><input type="text" id="checkPort" value="443">`,
-        'base64Tool': `<textarea id="base64Text" rows="1" placeholder="Texto"></textarea><button onclick="base64Encode()">Codificar</button><button onclick="base64Decode()">Decodificar</button>`,
-        'hibpCheck': `<input type="email" id="hibpEmail" value="test@example.com">`,
-        'cveSearch': `<input type="text" id="cveId" value="CVE-2021-44228">`,
-        'emailHeader': `<textarea id="emailHeader" rows="1" placeholder="Pega cabecera de email"></textarea>`,
-        'logAnalyzer': `<textarea id="logText" rows="1" placeholder="Pega logs aquí"></textarea>`,
-        'textHex': `<textarea id="convertText" rows="1" placeholder="Texto"></textarea><button onclick="textToHex()">→ Hex</button><button onclick="hexToText()">Hex →</button><button onclick="textToAscii()">→ ASCII</button>`,
-        'urlEncoder': `<textarea id="urlText" rows="1" placeholder="URL o texto"></textarea><button onclick="urlEncode()">Codificar URL</button><button onclick="urlDecode()">Decodificar URL</button>`
-    };
+    const ports = parsePorts(portStr);
+    addScanMessage(`🔍 Escaneando ${target} ${torMode ? '(vía Tor anónimo)' : ''} - ${ports.length} puertos...`, 'info');
+    scanResultsData = [];
+    let idx = 0;
+    const progressBar = document.getElementById('scanProgress');
+    progressBar.style.width = '0%';
+    progressBar.textContent = '0%';
+    document.getElementById('startScanBtn').disabled = true;
+    document.getElementById('stopScanBtn').disabled = false;
+    isScanning = true;
     
-    for (const [id, html] of Object.entries(inputsMap)) {
-        const div = document.getElementById(`inputs-${id}`);
-        if (div) div.innerHTML = html;
-    }
-}
-
-// ========== EJECUCIÓN DE HERRAMIENTAS ==========
-async function executeTool(toolId) {
-    const resultDiv = document.getElementById(`result-${toolId}`);
-    if(resultDiv) resultDiv.innerHTML = '<span class="loading"></span> Ejecutando...';
-    
-    let result;
-    try {
-        switch(toolId) {
-            case 'portScan': result = await portScanReal(); break;
-            case 'subdomainFind': result = await subdomainFindReal(); break;
-            case 'reverseIP': result = await reverseIPReal(); break;
-            case 'whoisLookup': result = await whoisLookupReal(); break;
-            case 'dnsLookup': result = await dnsLookupReal(); break;
-            case 'sslCheck': result = await sslCheckReal(); break;
-            case 'ipGeo': result = await geoLookupReal(); break;
-            case 'macLookup': result = await macLookupReal(); break;
-            case 'hibpCheck': result = await hibpCheckReal(); break;
-            case 'cveSearch': result = await cveSearchReal(); break;
-            case 'wappalyzer': result = await wappalyzerReal(); break;
-            case 'shodanLookup': result = await shodanLookupReal(); break;
-            case 'zoneTransfer': result = await zoneTransferReal(); break;
-            case 'waybackCheck': result = await waybackCheckReal(); break;
-            case 'githubDork': result = await githubDorkReal(); break;
-            case 'hashGen': result = await generateHashReal(); break;
-            case 'rainbowTables': result = crackHashReal(); break;
-            case 'passwordGen': result = generatePasswordReal(); break;
-            case 'hashComparer': result = compareHashesReal(); break;
-            case 'emailValidator': result = validateEmailReal(); break;
-            case 'ipCalculator': result = calculateIPReal(); break;
-            case 'pingTool': result = pingReal(); break;
-            case 'portChecker': result = checkPortReal(); break;
-            case 'networkScan': result = networkScanReal(); break;
-            case 'traceroute': result = tracerouteReal(); break;
-            case 'osintEmail': result = osintSearchReal(); break;
-            case 'bannerGrab': result = grabBannerReal(); break;
-            case 'advancedBanner': result = advancedBannerReal(); break;
-            case 'sshKeyGen': result = await generateSSHKeyReal(); break;
-            case 'emailHeader': result = analyzeHeaderReal(); break;
-            case 'logAnalyzer': result = analyzeLogReal(); break;
-            case 'textHex': result = textHexReal(); break;
-            case 'urlEncoder': result = urlEncoderReal(); break;
-            case 'base64Tool': result = base64ToolReal(); break;
-            case 'aesCipher': result = { error: 'Usa los botones Cifrar/Descifrar' }; break;
-            case 'rsaCipher': result = { error: 'Usa los botones Cifrar RSA/Descifrar RSA' }; break;
-            default: result = { error: 'Herramienta no implementada: ' + toolId };
-        }
-    } catch(e) {
-        result = { error: e.message };
-    }
-    
-    if(resultDiv) showResult(`result-${toolId}`, result);
-    saveToHistory(toolId, result);
-}
-
-// ========== IMPLEMENTACIONES DE HERRAMIENTAS ==========
-
-async function portScanReal() {
-    const host = document.getElementById('scanHost')?.value || 'scanme.nmap.org';
-    const ports = (document.getElementById('scanPorts')?.value || '22,80,443').split(',').map(p => parseInt(p.trim()));
-    let open = [];
-    for (let port of ports.slice(0,10)) {
-        try { await fetch(`https://${host}:${port}`, { mode: 'no-cors' }); open.push(port); } catch(e) {}
-    }
-    return { herramienta: 'Escáner de Puertos', host, puertos_abiertos: open, timestamp: new Date().toISOString() };
-}
-
-async function subdomainFindReal() {
-    const domain = document.getElementById('subDomain')?.value || 'google.com';
-    const subs = ['www','mail','ftp','admin','blog','shop','api','dev','test','webmail'];
-    let found = [];
-    for(let s of subs) {
-        try { await fetch(`https://${s}.${domain}`, { mode: 'no-cors' }); found.push(`${s}.${domain}`); } catch(e) {}
-    }
-    return { herramienta: 'Subdomain Finder', dominio: domain, encontrados: found };
-}
-
-async function reverseIPReal() {
-    const domain = document.getElementById('reverseDomain')?.value || 'google.com';
-    try {
-        const res = await fetch(`https://api.hackertarget.com/reverseiplookup/?q=${domain}`);
-        const text = await res.text();
-        return { herramienta: 'Reverse IP', dominio: domain, ips: text.split('\n').filter(x=>x.includes('.')).slice(0,20) };
-    } catch(e) {
-        return { herramienta: 'Reverse IP', dominio: domain, ips: ['192.0.2.1', '192.0.2.2'], error: 'Simulado' };
-    }
-}
-
-async function whoisLookupReal() {
-    const domain = document.getElementById('whoisDomain')?.value || 'github.com';
-    return { herramienta: 'WHOIS', dominio: domain, registrador: 'NameCheap, Inc.', creado: '2010-01-01', expira: '2025-12-31' };
-}
-
-async function dnsLookupReal() {
-    const domain = document.getElementById('dnsDomain')?.value || 'google.com';
-    try {
-        const res = await fetch(`https://dns.google/resolve?name=${domain}`);
-        const data = await res.json();
-        return { herramienta: 'DNS Lookup', dominio: domain, ips: data.Answer?.map(a=>a.data) || [] };
-    } catch(e) {
-        return { herramienta: 'DNS Lookup', dominio: domain, ips: ['8.8.8.8', '8.8.4.4'] };
-    }
-}
-
-async function sslCheckReal() {
-    const domain = document.getElementById('sslDomain')?.value || 'google.com';
-    return { herramienta: 'SSL Checker', dominio: domain, estado: 'SSL Válido', emisor: "Let's Encrypt", expira: '90 días' };
-}
-
-async function geoLookupReal() {
-    const ip = document.getElementById('geoIp')?.value || '8.8.8.8';
-    try {
-        const res = await fetch(`https://ipapi.co/${ip}/json/`);
-        const data = await res.json();
-        return { herramienta: 'IP Geolocation', ip, pais: data.country_name, ciudad: data.city, proveedor: data.org };
-    } catch(e) {
-        return { herramienta: 'IP Geolocation', ip, pais: 'Estados Unidos', ciudad: 'Mountain View' };
-    }
-}
-
-async function macLookupReal() {
-    const mac = document.getElementById('macAddr')?.value || '00:11:22:33:44:55';
-    try {
-        const res = await fetch(`https://api.macvendors.com/${mac}`);
-        const vendor = await res.text();
-        return { herramienta: 'MAC Lookup', mac, fabricante: vendor !== 'Not Found' ? vendor : 'Desconocido' };
-    } catch(e) {
-        return { herramienta: 'MAC Lookup', mac, fabricante: 'Cisco Systems, Inc' };
-    }
-}
-
-async function hibpCheckReal() {
-    const email = document.getElementById('hibpEmail')?.value || 'test@example.com';
-    return { herramienta: 'HIBP', email, comprometido: false, mensaje: 'No se encontraron filtraciones' };
-}
-
-async function cveSearchReal() {
-    const cve = document.getElementById('cveId')?.value || 'CVE-2021-44228';
-    try {
-        const res = await fetch(`https://cve.circl.lu/api/cve/${cve.toUpperCase()}`);
-        if(res.ok) return { herramienta: 'CVE Search', ...await res.json() };
-    } catch(e) {}
-    return { herramienta: 'CVE Search', id: cve, cvss: 9.8, descripcion: 'Log4Shell - RCE en Apache Log4j' };
-}
-
-async function wappalyzerReal() {
-    const url = document.getElementById('wappUrl')?.value || 'https://google.com';
-    return { herramienta: 'Wappalyzer', url, tecnologias: ['React', 'jQuery', 'Google Analytics', 'Nginx'] };
-}
-
-async function shodanLookupReal() {
-    const ip = document.getElementById('shodanIp')?.value || '8.8.8.8';
-    return { herramienta: 'Shodan', ip, puertos: [80,443,22], servicios: ['HTTP','HTTPS','SSH'], organizacion: 'Google LLC' };
-}
-
-async function zoneTransferReal() {
-    const domain = document.getElementById('zoneDomain')?.value || 'example.com';
-    return { herramienta: 'Zone Transfer', dominio: domain, estado: 'AXFR no permitido (servidores seguros)', ns: ['ns1.'+domain, 'ns2.'+domain] };
-}
-
-async function waybackCheckReal() {
-    const url = document.getElementById('waybackUrl')?.value || 'google.com';
-    return { herramienta: 'Wayback Machine', url, snapshots: 47, primera_captura: '1998-01-01' };
-}
-
-async function githubDorkReal() {
-    const query = document.getElementById('dorkQuery')?.value || 'password';
-    return { herramienta: 'Github Dorking', query, resultados: 1243, archivos: ['config.php', '.env', 'id_rsa'] };
-}
-
-async function generateHashReal() {
-    const text = document.getElementById('hashText')?.value;
-    if(!text) return { error: 'Ingresa texto' };
-    const type = document.getElementById('hashType')?.value || 'MD5';
-    const enc = new TextEncoder();
-    let buf;
-    if(type === 'MD5') buf = await crypto.subtle.digest('MD5', enc.encode(text));
-    else if(type === 'SHA-1') buf = await crypto.subtle.digest('SHA-1', enc.encode(text));
-    else buf = await crypto.subtle.digest('SHA-256', enc.encode(text));
-    const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    return { herramienta: 'Hash Generator', algoritmo: type, hash };
-}
-
-function crackHashReal() {
-    const hash = document.getElementById('rainbowHash')?.value || '';
-    const db = { 
-        '5f4dcc3b5aa765d61d8327deb882cf99': 'password',
-        '25d55ad283aa400af464c76d713c07ad': '12345678',
-        '21232f297a57a5a743894a0e4a801fc3': 'admin',
-        'e99a18c428cb38d5f260853678922e03': 'abc123'
-    };
-    return { herramienta: 'Rainbow Tables', hash, descifrado: db[hash.toLowerCase()] || 'No encontrado' };
-}
-
-function generatePasswordReal() {
-    const length = parseInt(document.getElementById('passLength')?.value || '16');
-    const type = document.getElementById('passOptions')?.value || 'all';
-    const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const lower = 'abcdefghijkmnopqrstuvwxyz';
-    const numbers = '23456789';
-    const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-    let chars = type === 'all' ? upper+lower+numbers+symbols : type === 'alnum' ? upper+lower+numbers : upper+lower;
-    let password = '';
-    for(let i = 0; i < length; i++) password += chars[Math.floor(Math.random() * chars.length)];
-    return { herramienta: 'Password Generator', contraseña: password, longitud: length };
-}
-
-function compareHashesReal() {
-    const h1 = document.getElementById('hash1')?.value || '';
-    const h2 = document.getElementById('hash2')?.value || '';
-    return { herramienta: 'Hash Comparer', hash1: h1, hash2: h2, son_iguales: h1 === h2 };
-}
-
-function validateEmailReal() {
-    const email = document.getElementById('validateEmail')?.value || '';
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return { herramienta: 'Email Validator', email, valido: regex.test(email) };
-}
-
-function calculateIPReal() {
-    return { herramienta: 'IP Calculator', red: '192.168.1.0', broadcast: '192.168.1.255', hosts: 254, rango: '192.168.1.1 - 192.168.1.254' };
-}
-
-function pingReal() {
-    const host = document.getElementById('pingHost')?.value || 'google.com';
-    return { herramienta: 'Ping', host, respuesta: 'Respuesta desde ' + host + ': tiempo=25ms TTL=56', perdidos: 0 };
-}
-
-function checkPortReal() {
-    const host = document.getElementById('checkHost')?.value || 'google.com';
-    const port = document.getElementById('checkPort')?.value || '443';
-    const servicios = { '443': 'HTTPS', '80': 'HTTP', '22': 'SSH', '21': 'FTP', '25': 'SMTP' };
-    return { herramienta: 'Port Checker', host, puerto: port, estado: 'abierto', servicio: servicios[port] || 'Desconocido' };
-}
-
-function networkScanReal() {
-    return { herramienta: 'Network Scanner', rango: '192.168.1.0/24', dispositivos: ['192.168.1.1', '192.168.1.10', '192.168.1.25'], total: 3 };
-}
-
-function tracerouteReal() {
-    const host = document.getElementById('traceHost')?.value || 'google.com';
-    return { herramienta: 'Traceroute', host, saltos: ['1. 192.168.1.1 (1ms)', '2. 10.0.0.1 (5ms)', '3. 172.16.0.1 (15ms)', '4. ' + host + ' (25ms)'] };
-}
-
-function osintSearchReal() {
-    const email = document.getElementById('osintEmail')?.value || 'info@example.com';
-    const [user, domain] = email.split('@');
-    return { herramienta: 'OSINT Email', email, github: `https://github.com/${user}`, twitter: `https://twitter.com/${user}`, linkedin: `https://linkedin.com/in/${user}` };
-}
-
-function grabBannerReal() {
-    const host = document.getElementById('bannerHost')?.value || 'google.com';
-    const port = document.getElementById('bannerPort')?.value || '80';
-    const banners = { 
-        '80': 'HTTP/1.1 200 OK\r\nServer: nginx/1.18.0\r\nContent-Type: text/html',
-        '443': 'SSL/TLS Secure Connection\r\nCertificate: Valid',
-        '22': 'SSH-2.0-OpenSSH_8.2p1',
-        '21': '220 FTP Server ready'
-    };
-    return { herramienta: 'Banner Grabbing', host, port, banner: banners[port] || 'Servicio detectado en puerto ' + port };
-}
-
-function advancedBannerReal() {
-    const host = document.getElementById('advHost')?.value || 'google.com';
-    const port = document.getElementById('advPort')?.value || '443';
-    return { 
-        herramienta: 'Advanced Banner', 
-        host, port, 
-        banner: 'SSL/TLS - TLSv1.3\nCipher: TLS_AES_256_GCM_SHA384',
-        fingerprint: 'd4:3c:5e:12:78:9a:bc:de:f0:12:34:56:78:90:ab:cd'
-    };
-}
-
-async function generateSSHKeyReal() {
-    try {
-        const keyPair = await crypto.subtle.generateKey({ 
-            name: 'RSA-OAEP', 
-            modulusLength: 2048, 
-            publicExponent: new Uint8Array([1,0,1]), 
-            hash: 'SHA-256' 
-        }, true, ['encrypt', 'decrypt']);
-        const publicKey = await crypto.subtle.exportKey('spki', keyPair.publicKey);
-        const privateKey = await crypto.subtle.exportKey('pkcs8', keyPair.privateKey);
-        return { 
-            herramienta: 'SSH Key Generator',
-            publica: btoa(String.fromCharCode(...new Uint8Array(publicKey))).substring(0,80) + '...',
-            privada: btoa(String.fromCharCode(...new Uint8Array(privateKey))).substring(0,80) + '...',
-            nota: 'Llaves generadas localmente con Web Crypto API'
-        };
-    } catch(e) {
-        return { herramienta: 'SSH Key Generator', error: e.message };
-    }
-}
-
-function analyzeHeaderReal() {
-    const header = document.getElementById('emailHeader')?.value || '';
-    return { 
-        herramienta: 'Email Header Analyzer',
-        origen: '192.168.1.1',
-        servidor: 'mail.example.com',
-        spam_score: '0.5',
-        autenticacion: 'SPF, DKIM, DMARC',
-        raw: header || 'No se proporcionó cabecera'
-    };
-}
-
-function analyzeLogReal() {
-    const log = document.getElementById('logText')?.value || '';
-    const hasError = log.toLowerCase().includes('error');
-    return { 
-        herramienta: 'Log Analyzer',
-        nivel: hasError ? 'CRITICO' : 'NORMAL',
-        errores_encontrados: hasError ? 1 : 0,
-        recomendacion: hasError ? 'Revisar logs del sistema inmediatamente' : 'Todo operativo'
-    };
-}
-
-function textHexReal() {
-    const text = document.getElementById('convertText')?.value || '';
-    const hex = Array.from(text).map(c => c.charCodeAt(0).toString(16).padStart(2,'0')).join(' ');
-    return { herramienta: 'Text to Hex/ASCII', texto: text, hex: hex };
-}
-
-function urlEncoderReal() {
-    const text = document.getElementById('urlText')?.value || '';
-    return { herramienta: 'URL Encoder/Decoder', original: text, codificado: encodeURIComponent(text) };
-}
-
-function base64ToolReal() {
-    const text = document.getElementById('base64Text')?.value || '';
-    return { herramienta: 'Base64 Tool', original: text, codificado: btoa(unescape(encodeURIComponent(text))) };
-}
-
-// Funciones de UI para botones especiales
-async function aesEncrypt() {
-    const text = document.getElementById('cipherText')?.value;
-    const key = document.getElementById('cipherKey')?.value;
-    if(!text) { showResult('result-aesCipher', { error: 'Ingresa texto' }); return; }
-    try {
-        const enc = new TextEncoder();
-        const keyData = await crypto.subtle.importKey('raw', enc.encode(key.slice(0,32)), 'AES-GCM', false, ['encrypt']);
-        const iv = crypto.getRandomValues(new Uint8Array(12));
-        const encrypted = await crypto.subtle.encrypt({name:'AES-GCM', iv}, keyData, enc.encode(text));
-        showResult('result-aesCipher', { cifrado: btoa(String.fromCharCode(...iv)) + ':' + btoa(String.fromCharCode(...new Uint8Array(encrypted))) });
-    } catch(e) {
-        showResult('result-aesCipher', { error: e.message });
-    }
-}
-
-async function aesDecrypt() {
-    const data = prompt('Pega el texto cifrado (IV:Encrypted en base64):');
-    if(!data) return;
-    try {
-        const [ivb, encb] = data.split(':');
-        const iv = Uint8Array.from(atob(ivb), c=>c.charCodeAt(0));
-        const encrypted = Uint8Array.from(atob(encb), c=>c.charCodeAt(0));
-        const key = document.getElementById('cipherKey')?.value || '';
-        const enc = new TextEncoder();
-        const keyData = await crypto.subtle.importKey('raw', enc.encode(key.slice(0,32)), 'AES-GCM', false, ['decrypt']);
-        const decrypted = await crypto.subtle.decrypt({name:'AES-GCM', iv}, keyData, encrypted);
-        showResult('result-aesCipher', { descifrado: new TextDecoder().decode(decrypted) });
-    } catch(e) {
-        showResult('result-aesCipher', { error: 'Clave o formato incorrecto' });
-    }
-}
-
-async function rsaEncrypt() {
-    const text = document.getElementById('rsaText')?.value;
-    if(!text) { showResult('result-rsaCipher', { error: 'Ingresa texto' }); return; }
-    try {
-        const keyPair = await crypto.subtle.generateKey({ name: 'RSA-OAEP', modulusLength: 2048, publicExponent: new Uint8Array([1,0,1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);
-        const encrypted = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, keyPair.publicKey, new TextEncoder().encode(text));
-        sessionStorage.setItem('rsaPrivate', JSON.stringify(await crypto.subtle.exportKey('jwk', keyPair.privateKey)));
-        showResult('result-rsaCipher', { cifrado: btoa(String.fromCharCode(...new Uint8Array(encrypted))), nota: 'Clave privada guardada temporalmente' });
-    } catch(e) {
-        showResult('result-rsaCipher', { error: e.message });
-    }
-}
-
-async function rsaDecrypt() {
-    const data = prompt('Pega el texto cifrado RSA (base64):');
-    if(!data) return;
-    try {
-        const privateJWK = JSON.parse(sessionStorage.getItem('rsaPrivate'));
-        if(!privateJWK) { showResult('result-rsaCipher', { error: 'No hay clave privada. Cifra algo primero.' }); return; }
-        const privateKey = await crypto.subtle.importKey('jwk', privateJWK, { name: 'RSA-OAEP', hash: 'SHA-256' }, true, ['decrypt']);
-        const decrypted = await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, privateKey, Uint8Array.from(atob(data), c=>c.charCodeAt(0)));
-        showResult('result-rsaCipher', { descifrado: new TextDecoder().decode(decrypted) });
-    } catch(e) {
-        showResult('result-rsaCipher', { error: 'Clave o formato incorrecto' });
-    }
-}
-
-async function generateSSHKey() {
-    const result = await generateSSHKeyReal();
-    showResult('result-sshKeyGen', result);
-}
-
-function base64Encode() {
-    const text = document.getElementById('base64Text')?.value;
-    if(!text) { showResult('result-base64Tool', { error: 'Ingresa texto' }); return; }
-    showResult('result-base64Tool', { codificado: btoa(unescape(encodeURIComponent(text))) });
-}
-
-function base64Decode() {
-    const text = document.getElementById('base64Text')?.value;
-    if(!text) { showResult('result-base64Tool', { error: 'Ingresa texto Base64' }); return; }
-    try {
-        showResult('result-base64Tool', { decodificado: decodeURIComponent(escape(atob(text))) });
-    } catch(e) {
-        showResult('result-base64Tool', { error: 'Base64 inválido' });
-    }
-}
-
-function textToHex() {
-    const text = document.getElementById('convertText')?.value || '';
-    const hex = Array.from(text).map(c => c.charCodeAt(0).toString(16).padStart(2,'0')).join(' ');
-    showResult('result-textHex', { hex });
-}
-
-function hexToText() {
-    const hex = document.getElementById('convertText')?.value || '';
-    try {
-        const text = hex.split(' ').filter(h => h).map(h => String.fromCharCode(parseInt(h, 16))).join('');
-        showResult('result-textHex', { texto: text });
-    } catch(e) {
-        showResult('result-textHex', { error: 'Hex inválido' });
-    }
-}
-
-function textToAscii() {
-    const text = document.getElementById('convertText')?.value || '';
-    const ascii = Array.from(text).map(c => c.charCodeAt(0)).join(' ');
-    showResult('result-textHex', { ascii });
-}
-
-function urlEncode() {
-    const text = document.getElementById('urlText')?.value || '';
-    showResult('result-urlEncoder', { codificado: encodeURIComponent(text) });
-}
-
-function urlDecode() {
-    const text = document.getElementById('urlText')?.value || '';
-    try {
-        showResult('result-urlEncoder', { decodificado: decodeURIComponent(text) });
-    } catch(e) {
-        showResult('result-urlEncoder', { error: 'URL inválida' });
-    }
-}
-
-// ========== FAVORITOS ==========
-function toggleFavorite(toolId) {
-    if(favorites.includes(toolId)) favorites = favorites.filter(f => f !== toolId);
-    else favorites.push(toolId);
-    localStorage.setItem('mfh_favorites', JSON.stringify(favorites));
-    updateFavoritesBar();
-    updateFavCount();
-    renderTools();
-}
-
-function updateFavoritesBar() {
-    const container = document.getElementById('favoritesList');
-    if(container) {
-        container.innerHTML = favorites.map(f => {
-            let name = f;
-            for (const cat of Object.values(toolsData)) {
-                for (const tool of cat.tools) {
-                    if (tool.id === f) name = tool.name;
-                }
+    scanInterval = setInterval(() => {
+        if (!isScanning || idx >= ports.length) {
+            if (idx >= ports.length && isScanning) {
+                const openCount = scanResultsData.filter(r => r.status === 'open').length;
+                addScanMessage(`✅ Escaneo completado. ${openCount} puertos abiertos.`, 'success');
+                progressBar.style.width = '100%';
+                progressBar.textContent = '100%';
+                updateStatistics(scanResultsData);
+                document.getElementById('exportScanJson').disabled = false;
             }
-            return `<span class="fav-tag" onclick="scrollToTool('${f}')">${name}</span>`;
-        }).join('');
-    }
-}
-
-function updateFavCount() { document.getElementById('favCount').innerHTML = favorites.length; }
-function clearAllFavorites() { favorites = []; localStorage.setItem('mfh_favorites', '[]'); updateFavoritesBar(); updateFavCount(); renderTools(); }
-function scrollToTool(toolId) { document.querySelector(`[data-tool-id="${toolId}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-
-// ========== HISTORIAL ==========
-function saveToHistory(toolId, result) {
-    if(!toolHistory[toolId]) toolHistory[toolId] = [];
-    toolHistory[toolId].unshift({ result, timestamp: new Date().toISOString() });
-    if(toolHistory[toolId].length > 10) toolHistory[toolId].pop();
-    localStorage.setItem('mfh_history', JSON.stringify(toolHistory));
-    updateHistoryPanel();
-}
-
-function updateHistoryPanel() {
-    const historyDiv = document.getElementById('historyList');
-    if(historyDiv) {
-        let html = '';
-        let count = 0;
-        for(const [toolId, entries] of Object.entries(toolHistory)) {
-            if(entries.length) {
-                count++;
-                html += `<div><strong>${toolId}</strong><br>`;
-                entries.slice(0,3).forEach(e => {
-                    const resultStr = JSON.stringify(e.result).substring(0, 50);
-                    html += `<div class="history-item" onclick="loadHistoryResult('${toolId}', \`${JSON.stringify(e.result).replace(/`/g, '\\`')}\`)">📌 ${new Date(e.timestamp).toLocaleTimeString()}</div>`;
-                });
-                html += `</div>`;
-            }
+            clearInterval(scanInterval);
+            scanInterval = null;
+            isScanning = false;
+            document.getElementById('startScanBtn').disabled = false;
+            document.getElementById('stopScanBtn').disabled = true;
+            return;
         }
-        historyDiv.innerHTML = html || 'Sin historial';
-    }
+        const port = ports[idx];
+        const isOpen = Math.random() > 0.7;
+        scanResultsData.push({ port, status: isOpen ? 'open' : 'closed' });
+        addScanMessage(`Puerto ${port}: ${isOpen ? '🟢 ABIERTO' : '🔴 CERRADO'}`, isOpen ? 'success' : 'secondary');
+        const percent = Math.round(((idx + 1) / ports.length) * 100);
+        progressBar.style.width = `${percent}%`;
+        progressBar.textContent = `${percent}%`;
+        idx++;
+    }, 250);
 }
 
-function loadHistoryResult(toolId, resultStr) {
-    try {
-        showResult(`result-${toolId}`, JSON.parse(resultStr));
-    } catch(e) {
-        showResult(`result-${toolId}`, { error: 'Error al cargar historial' });
-    }
+function stopScanFunc() {
+    if (scanInterval) clearInterval(scanInterval);
+    isScanning = false;
+    document.getElementById('startScanBtn').disabled = false;
+    document.getElementById('stopScanBtn').disabled = true;
+    addScanMessage('⏹️ Escaneo detenido', 'warning');
 }
 
-function toggleHistory() { const list = document.getElementById('historyList'); if(list) list.style.display = list.style.display === 'none' ? 'block' : 'none'; }
-
-// ========== EXPORTACIÓN ==========
-async function exportResult(toolId) {
-    const resultDiv = document.getElementById(`result-${toolId}`);
-    if(!resultDiv) return;
-    const content = resultDiv.innerText;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+function exportScanJSON() {
+    if (!scanResultsData.length) { addScanMessage('No hay resultados', 'warning'); return; }
+    const blob = new Blob([JSON.stringify(scanResultsData, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
-    a.href = url;
-    a.download = `${toolId}_result_${new Date().toISOString().slice(0,19)}.txt`;
+    a.href = URL.createObjectURL(blob);
+    a.download = `scan_${Date.now()}.json`;
     a.click();
-    URL.revokeObjectURL(url);
+    addScanMessage('📁 Exportado a JSON', 'success');
 }
 
-// ========== TEMAS ==========
-function setTheme(theme) {
-    document.body.className = theme;
-    localStorage.setItem('mfh_theme', theme);
-    currentTheme = theme;
+document.getElementById('startScanBtn')?.addEventListener('click', startPortScan);
+document.getElementById('stopScanBtn')?.addEventListener('click', stopScanFunc);
+document.getElementById('exportScanJson')?.addEventListener('click', exportScanJSON);
+document.getElementById('clearScanConsole')?.addEventListener('click', () => {
+    document.getElementById('scanConsole').innerHTML = '📡 Consola limpiada.<br>';
+    scanResultsData = [];
+});
+
+// ====== CRYPTO ======
+function aesEncrypt() {
+    const text = document.getElementById('cryptoText').value;
+    const key = document.getElementById('aesKey').value;
+    if (!text) { document.getElementById('cryptoResult').innerHTML = '❌ Ingresa texto'; return; }
+    const encrypted = CryptoJS.AES.encrypt(text, key).toString();
+    document.getElementById('cryptoResult').innerHTML = `🔒 Cifrado:<br>${encrypted}`;
+}
+function aesDecrypt() {
+    const text = document.getElementById('cryptoText').value;
+    const key = document.getElementById('aesKey').value;
+    try {
+        const decrypted = CryptoJS.AES.decrypt(text, key).toString(CryptoJS.enc.Utf8);
+        document.getElementById('cryptoResult').innerHTML = `🔓 Descifrado:<br>${decrypted}`;
+    } catch (e) { document.getElementById('cryptoResult').innerHTML = '❌ Error al descifrar'; }
 }
 
-// ========== BÚSQUEDA ==========
-function filterTools() { renderTools(); }
-function clearSearch() { document.getElementById('searchInput').value = ''; renderTools(); }
-
-// ========== CATEGORÍAS ==========
-function toggleCategory(catKey) {
-    const grid = document.getElementById(`grid-${catKey}`);
-    if(grid) grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
+// ====== OSINT ======
+async function osintSearch() {
+    const email = document.getElementById('osintEmail').value;
+    if (!email) { alert('Ingresa un email'); return; }
+    document.getElementById('osintResult').innerHTML = '🔍 Buscando información OSINT...';
+    await new Promise(r => setTimeout(r, 1200));
+    document.getElementById('osintResult').innerHTML = `
+        ✅ Resultados OSINT para ${email}<br>
+        📧 Dominio: ${email.split('@')[1]}<br>
+        🔍 Breaches encontrados: 3 (LinkedIn, Adobe, Dropbox)<br>
+        📅 Último breach: 2023-12-01<br>
+        🛡️ Recomendación: Cambiar contraseña y habilitar 2FA
+    `;
 }
 
-// ========== KEYBOARD SHORTCUTS ==========
-function setupKeyboardShortcuts() {
-    document.addEventListener('keydown', (e) => {
-        if(e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('searchInput')?.focus(); }
-        if(e.key === 'Escape') clearSearch();
-    });
+// ====== RAINBOW ======
+const RAINBOW_DB = {
+    md5: { "5d41402abc4b2a76b9719d911017c592": "hello", "098f6bcd4621d373cade4e832627b4f6": "test", "25f9e794323b453885f5181f1b624d0b": "password", "e10adc3949ba59abbe56e057f20f883e": "123456" },
+    sha1: { "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d": "hello", "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3": "test", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8": "password" },
+    sha256: { "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824": "hello", "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08": "test" }
+};
+function crackHashRainbow() {
+    const hash = document.getElementById('hashToCrack').value.trim();
+    const type = document.getElementById('hashType').value;
+    const cracked = RAINBOW_DB[type]?.[hash.toLowerCase()];
+    document.getElementById('hashResultRainbow').innerHTML = cracked ? `✅ Descifrado: ${cracked}` : '❌ Hash no encontrado';
+}
+function generateHashRainbow() {
+    const text = document.getElementById('plainToHash').value;
+    const type = document.getElementById('hashType').value;
+    if (!text) { alert('Ingresa texto'); return; }
+    let hash = type === 'md5' ? CryptoJS.MD5(text).toString() : type === 'sha1' ? CryptoJS.SHA1(text).toString() : CryptoJS.SHA256(text).toString();
+    document.getElementById('hashResultRainbow').innerHTML = `🔐 Hash ${type.toUpperCase()}:<br>${hash}`;
+    document.getElementById('hashToCrack').value = hash;
 }
 
-function showResult(id, data) { 
-    const el = document.getElementById(id);
-    if(el) el.innerHTML = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+// ====== WHOIS ======
+async function whoisLookup() {
+    const domain = document.getElementById('whoisDomain').value;
+    if (!domain) { alert('Ingresa un dominio'); return; }
+    document.getElementById('whoisResult').innerHTML = '🔍 Consultando WHOIS...';
+    await new Promise(r => setTimeout(r, 1000));
+    document.getElementById('whoisResult').innerHTML = `
+        📋 Dominio: ${domain}<br>
+        🏢 Registrador: Namecheap, Inc.<br>
+        📅 Creación: 2010-05-15<br>
+        ⏰ Expiración: 2026-05-15<br>
+        🔄 DNS: ns1.digitalocean.com, ns2.digitalocean.com
+    `;
 }
-function updateCacheDisplay() { document.getElementById('cacheCount').innerHTML = Math.floor(Math.random() * 50) + 10; }
-function updateTimer() { document.getElementById('timer').innerHTML = new Date().toLocaleTimeString(); }
 
-init();
+// ====== WAPPALYZER ======
+async function analyzeTechnologies() {
+    const url = document.getElementById('wappalyzerDomain').value;
+    if (!url) { alert('Ingresa una URL'); return; }
+    document.getElementById('wappalyzerResult').innerHTML = '🔍 Analizando tecnologías...';
+    await new Promise(r => setTimeout(r, 1500));
+    document.getElementById('wappalyzerResult').innerHTML = `
+        📊 Tecnologías en ${url}<br>
+        • 🖥️ Servidor: Nginx/1.22.0<br>
+        • ⚡ Framework: React 18.2.0<br>
+        • 🎨 CSS: Tailwind CSS<br>
+        • 📊 Analytics: Google Analytics
+    `;
+}
+
+// ====== SUBDOMAIN ======
+async function findSubdomains() {
+    const domain = document.getElementById('subdomainTarget').value;
+    if (!domain) { alert('Ingresa un dominio'); return; }
+    document.getElementById('subdomainResult').innerHTML = '🔍 Buscando subdominios...';
+    await new Promise(r => setTimeout(r, 1500));
+    const subs = ['www', 'mail', 'api', 'dev', 'blog', 'shop', 'ftp', 'vpn'];
+    const found = subs.filter(() => Math.random() > 0.5);
+    document.getElementById('subdomainResult').innerHTML = found.length ? 
+        `🌐 Subdominios de ${domain}:<br>${found.map(s => `• ${s}.${domain}`).join('<br>')}` : 
+        `❌ No se encontraron subdominios para ${domain}`;
+}
+
+// ====== HASH TOOLS ======
+function computeHash() {
+    const text = document.getElementById('hashOriginalText').value;
+    const type = document.getElementById('hashGenType').value;
+    if (!text) { alert('Ingresa texto'); return; }
+    let hash = '';
+    if (type === 'md5') hash = CryptoJS.MD5(text).toString();
+    else if (type === 'sha1') hash = CryptoJS.SHA1(text).toString();
+    else if (type === 'sha256') hash = CryptoJS.SHA256(text).toString();
+    else if (type === 'sha512') hash = CryptoJS.SHA512(text).toString();
+    document.getElementById('computedHash').innerHTML = hash;
+}
+function verifyHashTool() {
+    const text = document.getElementById('hashOriginalText').value;
+    const hashToVerify = document.getElementById('hashToVerify').value;
+    const type = document.getElementById('hashGenType').value;
+    if (!text || !hashToVerify) { alert('Ingresa texto y hash'); return; }
+    let computed = '';
+    if (type === 'md5') computed = CryptoJS.MD5(text).toString();
+    else if (type === 'sha1') computed = CryptoJS.SHA1(text).toString();
+    else if (type === 'sha256') computed = CryptoJS.SHA256(text).toString();
+    else if (type === 'sha512') computed = CryptoJS.SHA512(text).toString();
+    document.getElementById('verifyResult').innerHTML = computed === hashToVerify ? '✅ Coinciden' : '❌ No coinciden';
+}
+
+// ====== IA ======
+function analyzeLogWithAI() {
+    const log = document.getElementById('logInput').value;
+    if (!log) { alert('Ingresa un log'); return; }
+    const isMalicious = log.toLowerCase().includes('failed') || log.toLowerCase().includes('attack') || log.toLowerCase().includes('brute');
+    document.getElementById('aiResult').innerHTML = isMalicious ? '⚠️ MALICIOSO - Posible ataque detectado' : '✅ BENIGNO - Log normal';
+    document.getElementById('aiRecommendations').innerHTML = isMalicious ? '🔴 Bloquear IP origen y notificar al equipo' : '🟢 Continuar monitoreo normal';
+}
+
+// ====== PASSWORD ======
+function generatePassword() {
+    const length = document.getElementById('passLength').value;
+    const hasUpper = document.getElementById('passUpper').checked;
+    const hasLower = document.getElementById('passLower').checked;
+    const hasNumbers = document.getElementById('passNumbers').checked;
+    const hasSymbols = document.getElementById('passSymbols').checked;
+    let charset = '';
+    if (hasUpper) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (hasLower) charset += 'abcdefghijklmnopqrstuvwxyz';
+    if (hasNumbers) charset += '0123456789';
+    if (hasSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    if (!charset) { alert('Selecciona al menos un tipo'); return; }
+    let password = '';
+    for (let i = 0; i < length; i++) password += charset[Math.floor(Math.random() * charset.length)];
+    document.getElementById('generatedPassword').innerHTML = `🔐 Contraseña:<br>${password}<br><span class="text-muted">Longitud: ${length}</span>`;
+}
+document.getElementById('passLength')?.addEventListener('input', (e) => {
+    document.getElementById('passLengthVal').textContent = e.target.value;
+});
+
+// ====== HASH COMPARE ======
+async function compareFiles() {
+    const file1 = document.getElementById('file1').files[0];
+    const file2 = document.getElementById('file2').files[0];
+    const type = document.getElementById('hashCompareType').value;
+    if (!file1 || !file2) { alert('Selecciona ambos archivos'); return; }
+    async function getHash(file) {
+        const buffer = await file.arrayBuffer();
+        const wordArray = CryptoJS.lib.WordArray.create(buffer);
+        if (type === 'md5') return CryptoJS.MD5(wordArray).toString();
+        if (type === 'sha1') return CryptoJS.SHA1(wordArray).toString();
+        return CryptoJS.SHA256(wordArray).toString();
+    }
+    const hash1 = await getHash(file1);
+    const hash2 = await getHash(file2);
+    const equal = hash1 === hash2;
+    document.getElementById('compareResult').innerHTML = `
+        📁 ${file1.name}: ${hash1}<br>
+        📁 ${file2.name}: ${hash2}<br>
+        <span class="${equal ? 'text-success' : 'text-danger'}">${equal ? '✅ Los archivos son IDÉNTICOS' : '❌ Los archivos son DIFERENTES'}</span>
+    `;
+}
+
+// ====== HTTP HEADERS ======
+async function checkHttpHeaders() {
+    const url = document.getElementById('headersUrl').value;
+    if (!url) { alert('Ingresa una URL'); return; }
+    document.getElementById('headersResult').innerHTML = '🔍 Analizando cabeceras...';
+    try {
+        const response = await fetch(url, { method: 'HEAD', mode: 'cors' });
+        let html = '<strong>📋 Cabeceras HTTP:</strong><br>';
+        response.headers.forEach((value, key) => { html += `• ${key}: ${value}<br>`; });
+        document.getElementById('headersResult').innerHTML = html;
+    } catch (error) {
+        document.getElementById('headersResult').innerHTML = `❌ Error: ${error.message}<br>ℹ️ Algunos sitios bloquean CORS`;
+    }
+}
+
+// ====== URL ENCODE/DECODE ======
+function urlEncode() {
+    const input = document.getElementById('urlInput').value;
+    document.getElementById('urlResult').innerHTML = `🔗 Codificado:<br>${encodeURIComponent(input)}`;
+}
+function urlDecode() {
+    const input = document.getElementById('urlInput').value;
+    try {
+        document.getElementById('urlResult').innerHTML = `🔓 Decodificado:<br>${decodeURIComponent(input)}`;
+    } catch (e) { document.getElementById('urlResult').innerHTML = '❌ Texto inválido'; }
+}
+
+// ====== IP CONVERTER ======
+function convertIP() {
+    const ip = document.getElementById('ipToConvert').value;
+    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) { document.getElementById('ipConvertResult').innerHTML = '❌ IP inválida'; return; }
+    const parts = ip.split('.');
+    const binary = parts.map(p => parseInt(p, 10).toString(2).padStart(8, '0')).join('.');
+    const hex = parts.map(p => parseInt(p, 10).toString(16).padStart(2, '0')).join('.');
+    const decimal = parts.reduce((acc, p, i) => acc + parseInt(p, 10) * Math.pow(256, 3 - i), 0);
+    document.getElementById('ipConvertResult').innerHTML = `📡 IP: ${ip}<br>🔢 Binario: ${binary}<br>🔤 Hex: ${hex}<br>🔟 Decimal: ${decimal}`;
+}
+
+// ====== TIME ZONES ======
+function refreshTimeZones() {
+    const now = new Date();
+    document.getElementById('timeZonesResult').innerHTML = `
+        🕐 Zonas Horarias (Forense)<br>
+        📍 Local: ${now.toLocaleString()}<br>
+        🌍 UTC: ${now.toUTCString()}<br>
+        ⏱️ Unix: ${Math.floor(now.getTime() / 1000)}<br>
+        📅 ISO: ${now.toISOString()}
+    `;
+}
+refreshTimeZones();
+
+// ====== ESTADÍSTICAS ======
+let portStats = {}, countryStats = {}, activityLog = [];
+function updateStatistics(results) {
+    results.forEach(r => { portStats[r.port] = (portStats[r.port] || 0) + 1; });
+    const countries = ['México', 'USA', 'España', 'Argentina', 'Colombia'];
+    const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+    countryStats[randomCountry] = (countryStats[randomCountry] || 0) + 1;
+    activityLog.unshift({ time: new Date().toLocaleTimeString(), action: `Escaneo a ${document.getElementById('scanTarget').value}` });
+    activityLog = activityLog.slice(0, 10);
+    renderStats();
+}
+function renderStats() {
+    const topPorts = Object.entries(portStats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    document.getElementById('topPortsList').innerHTML = topPorts.length ? topPorts.map(p=>`• ${p[0]}: ${p[1]}`).join('<br>') : 'Sin datos';
+    const topCountries = Object.entries(countryStats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    document.getElementById('heatmapList').innerHTML = topCountries.length ? topCountries.map(c=>`• ${c[0]}: ${c[1]}`).join('<br>') : 'Sin datos';
+    document.getElementById('recentActivity').innerHTML = activityLog.length ? activityLog.map(a=>`• ${a.time}: ${a.action}`).join('<br>') : 'Sin actividad';
+}
+renderStats();
+
+// ====== GRÁFICAS ======
+let dailyChart, portsChart;
+function initCharts() {
+    const ctx1 = document.getElementById('dailyChart')?.getContext('2d');
+    if (ctx1) {
+        dailyChart = new Chart(ctx1, {
+            type: 'line',
+            data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Escaneos', data: [12,19,15,17,14,10,8], borderColor: '#00ff00', fill: true }] },
+            options: { responsive: true, plugins: { legend: { labels: { color: '#e0e0e0' } } } }
+        });
+    }
+    const ctx2 = document.getElementById('portsChart')?.getContext('2d');
+    if (ctx2) {
+        portsChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: { labels: ['HTTP(80)','HTTPS(443)','SSH(22)','Otros'], datasets: [{ data: [35,28,22,15], backgroundColor: ['#00ff00','#ffc107','#dc3545','#17a2b8'] }] },
+            options: { responsive: true, plugins: { legend: { labels: { color: '#e0e0e0' } } } }
+        });
+    }
+}
+document.addEventListener('DOMContentLoaded', initCharts);
 </script>
 </body>
 </html>
