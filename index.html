@@ -2,9 +2,11 @@
 <html lang="es-MX">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
-    <meta name="description" content="Suite de ciberseguridad con 20+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA y más. Hecho en México.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. 20+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA, Password Generator, Hash Compare, HTTP Headers, URL Encode, IP Converter, Time Zones. Hecho en México.">
+    <title>🔥 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     
     <style>
-        /* ===== ESTILOS BASE ===== */
+        /* ===== ESTILOS COMPLETOS ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
@@ -30,6 +32,8 @@
         body.light-mode .badge-mfh { background: rgba(0,170,0,0.1); color: #008800; }
         body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
         body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
+        body.light-mode .card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
+        body.light-mode .modal-content { background: #fff; border-color: #00aa00; }
         
         /* ===== NAVBAR ===== */
         .navbar {
@@ -50,35 +54,28 @@
             background-clip: text;
             color: transparent;
         }
-        .navbar .nav-link {
-            color: #e0e0e0 !important;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
+        .navbar .nav-link { color: #e0e0e0 !important; font-size: 0.85rem; transition: all 0.3s ease; }
         .navbar .nav-link:hover { color: #00ff00 !important; }
+        .navbar .nav-link.active { color: #00ff00 !important; border-bottom: 2px solid #00ff00; }
         .theme-toggle { cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; }
         .theme-toggle:hover { transform: rotate(180deg); }
         
-        /* ===== BOTÓN DE DONACIÓN ===== */
+        /* ===== BOTÓN DONACIÓN ===== */
         .btn-donate {
             background: linear-gradient(135deg, #ff6b6b, #ee5a24);
             border: none;
             color: #fff;
             font-weight: 700;
-            padding: 6px 18px;
+            padding: 5px 16px;
             border-radius: 50px;
             transition: all 0.3s ease;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             animation: pulse-donate 2s ease-in-out infinite;
         }
-        .btn-donate:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(238, 90, 36, 0.5);
-            color: #fff;
-        }
+        .btn-donate:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(238,90,36,0.5); color: #fff; }
         @keyframes pulse-donate {
-            0%, 100% { box-shadow: 0 0 10px rgba(238, 90, 36, 0.3); }
-            50% { box-shadow: 0 0 25px rgba(238, 90, 36, 0.6); }
+            0%,100% { box-shadow: 0 0 10px rgba(238,90,36,0.3); }
+            50% { box-shadow: 0 0 25px rgba(238,90,36,0.6); }
         }
         
         /* ===== TOOL CARDS ===== */
@@ -96,7 +93,8 @@
             border-color: #00ff00;
             box-shadow: 0 10px 25px rgba(0,255,0,0.15);
         }
-        .tool-icon { font-size: 1.8rem; color: #00ff00; }
+        .tool-icon { font-size: 1.8rem; color: #00ff00; transition: all 0.3s ease; }
+        .tool-card:hover .tool-icon { transform: rotate(360deg) scale(1.1); }
         
         /* ===== CONSOLA ===== */
         .console-output {
@@ -108,6 +106,7 @@
             height: 220px;
             overflow-y: auto;
             font-size: 0.8rem;
+            line-height: 1.6;
         }
         .console-output::-webkit-scrollbar { width: 5px; }
         .console-output::-webkit-scrollbar-track { background: #1a1a1a; }
@@ -124,6 +123,7 @@
             transition: all 0.3s ease;
         }
         .btn-mfh:hover { transform: scale(1.02); box-shadow: 0 0 12px rgba(0,255,0,0.4); }
+        .btn-mfh:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-outline-mfh {
             background: transparent;
             border: 2px solid #00ff00;
@@ -131,8 +131,10 @@
             font-weight: 600;
             padding: 5px 12px;
             border-radius: 8px;
+            transition: all 0.3s ease;
         }
         .btn-outline-mfh:hover { background: #00ff00; color: #000; }
+        .btn-outline-mfh:disabled { opacity: 0.5; cursor: not-allowed; }
         
         /* ===== BADGES ===== */
         .badge-mfh {
@@ -160,6 +162,8 @@
             background: rgba(0,255,0,0.15);
             border-bottom: 2px solid #00ff00;
         }
+        body.light-mode .nav-tabs .nav-link { color: #333; }
+        body.light-mode .nav-tabs .nav-link.active { color: #00aa00; background: rgba(0,170,0,0.1); }
         
         /* ===== FORMULARIOS ===== */
         .form-control, .form-select {
@@ -174,10 +178,35 @@
             box-shadow: 0 0 8px rgba(0,255,0,0.3);
             outline: none;
         }
+        body.light-mode .form-control, body.light-mode .form-select {
+            background: #fff;
+            color: #1a1a1a;
+            border-color: #ccc;
+        }
+        
+        /* ===== PROGRESS ===== */
+        .progress { background: #1a1a1a; border-radius: 10px; height: 18px; }
+        .progress-bar { background: #00ff00; transition: width 0.3s ease; font-weight: bold; }
+        
+        /* ===== CARDS ===== */
+        .card {
+            background: rgba(20,20,20,0.95);
+            border: 1px solid rgba(0,255,0,0.15);
+            border-radius: 12px;
+        }
+        
+        /* ===== MODAL ===== */
+        .modal-content {
+            background: #1a1a1a;
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+        }
+        .modal-header { border-bottom: 1px solid rgba(0,255,0,0.3); }
+        .modal-footer { border-top: 1px solid rgba(0,255,0,0.3); }
         
         /* ===== FOOTER ===== */
         footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.2); padding: 20px 0 15px; margin-top: 30px; }
-        footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; }
+        footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease; }
         footer a:hover { color: #00ff00; }
         
         /* ===== ANIMACIONES ===== */
@@ -187,10 +216,18 @@
         }
         .glow-text { animation: glow 2s ease-in-out infinite; }
         
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tool-card { animation: fadeInUp 0.5s ease-out; }
+        
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .navbar-brand { font-size: 1rem; }
             .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
             .btn-mfh { padding: 4px 10px; font-size: 0.75rem; }
+            .btn-donate { padding: 4px 12px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -199,11 +236,12 @@
 <!-- ==================== NAVBAR ==================== -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="/"><i class="fas fa-shield-haltered me-2"></i>MFH TOOLS PRO</a>
+        <a class="navbar-brand" href="#"><i class="fas fa-shield-haltered me-2"></i>MFH TOOLS PRO</a>
         <div class="ms-auto d-flex align-items-center gap-2">
-            <a href="/contacto.html" class="btn btn-sm btn-outline-mfh d-none d-md-inline"><i class="fas fa-envelope me-1"></i>Contacto</a>
-            <a href="/aviso-legal.html" class="btn btn-sm btn-outline-mfh d-none d-md-inline"><i class="fas fa-gavel me-1"></i>Legal</a>
-            <a href="/donar.html" class="btn btn-sm btn-donate"><i class="fas fa-heart me-1"></i>Donar</a>
+            <button class="btn btn-sm btn-donate" onclick="openDonationModal()"><i class="fas fa-heart me-1"></i>Donar</button>
+            <button class="btn btn-sm btn-outline-mfh" onclick="openContactModal()"><i class="fas fa-envelope me-1"></i>Contacto</button>
+            <button class="btn btn-sm btn-outline-mfh" onclick="openLegalModal()"><i class="fas fa-gavel me-1"></i>Legal</button>
+            <button class="btn btn-sm btn-outline-mfh" onclick="openMarketplaceModal()"><i class="fas fa-store me-1"></i>Marketplace</button>
             <i class="fas fa-sun theme-toggle" id="themeToggle"></i>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -211,11 +249,10 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
                 <li class="nav-item"><a class="nav-link" href="#herramientas">Herramientas</a></li>
                 <li class="nav-item"><a class="nav-link" href="#tools-panel">Panel</a></li>
                 <li class="nav-item"><a class="nav-link" href="#estadisticas">Stats</a></li>
-                <li class="nav-item"><a class="nav-link" href="/marketplace.html">Marketplace</a></li>
             </ul>
         </div>
     </div>
@@ -236,7 +273,6 @@
                     <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
                 </div>
                 <button class="btn-mfh" onclick="document.getElementById('tools-panel').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play me-2"></i>Usar Herramientas</button>
-                <a href="/marketplace.html" class="btn btn-outline-mfh ms-2"><i class="fas fa-store me-2"></i>Marketplace</a>
             </div>
             <div class="col-lg-4">
                 <div class="console-output" style="height: auto;">
@@ -263,7 +299,7 @@
             <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('wappalyzer')"><i class="fab fa-codepen tool-icon"></i><small>Wappalyzer</small></div></div>
             <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('subdomain')"><i class="fas fa-sitemap tool-icon"></i><small>Subdomain</small></div></div>
             <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('hash')"><i class="fas fa-hashtag tool-icon"></i><small>Hash Tools</small></div></div>
-            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('ai')"><i class="fas fa-robot tool-icon"></i><small>IA Asistente</small></div></div>
+            <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('ai')"><i class="fas fa-robot tool-icon"></i><small>IA</small></div></div>
             <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('password')"><i class="fas fa-key tool-icon"></i><small>Password</small></div></div>
             <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('hashcompare')"><i class="fas fa-code-branch tool-icon"></i><small>Hash Compare</small></div></div>
             <div class="col-md-2 col-4"><div class="tool-card p-2 text-center" onclick="showTool('httpheaders')"><i class="fas fa-globe tool-icon"></i><small>HTTP Headers</small></div></div>
@@ -315,7 +351,7 @@
                             <button class="btn-mfh mt-2 w-100" id="startScanBtn"><i class="fas fa-play me-2"></i>Iniciar Escaneo</button>
                             <button class="btn-outline-mfh mt-1 w-100" id="stopScanBtn" disabled><i class="fas fa-stop me-2"></i>Detener</button>
                             <div class="mt-2">
-                                <small class="text-muted"><i class="fas fa-info-circle me-1"></i> <a href="/tools/guias/escanner.html" target="_blank">Guía completa del Escáner</a></small>
+                                <small class="text-muted"><i class="fas fa-info-circle me-1"></i> <a href="#" onclick="openGuideModal('escáner de puertos','El escáner de puertos permite detectar servicios activos en un objetivo. Ingresa una IP o dominio y un rango de puertos (ej: 22,80,443). Activa el modo Tor para escaneos anónimos. Los resultados se exportan a JSON.')">Ver guía completa</a></small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -324,15 +360,6 @@
                             <div class="mt-2 d-flex gap-2">
                                 <button class="btn-outline-mfh btn-sm" id="exportScanJson"><i class="fas fa-file-code"></i> JSON</button>
                                 <button class="btn-outline-mfh btn-sm" id="clearScanConsole"><i class="fas fa-trash"></i> Limpiar</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> El escáner de puertos permite detectar servicios activos en un objetivo. 
-                                Ingresa una IP o dominio y un rango de puertos (ej: 22,80,443). Activa el modo Tor para 
-                                escaneos anónimos (simulado). Los resultados se pueden exportar a JSON para análisis posterior.
                             </div>
                         </div>
                     </div>
@@ -346,18 +373,10 @@
                             <input type="text" id="aesKey" class="form-control mt-2" value="MiClave123">
                             <button class="btn-mfh btn-sm mt-1" onclick="aesEncrypt()">Cifrar AES</button>
                             <button class="btn-outline-mfh btn-sm mt-1" onclick="aesDecrypt()">Descifrar AES</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/rsa-aes.html" target="_blank">Guía de cifrado</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('RSA/AES','RSA/AES permite cifrar y descifrar mensajes. AES es simétrico (misma clave para cifrar/descifrar). Úsalo para proteger información sensible o enseñar conceptos de criptografía.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="cryptoResult" class="console-output" style="height: 150px;">Resultado...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> RSA/AES permite cifrar y descifrar mensajes. AES es simétrico (misma clave para cifrar/descifrar). 
-                                Úsalo para proteger información sensible o enseñar conceptos de criptografía.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -368,18 +387,10 @@
                         <div class="col-md-6">
                             <input type="email" id="osintEmail" class="form-control" placeholder="ejemplo@dominio.com">
                             <button class="btn-mfh mt-2" onclick="osintSearch()">Investigar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/osint.html" target="_blank">Guía de OSINT</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('OSINT','OSINT (Open Source Intelligence) recopila información pública sobre un email. Detecta breaches, dominios asociados y da recomendaciones de seguridad.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="osintResult" class="console-output">🔍 Ingresa un email para investigar...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> OSINT (Open Source Intelligence) recopila información pública sobre un email. 
-                                Detecta breaches, dominios asociados y da recomendaciones de seguridad.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -400,18 +411,10 @@
                                 <input type="text" id="plainToHash" class="form-control" placeholder="Texto para generar hash">
                                 <button class="btn-outline-mfh mt-1" onclick="generateHashRainbow()">Generar Hash</button>
                             </div>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/rainbow.html" target="_blank">Guía de Rainbow Tables</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('Rainbow Tables','Rainbow Tables permiten descifrar hashes usando diccionarios precomputados. Útil para recuperar contraseñas olvidadas o demostrar vulnerabilidades de hashes débiles.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="hashResultRainbow" class="console-output" style="height: 180px;">📝 Esperando acción...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Rainbow Tables permiten descifrar hashes usando diccionarios precomputados. 
-                                Útil para recuperar contraseñas olvidadas o demostrar vulnerabilidades de hashes débiles.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -422,18 +425,10 @@
                         <div class="col-md-6">
                             <input type="text" id="whoisDomain" class="form-control" placeholder="google.com">
                             <button class="btn-mfh mt-2" onclick="whoisLookup()">Consultar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/whois.html" target="_blank">Guía de WHOIS</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('WHOIS','WHOIS consulta información de registro de dominios: propietario, fechas de creación/expiración, servidores DNS. Esencial para investigaciones de dominio y OSINT.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="whoisResult" class="console-output">🔍 Ingresa un dominio para consultar WHOIS...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> WHOIS consulta información de registro de dominios: propietario, fechas de creación/expiración, 
-                                servidores DNS. Esencial para investigaciones de dominio y OSINT.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -444,18 +439,10 @@
                         <div class="col-md-6">
                             <input type="text" id="wappalyzerDomain" class="form-control" placeholder="https://github.com">
                             <button class="btn-mfh mt-2" onclick="analyzeTechnologies()">Analizar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/wappalyzer.html" target="_blank">Guía de Wappalyzer</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('Wappalyzer','Wappalyzer detecta tecnologías web: frameworks, servidores, CMS, analytics. Útil para reconocimiento en pentesting y análisis de competencia.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="wappalyzerResult" class="console-output">🔍 Ingresa una URL para analizar tecnologías...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Wappalyzer detecta tecnologías web: frameworks, servidores, CMS, analytics. 
-                                Útil para reconocimiento en pentesting y análisis de competencia.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -466,18 +453,10 @@
                         <div class="col-md-6">
                             <input type="text" id="subdomainTarget" class="form-control" placeholder="dominio.com">
                             <button class="btn-mfh mt-2" onclick="findSubdomains()">Buscar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/subdomain.html" target="_blank">Guía de Subdomain Finder</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('Subdomain Finder','Subdomain Finder descubre subdominios asociados a un dominio principal. Esencial para mapear superficies de ataque en auditorías de seguridad.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="subdomainResult" class="console-output">🔍 Ingresa un dominio para buscar subdominios...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Subdomain Finder descubre subdominios asociados a un dominio principal. 
-                                Esencial para mapear superficies de ataque en auditorías de seguridad.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -494,21 +473,13 @@
                                 <option value="sha512">SHA512</option>
                             </select>
                             <button class="btn-mfh mt-2" onclick="computeHash()">Calcular Hash</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/hash.html" target="_blank">Guía de Hash Tools</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('Hash Tools','Hash Tools genera hashes MD5, SHA1, SHA256 y SHA512. También verifica la integridad de datos comparando hashes. Fundamental para verificar descargas y archivos.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="computedHash" class="console-output" style="height: 80px;">-</div>
                             <input type="text" id="hashToVerify" class="form-control mt-2" placeholder="Hash a verificar">
                             <button class="btn-outline-mfh mt-1" onclick="verifyHashTool()">Verificar</button>
                             <div id="verifyResult" class="console-output mt-2" style="height: 60px;">-</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Hash Tools genera hashes MD5, SHA1, SHA256 y SHA512. También verifica la integridad 
-                                de datos comparando hashes. Fundamental para verificar descargas y archivos.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -519,19 +490,11 @@
                         <div class="col-md-6">
                             <textarea id="logInput" class="form-control" rows="5" placeholder="[2025-06-09] SSH: Failed password for root from 192.168.1.100 port 22"></textarea>
                             <button class="btn-mfh mt-2" onclick="analyzeLogWithAI()">Analizar con IA</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/ia.html" target="_blank">Guía de IA Asistente</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('IA Asistente','El Asistente IA clasifica logs de seguridad como maliciosos, sospechosos o benignos. Ideal para SOC, equipos de respuesta a incidentes y análisis forense.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="aiResult" class="console-output" style="height: 150px;">🤖 Esperando log...</div>
                             <div id="aiRecommendations" class="console-output mt-2" style="height: 80px;"></div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> El Asistente IA clasifica logs de seguridad como maliciosos, sospechosos o benignos. 
-                                Ideal para SOC, equipos de respuesta a incidentes y análisis forense.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -547,18 +510,10 @@
                             <div class="form-check"><input class="form-check-input" type="checkbox" id="passNumbers" checked> Números</div>
                             <div class="form-check"><input class="form-check-input" type="checkbox" id="passSymbols" checked> Símbolos</div>
                             <button class="btn-mfh mt-2" onclick="generatePassword()">Generar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/password.html" target="_blank">Guía de contraseñas seguras</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('Generador de Contraseñas','Genera contraseñas seguras con longitud variable, mayúsculas, minúsculas, números y símbolos. Sigue las mejores prácticas de NIST para contraseñas fuertes.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="generatedPassword" class="console-output">Click en generar</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Genera contraseñas seguras con longitud variable, mayúsculas, minúsculas, números y símbolos. 
-                                Sigue las mejores prácticas de NIST para contraseñas fuertes.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -577,18 +532,10 @@
                                 <option value="sha256">SHA256</option>
                             </select>
                             <button class="btn-mfh mt-2" onclick="compareFiles()">Comparar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/hash-compare.html" target="_blank">Guía de Hash Compare</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('Comparador de Hashes','Compara dos archivos calculando sus hashes y verificando si son idénticos. Útil para verificar integridad de archivos descargados o detectar modificaciones.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="compareResult" class="console-output">Resultado...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Compara dos archivos calculando sus hashes y verificando si son idénticos. 
-                                Útil para verificar integridad de archivos descargados o detectar modificaciones.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -599,18 +546,10 @@
                         <div class="col-md-6">
                             <input type="text" id="headersUrl" class="form-control" placeholder="https://google.com">
                             <button class="btn-mfh mt-2" onclick="checkHttpHeaders()">Analizar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/http-headers.html" target="_blank">Guía de HTTP Headers</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('HTTP Headers','Analiza cabeceras HTTP para identificar configuraciones de seguridad (HSTS, CSP, X-Frame-Options). Esencial para auditorías de seguridad web y pentesting.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="headersResult" class="console-output">Cabeceras HTTP...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Analiza cabeceras HTTP para identificar configuraciones de seguridad (HSTS, CSP, X-Frame-Options). 
-                                Esencial para auditorías de seguridad web y pentesting.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -622,18 +561,10 @@
                             <textarea id="urlInput" class="form-control" rows="3" placeholder="Texto o URL"></textarea>
                             <button class="btn-mfh btn-sm mt-1" onclick="urlEncode()">Codificar</button>
                             <button class="btn-outline-mfh btn-sm mt-1" onclick="urlDecode()">Decodificar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/url-encode.html" target="_blank">Guía de URL Encode</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('URL Encode','URL Encode convierte caracteres especiales a formato URL-safe (%20 para espacios). Útil para construir URLs, depurar parámetros y enseñar fundamentos web.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="urlResult" class="console-output">Resultado...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> URL Encode convierte caracteres especiales a formato URL-safe (%20 para espacios). 
-                                Útil para construir URLs, depurar parámetros y enseñar fundamentos web.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -644,18 +575,10 @@
                         <div class="col-md-6">
                             <input type="text" id="ipToConvert" class="form-control" placeholder="192.168.1.1">
                             <button class="btn-mfh mt-2" onclick="convertIP()">Convertir</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/ip-converter.html" target="_blank">Guía de IP Converter</a></small></div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('IP Converter','IP Converter muestra una IP en formato binario, hexadecimal y decimal. Útil para redes, subnetting, y comprender la estructura de direcciones IP.')">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="ipConvertResult" class="console-output">Resultado...</div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> IP Converter muestra una IP en formato binario, hexadecimal y decimal. 
-                                Útil para redes, subnetting, y comprender la estructura de direcciones IP.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -666,15 +589,7 @@
                         <div class="col-md-12">
                             <div id="timeZonesResult" class="console-output">Cargando...</div>
                             <button class="btn-mfh mt-2" onclick="refreshTimeZones()">Actualizar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/tools/guias/time-zones.html" target="_blank">Guía de Time Zones</a></small></div>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="bg-dark p-2 rounded small">
-                                <strong>📖 Guía rápida:</strong> Time Zones muestra la hora actual en múltiples zonas horarias (UTC, Local, UNIX timestamp). 
-                                Esencial para análisis forense, correlación de eventos y coordinación internacional.
-                            </div>
+                            <div class="mt-2"><small class="text-muted"><a href="#" onclick="openGuideModal('Time Zones','Time Zones muestra la hora actual en múltiples zonas horarias (UTC, Local, UNIX timestamp). Esencial para análisis forense, correlación de eventos y coordinación internacional.')">Ver guía completa</a></small></div>
                         </div>
                     </div>
                 </div>
@@ -717,21 +632,21 @@
             <div class="col-md-4">
                 <h6 class="text-success">Enlaces</h6>
                 <ul class="list-unstyled small">
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#herramientas">Herramientas</a></li>
-                    <li><a href="/marketplace.html">Marketplace</a></li>
-                    <li><a href="/contacto.html">Contacto</a></li>
+                    <li><a href="#" onclick="document.getElementById('inicio').scrollIntoView({behavior:'smooth'})">Inicio</a></li>
+                    <li><a href="#" onclick="document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Herramientas</a></li>
+                    <li><a href="#" onclick="openMarketplaceModal()">Marketplace</a></li>
+                    <li><a href="#" onclick="openContactModal()">Contacto</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
                 <h6 class="text-success">Legal</h6>
                 <ul class="list-unstyled small">
-                    <li><a href="/aviso-legal.html">Aviso Legal</a></li>
-                    <li><a href="/aviso-legal.html#privacidad">Política de Privacidad</a></li>
-                    <li><a href="/aviso-legal.html#cookies">Política de Cookies</a></li>
+                    <li><a href="#" onclick="openLegalModal()">Aviso Legal</a></li>
+                    <li><a href="#" onclick="openLegalModal()">Política de Privacidad</a></li>
+                    <li><a href="#" onclick="openLegalModal()">Política de Cookies</a></li>
                 </ul>
                 <div class="mt-2">
-                    <a href="https://github.com/Falconmx1/mx_falconmx_security" class="text-white me-2"><i class="fab fa-github"></i></a>
+                    <a href="https://github.com/Falconmx1/mx_falconmx_security" class="text-white me-2" target="_blank"><i class="fab fa-github"></i></a>
                     <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
                     <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
                 </div>
@@ -744,9 +659,157 @@
     </div>
 </footer>
 
+<!-- ==================== MODALES ==================== -->
+<!-- Modal Donación -->
+<div class="modal fade" id="donationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success"><i class="fas fa-heart text-danger me-2"></i>Apoya MFH TOOLS PRO</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tu donación ayuda a mantener las herramientas gratuitas y mejorar la suite.</p>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-lg btn-donate" onclick="alert('Gracias por tu donación ❤️ Redirigiendo a PayPal...')"><i class="fab fa-paypal me-2"></i>PayPal</button>
+                    <button class="btn btn-lg" style="background:linear-gradient(135deg,#00c853,#00e676);color:#000;border:none;font-weight:600;" onclick="alert('Gracias por tu donación ❤️ Redirigiendo a MercadoPago...')"><i class="fas fa-credit-card me-2"></i>MercadoPago</button>
+                </div>
+                <hr>
+                <h6><i class="fas fa-bitcoin me-2"></i>Criptomonedas</h6>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-warning" onclick="alert('BTC: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa')"><i class="fab fa-bitcoin me-1"></i>BTC</button>
+                    <button class="btn btn-outline-warning" onclick="alert('ETH: 0x742d35Cc6634C0532925a3b844Bc454e4438f44e')"><i class="fab fa-ethereum me-1"></i>ETH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Contacto -->
+<div class="modal fade" id="contactModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success"><i class="fas fa-envelope me-2"></i>Contacto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm" onsubmit="sendContact(event)">
+                    <div class="mb-3"><label class="form-label">Nombre</label><input type="text" class="form-control" id="contactName" required></div>
+                    <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="contactEmail" required></div>
+                    <div class="mb-3"><label class="form-label">Asunto</label><select class="form-select" id="contactSubject"><option>Reportar error</option><option>Sugerencia</option><option>Colaboración</option><option>Otro</option></select></div>
+                    <div class="mb-3"><label class="form-label">Mensaje</label><textarea class="form-control" id="contactMessage" rows="4" required></textarea></div>
+                    <button type="submit" class="btn-mfh w-100"><i class="fas fa-paper-plane me-2"></i>Enviar</button>
+                </form>
+                <div id="contactResponse" class="mt-3 text-center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Legal -->
+<div class="modal fade" id="legalModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success"><i class="fas fa-gavel me-2"></i>Aviso Legal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
+                <h6 class="text-success">1. Identificación</h6>
+                <p><strong>MFH TOOLS PRO</strong> es una suite de herramientas de ciberseguridad desarrollada por <strong>FalconMX Security</strong>.</p>
+                <ul><li><strong>Responsable:</strong> FalconMX Security</li><li><strong>Correo:</strong> contacto@falconmx.security</li><li><strong>Sitio:</strong> https://falconmx1.github.io/mx_falconmx_security/</li></ul>
+                
+                <h6 class="text-success mt-3">2. Uso de las Herramientas</h6>
+                <p>Las herramientas tienen fines <strong>educativos y de investigación</strong>. El usuario se compromete a usarlas solo en sistemas propios o con autorización.</p>
+                
+                <h6 class="text-success mt-3">3. Limitación de Responsabilidad</h6>
+                <p>MFH TOOLS PRO se proporciona "tal cual". El desarrollador no se hace responsable de daños derivados del uso.</p>
+                
+                <h6 class="text-success mt-3">4. Propiedad Intelectual</h6>
+                <p>Todo el código y contenido es propiedad de FalconMX Security. Queda prohibida la reproducción sin autorización.</p>
+                
+                <h6 class="text-success mt-3">5. Política de Privacidad</h6>
+                <p>No recopilamos datos personales. Solo usamos cookies técnicas para el tema (almacenadas localmente).</p>
+                
+                <h6 class="text-success mt-3">6. Contacto</h6>
+                <p>Dudas: <a href="#" onclick="openContactModal()" class="text-success">contacto@falconmx.security</a></p>
+                <hr>
+                <p class="small text-muted">Última actualización: 9 de junio de 2025</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Marketplace -->
+<div class="modal fade" id="marketplaceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success"><i class="fas fa-store me-2"></i>Marketplace de Herramientas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card p-2">
+                            <h6><i class="fas fa-bolt text-warning me-1"></i>Massive Port Scanner</h6>
+                            <p class="small">Escanea hasta 10,000 puertos en paralelo.</p>
+                            <button class="btn-mfh btn-sm" onclick="alert('Descargando...')">Descargar</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-2">
+                            <h6><i class="fas fa-shield-alt text-danger me-1"></i>Vuln Scanner Lite</h6>
+                            <p class="small">Detecta SQLi, XSS, LFI en servicios web.</p>
+                            <button class="btn-mfh btn-sm" onclick="alert('Descargando...')">Descargar</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-2">
+                            <h6><i class="fas fa-robot text-info me-1"></i>AI Threat Hunter</h6>
+                            <p class="small">IA para detectar patrones de ataque en logs.</p>
+                            <button class="btn-mfh btn-sm" onclick="alert('Premium - $9.99')">Comprar</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-2">
+                            <h6><i class="fas fa-search text-success me-1"></i>Subdomain Enumerator</h6>
+                            <p class="small">Encuentra subdominios usando múltiples fuentes.</p>
+                            <button class="btn-mfh btn-sm" onclick="alert('Descargando...')">Descargar</button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <p class="small">¿Quieres contribuir con tu herramienta? <a href="#" onclick="openContactModal()" class="text-success">Contáctanos</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Guía -->
+<div class="modal fade" id="guideModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success"><i class="fas fa-book me-2"></i>Guía: <span id="guideTitle">Herramienta</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="guideContent">Contenido de la guía...</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-mfh" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// ====== TEMA ======
+// ==================== TEMA ====================
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
 if (localStorage.getItem('theme') === 'light') {
@@ -767,6 +830,40 @@ themeToggle.addEventListener('click', () => {
     }
 });
 
+// ==================== FUNCIONES MODALES ====================
+function openDonationModal() {
+    const modal = new bootstrap.Modal(document.getElementById('donationModal'));
+    modal.show();
+}
+function openContactModal() {
+    const modal = new bootstrap.Modal(document.getElementById('contactModal'));
+    modal.show();
+}
+function openLegalModal() {
+    const modal = new bootstrap.Modal(document.getElementById('legalModal'));
+    modal.show();
+}
+function openMarketplaceModal() {
+    const modal = new bootstrap.Modal(document.getElementById('marketplaceModal'));
+    modal.show();
+}
+function openGuideModal(title, content) {
+    document.getElementById('guideTitle').textContent = title;
+    document.getElementById('guideContent').textContent = content;
+    const modal = new bootstrap.Modal(document.getElementById('guideModal'));
+    modal.show();
+}
+
+function sendContact(e) {
+    e.preventDefault();
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    document.getElementById('contactResponse').innerHTML = `
+        <div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>¡Mensaje enviado!<br><small class="text-muted">${name}, te responderemos pronto a ${email}</small></div>
+    `;
+    document.getElementById('contactForm').reset();
+}
+
 function showTool(tool) {
     const tabMap = {
         scanner: 'scannerTab', crypto: 'cryptoTab', osint: 'osintTab', rainbow: 'rainbowTab',
@@ -783,7 +880,7 @@ function showTool(tool) {
     }
 }
 
-// ====== ESCÁNER ======
+// ==================== ESCÁNER ====================
 let scanResultsData = [];
 let scanInterval = null;
 let isScanning = false;
@@ -881,7 +978,7 @@ document.getElementById('clearScanConsole')?.addEventListener('click', () => {
     scanResultsData = [];
 });
 
-// ====== CRYPTO ======
+// ==================== CRYPTO ====================
 function aesEncrypt() {
     const text = document.getElementById('cryptoText').value;
     const key = document.getElementById('aesKey').value;
@@ -898,7 +995,7 @@ function aesDecrypt() {
     } catch (e) { document.getElementById('cryptoResult').innerHTML = '❌ Error al descifrar'; }
 }
 
-// ====== OSINT ======
+// ==================== OSINT ====================
 async function osintSearch() {
     const email = document.getElementById('osintEmail').value;
     if (!email) { alert('Ingresa un email'); return; }
@@ -913,7 +1010,7 @@ async function osintSearch() {
     `;
 }
 
-// ====== RAINBOW ======
+// ==================== RAINBOW ====================
 const RAINBOW_DB = {
     md5: { "5d41402abc4b2a76b9719d911017c592": "hello", "098f6bcd4621d373cade4e832627b4f6": "test", "25f9e794323b453885f5181f1b624d0b": "password", "e10adc3949ba59abbe56e057f20f883e": "123456" },
     sha1: { "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d": "hello", "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3": "test", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8": "password" },
@@ -934,7 +1031,7 @@ function generateHashRainbow() {
     document.getElementById('hashToCrack').value = hash;
 }
 
-// ====== WHOIS ======
+// ==================== WHOIS ====================
 async function whoisLookup() {
     const domain = document.getElementById('whoisDomain').value;
     if (!domain) { alert('Ingresa un dominio'); return; }
@@ -949,7 +1046,7 @@ async function whoisLookup() {
     `;
 }
 
-// ====== WAPPALYZER ======
+// ==================== WAPPALYZER ====================
 async function analyzeTechnologies() {
     const url = document.getElementById('wappalyzerDomain').value;
     if (!url) { alert('Ingresa una URL'); return; }
@@ -964,7 +1061,7 @@ async function analyzeTechnologies() {
     `;
 }
 
-// ====== SUBDOMAIN ======
+// ==================== SUBDOMAIN ====================
 async function findSubdomains() {
     const domain = document.getElementById('subdomainTarget').value;
     if (!domain) { alert('Ingresa un dominio'); return; }
@@ -977,7 +1074,7 @@ async function findSubdomains() {
         `❌ No se encontraron subdominios para ${domain}`;
 }
 
-// ====== HASH TOOLS ======
+// ==================== HASH TOOLS ====================
 function computeHash() {
     const text = document.getElementById('hashOriginalText').value;
     const type = document.getElementById('hashGenType').value;
@@ -1002,7 +1099,7 @@ function verifyHashTool() {
     document.getElementById('verifyResult').innerHTML = computed === hashToVerify ? '✅ Coinciden' : '❌ No coinciden';
 }
 
-// ====== IA ======
+// ==================== IA ====================
 function analyzeLogWithAI() {
     const log = document.getElementById('logInput').value;
     if (!log) { alert('Ingresa un log'); return; }
@@ -1011,7 +1108,7 @@ function analyzeLogWithAI() {
     document.getElementById('aiRecommendations').innerHTML = isMalicious ? '🔴 Bloquear IP origen y notificar al equipo' : '🟢 Continuar monitoreo normal';
 }
 
-// ====== PASSWORD ======
+// ==================== PASSWORD ====================
 function generatePassword() {
     const length = document.getElementById('passLength').value;
     const hasUpper = document.getElementById('passUpper').checked;
@@ -1032,7 +1129,7 @@ document.getElementById('passLength')?.addEventListener('input', (e) => {
     document.getElementById('passLengthVal').textContent = e.target.value;
 });
 
-// ====== HASH COMPARE ======
+// ==================== HASH COMPARE ====================
 async function compareFiles() {
     const file1 = document.getElementById('file1').files[0];
     const file2 = document.getElementById('file2').files[0];
@@ -1055,7 +1152,7 @@ async function compareFiles() {
     `;
 }
 
-// ====== HTTP HEADERS ======
+// ==================== HTTP HEADERS ====================
 async function checkHttpHeaders() {
     const url = document.getElementById('headersUrl').value;
     if (!url) { alert('Ingresa una URL'); return; }
@@ -1070,7 +1167,7 @@ async function checkHttpHeaders() {
     }
 }
 
-// ====== URL ENCODE/DECODE ======
+// ==================== URL ENCODE/DECODE ====================
 function urlEncode() {
     const input = document.getElementById('urlInput').value;
     document.getElementById('urlResult').innerHTML = `🔗 Codificado:<br>${encodeURIComponent(input)}`;
@@ -1082,7 +1179,7 @@ function urlDecode() {
     } catch (e) { document.getElementById('urlResult').innerHTML = '❌ Texto inválido'; }
 }
 
-// ====== IP CONVERTER ======
+// ==================== IP CONVERTER ====================
 function convertIP() {
     const ip = document.getElementById('ipToConvert').value;
     if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) { document.getElementById('ipConvertResult').innerHTML = '❌ IP inválida'; return; }
@@ -1093,7 +1190,7 @@ function convertIP() {
     document.getElementById('ipConvertResult').innerHTML = `📡 IP: ${ip}<br>🔢 Binario: ${binary}<br>🔤 Hex: ${hex}<br>🔟 Decimal: ${decimal}`;
 }
 
-// ====== TIME ZONES ======
+// ==================== TIME ZONES ====================
 function refreshTimeZones() {
     const now = new Date();
     document.getElementById('timeZonesResult').innerHTML = `
@@ -1106,7 +1203,7 @@ function refreshTimeZones() {
 }
 refreshTimeZones();
 
-// ====== ESTADÍSTICAS ======
+// ==================== ESTADÍSTICAS ====================
 let portStats = {}, countryStats = {}, activityLog = [];
 function updateStatistics(results) {
     results.forEach(r => { portStats[r.port] = (portStats[r.port] || 0) + 1; });
@@ -1126,14 +1223,14 @@ function renderStats() {
 }
 renderStats();
 
-// ====== GRÁFICAS ======
+// ==================== GRÁFICAS ====================
 let dailyChart, portsChart;
 function initCharts() {
     const ctx1 = document.getElementById('dailyChart')?.getContext('2d');
     if (ctx1) {
         dailyChart = new Chart(ctx1, {
             type: 'line',
-            data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Escaneos', data: [12,19,15,17,14,10,8], borderColor: '#00ff00', fill: true }] },
+            data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Escaneos', data: [12,19,15,17,14,10,8], borderColor: '#00ff00', fill: true, tension: 0.4 }] },
             options: { responsive: true, plugins: { legend: { labels: { color: '#e0e0e0' } } } }
         });
     }
@@ -1146,7 +1243,21 @@ function initCharts() {
         });
     }
 }
-document.addEventListener('DOMContentLoaded', initCharts);
+
+function updateChartColors() {
+    const isLight = body.classList.contains('light-mode');
+    const textColor = isLight ? '#333' : '#e0e0e0';
+    if (dailyChart) dailyChart.options.plugins.legend.labels.color = textColor;
+    if (portsChart) portsChart.options.plugins.legend.labels.color = textColor;
+    if (dailyChart) dailyChart.update();
+    if (portsChart) portsChart.update();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initCharts();
+    const observer = new MutationObserver(updateChartColors);
+    observer.observe(body, { attributes: true });
+});
 </script>
 </body>
 </html>
