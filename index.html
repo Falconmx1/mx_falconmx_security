@@ -242,7 +242,6 @@
             <button class="btn btn-sm btn-outline-mfh" onclick="openContactModal()"><i class="fas fa-envelope me-1"></i>Contacto</button>
             <button class="btn btn-sm btn-outline-mfh" onclick="openLegalModal()"><i class="fas fa-gavel me-1"></i>Legal</button>
             <button class="btn btn-sm btn-outline-mfh" onclick="openMarketplaceModal()"><i class="fas fa-store me-1"></i>Marketplace</button>
-            <a href="/guias.html" class="btn btn-sm btn-outline-mfh"><i class="fas fa-book me-1"></i>Guías</a>
             <i class="fas fa-sun theme-toggle" id="themeToggle"></i>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -274,7 +273,6 @@
                     <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
                 </div>
                 <button class="btn-mfh" onclick="document.getElementById('tools-panel').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play me-2"></i>Usar Herramientas</button>
-                <a href="/guias.html" class="btn btn-outline-mfh ms-2"><i class="fas fa-book me-2"></i>Ver Guías</a>
             </div>
             <div class="col-lg-4">
                 <div class="console-output" style="height: auto;">
@@ -352,9 +350,6 @@
                             </div>
                             <button class="btn-mfh mt-2 w-100" id="startScanBtn"><i class="fas fa-play me-2"></i>Iniciar Escaneo</button>
                             <button class="btn-outline-mfh mt-1 w-100" id="stopScanBtn" disabled><i class="fas fa-stop me-2"></i>Detener</button>
-                            <div class="mt-2">
-                                <small class="text-muted"><i class="fas fa-info-circle me-1"></i> <a href="/guias.html" target="_blank">Ver guía completa</a></small>
-                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="progress mb-2"><div id="scanProgress" class="progress-bar" style="width:0%">0%</div></div>
@@ -375,7 +370,6 @@
                             <input type="text" id="aesKey" class="form-control mt-2" value="MiClave123">
                             <button class="btn-mfh btn-sm mt-1" onclick="aesEncrypt()">Cifrar AES</button>
                             <button class="btn-outline-mfh btn-sm mt-1" onclick="aesDecrypt()">Descifrar AES</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="cryptoResult" class="console-output" style="height: 150px;">Resultado...</div>
@@ -389,7 +383,6 @@
                         <div class="col-md-6">
                             <input type="email" id="osintEmail" class="form-control" placeholder="ejemplo@dominio.com">
                             <button class="btn-mfh mt-2" onclick="osintSearch()">Investigar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="osintResult" class="console-output">🔍 Ingresa un email para investigar...</div>
@@ -413,7 +406,6 @@
                                 <input type="text" id="plainToHash" class="form-control" placeholder="Texto para generar hash">
                                 <button class="btn-outline-mfh mt-1" onclick="generateHashRainbow()">Generar Hash</button>
                             </div>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="hashResultRainbow" class="console-output" style="height: 180px;">📝 Esperando acción...</div>
@@ -427,7 +419,6 @@
                         <div class="col-md-6">
                             <input type="text" id="whoisDomain" class="form-control" placeholder="google.com">
                             <button class="btn-mfh mt-2" onclick="whoisLookup()">Consultar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="whoisResult" class="console-output">🔍 Ingresa un dominio para consultar WHOIS...</div>
@@ -441,7 +432,6 @@
                         <div class="col-md-6">
                             <input type="text" id="wappalyzerDomain" class="form-control" placeholder="https://github.com">
                             <button class="btn-mfh mt-2" onclick="analyzeTechnologies()">Analizar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="wappalyzerResult" class="console-output">🔍 Ingresa una URL para analizar tecnologías...</div>
@@ -455,7 +445,6 @@
                         <div class="col-md-6">
                             <input type="text" id="subdomainTarget" class="form-control" placeholder="dominio.com">
                             <button class="btn-mfh mt-2" onclick="findSubdomains()">Buscar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="subdomainResult" class="console-output">🔍 Ingresa un dominio para buscar subdominios...</div>
@@ -475,7 +464,6 @@
                                 <option value="sha512">SHA512</option>
                             </select>
                             <button class="btn-mfh mt-2" onclick="computeHash()">Calcular Hash</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="computedHash" class="console-output" style="height: 80px;">-</div>
@@ -492,7 +480,6 @@
                         <div class="col-md-6">
                             <textarea id="logInput" class="form-control" rows="5" placeholder="[2025-06-09] SSH: Failed password for root from 192.168.1.100 port 22"></textarea>
                             <button class="btn-mfh mt-2" onclick="analyzeLogWithAI()">Analizar con IA</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="aiResult" class="console-output" style="height: 150px;">🤖 Esperando log...</div>
@@ -512,7 +499,6 @@
                             <div class="form-check"><input class="form-check-input" type="checkbox" id="passNumbers" checked> Números</div>
                             <div class="form-check"><input class="form-check-input" type="checkbox" id="passSymbols" checked> Símbolos</div>
                             <button class="btn-mfh mt-2" onclick="generatePassword()">Generar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="generatedPassword" class="console-output">Click en generar</div>
@@ -534,7 +520,6 @@
                                 <option value="sha256">SHA256</option>
                             </select>
                             <button class="btn-mfh mt-2" onclick="compareFiles()">Comparar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="compareResult" class="console-output">Resultado...</div>
@@ -548,7 +533,6 @@
                         <div class="col-md-6">
                             <input type="text" id="headersUrl" class="form-control" placeholder="https://google.com">
                             <button class="btn-mfh mt-2" onclick="checkHttpHeaders()">Analizar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-12 mt-3">
                             <div id="headersResult" class="console-output">Cabeceras HTTP...</div>
@@ -563,7 +547,6 @@
                             <textarea id="urlInput" class="form-control" rows="3" placeholder="Texto o URL"></textarea>
                             <button class="btn-mfh btn-sm mt-1" onclick="urlEncode()">Codificar</button>
                             <button class="btn-outline-mfh btn-sm mt-1" onclick="urlDecode()">Decodificar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="urlResult" class="console-output">Resultado...</div>
@@ -577,7 +560,6 @@
                         <div class="col-md-6">
                             <input type="text" id="ipToConvert" class="form-control" placeholder="192.168.1.1">
                             <button class="btn-mfh mt-2" onclick="convertIP()">Convertir</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                         <div class="col-md-6">
                             <div id="ipConvertResult" class="console-output">Resultado...</div>
@@ -591,7 +573,6 @@
                         <div class="col-md-12">
                             <div id="timeZonesResult" class="console-output">Cargando...</div>
                             <button class="btn-mfh mt-2" onclick="refreshTimeZones()">Actualizar</button>
-                            <div class="mt-2"><small class="text-muted"><a href="/guias.html" target="_blank">Ver guía completa</a></small></div>
                         </div>
                     </div>
                 </div>
@@ -638,7 +619,6 @@
                     <li><a href="#" onclick="document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})">Herramientas</a></li>
                     <li><a href="#" onclick="openMarketplaceModal()">Marketplace</a></li>
                     <li><a href="#" onclick="openContactModal()">Contacto</a></li>
-                    <li><a href="/guias.html">Guías</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
@@ -796,25 +776,6 @@
                 <div class="text-center">
                     <p class="small">¿Quieres contribuir con tu herramienta? <a href="#" onclick="openContactModal()" class="text-success">Contáctanos</a></p>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Guía -->
-<div class="modal fade" id="guideModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-success"><i class="fas fa-book me-2"></i>Guía: <span id="guideTitle">Herramienta</span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p id="guideContent">Contenido de la guía...</p>
-                <a href="/guias.html" class="btn-mfh w-100">Ver todas las guías</a>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-mfh" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
