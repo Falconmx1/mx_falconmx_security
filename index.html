@@ -60,24 +60,6 @@
         .theme-toggle { cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; }
         .theme-toggle:hover { transform: rotate(180deg); }
         
-        /* ===== BOTÓN DONACIÓN ===== */
-        .btn-donate {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            border: none;
-            color: #fff;
-            font-weight: 700;
-            padding: 5px 16px;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            font-size: 0.8rem;
-            animation: pulse-donate 2s ease-in-out infinite;
-        }
-        .btn-donate:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(238,90,36,0.5); color: #fff; }
-        @keyframes pulse-donate {
-            0%,100% { box-shadow: 0 0 10px rgba(238,90,36,0.3); }
-            50% { box-shadow: 0 0 25px rgba(238,90,36,0.6); }
-        }
-        
         /* ===== TOOL CARDS ===== */
         .tool-card {
             background: rgba(20,20,20,0.95);
@@ -227,7 +209,6 @@
             .navbar-brand { font-size: 1rem; }
             .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
             .btn-mfh { padding: 4px 10px; font-size: 0.75rem; }
-            .btn-donate { padding: 4px 12px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -238,7 +219,6 @@
     <div class="container">
         <a class="navbar-brand" href="#"><i class="fas fa-shield-haltered me-2"></i>MFH TOOLS PRO</a>
         <div class="ms-auto d-flex align-items-center gap-2">
-            <button class="btn btn-sm btn-donate" onclick="openDonationModal()"><i class="fas fa-heart me-1"></i>Donar</button>
             <button class="btn btn-sm btn-outline-mfh" onclick="openContactModal()"><i class="fas fa-envelope me-1"></i>Contacto</button>
             <button class="btn btn-sm btn-outline-mfh" onclick="openLegalModal()"><i class="fas fa-gavel me-1"></i>Legal</button>
             <button class="btn btn-sm btn-outline-mfh" onclick="openMarketplaceModal()"><i class="fas fa-store me-1"></i>Marketplace</button>
@@ -644,30 +624,6 @@
 </footer>
 
 <!-- ==================== MODALES ==================== -->
-<!-- Modal Donación -->
-<div class="modal fade" id="donationModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-success"><i class="fas fa-heart text-danger me-2"></i>Apoya MFH TOOLS PRO</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Tu donación ayuda a mantener las herramientas gratuitas y mejorar la suite.</p>
-                <div class="d-grid gap-2">
-                    <button class="btn btn-lg btn-donate" onclick="alert('Gracias por tu donación ❤️ Redirigiendo a PayPal...')"><i class="fab fa-paypal me-2"></i>PayPal</button>
-                    <button class="btn btn-lg" style="background:linear-gradient(135deg,#00c853,#00e676);color:#000;border:none;font-weight:600;" onclick="alert('Gracias por tu donación ❤️ Redirigiendo a MercadoPago...')"><i class="fas fa-credit-card me-2"></i>MercadoPago</button>
-                </div>
-                <hr>
-                <h6><i class="fas fa-bitcoin me-2"></i>Criptomonedas</h6>
-                <div class="d-grid gap-2">
-                    <button class="btn btn-outline-warning" onclick="alert('BTC: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa')"><i class="fab fa-bitcoin me-1"></i>BTC</button>
-                    <button class="btn btn-outline-warning" onclick="alert('ETH: 0x742d35Cc6634C0532925a3b844Bc454e4438f44e')"><i class="fab fa-ethereum me-1"></i>ETH</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Modal Contacto (FUNCIONAL con mailto) -->
 <div class="modal fade" id="contactModal" tabindex="-1">
@@ -805,10 +761,6 @@ themeToggle.addEventListener('click', () => {
 });
 
 // ==================== FUNCIONES MODALES ====================
-function openDonationModal() {
-    const modal = new bootstrap.Modal(document.getElementById('donationModal'));
-    modal.show();
-}
 function openContactModal() {
     const modal = new bootstrap.Modal(document.getElementById('contactModal'));
     modal.show();
