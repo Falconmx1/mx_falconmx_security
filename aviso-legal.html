@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviso Legal - MFH TOOLS PRO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #1a1a1a;
+        }
+        body.light-mode .navbar { background: rgba(255,255,255,0.95); border-bottom: 1px solid rgba(0,0,0,0.1); }
+        body.light-mode .card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
+        body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
+        
+        .navbar {
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,255,0,0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 8px 0;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .navbar .nav-link { color: #e0e0e0 !important; font-size: 0.85rem; }
+        .navbar .nav-link:hover { color: #00ff00 !important; }
+        .theme-toggle { cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; }
+        .theme-toggle:hover { transform: rotate(180deg); }
+        
+        .card {
+            background: rgba(20,20,20,0.95);
+            border: 1px solid rgba(0,255,0,0.15);
+            border-radius: 12px;
+        }
+        .text-success-mfh { color: #00ff00; }
+        
+        footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.2); padding: 20px 0 15px; margin-top: 30px; }
+        footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; }
+        footer a:hover { color: #00ff00; }
+        
+        @media (max-width: 768px) { .navbar-brand { font-size: 1rem; } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-shield-haltered me-2"></i>MFH TOOLS PRO</a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <a href="/contacto.html" class="btn btn-sm btn-outline-mfh d-none d-md-inline"><i class="fas fa-envelope me-1"></i>Contacto</a>
+            <a href="/donar.html" class="btn btn-sm btn-donate"><i class="fas fa-heart me-1"></i>Donar</a>
+            <i class="fas fa-sun theme-toggle" id="themeToggle"></i>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="/#herramientas">Herramientas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/marketplace.html">Marketplace</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card p-4">
+                <h1 class="text-center text-success-mfh"><i class="fas fa-gavel me-2"></i>Aviso Legal</h1>
+                <p class="text-center text-muted">Última actualización: 9 de junio de 2025</p>
+                <hr class="bg-success">
+                
+                <h4 class="text-success-mfh mt-3">1. Identificación del Titular</h4>
+                <p><strong>MFH TOOLS PRO</strong> es una suite de herramientas de ciberseguridad desarrollada por <strong>FalconMX Security</strong>.</p>
+                <ul>
+                    <li><strong>Responsable:</strong> FalconMX Security</li>
+                    <li><strong>Correo electrónico:</strong> contacto@falconmx.security</li>
+                    <li><strong>Sitio web:</strong> https://falconmx1.github.io/mx_falconmx_security/</li>
+                    <li><strong>Ubicación:</strong> Ciudad de México, México</li>
+                </ul>
+                
+                <h4 class="text-success-mfh mt-4">2. Uso de las Herramientas</h4>
+                <p>Las herramientas proporcionadas en este sitio web tienen fines <strong>educativos y de investigación</strong> en el ámbito de la ciberseguridad. El usuario se compromete a:</p>
+                <ul>
+                    <li>Utilizar las herramientas únicamente en sistemas de su propiedad o con autorización expresa.</li>
+                    <li>No emplear las herramientas para actividades ilegales o maliciosas.</li>
+                    <li>Aceptar toda responsabilidad por el uso que haga de las herramientas.</li>
+                </ul>
+                
+                <h4 class="text-success-mfh mt-4">3. Limitación de Responsabilidad</h4>
+                <p>MFH TOOLS PRO se proporciona "tal cual", sin garantías de ningún tipo. El desarrollador no se hace responsable de:</p>
+                <ul>
+                    <li>Daños directos o indirectos derivados del uso de las herramientas.</li>
+                    <li>Pérdida de datos o interrupción de servicios.</li>
+                    <li>Uso indebido de las herramientas por parte de terceros.</li>
+                </ul>
+                
+                <h4 class="text-success-mfh mt-4">4. Propiedad Intelectual</h4>
+                <p>Todo el código fuente, diseño y contenido de este sitio web es propiedad de FalconMX Security, a menos que se indique lo contrario. Queda prohibida la reproducción, distribución o modificación sin autorización previa.</p>
+                
+                <h4 class="text-success-mfh mt-4">5. Política de Privacidad</h4>
+                <p>Este sitio web no recopila ni almacena datos personales de los usuarios, a menos que se proporcione voluntariamente a través del formulario de contacto. Los datos proporcionados serán utilizados únicamente para responder consultas.</p>
+                <ul>
+                    <li><strong>Cookies:</strong> No se utilizan cookies de seguimiento. Solo se utilizan cookies técnicas para el funcionamiento del tema oscuro/claro (almacenadas localmente).</li>
+                    <li><strong>Datos:</strong> No se comparten datos con terceros.</li>
+                </ul>
+                
+                <h4 class="text-success-mfh mt-4">6. Enlaces a Terceros</h4>
+                <p>Este sitio web puede contener enlaces a sitios externos. No nos hacemos responsables del contenido o las políticas de privacidad de dichos sitios.</p>
+                
+                <h4 class="text-success-mfh mt-4">7. Modificaciones</h4>
+                <p>Nos reservamos el derecho de modificar este aviso legal en cualquier momento. Los cambios serán publicados en esta página.</p>
+                
+                <h4 class="text-success-mfh mt-4">8. Contacto</h4>
+                <p>Si tienes preguntas sobre este aviso legal, contáctanos en: <a href="/contacto.html" class="text-success">contacto@falconmx.security</a></p>
+                
+                <hr class="bg-success">
+                <div class="text-center small text-muted">
+                    <p>Hecho con 🌮 en México - 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container text-center">
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/">Inicio</a>
+            <a href="/aviso-legal.html">Aviso Legal</a>
+            <a href="/contacto.html">Contacto</a>
+        </div>
+        <p class="small mt-2">© 2025 MFH TOOLS PRO - Todos los derechos reservados</p>
+    </div>
+</footer>
+
+<script>
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+if (localStorage.getItem('theme') === 'light') {
+    body.classList.add('light-mode');
+    themeToggle.classList.remove('fa-sun');
+    themeToggle.classList.add('fa-moon');
+}
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light-mode');
+    const isLight = body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    if (isLight) {
+        themeToggle.classList.remove('fa-sun');
+        themeToggle.classList.add('fa-moon');
+    } else {
+        themeToggle.classList.remove('fa-moon');
+        themeToggle.classList.add('fa-sun');
+    }
+});
+</script>
+</body>
+</html>
