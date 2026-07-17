@@ -625,7 +625,7 @@
 
 <!-- ==================== MODALES ==================== -->
 
-<!-- Modal Contacto (FUNCIONAL con mailto) -->
+<!-- Modal Contacto -->
 <div class="modal fade" id="contactModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -689,7 +689,7 @@
     </div>
 </div>
 
-<!-- Modal Marketplace -->
+<!-- ==================== MODAL MARKETPLACE FUNCIONAL ==================== -->
 <div class="modal fade" id="marketplaceModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -697,34 +697,68 @@
                 <h5 class="modal-title text-success"><i class="fas fa-store me-2"></i>Marketplace de Herramientas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="marketplaceBody">
                 <div class="row g-3">
+                    <!-- Massive Port Scanner -->
                     <div class="col-md-6">
-                        <div class="card p-2">
+                        <div class="card p-3 h-100">
                             <h6><i class="fas fa-bolt text-warning me-1"></i>Massive Port Scanner</h6>
-                            <p class="small">Escanea hasta 10,000 puertos en paralelo.</p>
-                            <button class="btn-mfh btn-sm" onclick="alert('Descargando...')">Descargar</button>
+                            <p class="small">Escanea hasta 10,000 puertos en paralelo con workers. Detecta servicios comunes y guarda resultados en JSON.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-database me-1"></i> 10k puertos</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('massive-port-scanner.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    
+                    <!-- Vuln Scanner Lite -->
                     <div class="col-md-6">
-                        <div class="card p-2">
+                        <div class="card p-3 h-100">
                             <h6><i class="fas fa-shield-alt text-danger me-1"></i>Vuln Scanner Lite</h6>
-                            <p class="small">Detecta SQLi, XSS, LFI en servicios web.</p>
-                            <button class="btn-mfh btn-sm" onclick="alert('Descargando...')">Descargar</button>
+                            <p class="small">Detecta SQLi, XSS, LFI, Open Redirect y Path Traversal en servicios web. Genera reportes detallados.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-bug me-1"></i> 5+ vulnerabilidades</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('vuln-scanner-lite.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    
+                    <!-- Subdomain Enumerator -->
                     <div class="col-md-6">
-                        <div class="card p-2">
-                            <h6><i class="fas fa-robot text-info me-1"></i>AI Threat Hunter</h6>
-                            <p class="small">IA para detectar patrones de ataque en logs.</p>
-                            <button class="btn-mfh btn-sm" onclick="alert('Premium - $9.99')">Comprar</button>
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-sitemap text-success me-1"></i>Subdomain Enumerator</h6>
+                            <p class="small">Encuentra subdominios usando DNS brute-force + fuentes OSINT (crt.sh, Hackertarget). Soporta wordlists personalizadas.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-search me-1"></i> OSINT</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('subdomain-enumerator.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    
+                    <!-- Próximamente -->
                     <div class="col-md-6">
-                        <div class="card p-2">
-                            <h6><i class="fas fa-search text-success me-1"></i>Subdomain Enumerator</h6>
-                            <p class="small">Encuentra subdominios usando múltiples fuentes.</p>
-                            <button class="btn-mfh btn-sm" onclick="alert('Descargando...')">Descargar</button>
+                        <div class="card p-3 h-100" style="opacity:0.6;border-style:dashed;">
+                            <h6><i class="fas fa-rocket text-info me-1"></i>Próximamente...</h6>
+                            <p class="small">Más herramientas en desarrollo: HashCracker, DNS Recon, SSL Checker, y más.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-clock me-1"></i> En desarrollo</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" disabled>
+                                    <i class="fas fa-hourglass-half me-1"></i>Próximamente
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -782,13 +816,10 @@ function sendContact(e) {
     const subject = document.getElementById('contactSubject').value;
     const message = document.getElementById('contactMessage').value;
     
-    // Construir el mailto
     const mailtoLink = `mailto:mfalconh1@gmail.com?subject=${encodeURIComponent(subject + ' - ' + name)}&body=${encodeURIComponent('Nombre: ' + name + '\nEmail: ' + email + '\n\nMensaje:\n' + message)}`;
     
-    // Abrir el cliente de correo
     window.location.href = mailtoLink;
     
-    // Mostrar mensaje de confirmación
     document.getElementById('contactResponse').innerHTML = `
         <div class="alert alert-success">
             <i class="fas fa-check-circle me-2"></i>
@@ -797,6 +828,32 @@ function sendContact(e) {
         </div>
     `;
     document.getElementById('contactForm').reset();
+}
+
+// ==================== DESCARGA DE HERRAMIENTAS ====================
+function downloadTool(filename) {
+    const link = document.createElement('a');
+    link.href = `/tools/${filename}`;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    const modalBody = document.getElementById('marketplaceBody');
+    const originalContent = modalBody.innerHTML;
+    modalBody.innerHTML = `
+        <div class="text-center py-5">
+            <i class="fas fa-check-circle text-success" style="font-size:4rem;"></i>
+            <h4 class="mt-3">¡Descarga iniciada!</h4>
+            <p class="text-muted">El archivo <strong>${filename}</strong> se está descargando.</p>
+            <p class="small text-muted">Guárdalo en una carpeta y ejecútalo con Node.js</p>
+            <button class="btn-mfh mt-3" onclick="location.reload()">Volver al Marketplace</button>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        modalBody.innerHTML = originalContent;
+    }, 5000);
 }
 
 function showTool(tool) {
