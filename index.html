@@ -689,7 +689,7 @@
     </div>
 </div>
 
-<!-- ==================== MODAL MARKETPLACE (PRÓXIMAMENTE) ==================== -->
+<!-- ==================== MODAL MARKETPLACE ==================== -->
 <div class="modal fade" id="marketplaceModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -698,18 +698,41 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div class="text-center py-5">
-                    <i class="fas fa-rocket text-info" style="font-size:4rem;"></i>
-                    <h3 class="mt-3">🚀 Próximamente</h3>
-                    <p class="lead">Estamos preparando herramientas exclusivas para la comunidad.</p>
-                    <p class="text-muted">Muy pronto podrás descargar scripts, plugins y utilidades avanzadas directamente desde aquí.</p>
-                    <div class="mt-4">
-                        <span class="badge-mfh"><i class="fas fa-code me-1"></i> Scripts</span>
-                        <span class="badge-mfh"><i class="fas fa-plug me-1"></i> Plugins</span>
-                        <span class="badge-mfh"><i class="fas fa-tools me-1"></i> Herramientas</span>
+                <div class="row g-3">
+                    <!-- Massive Port Scanner -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-bolt text-warning me-1"></i>Massive Port Scanner</h6>
+                            <p class="small">Escanea hasta 10,000 puertos en paralelo con workers. Detecta servicios comunes y guarda resultados en JSON.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-database me-1"></i> 10k puertos</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('massive-port-scanner.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <hr>
-                    <p class="small text-muted">¿Quieres contribuir con tu herramienta? <a href="#" onclick="openContactModal()" class="text-success">Contáctanos</a></p>
+                    
+                    <!-- Próximamente -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100" style="opacity:0.6;border-style:dashed;">
+                            <h6><i class="fas fa-rocket text-info me-1"></i>Próximamente...</h6>
+                            <p class="small">Vuln Scanner Lite, Subdomain Enumerator, Hash Cracker, DNS Recon, SSL Checker, Whois Plus, CVE Scanner y más.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-clock me-1"></i> En desarrollo</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" disabled>
+                                    <i class="fas fa-hourglass-half me-1"></i>Próximamente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <p class="small">¿Quieres contribuir con tu herramienta? <a href="#" onclick="openContactModal()" class="text-success">Contáctanos</a></p>
                 </div>
             </div>
         </div>
@@ -773,6 +796,33 @@ function sendContact(e) {
         </div>
     `;
     document.getElementById('contactForm').reset();
+}
+
+// ==================== DESCARGA DE HERRAMIENTAS ====================
+function downloadTool(filename) {
+    // Usar ruta relativa (sin barra al inicio)
+    const link = document.createElement('a');
+    link.href = `tools/${filename}`;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    const modalBody = document.querySelector('#marketplaceModal .modal-body');
+    const originalContent = modalBody.innerHTML;
+    modalBody.innerHTML = `
+        <div class="text-center py-5">
+            <i class="fas fa-check-circle text-success" style="font-size:4rem;"></i>
+            <h4 class="mt-3">¡Descarga iniciada!</h4>
+            <p class="text-muted">El archivo <strong>${filename}</strong> se está descargando.</p>
+            <p class="small text-muted">Guárdalo en una carpeta y ejecútalo con Node.js</p>
+            <button class="btn-mfh mt-3" onclick="location.reload()">Volver al Marketplace</button>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        modalBody.innerHTML = originalContent;
+    }, 5000);
 }
 
 function showTool(tool) {
