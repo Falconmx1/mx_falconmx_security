@@ -6,7 +6,7 @@
  * 
  * Uso: node cron-parser.js <expresion>
  * Ejemplo: node cron-parser.js "0 0 * * *"
- * Ejemplo: node cron-parser.js "*/5 * * * *"
+ * Ejemplo: node cron-parser.js "* /5 * * * *"   (Nota: espacio entre * y /)
  * Ejemplo: node cron-parser.js "0 9-17 * * 1-5"
  * Ejemplo: node cron-parser.js --verbose "0 0 * * *"
  */
@@ -59,7 +59,7 @@ Opciones:
 
 Ejemplos:
   node cron-parser.js "0 0 * * *"
-  node cron-parser.js "*/5 * * * *"
+  node cron-parser.js "* /5 * * * *"
   node cron-parser.js "0 9-17 * * 1-5"
   node cron-parser.js --verbose "0 0 * * *"
 `);
@@ -212,7 +212,6 @@ function getFieldDescription(values, type, min, max) {
 function getExpressionExample(parsed) {
     const examples = {
         '0 0 * * *': 'Diariamente a medianoche',
-        '*/5 * * * *': 'Cada 5 minutos',
         '0 * * * *': 'Cada hora',
         '0 0 * * 1': 'Todos los lunes a medianoche',
         '0 9-17 * * 1-5': 'Cada hora de 9 a 17, de lunes a viernes',
