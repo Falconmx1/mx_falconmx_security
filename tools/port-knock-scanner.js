@@ -149,7 +149,8 @@ function scanPort(host, port, timeout) {
     });
 }
 
-async function knockSequence(host, sequence, timeout) {
+// ==================== FUNCION DE KNOCK (CORREGIDA) ====================
+async function performKnock(host, sequence, timeout) {
     console.log(`🔑 Ejecutando secuencia de knock: ${sequence.join(', ')}`);
     console.log('='.repeat(60));
     
@@ -168,7 +169,7 @@ async function knockSequence(host, sequence, timeout) {
             console.log(`   ❌ Puerto ${port}: ${result.status}`);
         }
         
-        // Esperar entre knocks
+        // Verificar si completó la secuencia
         if (consecutive === sequence.length) {
             console.log(`\n🎯 ¡Secuencia de knock completada! Todos los puertos abiertos.`);
         }
@@ -180,7 +181,7 @@ async function knockSequence(host, sequence, timeout) {
     return results;
 }
 
-async function scanPorts(host, portList, timeout) {
+async function scanPortsList(host, portList, timeout) {
     console.log(`🔍 Escaneando ${host} - ${portList.length} puertos`);
     console.log('='.repeat(60));
     
@@ -210,7 +211,7 @@ async function scanPorts(host, portList, timeout) {
     return { results, openCount, filteredCount, total };
 }
 
-function detectKnockPattern(results) {
+function detectKnockPatterns(results) {
     const patterns = [];
     
     // Verificar patrones conocidos
@@ -239,8 +240,8 @@ function detectKnockPattern(results) {
         
         // Escaneo normal o knock
         if (knockSequence) {
-            // Modo knock
-            await knockSequence(ip, knockSequence, timeout);
+            // Modo knock - CORREGIDO
+            await performKnock(ip, knockSequence, timeout);
         } else {
             // Modo escaneo normal
             let portList;
@@ -250,7 +251,7 @@ function detectKnockPattern(results) {
                 portList = CONFIG.defaultPorts;
             }
             
-            const result = await scanPorts(ip, portList, timeout);
+            const result = await scanPortsList(ip, portList, timeout);
             
             console.log('\n📊 RESULTADOS:');
             console.log(`   ✅ Puertos abiertos: ${result.openCount}`);
@@ -264,7 +265,7 @@ function detectKnockPattern(results) {
                 });
                 
                 // Detectar patrones de knock
-                const patterns = detectKnockPattern(result.results.filter(r => r.status === 'open'));
+                const patterns = detectKnockPatterns(result.results.filter(r => r.status === 'open'));
                 if (patterns.length > 0) {
                     console.log('\n🔑 PATRONES DE KNOCK DETECTADOS:');
                     patterns.forEach(p => {
