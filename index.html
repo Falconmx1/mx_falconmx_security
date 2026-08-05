@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. 30+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA, Password Generator, Hash Compare, HTTP Headers, URL Encode, IP Converter, Time Zones, Regex Tester, CSV to JSON, JSON Formatter. Hecho en México.">
+    <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. 33+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA, Password Generator, Hash Compare, HTTP Headers, URL Encode, IP Converter, Time Zones, Network Traffic Analyzer, Port Knock Scanner, SSL Vulnerability Checker. Hecho en México.">
     <title>🔥 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
     
     <!-- ===== FAVICON COMPLETO ===== -->
@@ -255,9 +255,9 @@
             <div class="col-lg-8">
                 <h1 class="display-4 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS PRO</h1>
                 <p class="lead text-success">Suite de Ciberseguridad Mexicana</p>
-                <p class="mb-2">30+ Herramientas: Escáner | RSA/AES | OSINT | Rainbow | WHOIS | Wappalyzer | Subdomain | Hash | IA | Password | Hash Compare | HTTP Headers | URL Encode | IP Converter | Time Zones | Regex Tester | CSV to JSON | JSON Formatter</p>
+                <p class="mb-2">33+ Herramientas: Escáner | RSA/AES | OSINT | Rainbow | WHOIS | Wappalyzer | Subdomain | Hash | IA | Password | Hash Compare | HTTP Headers | URL Encode | IP Converter | Time Zones | Network Traffic Analyzer | Port Knock Scanner | SSL Vulnerability Checker</p>
                 <div class="d-flex gap-2 flex-wrap mb-3">
-                    <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 30+ Herramientas</span>
+                    <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 33+ Herramientas</span>
                     <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
                     <span class="badge-mfh"><i class="fab fa-github me-1"></i> Open Source</span>
                     <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
@@ -600,7 +600,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h6 class="text-success">MFH TOOLS PRO</h6>
-                <p class="small">Suite de ciberseguridad mexicana con 30+ herramientas profesionales. Hecho con 🌮 en México.</p>
+                <p class="small">Suite de ciberseguridad mexicana con 33+ herramientas profesionales. Hecho con 🌮 en México.</p>
             </div>
             <div class="col-md-4">
                 <h6 class="text-success">Enlaces</h6>
@@ -1183,6 +1183,54 @@
                                 <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> JSON</span>
                                 <br>
                                 <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('json-formatter.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Network Traffic Analyzer -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-chart-network text-primary me-1"></i>Network Traffic Analyzer</h6>
+                            <p class="small">Analiza tráfico de red en tiempo real (simulado). Muestra protocolos, puertos, países origen y detecta anomalías.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-network-wired me-1"></i> Redes</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('network-traffic-analyzer.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Port Knock Scanner -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-door-open text-warning me-1"></i>Port Knock Scanner</h6>
+                            <p class="small">Escanea puertos usando técnicas de "knock". Detecta secuencias de puertos abiertos y patrones de knock.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-plug me-1"></i> Puertos</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('port-knock-scanner.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SSL/TLS Vulnerability Checker -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-shield-virus text-danger me-1"></i>SSL/TLS Vulnerability Checker</h6>
+                            <p class="small">Verifica vulnerabilidades SSL/TLS: Heartbleed, POODLE, BEAST, CRIME, DROWN. Incluye calificación y recomendaciones.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-lock me-1"></i> SSL/TLS</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('ssl-vulnerability-checker.js')">
                                     <i class="fas fa-download me-1"></i>Descargar
                                 </button>
                             </div>
