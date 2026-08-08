@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. 43+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA, Password Generator, Hash Compare, HTTP Headers, URL Encode, IP Converter, Time Zones, YAML to JSON, XML to JSON, SQL Formatter, Markdown to HTML, Code Minifier, Memory Dump Analyzer, Log File Analyzer, Network Packet Analyzer. Hecho en México.">
+    <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. 55+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA, Password Generator, Hash Compare, HTTP Headers, URL Encode, IP Converter, Time Zones, YAML to JSON, XML to JSON, SQL Formatter, Markdown to HTML, Code Minifier, Memory Dump Analyzer, Log File Analyzer, Network Packet Analyzer. Hecho en México.">
     <title>🔥 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
     
     <!-- ===== FAVICON COMPLETO ===== -->
@@ -255,9 +255,9 @@
             <div class="col-lg-8">
                 <h1 class="display-4 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS PRO</h1>
                 <p class="lead text-success">Suite de Ciberseguridad Mexicana</p>
-                <p class="mb-2">43+ Herramientas: Escáner | RSA/AES | OSINT | Rainbow | WHOIS | Wappalyzer | Subdomain | Hash | IA | Password | Hash Compare | HTTP Headers | URL Encode | IP Converter | Time Zones | YAML to JSON | XML to JSON | SQL Formatter | Markdown to HTML | Code Minifier | Memory Dump Analyzer | Log File Analyzer | Network Packet Analyzer</p>
+                <p class="mb-2">55+ Herramientas: Escáner | RSA/AES | OSINT | Rainbow | WHOIS | Wappalyzer | Subdomain | Hash | IA | Password | Hash Compare | HTTP Headers | URL Encode | IP Converter | Time Zones | YAML to JSON | XML to JSON | SQL Formatter | Markdown to HTML | Code Minifier | Memory Dump Analyzer | Log File Analyzer | Network Packet Analyzer | Subdomain Takeover Checker | Port Knocking Client | JWT Analyzer | CORS Scanner | Email Header Analyzer</p>
                 <div class="d-flex gap-2 flex-wrap mb-3">
-                    <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 43+ Herramientas</span>
+                    <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 55+ Herramientas</span>
                     <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
                     <span class="badge-mfh"><i class="fab fa-github me-1"></i> Open Source</span>
                     <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
@@ -600,7 +600,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h6 class="text-success">MFH TOOLS PRO</h6>
-                <p class="small">Suite de ciberseguridad mexicana con 43+ herramientas profesionales. Hecho con 🌮 en México.</p>
+                <p class="small">Suite de ciberseguridad mexicana con 55+ herramientas profesionales. Hecho con 🌮 en México.</p>
             </div>
             <div class="col-md-4">
                 <h6 class="text-success">Enlaces</h6>
@@ -1507,6 +1507,90 @@
                                 <span class="badge-mfh"><i class="fas fa-file-alt me-1"></i> Reportes</span>
                                 <br>
                                 <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('report-generator.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ========================================= -->
+                    <!-- NUEVAS HERRAMIENTAS FASE 5                -->
+                    <!-- ========================================= -->
+                    
+                    <!-- Subdomain Takeover Checker -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-bug text-danger me-1"></i>Subdomain Takeover Checker</h6>
+                            <p class="small">Detecta subdominios vulnerables a takeover. Verifica CNAME, A, NS y MX que apuntan a servicios externos (GitHub, Heroku, AWS, etc.).</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> Seguridad</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('subdomain-takeover-checker.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Port Knocking Client -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-door-open text-warning me-1"></i>Port Knocking Client</h6>
+                            <p class="small">Cliente para autenticación por port knocking. Envía paquetes a puertos específicos en secuencia, soporta TCP/UDP y modo stealth.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-network-wired me-1"></i> Redes</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('port-knocking-client.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- JWT Token Analyzer -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-key text-primary me-1"></i>JWT Token Analyzer</h6>
+                            <p class="small">Analiza y decodifica tokens JWT. Verifica firma, validez, expiración, y detecta algoritmos inseguros. Soporta verificación con secreto.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-lock me-1"></i> Seguridad</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('jwt-analyzer.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CORS Misconfiguration Scanner -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-shield-virus text-danger me-1"></i>CORS Misconfiguration Scanner</h6>
+                            <p class="small">Detecta configuraciones CORS inseguras en dominios. Verifica ACAO, credenciales, métodos permitidos y genera recomendaciones.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-globe me-1"></i> Web</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('cors-scanner.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Email Header Analyzer -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-envelope text-warning me-1"></i>Email Header Analyzer</h6>
+                            <p class="small">Analiza cabeceras de email para detectar spoofing y phishing. Verifica SPF, DKIM, DMARC, y detecta discrepancias en remitentes.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> Forense</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('email-header-analyzer.js')">
                                     <i class="fas fa-download me-1"></i>Descargar
                                 </button>
                             </div>
