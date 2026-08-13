@@ -8,17 +8,22 @@
  * Ejemplo: node breach-checker.js --email usuario@email.com
  * Ejemplo: node breach-checker.js --list emails.txt
  * Ejemplo: node breach-checker.js --email usuario@email.com --output report.json
+ * Ejemplo: node breach-checker.js --email usuario@email.com --hibp-key TU_API_KEY
  */
 
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 // ==================== CONFIGURACIÓN ====================
 const CONFIG = {
-    baseUrl: 'https://haveibeenpwned.com/api/v3',
     timeout: 15000,
-    userAgent: 'MFH-Breach-Checker/1.0'
+    userAgent: 'MFH-Breach-Checker/1.0',
+    providers: {
+        leakcheck: 'https://leakcheck.io/api/public',
+        hibp: 'https://haveibeenpwned.com/api/v3'
+    }
 };
 
 // ==================== PARSEAR ARGUMENTOS ====================
@@ -27,6 +32,7 @@ const args = process.argv.slice(2);
 let email = null;
 let listFile = null;
 let outputFile = null;
+let hibpKey = null;
 let verbose = false;
 
 for (let i = 0; i < args.length; i++) {
@@ -44,6 +50,11 @@ for (let i = 0; i < args.length; i++) {
         case '--output':
         case '-o':
             outputFile = args[i + 1];
+            i++;
+            break;
+        case '--hibp-key':
+        case '-k':
+            hibpKey = args[i + 1];
             i++;
             break;
         case '--verbose':
@@ -64,6 +75,7 @@ Opciones:
   --email, -e <email>      Email a verificar
   --list, -l <archivo>     Archivo con lista de emails
   --output, -o <archivo>   Guardar resultados en JSON
+  --hibp-key, -k <key>     API Key de Have I Been Pwned (opcional)
   --verbose, -v            Mostrar más detalles
   --help, -h               Mostrar esta ayuda
 
@@ -77,9 +89,8 @@ Ejemplos:
 }
 
 // ==================== FUNCIONES ====================
-function makeRequest(endpoint) {
+function makeRequest(url, headers = {}) {
     return new Promise((resolve, reject) => {
-        const url = `${CONFIG.baseUrl}${endpoint}`;
         const parsedUrl = new URL(url);
 
         const options = {
@@ -89,7 +100,7 @@ function makeRequest(endpoint) {
             headers: {
                 'User-Agent': CONFIG.userAgent,
                 'Accept': 'application/json',
-                'hibp-api-key': '' // API key opcional para mayor límite
+                ...headers
             },
             timeout: CONFIG.timeout
         };
@@ -108,7 +119,7 @@ function makeRequest(endpoint) {
                     try {
                         resolve(JSON.parse(data));
                     } catch (error) {
-                        reject(new Error(`Error parsing JSON: ${error.message}`));
+                        resolve({ error: 'Error parsing JSON', raw: data });
                     }
                 } else {
                     reject(new Error(`HTTP Error ${res.statusCode}: ${data}`));
@@ -124,14 +135,117 @@ function makeRequest(endpoint) {
     });
 }
 
-async function checkEmail(email) {
-    const normalizedEmail = email.toLowerCase().trim();
-    const endpoint = `/breachedaccount/${encodeURIComponent(normalizedEmail)}?truncateResponse=false`;
-    const breaches = await makeRequest(endpoint);
-    return breaches;
+function checkLeakCheck(email) {
+    return new Promise((resolve, reject) => {
+        const url = `${CONFIG.providers.leakcheck}/?check=${encodeURIComponent(email)}`;
+        
+        makeRequest(url).then(data => {
+            if (data && data.found === true) {
+                resolve({
+                    provider: 'leakcheck',
+                    email,
+                    found: true,
+                    breaches: data.result || [],
+                    total: data.result ? data.result.length : 0
+                });
+            } else {
+                resolve({
+                    provider: 'leakcheck',
+                    email,
+                    found: false,
+                    breaches: [],
+                    total: 0
+                });
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
 }
 
-function formatBreachDate(dateString) {
+function checkHIBP(email, apiKey) {
+    return new Promise((resolve, reject) => {
+        const url = `${CONFIG.providers.hibp}/breachedaccount/${encodeURIComponent(email)}?truncateResponse=false`;
+        const headers = apiKey ? { 'hibp-api-key': apiKey } : {};
+        
+        makeRequest(url, headers).then(data => {
+            if (data === null) {
+                resolve({
+                    provider: 'hibp',
+                    email,
+                    found: false,
+                    breaches: [],
+                    total: 0
+                });
+            } else if (Array.isArray(data)) {
+                resolve({
+                    provider: 'hibp',
+                    email,
+                    found: data.length > 0,
+                    breaches: data,
+                    total: data.length
+                });
+            } else {
+                resolve({
+                    provider: 'hibp',
+                    email,
+                    found: false,
+                    breaches: [],
+                    total: 0
+                });
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+async function checkEmail(email, hibpKey) {
+    const normalizedEmail = email.toLowerCase().trim();
+    let result = null;
+    let errors = [];
+
+    // Intentar con LeakCheck primero
+    try {
+        result = await checkLeakCheck(normalizedEmail);
+        if (result && result.found !== undefined) {
+            return result;
+        }
+    } catch (error) {
+        errors.push(`leakcheck: ${error.message}`);
+        if (verbose) console.log(`⚠️ leakcheck falló: ${error.message}`);
+    }
+
+    // Si hay API key de HIBP, intentar con HIBP
+    if (hibpKey) {
+        try {
+            result = await checkHIBP(normalizedEmail, hibpKey);
+            if (result && result.found !== undefined) {
+                return result;
+            }
+        } catch (error) {
+            errors.push(`hibp: ${error.message}`);
+            if (verbose) console.log(`⚠️ HIBP falló: ${error.message}`);
+        }
+    }
+
+    // Si todo falla
+    if (errors.length > 0) {
+        throw new Error(`No se pudo verificar ${email}. Errores: ${errors.join('; ')}`);
+    }
+
+    // Si no se pudo verificar pero no hubo error
+    return {
+        provider: 'unknown',
+        email: normalizedEmail,
+        found: false,
+        breaches: [],
+        total: 0,
+        error: 'No se pudo verificar con ningún proveedor'
+    };
+}
+
+function formatDate(dateString) {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString('es-MX', {
@@ -168,39 +282,28 @@ function formatSingleResult(result) {
     }
 
     output += `📧 ${result.email}\n`;
+    output += `📡 Proveedor: ${result.provider}\n`;
     
-    if (!result.breaches || result.breaches.length === 0) {
+    if (!result.found || result.total === 0) {
         output += `   ✅ No encontrado en ninguna brecha conocida\n`;
         output += `   🛡️ Seguro (por ahora)\n`;
     } else {
-        output += `   🔴 ¡COMPROMETIDO! Encontrado en ${result.breaches.length} brecha(s)\n\n`;
+        output += `   🔴 ¡COMPROMETIDO! Encontrado en ${result.total} brecha(s)\n\n`;
         
-        // Agrupar por severidad
-        const severityOrder = { 'high': 0, 'medium': 1, 'low': 2 };
-        const sortedBreaches = [...result.breaches].sort((a, b) => {
-            return (severityOrder[a.Severity?.toLowerCase()] || 9) - (severityOrder[b.Severity?.toLowerCase()] || 9);
-        });
-
-        for (const breach of sortedBreaches) {
-            const severity = breach.Severity || 'unknown';
-            const icon = severity === 'high' ? '🔴' : severity === 'medium' ? '🟡' : '🟢';
+        const breaches = result.breaches;
+        for (const breach of breaches) {
+            const name = breach.name || breach.title || 'Unknown';
+            const date = breach.breachDate || breach.date || 'N/A';
+            const description = breach.description || '';
+            const dataClasses = breach.dataClasses || breach.affected || [];
             
-            output += `   ${icon} ${breach.Title || 'Unknown'}\n`;
-            output += `      📅 Fecha: ${formatBreachDate(breach.BreachDate)}\n`;
-            if (breach.Domain) {
-                output += `      🌐 Dominio: ${breach.Domain}\n`;
+            output += `   📌 ${name}\n`;
+            output += `      📅 Fecha: ${formatDate(date)}\n`;
+            if (dataClasses.length > 0) {
+                output += `      📊 Datos expuestos: ${dataClasses.join(', ')}\n`;
             }
-            if (breach.IsVerified) {
-                output += `      ✅ Verificado\n`;
-            }
-            if (breach.IsSensitive) {
-                output += `      🔒 Contiene datos sensibles\n`;
-            }
-            if (breach.DataClasses && breach.DataClasses.length > 0) {
-                output += `      📊 Datos expuestos: ${breach.DataClasses.join(', ')}\n`;
-            }
-            if (breach.Description) {
-                const desc = breach.Description.replace(/<[^>]+>/g, '').substring(0, 100);
+            if (description) {
+                const desc = description.replace(/<[^>]+>/g, '').substring(0, 100);
                 output += `      📝 ${desc}...\n`;
             }
             output += '\n';
@@ -244,6 +347,13 @@ function formatSingleResult(result) {
         process.exit(1);
     }
 
+    if (hibpKey) {
+        console.log(`🔑 API Key de HIBP configurada`);
+    } else {
+        console.log(`ℹ️ Usando leakcheck.io (gratuito, sin API key)`);
+        console.log(`💡 Para usar HIBP: --hibp-key TU_API_KEY`);
+    }
+
     const results = [];
     let processed = 0;
 
@@ -252,15 +362,11 @@ function formatSingleResult(result) {
         console.log(`\n[${processed}/${emails.length}] Verificando: ${e}`);
         
         try {
-            const breaches = await checkEmail(e);
-            results.push({
-                email: e,
-                breaches: breaches,
-                compromised: breaches && breaches.length > 0
-            });
+            const result = await checkEmail(e, hibpKey);
+            results.push(result);
             
-            if (breaches && breaches.length > 0) {
-                console.log(`   🔴 ¡COMPROMETIDO! ${breaches.length} brecha(s)`);
+            if (result.found) {
+                console.log(`   🔴 ¡COMPROMETIDO! ${result.total} brecha(s)`);
             } else {
                 console.log(`   ✅ No encontrado en brechas`);
             }
@@ -272,9 +378,9 @@ function formatSingleResult(result) {
             });
         }
 
-        // Esperar 1.5 segundos entre requests (política de rate limiting)
+        // Esperar 1 segundo entre requests para no saturar
         if (processed < emails.length) {
-            await new Promise(r => setTimeout(r, 1500));
+            await new Promise(r => setTimeout(r, 1000));
         }
     }
 
@@ -282,7 +388,7 @@ function formatSingleResult(result) {
     console.log(formatResults(results));
 
     // Estadísticas
-    const compromised = results.filter(r => r.compromised);
+    const compromised = results.filter(r => r.found);
     const errors = results.filter(r => r.error);
     console.log(`\n📊 ESTADÍSTICAS:`);
     console.log(`   🔴 Comprometidos: ${compromised.length}`);
