@@ -5,9 +5,8 @@
  * Consulta información de ASN (Autonomous System Number)
  * 
  * Uso: node asn-lookup.js [opciones]
- * Ejemplo: node asn-lookup.js --asn 15169
  * Ejemplo: node asn-lookup.js --ip 8.8.8.8
- * Ejemplo: node asn-lookup.js --asn 15169 --output report.json
+ * Ejemplo: node asn-lookup.js --ip 8.8.8.8 --output report.json
  */
 
 const https = require('https');
@@ -16,26 +15,23 @@ const path = require('path');
 
 // ==================== CONFIGURACIÓN ====================
 const CONFIG = {
-    baseUrl: 'https://api.bgpview.io',
     timeout: 10000,
-    userAgent: 'MFH-ASN-Lookup/1.0'
+    userAgent: 'MFH-ASN-Lookup/1.0',
+    providers: {
+        ipapi: 'https://ipapi.co',
+        ipinfo: 'https://ipinfo.io'
+    }
 };
 
 // ==================== PARSEAR ARGUMENTOS ====================
 const args = process.argv.slice(2);
 
-let asn = null;
 let ip = null;
 let outputFile = null;
 let verbose = false;
 
 for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-        case '--asn':
-        case '-a':
-            asn = args[i + 1];
-            i++;
-            break;
         case '--ip':
         case '-i':
             ip = args[i + 1];
@@ -61,25 +57,22 @@ Uso:
   node asn-lookup.js [opciones]
 
 Opciones:
-  --asn, -a <número>       Número de ASN (ej: 15169)
   --ip, -i <dirección>     Dirección IP (ej: 8.8.8.8)
   --output, -o <archivo>   Guardar resultados en JSON
   --verbose, -v            Mostrar más detalles
   --help, -h               Mostrar esta ayuda
 
 Ejemplos:
-  node asn-lookup.js --asn 15169
   node asn-lookup.js --ip 8.8.8.8
-  node asn-lookup.js --asn 15169 --output report.json
+  node asn-lookup.js --ip 8.8.8.8 --output report.json
 `);
             process.exit(0);
     }
 }
 
 // ==================== FUNCIONES ====================
-function makeRequest(endpoint) {
+function makeRequest(url) {
     return new Promise((resolve, reject) => {
-        const url = `${CONFIG.baseUrl}${endpoint}`;
         const parsedUrl = new URL(url);
 
         const options = {
@@ -121,77 +114,93 @@ function makeRequest(endpoint) {
     });
 }
 
-async function lookupASN(asn) {
-    const cleanAsn = asn.toString().replace(/^AS/i, '');
-    const data = await makeRequest(`/asn/${cleanAsn}`);
-    return data;
-}
-
 async function lookupIP(ip) {
-    const data = await makeRequest(`/ip/${ip}`);
-    return data;
+    let result = null;
+    let errors = [];
+
+    // Intentar con ipapi.co primero
+    try {
+        const url = `${CONFIG.providers.ipapi}/${ip}/json/`;
+        const data = await makeRequest(url);
+        
+        if (data && !data.error) {
+            result = {
+                provider: 'ipapi.co',
+                ip: data.ip || ip,
+                asn: data.asn ? `AS${data.asn}` : 'N/A',
+                asn_name: data.org || 'N/A',
+                country: data.country_name || 'N/A',
+                country_code: data.country || 'N/A',
+                city: data.city || 'N/A',
+                region: data.region || 'N/A',
+                latitude: data.latitude || 'N/A',
+                longitude: data.longitude || 'N/A',
+                timezone: data.timezone || 'N/A',
+                isp: data.org || 'N/A'
+            };
+            return result;
+        }
+    } catch (error) {
+        errors.push(`ipapi.co: ${error.message}`);
+        if (verbose) console.log(`⚠️ ipapi.co falló: ${error.message}`);
+    }
+
+    // Intentar con ipinfo.io como respaldo
+    try {
+        const url = `${CONFIG.providers.ipinfo}/${ip}/json`;
+        const data = await makeRequest(url);
+        
+        if (data && !data.error) {
+            const asnParts = data.org ? data.org.split(' ') : [];
+            const asn = asnParts.find(p => p.startsWith('AS')) || 'N/A';
+            const asnName = asnParts.filter(p => !p.startsWith('AS')).join(' ') || 'N/A';
+
+            result = {
+                provider: 'ipinfo.io',
+                ip: data.ip || ip,
+                asn: asn,
+                asn_name: asnName,
+                country: data.country || 'N/A',
+                country_code: data.country || 'N/A',
+                city: data.city || 'N/A',
+                region: data.region || 'N/A',
+                latitude: data.loc ? data.loc.split(',')[0] : 'N/A',
+                longitude: data.loc ? data.loc.split(',')[1] : 'N/A',
+                timezone: data.timezone || 'N/A',
+                isp: data.org || 'N/A'
+            };
+            return result;
+        }
+    } catch (error) {
+        errors.push(`ipinfo.io: ${error.message}`);
+        if (verbose) console.log(`⚠️ ipinfo.io falló: ${error.message}`);
+    }
+
+    // Si todo falla
+    throw new Error(`No se pudo obtener información de la IP ${ip}. Errores: ${errors.join('; ')}`);
 }
 
-function formatResults(data, type) {
+function formatResults(data) {
     let output = '';
     output += `🔍 ASN Lookup - MFH TOOLS PRO\n`;
-    output += '='.repeat(50) + '\n\n';
+    output += '='.split(50).join('=') + '\n\n';
 
-    if (type === 'asn') {
-        const asnData = data.data;
-        if (!asnData) {
-            output += '❌ No se encontró información para este ASN\n';
-            return output;
-        }
+    output += `📋 IP: ${data.ip}\n`;
+    output += `📋 ASN: ${data.asn}\n`;
+    output += `📋 Nombre ASN: ${data.asn_name}\n`;
+    output += `📋 País: ${data.country} (${data.country_code})\n`;
+    output += `📋 Ciudad: ${data.city}\n`;
+    output += `📋 Región: ${data.region}\n`;
+    output += `📋 ISP: ${data.isp}\n`;
+    output += `📋 Zona horaria: ${data.timezone}\n`;
+    output += `📍 Coordenadas: ${data.latitude}, ${data.longitude}\n`;
+    output += `📡 Proveedor: ${data.provider}\n`;
 
-        output += `📋 ASN: ${asnData.asn || 'N/A'}\n`;
-        output += `📋 Nombre: ${asnData.name || 'N/A'}\n`;
-        output += `📋 Descripción: ${asnData.description || 'N/A'}\n`;
-        output += `📋 País: ${asnData.country_code || 'N/A'}\n`;
-        output += `📋 Rango de IPs: ${asnData.ipv4_prefixes ? asnData.ipv4_prefixes.length : 0} prefijos IPv4\n`;
-
-        if (asnData.ipv4_prefixes && asnData.ipv4_prefixes.length > 0) {
-            output += `\n📋 PREFIJOS IPv4 (${asnData.ipv4_prefixes.length}):\n`;
-            const prefixes = asnData.ipv4_prefixes.slice(0, 10);
-            for (const prefix of prefixes) {
-                output += `   • ${prefix.prefix}\n`;
-            }
-            if (asnData.ipv4_prefixes.length > 10) {
-                output += `   ... y ${asnData.ipv4_prefixes.length - 10} más\n`;
-            }
-        }
-
-        if (asnData.ipv6_prefixes && asnData.ipv6_prefixes.length > 0) {
-            output += `\n📋 PREFIJOS IPv6 (${asnData.ipv6_prefixes.length}):\n`;
-            const prefixes = asnData.ipv6_prefixes.slice(0, 5);
-            for (const prefix of prefixes) {
-                output += `   • ${prefix.prefix}\n`;
-            }
-            if (asnData.ipv6_prefixes.length > 5) {
-                output += `   ... y ${asnData.ipv6_prefixes.length - 5} más\n`;
-            }
-        }
-
-    } else if (type === 'ip') {
-        const ipData = data.data;
-        if (!ipData) {
-            output += '❌ No se encontró información para esta IP\n';
-            return output;
-        }
-
-        output += `📋 IP: ${ipData.ip || 'N/A'}\n`;
-        output += `📋 ASN: ${ipData.asn || 'N/A'}\n`;
-        output += `📋 Nombre ASN: ${ipData.asn_name || 'N/A'}\n`;
-        output += `📋 País: ${ipData.country_code || 'N/A'}\n`;
-        output += `📋 Rango: ${ipData.prefix || 'N/A'}\n`;
-
-        if (ipData.rdap) {
-            output += `\n📋 INFORMACIÓN RDAP:\n`;
-            if (ipData.rdap.name) output += `   • Nombre: ${ipData.rdap.name}\n`;
-            if (ipData.rdap.type) output += `   • Tipo: ${ipData.rdap.type}\n`;
-            if (ipData.rdap.country) output += `   • País: ${ipData.rdap.country}\n`;
-        }
-    }
+    // Enlaces útiles
+    output += `\n🔗 ENLACES ÚTILES:\n`;
+    output += `   • https://bgp.he.net/${data.asn}\n`;
+    output += `   • https://whois.arin.net/rest/ip/${data.ip}\n`;
+    output += `   • https://www.shodan.io/host/${data.ip}\n`;
 
     return output;
 }
@@ -199,36 +208,26 @@ function formatResults(data, type) {
 // ==================== MAIN ====================
 (async function main() {
     console.log(`🔍 ASN Lookup - MFH TOOLS PRO`);
-    console.log('='.repeat(40));
+    console.log('='.split(40).join('='));
 
-    if (!asn && !ip) {
-        console.error('❌ Debes especificar --asn o --ip');
+    if (!ip) {
+        console.error('❌ Debes especificar una IP con --ip');
         console.log('   Usa --help para ver las opciones');
         process.exit(1);
     }
 
     try {
-        let result = null;
-        let type = null;
-
-        if (asn) {
-            console.log(`📡 Consultando ASN: ${asn}`);
-            result = await lookupASN(asn);
-            type = 'asn';
-        } else if (ip) {
-            console.log(`📡 Consultando IP: ${ip}`);
-            result = await lookupIP(ip);
-            type = 'ip';
-        }
+        console.log(`📡 Consultando IP: ${ip}`);
+        const result = await lookupIP(ip);
 
         // Mostrar resultados
-        console.log(formatResults(result, type));
+        console.log(formatResults(result));
 
         // Guardar resultados
         if (outputFile) {
             const output = {
                 timestamp: new Date().toISOString(),
-                query: { asn, ip },
+                query: { ip },
                 data: result
             };
             fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
