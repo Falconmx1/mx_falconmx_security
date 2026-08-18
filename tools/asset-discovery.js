@@ -33,7 +33,7 @@ let network = null;
 let domain = null;
 let outputFile = null;
 let verbose = false;
-let scanPorts = false;
+let scanPortsFlag = false;
 
 for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
@@ -49,7 +49,7 @@ for (let i = 0; i < args.length; i++) {
             break;
         case '--ports':
         case '-p':
-            scanPorts = true;
+            scanPortsFlag = true;
             break;
         case '--output':
         case '-o':
@@ -181,7 +181,7 @@ function getSubdomains(domain) {
     });
 }
 
-function scanPort(ip, port) {
+function checkPort(ip, port) {
     return new Promise((resolve) => {
         const socket = new net.Socket();
         socket.setTimeout(CONFIG.timeout);
@@ -204,10 +204,10 @@ function scanPort(ip, port) {
     });
 }
 
-async function scanPorts(ip, ports = CONFIG.commonPorts) {
+async function scanTargetPorts(ip, ports = CONFIG.commonPorts) {
     const results = [];
     for (const port of ports) {
-        const result = await scanPort(ip, port);
+        const result = await checkPort(ip, port);
         if (result.open) {
             results.push(result.port);
         }
@@ -253,8 +253,8 @@ async function discoverNetwork(network) {
                 }
                 
                 // Escanear puertos
-                if (scanPorts) {
-                    asset.ports = await scanPorts(result.ip);
+                if (scanPortsFlag) {
+                    asset.ports = await scanTargetPorts(result.ip);
                 }
                 
                 assets.push(asset);
