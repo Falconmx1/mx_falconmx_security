@@ -7,7 +7,8 @@
  * Uso: node multi-tenant-manager.js [opciones]
  * Ejemplo: node multi-tenant-manager.js --create --name "Cliente A" --domain cliente-a.com
  * Ejemplo: node multi-tenant-manager.js --list
- * Ejemplo: node multi-tenant-manager.js --tenant tenant-123 --config
+ * Ejemplo: node multi-tenant-manager.js --tenant tenant-001 --config-get
+ * Ejemplo: node multi-tenant-manager.js --tenant tenant-001 --config-set '{"key":"value"}'
  */
 
 const fs = require('fs');
@@ -25,8 +26,9 @@ let action = null;
 let tenantId = null;
 let name = null;
 let domain = null;
-let config = null;
+let configData = null;
 let verbose = false;
+let init = false;
 
 for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
@@ -41,14 +43,32 @@ for (let i = 0; i < args.length; i++) {
             tenantId = args[i + 1];
             i++;
             break;
-        case '--config':
-            action = 'config';
-            tenantId = args[i + 1];
-            i++;
-            break;
         case '--tenant':
             tenantId = args[i + 1];
             i++;
+            break;
+        case '--config-get':
+            action = 'config-get';
+            break;
+        case '--config-set':
+            action = 'config-set';
+            try {
+                configData = JSON.parse(args[i + 1]);
+            } catch (error) {
+                // Parsear formato key=value,key2=value2
+                const pairs = args[i + 1].split(',');
+                configData = {};
+                for (const pair of pairs) {
+                    const [key, value] = pair.split('=').map(s => s.trim());
+                    if (key && value) {
+                        configData[key] = value;
+                    }
+                }
+            }
+            i++;
+            break;
+        case '--stats':
+            action = 'stats';
             break;
         case '--name':
             name = args[i + 1];
@@ -58,21 +78,8 @@ for (let i = 0; i < args.length; i++) {
             domain = args[i + 1];
             i++;
             break;
-        case '--set':
-            try {
-                config = JSON.parse(args[i + 1]);
-            } catch (error) {
-                // Parsear formato key=value,key2=value2
-                const pairs = args[i + 1].split(',');
-                config = {};
-                for (const pair of pairs) {
-                    const [key, value] = pair.split('=').map(s => s.trim());
-                    if (key && value) {
-                        config[key] = value;
-                    }
-                }
-            }
-            i++;
+        case '--init':
+            init = true;
             break;
         case '--verbose':
         case '-v':
@@ -89,21 +96,26 @@ Uso:
   node multi-tenant-manager.js [opciones]
 
 Opciones:
-  --create                Crear un nuevo tenant
-  --list                  Listar todos los tenants
-  --delete <id>           Eliminar un tenant
-  --config <id>           Ver configuración de un tenant
-  --tenant <id>           Seleccionar tenant para operaciones
-  --name <nombre>         Nombre del tenant
-  --domain <dominio>      Dominio del tenant
-  --set <json>            Establecer configuración
-  --verbose, -v           Mostrar más detalles
-  --help, -h              Mostrar esta ayuda
+  --init                   Inicializar sistema multi-tenant
+  --create                 Crear un nuevo tenant
+  --list                   Listar todos los tenants
+  --delete <id>            Eliminar un tenant
+  --tenant <id>            Seleccionar tenant para operaciones
+  --config-get             Ver configuración del tenant seleccionado
+  --config-set <json>      Establecer configuración del tenant
+  --stats                  Ver estadísticas generales
+  --name <nombre>          Nombre del tenant (con --create)
+  --domain <dominio>       Dominio del tenant (con --create)
+  --verbose, -v            Mostrar más detalles
+  --help, -h               Mostrar esta ayuda
 
 Ejemplos:
+  node multi-tenant-manager.js --init
   node multi-tenant-manager.js --create --name "Cliente A" --domain cliente-a.com
   node multi-tenant-manager.js --list
-  node multi-tenant-manager.js --tenant tenant-123 --config
+  node multi-tenant-manager.js --tenant tenant-001 --config-get
+  node multi-tenant-manager.js --tenant tenant-001 --config-set '{"maxScans":100,"notifyEmail":"admin@cliente.com"}'
+  node multi-tenant-manager.js --stats
 `);
             process.exit(0);
     }
@@ -118,7 +130,7 @@ function loadConfig() {
     } catch (error) {
         console.error('❌ Error cargando configuración:', error.message);
     }
-    return { tenants: [], lastId: 0 };
+    return { tenants: [], lastId: 0, stats: { totalTenants: 0, totalScans: 0, totalAlerts: 0 } };
 }
 
 function saveConfig(data) {
@@ -143,19 +155,75 @@ function createTenantDirectory(id) {
         fs.mkdirSync(path.join(tenantDir, 'data'), { recursive: true });
         fs.mkdirSync(path.join(tenantDir, 'logs'), { recursive: true });
         fs.mkdirSync(path.join(tenantDir, 'reports'), { recursive: true });
+        fs.mkdirSync(path.join(tenantDir, 'config'), { recursive: true });
     }
     return tenantDir;
 }
 
-function createTenant(name, domain, configData) {
+function initSystem() {
+    if (!fs.existsSync(TENANTS_DIR)) {
+        fs.mkdirSync(TENANTS_DIR, { recursive: true });
+    }
+    
+    const config = loadConfig();
+    if (config.tenants.length === 0) {
+        // Crear tenant por defecto
+        const defaultTenant = {
+            id: 'tenant-001',
+            name: 'Default',
+            domain: 'localhost',
+            createdAt: new Date().toISOString(),
+            status: 'active',
+            config: {
+                maxScans: 100,
+                maxAlerts: 1000,
+                notifyEmail: 'admin@localhost',
+                retentionDays: 30
+            },
+            stats: {
+                scans: 0,
+                alerts: 0,
+                reports: 0,
+                lastActivity: null
+            }
+        };
+        config.tenants.push(defaultTenant);
+        config.lastId = 1;
+        config.stats = { totalTenants: 1, totalScans: 0, totalAlerts: 0 };
+        saveConfig(config);
+        
+        // Crear directorio del tenant
+        createTenantDirectory(defaultTenant.id);
+        
+        // Crear archivo de configuración del tenant
+        const tenantDir = path.join(TENANTS_DIR, defaultTenant.id);
+        const tenantConfigPath = path.join(tenantDir, 'config', 'tenant.json');
+        fs.writeFileSync(tenantConfigPath, JSON.stringify(defaultTenant, null, 2));
+        
+        console.log(`✅ Sistema multi-tenant inicializado`);
+        console.log(`📋 Tenant por defecto creado: ${defaultTenant.id}`);
+        console.log(`📁 Directorio: ${tenantDir}`);
+    } else {
+        console.log(`ℹ️ Sistema ya inicializado con ${config.tenants.length} tenants`);
+    }
+}
+
+function createTenant(name, domain) {
     const id = generateTenantId();
+    const config = loadConfig();
+    
     const tenant = {
         id,
         name: name || `Tenant ${id}`,
         domain: domain || null,
         createdAt: new Date().toISOString(),
         status: 'active',
-        config: configData || {},
+        config: {
+            maxScans: 100,
+            maxAlerts: 1000,
+            notifyEmail: `admin@${domain || 'localhost'}`,
+            retentionDays: 30
+        },
         stats: {
             scans: 0,
             alerts: 0,
@@ -164,22 +232,16 @@ function createTenant(name, domain, configData) {
         }
     };
 
-    const config = loadConfig();
     config.tenants.push(tenant);
+    config.stats.totalTenants = config.tenants.length;
     saveConfig(config);
 
     // Crear directorio
     const tenantDir = createTenantDirectory(id);
     
     // Crear archivo de configuración del tenant
-    const tenantConfig = {
-        id,
-        name: tenant.name,
-        domain: tenant.domain,
-        createdAt: tenant.createdAt,
-        settings: tenant.config
-    };
-    fs.writeFileSync(path.join(tenantDir, 'tenant.json'), JSON.stringify(tenantConfig, null, 2));
+    const tenantConfigPath = path.join(tenantDir, 'config', 'tenant.json');
+    fs.writeFileSync(tenantConfigPath, JSON.stringify(tenant, null, 2));
 
     console.log(`✅ Tenant creado: ${id}`);
     console.log(`📋 Nombre: ${tenant.name}`);
@@ -193,11 +255,12 @@ function listTenants() {
     const config = loadConfig();
     if (config.tenants.length === 0) {
         console.log('📭 No hay tenants creados');
+        console.log('   Ejecuta --init para inicializar el sistema');
         return;
     }
 
     console.log(`\n📋 TENANTS (${config.tenants.length}):`);
-    console.log('='.split(60).join('='));
+    console.log('='.repeat(70));
 
     for (const tenant of config.tenants) {
         const statusIcon = tenant.status === 'active' ? '🟢' : '🔴';
@@ -210,6 +273,7 @@ function listTenants() {
         if (tenant.stats?.lastActivity) {
             console.log(`   ⏱️ Última actividad: ${new Date(tenant.stats.lastActivity).toLocaleString()}`);
         }
+        console.log(`   📁 Directorio: ${path.join(TENANTS_DIR, tenant.id)}`);
     }
 }
 
@@ -218,6 +282,7 @@ function getTenant(id) {
     const tenant = config.tenants.find(t => t.id === id);
     if (!tenant) {
         console.error(`❌ Tenant no encontrado: ${id}`);
+        console.log('   Usa --list para ver los tenants disponibles');
         process.exit(1);
     }
     return tenant;
@@ -225,33 +290,33 @@ function getTenant(id) {
 
 function showTenantConfig(id) {
     const tenant = getTenant(id);
-    const tenantDir = path.join(TENANTS_DIR, id);
-    const tenantConfigPath = path.join(tenantDir, 'tenant.json');
     
     console.log(`\n📋 CONFIGURACIÓN DE TENANT: ${id}`);
-    console.log('='.split(60).join('='));
+    console.log('='.repeat(60));
     console.log(`📌 Nombre: ${tenant.name}`);
     console.log(`🌐 Dominio: ${tenant.domain || 'N/A'}`);
-    console.log(`📅 Creado: ${new Date(tenant.createdAt).toLocaleString()}`);
     console.log(`📊 Estado: ${tenant.status}`);
-    
-    if (fs.existsSync(tenantConfigPath)) {
-        const configData = JSON.parse(fs.readFileSync(tenantConfigPath, 'utf8'));
-        console.log(`\n📋 CONFIGURACIÓN DETALLADA:`);
-        console.log(JSON.stringify(configData, null, 2));
-    }
+    console.log(`📅 Creado: ${new Date(tenant.createdAt).toLocaleString()}`);
+    console.log(`\n⚙️ CONFIGURACIÓN:`);
+    console.log(JSON.stringify(tenant.config, null, 2));
     
     // Mostrar archivos del tenant
-    const tenantDir2 = path.join(TENANTS_DIR, id);
-    if (fs.existsSync(tenantDir2)) {
+    const tenantDir = path.join(TENANTS_DIR, id);
+    if (fs.existsSync(tenantDir)) {
         console.log(`\n📁 DIRECTORIO DEL TENANT:`);
-        console.log(`   ${tenantDir2}`);
-        const subdirs = ['data', 'logs', 'reports'];
+        console.log(`   ${tenantDir}`);
+        const subdirs = ['data', 'logs', 'reports', 'config'];
         for (const subdir of subdirs) {
-            const subPath = path.join(tenantDir2, subdir);
+            const subPath = path.join(tenantDir, subdir);
             if (fs.existsSync(subPath)) {
                 const files = fs.readdirSync(subPath);
                 console.log(`   📂 ${subdir}: ${files.length} archivos`);
+                if (subdir === 'config' && files.length > 0) {
+                    const configFiles = files.filter(f => f.endsWith('.json'));
+                    for (const cf of configFiles) {
+                        console.log(`      📄 ${cf}`);
+                    }
+                }
             }
         }
     }
@@ -266,25 +331,23 @@ function updateTenantConfig(id, updates) {
     }
 
     // Actualizar configuración
-    if (updates.name) tenant.name = updates.name;
-    if (updates.domain) tenant.domain = updates.domain;
-    if (updates.status) tenant.status = updates.status;
-    if (updates.config) {
-        tenant.config = { ...tenant.config, ...updates.config };
-    }
-
+    tenant.config = { ...tenant.config, ...updates };
+    tenant.updatedAt = new Date().toISOString();
+    
     saveConfig(config);
 
     // Actualizar archivo de configuración del tenant
     const tenantDir = path.join(TENANTS_DIR, id);
-    const tenantConfigPath = path.join(tenantDir, 'tenant.json');
+    const tenantConfigPath = path.join(tenantDir, 'config', 'tenant.json');
     if (fs.existsSync(tenantConfigPath)) {
         const configData = JSON.parse(fs.readFileSync(tenantConfigPath, 'utf8'));
-        configData.settings = tenant.config;
+        configData.config = tenant.config;
+        configData.updatedAt = tenant.updatedAt;
         fs.writeFileSync(tenantConfigPath, JSON.stringify(configData, null, 2));
     }
 
-    console.log(`✅ Tenant actualizado: ${id}`);
+    console.log(`✅ Configuración del tenant actualizada: ${id}`);
+    console.log(`📋 Nuevos valores:`, JSON.stringify(updates, null, 2));
     return tenant;
 }
 
@@ -298,6 +361,7 @@ function deleteTenant(id) {
         process.exit(1);
     }
 
+    config.stats.totalTenants = config.tenants.length;
     saveConfig(config);
 
     // Opcional: eliminar directorio (comentado por seguridad)
@@ -309,42 +373,101 @@ function deleteTenant(id) {
     console.log(`✅ Tenant eliminado: ${id}`);
 }
 
-function updateTenantStats(id, stats) {
+function updateTenantStats(id, statsUpdate) {
     const config = loadConfig();
     const tenant = config.tenants.find(t => t.id === id);
     if (tenant) {
         tenant.stats = tenant.stats || {};
-        if (stats.scans) tenant.stats.scans = (tenant.stats.scans || 0) + stats.scans;
-        if (stats.alerts) tenant.stats.alerts = (tenant.stats.alerts || 0) + stats.alerts;
-        if (stats.reports) tenant.stats.reports = (tenant.stats.reports || 0) + stats.reports;
+        if (statsUpdate.scans) tenant.stats.scans = (tenant.stats.scans || 0) + statsUpdate.scans;
+        if (statsUpdate.alerts) tenant.stats.alerts = (tenant.stats.alerts || 0) + statsUpdate.alerts;
+        if (statsUpdate.reports) tenant.stats.reports = (tenant.stats.reports || 0) + statsUpdate.reports;
         tenant.stats.lastActivity = new Date().toISOString();
         saveConfig(config);
+        
+        // Actualizar estadísticas globales
+        config.stats.totalScans = config.tenants.reduce((sum, t) => sum + (t.stats?.scans || 0), 0);
+        config.stats.totalAlerts = config.tenants.reduce((sum, t) => sum + (t.stats?.alerts || 0), 0);
+        saveConfig(config);
+    }
+}
+
+function showStats() {
+    const config = loadConfig();
+    const tenants = config.tenants;
+    
+    if (tenants.length === 0) {
+        console.log('📭 No hay tenants para mostrar estadísticas');
+        return;
+    }
+
+    console.log(`\n📊 ESTADÍSTICAS GLOBALES`);
+    console.log('='.repeat(60));
+    console.log(`📋 Total tenants: ${tenants.length}`);
+    console.log(`📊 Total escaneos: ${config.stats?.totalScans || 0}`);
+    console.log(`📊 Total alertas: ${config.stats?.totalAlerts || 0}`);
+    
+    console.log(`\n📊 POR TENANT:`);
+    console.log('='.repeat(60));
+    
+    for (const tenant of tenants) {
+        const statusIcon = tenant.status === 'active' ? '🟢' : '🔴';
+        console.log(`\n${statusIcon} ${tenant.id}: ${tenant.name}`);
+        console.log(`   📊 Escaneos: ${tenant.stats?.scans || 0}`);
+        console.log(`   📊 Alertas: ${tenant.stats?.alerts || 0}`);
+        console.log(`   📊 Reportes: ${tenant.stats?.reports || 0}`);
+        if (tenant.stats?.lastActivity) {
+            console.log(`   ⏱️ Última actividad: ${new Date(tenant.stats.lastActivity).toLocaleString()}`);
+        }
+        console.log(`   📅 Creado: ${new Date(tenant.createdAt).toLocaleString()}`);
     }
 }
 
 // ==================== MAIN ====================
 (async function main() {
     console.log(`🔍 Multi-Tenant Manager - MFH TOOLS PRO`);
-    console.log('='.split(40).join('='));
+    console.log('='.repeat(40));
+
+    if (init) {
+        initSystem();
+        process.exit(0);
+    }
 
     if (!fs.existsSync(TENANTS_DIR)) {
-        fs.mkdirSync(TENANTS_DIR, { recursive: true });
+        console.log('ℹ️ Sistema no inicializado. Ejecuta --init para crear el tenant por defecto.');
+        process.exit(0);
     }
 
     switch (action) {
         case 'create':
-            createTenant(name, domain, config);
+            createTenant(name, domain);
             break;
+            
         case 'list':
             listTenants();
             break;
-        case 'config':
+            
+        case 'config-get':
             if (!tenantId) {
-                console.error('❌ Debes especificar un ID de tenant');
+                console.error('❌ Debes especificar un ID de tenant con --tenant');
+                console.log('   Ejemplo: --tenant tenant-001 --config-get');
                 process.exit(1);
             }
             showTenantConfig(tenantId);
             break;
+            
+        case 'config-set':
+            if (!tenantId) {
+                console.error('❌ Debes especificar un ID de tenant con --tenant');
+                console.log('   Ejemplo: --tenant tenant-001 --config-set \'{"key":"value"}\'');
+                process.exit(1);
+            }
+            if (!configData) {
+                console.error('❌ Debes especificar los datos de configuración');
+                process.exit(1);
+            }
+            updateTenantConfig(tenantId, configData);
+            break;
+            
         case 'delete':
             if (!tenantId) {
                 console.error('❌ Debes especificar un ID de tenant');
@@ -352,12 +475,15 @@ function updateTenantStats(id, stats) {
             }
             deleteTenant(tenantId);
             break;
+            
+        case 'stats':
+            showStats();
+            break;
+            
         default:
-            if (tenantId && config) {
-                updateTenantConfig(tenantId, { config });
-            } else {
-                console.log('ℹ️ Sin acción especificada. Usa --help para ver opciones.');
-            }
+            console.log('ℹ️ Sin acción especificada. Usa --help para ver opciones.');
+            console.log('💡 Opciones: --init, --create, --list, --config-get, --config-set, --stats, --delete');
+            console.log('💡 Ejemplo: --tenant tenant-001 --config-get');
             break;
     }
 
