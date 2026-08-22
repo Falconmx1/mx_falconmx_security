@@ -486,4 +486,151 @@ function listReports() {
         const statusIcon = report.enabled ? '🟢' : '🔴';
         console.log(`\n${statusIcon} ${report.id}`);
         console.log(`   📋 Archivo: ${path.basename(report.file)}`);
-        console.log(`   📋 Canales: ${report
+        console.log(`   📋 Canales: ${report.channels.join(', ')}`);
+        if (report.recipients && report.recipients.length > 0) {
+            console.log(`   📋 Destinatarios: ${report.recipients.join(', ')}`);
+        }
+        console.log(`   🕐 Programación: ${report.schedule}`);
+        if (report.lastRun) {
+            console.log(`   ⏱️ Última ejecución: ${new Date(report.lastRun).toLocaleString()}`);
+        }
+        console.log(`   📅 Creado: ${new Date(report.createdAt).toLocaleString()}`);
+    }
+}
+
+function removeReport(id) {
+    const config = loadConfig();
+    const reports = config.reports || [];
+    const initialLength = reports.length;
+    config.reports = reports.filter(r => r.id !== id);
+    
+    if (config.reports.length === initialLength) {
+        console.error(`❌ Reporte no encontrado: ${id}`);
+        process.exit(1);
+    }
+
+    saveConfig(config);
+    if (global.scheduledReports && global.scheduledReports[id]) {
+        global.scheduledReports[id].stop();
+        delete global.scheduledReports[id];
+    }
+
+    console.log(`✅ Reporte eliminado: ${id}`);
+}
+
+function sendReport(id) {
+    const config = loadConfig();
+    const reports = config.reports || [];
+    const report = reports.find(r => r.id === id);
+    
+    if (!report) {
+        console.error(`❌ Reporte no encontrado: ${id}`);
+        process.exit(1);
+    }
+
+    if (!report.enabled) {
+        console.error(`❌ Reporte deshabilitado: ${id}`);
+        process.exit(1);
+    }
+
+    console.log(`🔄 Enviando reporte: ${id}`);
+    distributeReport(report.file, report.channels, report.recipients, report.subject, report.message)
+        .then(results => {
+            logReport(`✅ Reporte ${id} enviado exitosamente`, 'success');
+            report.lastRun = new Date().toISOString();
+            saveConfig(config);
+        })
+        .catch(error => {
+            logReport(`❌ Error en reporte ${id}: ${error.message}`, 'error');
+        });
+}
+
+// ==================== MAIN ====================
+(async function main() {
+    console.log(`🔍 Automated Report Distributor - MFH TOOLS PRO`);
+    console.log('='.repeat(40));
+
+    if (init) {
+        initConfig();
+        process.exit(0);
+    }
+
+    // Cargar tareas existentes
+    const config = loadConfig();
+    const reports = config.reports || [];
+    global.scheduledReports = global.scheduledReports || {};
+    
+    for (const report of reports) {
+        if (report.enabled && cron.validate(report.schedule)) {
+            const task = cron.schedule(report.schedule, () => {
+                console.log(`🔄 Ejecutando reporte programado: ${report.id}`);
+                distributeReport(report.file, report.channels, report.recipients, report.subject, report.message)
+                    .then(() => {
+                        const config2 = loadConfig();
+                        const r = config2.reports.find(r2 => r2.id === report.id);
+                        if (r) {
+                            r.lastRun = new Date().toISOString();
+                            saveConfig(config2);
+                        }
+                    })
+                    .catch(error => {
+                        logReport(`❌ Error en reporte ${report.id}: ${error.message}`, 'error');
+                    });
+            });
+            global.scheduledReports[report.id] = task;
+        }
+    }
+
+    if (Object.keys(global.scheduledReports).length > 0) {
+        console.log(`⏰ ${Object.keys(global.scheduledReports).length} reportes programados cargados`);
+    }
+
+    switch (action) {
+        case 'list':
+            listReports();
+            break;
+            
+        case 'send':
+            if (!reportId) {
+                console.error('❌ Debes especificar un ID de reporte');
+                process.exit(1);
+            }
+            await sendReport(reportId);
+            break;
+            
+        case 'remove':
+            if (!reportId) {
+                console.error('❌ Debes especificar un ID de reporte');
+                process.exit(1);
+            }
+            removeReport(reportId);
+            break;
+            
+        default:
+            if (file && channels && channels.length > 0) {
+                if (schedule) {
+                    await scheduleReport(file, channels, recipients, subject, message, schedule);
+                } else {
+                    await distributeReport(file, channels, recipients, subject, message);
+                }
+            } else {
+                console.log('ℹ️ Sin acción especificada. Usa --help para ver opciones.');
+                console.log('💡 Opciones: --init, --file, --channels, --schedule, --list');
+                console.log('💡 Ejemplo: --file report.pdf --channels console,email --recipients admin@example.com');
+            }
+            break;
+    }
+
+    console.log('\n✅ Report Distributor completado');
+})();
+
+// ==================== MANEJO DE SEÑALES ====================
+process.on('SIGINT', () => {
+    console.log('\n🛑 Deteniendo report distributor...');
+    if (global.scheduledReports) {
+        for (const [id, task] of Object.entries(global.scheduledReports)) {
+            task.stop();
+        }
+    }
+    process.exit(0);
+});
