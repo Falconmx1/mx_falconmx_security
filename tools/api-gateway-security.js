@@ -3,7 +3,7 @@
 /**
  * API Gateway Security - MFH TOOLS PRO
  * Proxy seguro con autenticación y rate limiting para APIs
- * Versión mejorada con corrección de parsing de query string
+ * Versión CORREGIDA - Lectura correcta de query string
  * 
  * Uso: node api-gateway-security.js [opciones]
  * Ejemplo: node api-gateway-security.js --port 8080 --target https://api.example.com
@@ -17,7 +17,6 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const url = require('url');
-const querystring = require('querystring');
 
 // ==================== CONFIGURACIÓN ====================
 const CONFIG_FILE = path.join(__dirname, 'gateway_config.json');
@@ -29,11 +28,11 @@ const DEFAULT_CONFIG = {
     rateLimit: {
         enabled: true,
         maxRequests: 100,
-        windowMs: 60000 // 1 minuto
+        windowMs: 60000
     },
     auth: {
         enabled: false,
-        type: 'api_key', // api_key, jwt, basic
+        type: 'api_key',
         apiKeys: [],
         jwtSecret: null,
         users: []
@@ -46,7 +45,7 @@ const DEFAULT_CONFIG = {
         enabled: true,
         origins: ['*'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        headers: ['Content-Type', 'Authorization']
+        headers: ['Content-Type', 'Authorization', 'X-API-Key']
     }
 };
 
@@ -159,7 +158,7 @@ function initConfig() {
         { key: 'test-key-123', name: 'Test User', permissions: ['read', 'write'] },
         { key: 'demo-key-456', name: 'Demo User', permissions: ['read'] }
     ];
-    config.rateLimit.maxRequests = 100;
+    config.rateLimit.maxRequests = 50;
     saveConfig(config);
     console.log('✅ Configuración por defecto creada.');
     console.log(`📝 Edita: ${CONFIG_FILE}`);
@@ -172,9 +171,19 @@ function generateAPIKey() {
     return 'key-' + crypto.randomBytes(16).toString('hex');
 }
 
+// ==================== FUNCIÓN CRÍTICA: PARSING DE QUERY ====================
 function parseQueryString(req) {
-    const parsedUrl = url.parse(req.url);
-    return querystring.parse(parsedUrl.query || '');
+    // Parsear la URL completa
+    const parsedUrl = url.parse(req.url, true);
+    // parsedUrl.query contiene el objeto con los parámetros
+    return parsedUrl.query || {};
+}
+
+function getClientIP(req) {
+    return req.headers['x-forwarded-for']?.split(',')[0] || 
+           req.connection?.remoteAddress || 
+           req.socket?.remoteAddress || 
+           'unknown';
 }
 
 function validateAPIKey(config, key) {
@@ -187,7 +196,6 @@ function validateJWT(config, token) {
     try {
         const parts = token.split('.');
         if (parts.length !== 3) return false;
-        // Verificación simple (en producción usar librería)
         return true;
     } catch (error) {
         return false;
@@ -253,13 +261,13 @@ function logRequest(req, config, status, message = '') {
     if (!config.logging || !config.logging.enabled) return;
     
     const timestamp = new Date().toISOString();
-    const level = config.logging.level || 'info';
-    const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
+    const clientIp = getClientIP(req);
     const logEntry = `[${timestamp}] ${req.method} ${req.url} - ${status} - ${clientIp}${message ? ' - ' + message : ''}`;
     
-    console.log(logEntry);
+    if (verbose || status >= 400) {
+        console.log(logEntry);
+    }
     
-    // Guardar en archivo de logs
     try {
         fs.appendFileSync(LOG_FILE, logEntry + '\n', 'utf8');
     } catch (error) {
@@ -273,25 +281,20 @@ function proxyRequest(req, res, target, config, state) {
             console.log(`📡 ${req.method} ${req.url}`);
         }
         
-        // Construir URL del target
         const targetUrl = new URL(target);
         const path = req.url;
         
-        // Construir headers del proxy
         const headers = { ...req.headers };
-        // Eliminar headers de conexión
         delete headers['connection'];
         delete headers['transfer-encoding'];
         delete headers['keep-alive'];
+        delete headers['host'];
         
-        // Añadir headers de proxy
         headers['host'] = targetUrl.hostname;
-        headers['x-forwarded-for'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
+        headers['x-forwarded-for'] = getClientIP(req);
         headers['x-forwarded-proto'] = targetUrl.protocol.replace(':', '');
-        headers['x-forwarded-host'] = req.headers.host;
-        headers['x-forwarded-port'] = targetUrl.port || (targetUrl.protocol === 'https:' ? '443' : '80');
+        headers['x-forwarded-host'] = req.headers.host || targetUrl.hostname;
         
-        // Opciones del proxy
         const options = {
             hostname: targetUrl.hostname,
             port: targetUrl.port || (targetUrl.protocol === 'https:' ? 443 : 80),
@@ -305,15 +308,9 @@ function proxyRequest(req, res, target, config, state) {
         const httpModule = targetUrl.protocol === 'https:' ? https : http;
         
         const proxyReq = httpModule.request(options, (proxyRes) => {
-            // Reenviar cabeceras
             res.writeHead(proxyRes.statusCode, proxyRes.headers);
-            
-            // Reenviar body
             proxyRes.pipe(res);
-            
-            // Log
             logRequest(req, config, proxyRes.statusCode);
-            
             resolve({
                 statusCode: proxyRes.statusCode,
                 statusMessage: proxyRes.statusMessage
@@ -346,7 +343,6 @@ function proxyRequest(req, res, target, config, state) {
             reject(new Error('Timeout'));
         });
         
-        // Reenviar body de la petición
         req.pipe(proxyReq);
     });
 }
@@ -355,15 +351,13 @@ function handleRequest(req, res, config, state) {
     // CORS
     handleCORS(config, req, res);
     
-    // Manejar OPTIONS
     if (req.method === 'OPTIONS') {
         res.statusCode = 200;
         res.end();
         return;
     }
     
-    // Obtener IP del cliente
-    const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
+    const clientIp = getClientIP(req);
     
     // Rate limiting
     const rateResult = checkRateLimit(clientIp, config, state);
@@ -387,12 +381,11 @@ function handleRequest(req, res, config, state) {
         return;
     }
     
-    // Establecer headers de rate limit (siempre)
     res.setHeader('X-RateLimit-Limit', rateResult.limit);
     res.setHeader('X-RateLimit-Remaining', rateResult.remaining);
     res.setHeader('X-RateLimit-Reset', new Date(rateResult.reset).toISOString());
     
-    // Autenticación
+    // ==================== AUTENTICACIÓN ====================
     let authResult = { authenticated: false, user: null, error: null };
     
     if (config.auth && config.auth.enabled) {
@@ -400,13 +393,13 @@ function handleRequest(req, res, config, state) {
         let apiKey = null;
         
         if (authType === 'api_key') {
-            // Buscar API Key en headers o query string
+            // Buscar API Key en headers
             apiKey = req.headers['x-api-key'];
             
             // Si no está en headers, buscar en query string
             if (!apiKey) {
                 const query = parseQueryString(req);
-                apiKey = query.api_key;
+                apiKey = query.api_key || query.apikey || query.key;
             }
             
             if (apiKey) {
@@ -417,7 +410,7 @@ function handleRequest(req, res, config, state) {
                     authResult = { authenticated: false, error: 'Invalid API Key' };
                 }
             } else {
-                authResult = { authenticated: false, error: 'API Key required' };
+                authResult = { authenticated: false, error: 'API Key required (header x-api-key or query api_key)' };
             }
         } else if (authType === 'jwt') {
             const authHeader = req.headers.authorization;
@@ -520,7 +513,6 @@ function startGateway(config) {
         console.log(`\n🔄 Gateway ejecutándose. Presiona Ctrl+C para detener.`);
     });
     
-    // Guardar referencia para detener
     global.gatewayServer = server;
     global.gatewayConfig = config;
     global.gatewayState = state;
@@ -569,7 +561,6 @@ function testConfig() {
     console.log('\n🔍 PROBANDO CONFIGURACIÓN');
     console.log('='.repeat(50));
     
-    // Validar target
     if (config.target) {
         try {
             new URL(config.target);
@@ -581,7 +572,6 @@ function testConfig() {
         console.log(`ℹ️ Target no configurado`);
     }
     
-    // Validar auth
     if (config.auth && config.auth.enabled) {
         console.log(`✅ Auth habilitado: ${config.auth.type}`);
         if (config.auth.type === 'api_key' && config.auth.apiKeys) {
@@ -590,24 +580,16 @@ function testConfig() {
                 console.log(`      🔑 ${key.key} (${key.name})`);
             }
         }
-        if (config.auth.type === 'jwt' && config.auth.jwtSecret) {
-            console.log(`   🔐 JWT Secret configurado`);
-        }
-        if (config.auth.type === 'basic' && config.auth.users) {
-            console.log(`   👤 ${config.auth.users.length} usuarios configurados`);
-        }
     } else {
         console.log(`ℹ️ Auth deshabilitado`);
     }
     
-    // Validar rate limit
     if (config.rateLimit && config.rateLimit.enabled) {
         console.log(`✅ Rate limit: ${config.rateLimit.maxRequests}/min`);
     } else {
         console.log(`ℹ️ Rate limit deshabilitado`);
     }
     
-    // Validar CORS
     console.log(`✅ CORS: ${config.cors?.enabled ? 'Habilitado' : 'Deshabilitado'}`);
     console.log('='.repeat(50));
 }
@@ -624,7 +606,6 @@ function testConfig() {
 
     const config = loadConfig(configFile);
 
-    // Sobrescribir con argumentos
     if (port) config.port = port;
     if (target) config.target = target;
 
