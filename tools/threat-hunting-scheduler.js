@@ -2,10 +2,10 @@
 
 /**
  * Threat Hunting Scheduler - MFH TOOLS PRO
- * Programa y ejecuta threat hunting automático
+ * Programa y ejecuta threat hunting automatico
  * 
  * Uso: node threat-hunting-scheduler.js [opciones]
- * Ejemplo: node threat-hunting-scheduler.js --schedule "0 */6 * * *" --iocs iocs.json
+ * Ejemplo: node threat-hunting-scheduler.js --schedule "0 6 * * *" --iocs iocs.json
  * Ejemplo: node threat-hunting-scheduler.js --run --target 192.168.1.0/24
  * Ejemplo: node threat-hunting-scheduler.js --list
  */
@@ -15,7 +15,7 @@ const path = require('path');
 const cron = require('node-cron');
 const crypto = require('crypto');
 
-// ==================== CONFIGURACIÓN ====================
+// ==================== CONFIGURACION ====================
 const CONFIG_FILE = path.join(__dirname, 'threat_hunting_config.json');
 const HUNTS_DIR = path.join(__dirname, 'threat_hunts');
 const REPORTS_DIR = path.join(__dirname, 'threat_reports');
@@ -92,27 +92,27 @@ for (let i = 0; i < args.length; i++) {
             console.log(`
 🔍 Threat Hunting Scheduler - MFH TOOLS PRO
 ==========================================
-Programa y ejecuta threat hunting automático.
+Programa y ejecuta threat hunting automatico.
 
 Uso:
   node threat-hunting-scheduler.js [opciones]
 
 Opciones:
-  --init                   Crear configuración por defecto
-  --list                   Listar cacerías programadas
+  --init                   Crear configuracion por defecto
+  --list                   Listar cacerias programadas
   --run                    Ejecutar una cacería inmediata
-  --schedule <cron>        Programar cacería automática
+  --schedule <cron>        Programar cacería automatica
   --target <objetivo>      Objetivo a analizar (IP, rango, dominio)
   --iocs <archivo>         Archivo con IOCS en JSON
   --output <archivo>       Guardar reporte en archivo
-  --verbose, -v            Mostrar más detalles
+  --verbose, -v            Mostrar mas detalles
   --help, -h               Mostrar esta ayuda
 
 Ejemplos:
   node threat-hunting-scheduler.js --init
   node threat-hunting-scheduler.js --list
   node threat-hunting-scheduler.js --run --target 192.168.1.0/24
-  node threat-hunting-scheduler.js --schedule "0 */6 * * *" --iocs iocs.json
+  node threat-hunting-scheduler.js --schedule "0 6 * * *" --iocs iocs.json
 `);
             process.exit(0);
     }
@@ -125,7 +125,7 @@ function loadConfig() {
             return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
         }
     } catch (error) {
-        console.error('❌ Error cargando configuración:', error.message);
+        console.error('❌ Error cargando configuracion:', error.message);
     }
     return { ...DEFAULT_CONFIG };
 }
@@ -134,7 +134,7 @@ function saveConfig(config) {
     try {
         fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
     } catch (error) {
-        console.error('❌ Error guardando configuración:', error.message);
+        console.error('❌ Error guardando configuracion:', error.message);
     }
 }
 
@@ -150,8 +150,8 @@ function initConfig() {
     config.ioc_feeds = DEFAULT_IOOS;
     saveConfig(config);
     
-    console.log('✅ Configuración por defecto creada.');
-    console.log(`📁 Cacerías: ${HUNTS_DIR}`);
+    console.log('✅ Configuracion por defecto creada.');
+    console.log(`📁 Cacerias: ${HUNTS_DIR}`);
     console.log(`📁 Reportes: ${REPORTS_DIR}`);
 }
 
@@ -160,18 +160,18 @@ function listHunts() {
     const schedules = config.schedules || [];
     
     if (schedules.length === 0) {
-        console.log('ℹ️ No hay cacerías programadas.');
+        console.log('ℹ️ No hay cacerias programadas.');
         return;
     }
     
-    console.log('\n📋 CACERÍAS PROGRAMADAS:');
+    console.log('\n📋 CACERIAS PROGRAMADAS:');
     console.log('='.repeat(60));
     schedules.forEach(hunt => {
         console.log(`\n📌 ID: ${hunt.id}`);
-        console.log(`   Programación: ${hunt.schedule}`);
+        console.log(`   Programacion: ${hunt.schedule}`);
         console.log(`   Objetivo: ${hunt.target || 'N/A'}`);
         console.log(`   Estado: ${hunt.enabled ? '✅ Activo' : '❌ Inactivo'}`);
-        console.log(`   Última ejecución: ${hunt.lastRun || 'Nunca'}`);
+        console.log(`   Ultima ejecucion: ${hunt.lastRun || 'Nunca'}`);
         if (hunt.findings) {
             console.log(`   Hallazgos: ${hunt.findings}`);
         }
@@ -201,9 +201,9 @@ function performHunt(target, iocs) {
         anomalies: 0
     };
 
-    // Simular análisis
+    // Simular analisis
     iocs.forEach((ioc, index) => {
-        const match = Math.random() < 0.3; // 30% probabilidad de match
+        const match = Math.random() < 0.3;
         if (match) {
             const finding = {
                 ioc: ioc,
@@ -215,7 +215,6 @@ function performHunt(target, iocs) {
             findings.push(finding);
             stats.matches++;
             
-            // Detectar anomalías
             if (Math.random() < 0.2) {
                 stats.anomalies++;
             }
@@ -250,29 +249,29 @@ function generateReport(report) {
     output += `📋 ID: ${report.id}\n`;
     output += `🕐 Fecha: ${report.timestamp}\n`;
     output += `🎯 Objetivo: ${report.target}\n`;
-    output += `⏱️ Duración: ${report.duration}s\n\n`;
+    output += `⏱️ Duracion: ${report.duration}s\n\n`;
     
-    output += `📊 ESTADÍSTICAS:\n`;
+    output += `📊 ESTADISTICAS:\n`;
     output += `   Total IOCS: ${report.stats.total_iocs}\n`;
     output += `   🔴 Matches: ${report.stats.matches}\n`;
     output += `   ⚠️ Falsos Positivos: ${report.stats.false_positives}\n`;
-    output += `   🚨 Anomalías: ${report.stats.anomalies}\n\n`;
+    output += `   🚨 Anomalias: ${report.stats.anomalies}\n\n`;
     
     output += `🎯 NIVEL DE AMENAZA: ${report.summary.threat_level}\n`;
-    output += `💡 RECOMENDACIÓN: ${report.summary.recommendation}\n\n`;
+    output += `💡 RECOMENDACION: ${report.summary.recommendation}\n\n`;
     
     if (report.findings.length > 0) {
         output += `🔎 HALLAZGOS:\n`;
         report.findings.forEach((f, i) => {
             output += `   ${i + 1}. ${f.ioc.type}: ${f.ioc.value}\n`;
             output += `      Severidad: ${f.severity}\n`;
-            output += `      Acción: ${f.action_required}\n`;
+            output += `      Accion: ${f.action_required}\n`;
         });
     } else {
         output += `✅ No se encontraron coincidencias.`;
     }
     
-    output += `\n\n---\nHecho en México 🇲🇽 | ${report.generatedBy}`;
+    output += `\n\n---\nHecho en Mexico 🇲🇽 | ${report.generatedBy}`;
     return output;
 }
 
@@ -291,7 +290,7 @@ function saveReport(report, outputFile) {
 
 function scheduleHunt(target, schedule, iocs) {
     if (!cron.validate(schedule)) {
-        console.error(`❌ Formato cron inválido: ${schedule}`);
+        console.error(`❌ Formato cron invalido: ${schedule}`);
         process.exit(1);
     }
     
@@ -332,7 +331,7 @@ function scheduleHunt(target, schedule, iocs) {
     global.scheduledHunts[id] = task;
     
     console.log(`✅ Cacería programada: ${id}`);
-    console.log(`📋 Programación: ${schedule}`);
+    console.log(`📋 Programacion: ${schedule}`);
     console.log(`🎯 Objetivo: ${target || 'N/A'}`);
 }
 
@@ -353,7 +352,6 @@ function scheduleHunt(target, schedule, iocs) {
         fs.mkdirSync(REPORTS_DIR, { recursive: true });
     }
     
-    // Cargar tareas existentes
     const config = loadConfig();
     const schedules = config.schedules || [];
     global.scheduledHunts = global.scheduledHunts || {};
@@ -396,7 +394,7 @@ function scheduleHunt(target, schedule, iocs) {
                 const iocsData = loadIOCs(iocsFile) || config.ioc_feeds || DEFAULT_IOOS;
                 scheduleHunt(target, schedule, iocsData);
             } else {
-                console.log('ℹ️ Sin acción especificada. Usa --help para ver opciones.');
+                console.log('ℹ️ Sin accion especificada. Usa --help para ver opciones.');
                 console.log('💡 Opciones: --list, --run, --schedule, --init');
             }
             break;
