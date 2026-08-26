@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. 105+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA, Password Generator, Hash Compare, HTTP Headers, URL Encode, IP Converter, Time Zones, YAML to JSON, XML to JSON, SQL Formatter, Markdown to HTML, Code Minifier, Memory Dump Analyzer, Log File Analyzer, Network Packet Analyzer, Subdomain Takeover, Port Knocking, JWT Analyzer, CORS Scanner, Email Header Analyzer, SSL Chain Checker, GitHub Secrets Scanner, Cloud Storage Scanner, API Rate Limit Tester, Security Headers Analyzer, Shodan Query Builder, VirusTotal Scanner, Whois Historical, Cipher Suite Analyzer, DNS Tunneling Detector, ASN Lookup, URL Expander, Breach Checker, Cert Transparency Log, Threat Intel Parser, Automated Scan Scheduler, Alert Manager, Log Aggregator, Incident Response Playbook, Vulnerability Tracker, Compliance Checker, Asset Discovery, Threat Intel Integrator, Security Dashboard, Automated Remediation, Malware Pattern Detector, Network Anomaly Detector, Phishing URL Classifier, Log Anomaly Analyzer, Threat Score Calculator, User Behavior Analytics, Malicious Domain Predictor, Email Threat Classifier, Vulnerability Predictor, Security Incident Forecaster, Workflow Orchestrator, SIEM Integration Gateway, Ticketing System Connector, Automated Report Distributor, Multi-Tenant Manager, API Gateway Security, Data Enrichment Pipeline, Compliance Automation Engine, Threat Hunting Console, Security Automation Playbook, AI-Powered Security Assistant, Automated Incident Classification, Security Chatbot, Predictive Alerting, Vulnerability Risk Scorer. Hecho en México.">
+    <meta name="description" content="MFH TOOLS PRO - Suite de Ciberseguridad Mexicana. 115+ herramientas: Escáner, RSA/AES, OSINT, Rainbow Tables, WHOIS, Wappalyzer, Subdomain, Hash Tools, IA, Password Generator, Hash Compare, HTTP Headers, URL Encode, IP Converter, Time Zones, YAML to JSON, XML to JSON, SQL Formatter, Markdown to HTML, Code Minifier, Memory Dump Analyzer, Log File Analyzer, Network Packet Analyzer, Subdomain Takeover, Port Knocking, JWT Analyzer, CORS Scanner, Email Header Analyzer, SSL Chain Checker, GitHub Secrets Scanner, Cloud Storage Scanner, API Rate Limit Tester, Security Headers Analyzer, Shodan Query Builder, VirusTotal Scanner, Whois Historical, Cipher Suite Analyzer, DNS Tunneling Detector, ASN Lookup, URL Expander, Breach Checker, Cert Transparency Log, Threat Intel Parser, Automated Scan Scheduler, Alert Manager, Log Aggregator, Incident Response Playbook, Vulnerability Tracker, Compliance Checker, Asset Discovery, Threat Intel Integrator, Security Dashboard, Automated Remediation, Malware Pattern Detector, Network Anomaly Detector, Phishing URL Classifier, Log Anomaly Analyzer, Threat Score Calculator, User Behavior Analytics, Malicious Domain Predictor, Email Threat Classifier, Vulnerability Predictor, Security Incident Forecaster, Workflow Orchestrator, SIEM Integration Gateway, Ticketing System Connector, Automated Report Distributor, Multi-Tenant Manager, API Gateway Security, Data Enrichment Pipeline, Compliance Automation Engine, Threat Hunting Console, Security Automation Playbook, AI-Powered Security Assistant, Automated Incident Classification, Security Chatbot, Predictive Alerting, Vulnerability Risk Scorer, Automated Compliance Reporter, Threat Hunting Scheduler, Security Metrics Dashboard, Incident Response Bot, Security Automation Pipeline, Zero Trust Access Manager, MFA Orchestrator, RBAC Engine, SSO Federation, Identity Governance, ML Threat Detector, Threat Hunting Pro, UEBA Engine, APT Detector, IOC Correlator. Hecho en México.">
     <title>🔥 MFH TOOLS PRO - Suite de Ciberseguridad Mexicana</title>
     
     <!-- ===== FAVICON COMPLETO ===== -->
@@ -44,6 +44,8 @@
         body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
         body.light-mode .card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
         body.light-mode .modal-content { background: #fff; border-color: #00aa00; }
+        body.light-mode .tools-list-container { background: rgba(255,255,255,0.05); border-color: rgba(0,0,0,0.1); }
+        body.light-mode .tools-list li { border-bottom-color: rgba(0,0,0,0.05); }
         
         /* ===== NAVBAR ===== */
         .navbar {
@@ -136,6 +138,71 @@
             padding: 3px 8px;
             border-radius: 15px;
             font-size: 0.7rem;
+        }
+        
+        /* ===== TOOLS LIST (OPCION 1) ===== */
+        .tools-list-container {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 8px 12px;
+            border: 1px solid rgba(0,255,0,0.15);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.3);
+            margin-top: 8px;
+        }
+        .tools-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .tools-list-container::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+        .tools-list-container::-webkit-scrollbar-thumb {
+            background: #00ff00;
+            border-radius: 10px;
+        }
+        .tools-grid-list {
+            margin: 0;
+        }
+        .tools-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tools-list li {
+            padding: 3px 0;
+            font-size: 0.78rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #d0d0d0;
+        }
+        .tools-list li .badge-mfh {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            min-width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .tools-list li .tool-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .tools-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #00ff00;
+            margin-bottom: 6px;
+        }
+        .tools-label .count {
+            color: #888;
+            font-weight: 400;
+        }
+        body.light-mode .tools-list li {
+            color: #333;
+            border-bottom-color: rgba(0,0,0,0.05);
         }
         
         /* ===== TABS ===== */
@@ -252,6 +319,12 @@
                 max-height: 60vh;
                 padding: 15px;
             }
+            .tools-list li {
+                font-size: 0.7rem;
+            }
+            .tools-list-container {
+                max-height: 250px;
+            }
         }
     </style>
 </head>
@@ -288,9 +361,139 @@
             <div class="col-lg-8">
                 <h1 class="display-4 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS PRO</h1>
                 <p class="lead text-success">Suite de Ciberseguridad Mexicana</p>
-                <p class="mb-2">105+ Herramientas: Escáner | RSA/AES | OSINT | Rainbow | WHOIS | Wappalyzer | Subdomain | Hash | IA | Password | Hash Compare | HTTP Headers | URL Encode | IP Converter | Time Zones | YAML to JSON | XML to JSON | SQL Formatter | Markdown to HTML | Code Minifier | Memory Dump Analyzer | Log File Analyzer | Network Packet Analyzer | Subdomain Takeover | Port Knocking | JWT Analyzer | CORS Scanner | Email Header Analyzer | SSL Chain Checker | GitHub Secrets Scanner | Cloud Storage Scanner | API Rate Limit Tester | Security Headers Analyzer | Shodan Query Builder | VirusTotal Scanner | Whois Historical | Cipher Suite Analyzer | DNS Tunneling Detector | ASN Lookup | URL Expander | Breach Checker | Cert Transparency Log | Threat Intel Parser | Automated Scan Scheduler | Alert Manager | Log Aggregator | Incident Response Playbook | Vulnerability Tracker | Compliance Checker | Asset Discovery | Threat Intel Integrator | Security Dashboard | Automated Remediation | Malware Pattern Detector | Network Anomaly Detector | Phishing URL Classifier | Log Anomaly Analyzer | Threat Score Calculator | User Behavior Analytics | Malicious Domain Predictor | Email Threat Classifier | Vulnerability Predictor | Security Incident Forecaster | Workflow Orchestrator | SIEM Integration Gateway | Ticketing System Connector | Automated Report Distributor | Multi-Tenant Manager | API Gateway Security | Data Enrichment Pipeline | Compliance Automation Engine | Threat Hunting Console | Security Automation Playbook | AI-Powered Security Assistant | Automated Incident Classification | Security Chatbot | Predictive Alerting | Vulnerability Risk Scorer</p>
+                
+                <!-- ====== NUEVA LISTA DE HERRAMIENTAS (OPCION 1) ====== -->
+                <div class="tools-list-container">
+                    <div class="tools-label">
+                        <i class="fas fa-tools me-2"></i>115+ Herramientas <span class="count">| Actualizado: Agosto 2026</span>
+                    </div>
+                    <div class="row tools-grid-list">
+                        <div class="col-md-4 col-sm-6">
+                            <ul class="tools-list">
+                                <li><span class="badge-mfh">🛡️</span><span class="tool-name">Escáner de Puertos</span></li>
+                                <li><span class="badge-mfh">🔐</span><span class="tool-name">RSA/AES</span></li>
+                                <li><span class="badge-mfh">👁️</span><span class="tool-name">OSINT</span></li>
+                                <li><span class="badge-mfh">🌈</span><span class="tool-name">Rainbow Tables</span></li>
+                                <li><span class="badge-mfh">🌐</span><span class="tool-name">WHOIS</span></li>
+                                <li><span class="badge-mfh">⚡</span><span class="tool-name">Wappalyzer</span></li>
+                                <li><span class="badge-mfh">📂</span><span class="tool-name">Subdomain</span></li>
+                                <li><span class="badge-mfh">#️⃣</span><span class="tool-name">Hash Tools</span></li>
+                                <li><span class="badge-mfh">🤖</span><span class="tool-name">IA</span></li>
+                                <li><span class="badge-mfh">🔑</span><span class="tool-name">Password</span></li>
+                                <li><span class="badge-mfh">🔄</span><span class="tool-name">Hash Compare</span></li>
+                                <li><span class="badge-mfh">📡</span><span class="tool-name">HTTP Headers</span></li>
+                                <li><span class="badge-mfh">🔗</span><span class="tool-name">URL Encode</span></li>
+                                <li><span class="badge-mfh">💻</span><span class="tool-name">IP Converter</span></li>
+                                <li><span class="badge-mfh">⏰</span><span class="tool-name">Time Zones</span></li>
+                                <li><span class="badge-mfh">📄</span><span class="tool-name">YAML to JSON</span></li>
+                                <li><span class="badge-mfh">📄</span><span class="tool-name">XML to JSON</span></li>
+                                <li><span class="badge-mfh">🗄️</span><span class="tool-name">SQL Formatter</span></li>
+                                <li><span class="badge-mfh">📝</span><span class="tool-name">Markdown to HTML</span></li>
+                                <li><span class="badge-mfh">⚡</span><span class="tool-name">Code Minifier</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <ul class="tools-list">
+                                <li><span class="badge-mfh">🧠</span><span class="tool-name">Memory Dump Analyzer</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Log File Analyzer</span></li>
+                                <li><span class="badge-mfh">🌐</span><span class="tool-name">Network Packet Analyzer</span></li>
+                                <li><span class="badge-mfh">🚨</span><span class="tool-name">Subdomain Takeover</span></li>
+                                <li><span class="badge-mfh">🚪</span><span class="tool-name">Port Knocking</span></li>
+                                <li><span class="badge-mfh">🔐</span><span class="tool-name">JWT Analyzer</span></li>
+                                <li><span class="badge-mfh">🌐</span><span class="tool-name">CORS Scanner</span></li>
+                                <li><span class="badge-mfh">📧</span><span class="tool-name">Email Header Analyzer</span></li>
+                                <li><span class="badge-mfh">🔒</span><span class="tool-name">SSL Chain Checker</span></li>
+                                <li><span class="badge-mfh">🔑</span><span class="tool-name">GitHub Secrets Scanner</span></li>
+                                <li><span class="badge-mfh">☁️</span><span class="tool-name">Cloud Storage Scanner</span></li>
+                                <li><span class="badge-mfh">⏱️</span><span class="tool-name">API Rate Limit Tester</span></li>
+                                <li><span class="badge-mfh">🛡️</span><span class="tool-name">Security Headers Analyzer</span></li>
+                                <li><span class="badge-mfh">🔍</span><span class="tool-name">Shodan Query Builder</span></li>
+                                <li><span class="badge-mfh">🦠</span><span class="tool-name">VirusTotal Scanner</span></li>
+                                <li><span class="badge-mfh">📜</span><span class="tool-name">Whois Historical</span></li>
+                                <li><span class="badge-mfh">🔐</span><span class="tool-name">Cipher Suite Analyzer</span></li>
+                                <li><span class="badge-mfh">🌐</span><span class="tool-name">DNS Tunneling Detector</span></li>
+                                <li><span class="badge-mfh">🔢</span><span class="tool-name">ASN Lookup</span></li>
+                                <li><span class="badge-mfh">🔗</span><span class="tool-name">URL Expander</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <ul class="tools-list">
+                                <li><span class="badge-mfh">⚠️</span><span class="tool-name">Breach Checker</span></li>
+                                <li><span class="badge-mfh">🔐</span><span class="tool-name">Cert Transparency Log</span></li>
+                                <li><span class="badge-mfh">🧠</span><span class="tool-name">Threat Intel Parser</span></li>
+                                <li><span class="badge-mfh">⏰</span><span class="tool-name">Automated Scan Scheduler</span></li>
+                                <li><span class="badge-mfh">🔔</span><span class="tool-name">Alert Manager</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Log Aggregator</span></li>
+                                <li><span class="badge-mfh">🚨</span><span class="tool-name">Incident Response Playbook</span></li>
+                                <li><span class="badge-mfh">🐛</span><span class="tool-name">Vulnerability Tracker</span></li>
+                                <li><span class="badge-mfh">📋</span><span class="tool-name">Compliance Checker</span></li>
+                                <li><span class="badge-mfh">🔍</span><span class="tool-name">Asset Discovery</span></li>
+                                <li><span class="badge-mfh">🧠</span><span class="tool-name">Threat Intel Integrator</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Security Dashboard</span></li>
+                                <li><span class="badge-mfh">⚡</span><span class="tool-name">Automated Remediation</span></li>
+                                <li><span class="badge-mfh">🦠</span><span class="tool-name">Malware Pattern Detector</span></li>
+                                <li><span class="badge-mfh">🌐</span><span class="tool-name">Network Anomaly Detector</span></li>
+                                <li><span class="badge-mfh">🔗</span><span class="tool-name">Phishing URL Classifier</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Log Anomaly Analyzer</span></li>
+                                <li><span class="badge-mfh">🔥</span><span class="tool-name">Threat Score Calculator</span></li>
+                                <li><span class="badge-mfh">👤</span><span class="tool-name">User Behavior Analytics</span></li>
+                                <li><span class="badge-mfh">🌐</span><span class="tool-name">Malicious Domain Predictor</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row tools-grid-list mt-1">
+                        <div class="col-md-4 col-sm-6">
+                            <ul class="tools-list">
+                                <li><span class="badge-mfh">📧</span><span class="tool-name">Email Threat Classifier</span></li>
+                                <li><span class="badge-mfh">🔮</span><span class="tool-name">Vulnerability Predictor</span></li>
+                                <li><span class="badge-mfh">📈</span><span class="tool-name">Security Incident Forecaster</span></li>
+                                <li><span class="badge-mfh">⚙️</span><span class="tool-name">Workflow Orchestrator</span></li>
+                                <li><span class="badge-mfh">🔗</span><span class="tool-name">SIEM Integration Gateway</span></li>
+                                <li><span class="badge-mfh">🎫</span><span class="tool-name">Ticketing System Connector</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Automated Report Distributor</span></li>
+                                <li><span class="badge-mfh">👥</span><span class="tool-name">Multi-Tenant Manager</span></li>
+                                <li><span class="badge-mfh">🛡️</span><span class="tool-name">API Gateway Security</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Data Enrichment Pipeline</span></li>
+                                <li><span class="badge-mfh">📋</span><span class="tool-name">Compliance Automation Engine</span></li>
+                                <li><span class="badge-mfh">🔍</span><span class="tool-name">Threat Hunting Console</span></li>
+                                <li><span class="badge-mfh">⚡</span><span class="tool-name">Security Automation Playbook</span></li>
+                                <li><span class="badge-mfh">🤖</span><span class="tool-name">AI-Powered Security Assistant</span></li>
+                                <li><span class="badge-mfh">📋</span><span class="tool-name">Automated Incident Classification</span></li>
+                                <li><span class="badge-mfh">💬</span><span class="tool-name">Security Chatbot</span></li>
+                                <li><span class="badge-mfh">🔔</span><span class="tool-name">Predictive Alerting</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Vulnerability Risk Scorer</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <ul class="tools-list">
+                                <li><span class="badge-mfh">📄</span><span class="tool-name">Automated Compliance Reporter</span></li>
+                                <li><span class="badge-mfh">🔍</span><span class="tool-name">Threat Hunting Scheduler</span></li>
+                                <li><span class="badge-mfh">📊</span><span class="tool-name">Security Metrics Dashboard</span></li>
+                                <li><span class="badge-mfh">🤖</span><span class="tool-name">Incident Response Bot</span></li>
+                                <li><span class="badge-mfh">⚡</span><span class="tool-name">Security Automation Pipeline</span></li>
+                                <li><span class="badge-mfh">🛡️</span><span class="tool-name">Zero Trust Access Manager</span></li>
+                                <li><span class="badge-mfh">🔑</span><span class="tool-name">MFA Orchestrator</span></li>
+                                <li><span class="badge-mfh">👤</span><span class="tool-name">RBAC Engine</span></li>
+                                <li><span class="badge-mfh">🔄</span><span class="tool-name">SSO Federation</span></li>
+                                <li><span class="badge-mfh">📋</span><span class="tool-name">Identity Governance</span></li>
+                                <li><span class="badge-mfh">🧠</span><span class="tool-name">ML Threat Detector</span></li>
+                                <li><span class="badge-mfh">🔍</span><span class="tool-name">Threat Hunting Pro</span></li>
+                                <li><span class="badge-mfh">👥</span><span class="tool-name">UEBA Engine</span></li>
+                                <li><span class="badge-mfh">💀</span><span class="tool-name">APT Detector</span></li>
+                                <li><span class="badge-mfh">🔗</span><span class="tool-name">IOC Correlator</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <ul class="tools-list">
+                                <li class="text-muted"><span class="badge-mfh" style="opacity:0.5;">🚀</span><span class="tool-name" style="opacity:0.6;">Próximamente...</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- ====== FIN DE LA LISTA ====== -->
+                
                 <div class="d-flex gap-2 flex-wrap mb-3">
-                    <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 105+ Herramientas</span>
+                    <span class="badge-mfh"><i class="fas fa-check-circle me-1"></i> 115+ Herramientas</span>
                     <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
                     <span class="badge-mfh"><i class="fab fa-github me-1"></i> Open Source</span>
                     <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
@@ -633,7 +836,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h6 class="text-success">MFH TOOLS PRO</h6>
-                <p class="small">Suite de ciberseguridad mexicana con 105+ herramientas profesionales. Hecho con 🌮 en México.</p>
+                <p class="small">Suite de ciberseguridad mexicana con 115+ herramientas profesionales. Hecho con 🌮 en México.</p>
             </div>
             <div class="col-md-4">
                 <h6 class="text-success">Enlaces</h6>
