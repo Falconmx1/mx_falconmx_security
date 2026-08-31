@@ -19,13 +19,13 @@
   # X-Frame-Options - Prevenir clickjacking (ataques de interfaz)
   X-Frame-Options: DENY
 
-  # X-Content-Type-Options - Prevenir MIME sniffing (evita ejecución de archivos maliciosos)
+  # X-Content-Type-Options - Prevenir MIME sniffing
   X-Content-Type-Options: nosniff
 
   # X-XSS-Protection - Proteger contra XSS (Cross-Site Scripting)
   X-XSS-Protection: 1; mode=block
 
-  # Referrer-Policy - Controlar información del referer (protege privacidad)
+  # Referrer-Policy - Controlar información del referer
   Referrer-Policy: strict-origin-when-cross-origin
 
   # Permissions-Policy - Limitar APIs sensibles del navegador
@@ -39,8 +39,6 @@
   # ========================
   # CORS - CONTROL DE ACCESO (SOLO ORÍGENES PERMITIDOS)
   # ========================
-  # 🔴 ANTES: Access-Control-Allow-Origin: * (VULNERABLE)
-  # ✅ AHORA: Solo tu dominio
   Access-Control-Allow-Origin: https://falconmx1.github.io
   Access-Control-Allow-Methods: GET, POST, OPTIONS
   Access-Control-Allow-Headers: Content-Type, Authorization
@@ -50,63 +48,43 @@
   # ========================
   # RENDIMIENTO Y CACHÉ
   # ========================
-
-  # Cache-Control - Control de caché (1 hora para HTML, revalidación obligatoria)
   Cache-Control: public, max-age=3600, must-revalidate
-
-  # Vary - Negociación de contenido (compresión, idioma, etc.)
   Vary: Accept-Encoding
-
-  # X-Robots-Tag - Control de indexación por buscadores
   X-Robots-Tag: index, follow
-
-  # Cross-Origin-Opener-Policy - Aislamiento de ventanas (seguridad)
   Cross-Origin-Opener-Policy: same-origin
-
-  # Cross-Origin-Resource-Policy - Control de recursos compartidos
   Cross-Origin-Resource-Policy: same-origin
-
 
 # ================================================================
 # CACHÉ ESPECÍFICO PARA ARCHIVOS ESTÁTICOS (1 AÑO)
 # ================================================================
 
-# CSS - Hojas de estilo
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 
-# JavaScript
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
-# Imágenes PNG
 /*.png
   Cache-Control: public, max-age=31536000, immutable
 
-# Imágenes JPG
 /*.jpg
   Cache-Control: public, max-age=31536000, immutable
 
 /*.jpeg
   Cache-Control: public, max-age=31536000, immutable
 
-# Imágenes SVG
 /*.svg
   Cache-Control: public, max-age=31536000, immutable
 
-# Iconos
 /*.ico
   Cache-Control: public, max-age=31536000, immutable
 
-# WebP
 /*.webp
   Cache-Control: public, max-age=31536000, immutable
 
-# GIF
 /*.gif
   Cache-Control: public, max-age=31536000, immutable
 
-# Fuentes
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
 
@@ -119,15 +97,12 @@
 /*.eot
   Cache-Control: public, max-age=31536000, immutable
 
-# Archivos JSON (ej: configuraciones, manifest)
 /*.json
   Cache-Control: public, max-age=86400, must-revalidate
 
-# Manifiesto de aplicación web
 /*.webmanifest
   Cache-Control: public, max-age=3600, must-revalidate
 
-# XML (ej: sitemap)
 /*.xml
   Cache-Control: public, max-age=3600, must-revalidate
 
@@ -135,11 +110,9 @@
 # CABECERAS ESPECÍFICAS PARA PÁGINAS CRÍTICAS
 # ================================================================
 
-# Página principal - caché más corto (siempre actualizada)
 /index.html
   Cache-Control: public, max-age=300, must-revalidate
 
-# 404 - No cachear
 /404.html
   Cache-Control: no-cache, no-store, must-revalidate
   Pragma: no-cache
