@@ -1,4 +1,4 @@
-# Deshabilitar Jekyll y excluir archivos innecesarios
+# Deshabilitar Jekyll completamente
 exclude:
   - node_modules
   - .github
@@ -60,7 +60,6 @@ exclude:
   - tools.html
   - wordpress-seguro.html
 
-# Compresión automática (si usas Jekyll)
 compress_html:
   clippings: all
   comments: all
