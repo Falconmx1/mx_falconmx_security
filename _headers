@@ -34,8 +34,18 @@
   # ========================
   # CONTENT SECURITY POLICY (CSP)
   # ========================
-  # Política de seguridad de contenido - Protege contra inyección de código
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://code.jquery.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' https: wss:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+
+  # ========================
+  # CORS - CONTROL DE ACCESO (SOLO ORÍGENES PERMITIDOS)
+  # ========================
+  # 🔴 ANTES: Access-Control-Allow-Origin: * (VULNERABLE)
+  # ✅ AHORA: Solo tu dominio
+  Access-Control-Allow-Origin: https://falconmx1.github.io
+  Access-Control-Allow-Methods: GET, POST, OPTIONS
+  Access-Control-Allow-Headers: Content-Type, Authorization
+  Access-Control-Allow-Credentials: true
+  Access-Control-Max-Age: 86400
 
   # ========================
   # RENDIMIENTO Y CACHÉ
