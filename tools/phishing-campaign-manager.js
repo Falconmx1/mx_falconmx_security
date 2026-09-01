@@ -170,9 +170,9 @@ function initConfig() {
     
     // Guardar plantillas
     for (const [key, data] of Object.entries(config.templates)) {
-        const path = path.join(TEMPLATES_DIR, `${key}.json`);
+        const templatePath = path.join(TEMPLATES_DIR, `${key}.json`);
         if (!fs.existsSync(path)) {
-            fs.writeFileSync(path, JSON.stringify(data, null, 2));
+            fs.writeFileSync(templatePath, JSON.stringify(data, null, 2));
         }
     }
     
