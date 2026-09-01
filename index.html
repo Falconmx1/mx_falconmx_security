@@ -3534,6 +3534,91 @@
                         </div>
                     </div>
                     
+                    <!-- ========================================= -->
+                    <!-- NUEVAS HERRAMIENTAS FASE 20 (156-160)      -->
+                    <!-- ========================================= -->
+                    
+                    <!-- Mobile App Security Scanner -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-mobile-alt text-primary me-1"></i>Mobile App Security Scanner</h6>
+                            <p class="small">Escanea aplicaciones móviles (APK/IPA) en busca de vulnerabilidades. Analiza permisos, secretos hardcodeados, conexiones inseguras y más.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fab fa-android me-1"></i> Android</span>
+                                <span class="badge-mfh"><i class="fab fa-apple me-1"></i> iOS</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('mobile-app-security-scanner.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- IoT Device Scanner -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-microchip text-warning me-1"></i>IoT Device Scanner</h6>
+                            <p class="small">Escanea y analiza dispositivos IoT en tu red. Identifica fabricantes, modelos, firmware y vulnerabilidades conocidas.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-wifi me-1"></i> IoT</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('iot-device-scanner.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bluetooth Security Analyzer -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fab fa-bluetooth text-info me-1"></i>Bluetooth Security Analyzer</h6>
+                            <p class="small">Analiza la seguridad de dispositivos Bluetooth. Detecta vulnerabilidades como BlueBorne, KNOB y evalúa la seguridad de conexiones.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fab fa-bluetooth-b me-1"></i> Bluetooth</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('bluetooth-security-analyzer.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RFID Security Scanner -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-rss text-success me-1"></i>RFID Security Scanner</h6>
+                            <p class="small">Escanea y analiza tags RFID. Identifica tipos de tags, evalúa su seguridad y detecta vulnerabilidades como clonación.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-wave-square me-1"></i> RFID</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('rfid-security-scanner.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- OT Security Monitor -->
+                    <div class="col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6><i class="fas fa-industry text-danger me-1"></i>OT Security Monitor</h6>
+                            <p class="small">Monitorea sistemas OT (PLC, SCADA, HMI). Analiza protocolos industriales como Modbus, Profibus y detecta vulnerabilidades.</p>
+                            <div class="mt-auto">
+                                <span class="badge-mfh"><i class="fas fa-code me-1"></i> Node.js</span>
+                                <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> OT</span>
+                                <br>
+                                <button class="btn-mfh btn-sm mt-2 w-100" onclick="downloadTool('ot-security-monitor.js')">
+                                    <i class="fas fa-download me-1"></i>Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Próximamente -->
                     <div class="col-md-6">
                         <div class="card p-3 h-100" style="opacity:0.6;border-style:dashed;">
@@ -4003,7 +4088,7 @@ function refreshTimeZones() {
 refreshTimeZones();
 
 // ==================== ESTADÍSTICAS ====================
-let portStats = {}, countryStats = {}, activityLog = [];
+let portStats = {}, countryStats = [], activityLog = [];
 function updateStatistics(results) {
     results.forEach(r => { portStats[r.port] = (portStats[r.port] || 0) + 1; });
     const countries = ['México', 'USA', 'España', 'Argentina', 'Colombia'];
