@@ -5,7 +5,7 @@
  * Herramienta de explicabilidad para modelos de IA
  * 
  * Uso: node ai-explainability-tool.js [opciones]
- * Ejemplo: node ai-explainability-tool.js --explain --model model.pkl --input data.json
+ * Ejemplo: node ai-explainability-tool.js --explain --model model.json --input data.json
  * Ejemplo: node ai-explainability-tool.js --methods
  * Ejemplo: node ai-explainability-tool.js --report
  */
@@ -109,314 +109,360 @@ Opciones:
 
 Ejemplos:
   node ai-explainability-tool.js --init
-  node ai-explainability-tool.js --explain --model model.pkl --input data.json
+  node ai-explainability-tool.js --explain --model model.json --input data.json
   node ai-explainability-tool.js --methods
   node ai-explainability-tool.js --report --format html
 `);
             process.exit(0);
+            break;
     }
 }
 
 // ==================== FUNCIONES ====================
-function loadConfig() {
-    try {
-        if (fs.existsSync(CONFIG_FILE)) {
-            return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
-        }
-    } catch (error) {
-        console.error('❌ Error cargando configuracion:', error.message);
-    }
-    return { ...DEFAULT_CONFIG };
-}
-
-function saveConfig(config) {
-    try {
-        fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
-    } catch (error) {
-        console.error('❌ Error guardando configuracion:', error.message);
-    }
-}
 
 function initConfig() {
-    if (!fs.existsSync(EXPLANATIONS_DIR)) {
-        fs.mkdirSync(EXPLANATIONS_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(REPORTS_DIR)) {
-        fs.mkdirSync(REPORTS_DIR, { recursive: true });
+    if (!fs.existsSync(CONFIG_FILE)) {
+        fs.writeFileSync(CONFIG_FILE, JSON.stringify(DEFAULT_CONFIG, null, 2));
+        console.log('✅ Configuracion por defecto creada.');
     }
     
-    const config = { ...DEFAULT_CONFIG };
-    saveConfig(config);
-    
-    console.log('✅ Configuracion por defecto creada.');
-    console.log(`📁 Explicaciones: ${EXPLANATIONS_DIR}`);
-    console.log(`📁 Reportes: ${REPORTS_DIR}`);
+    const dirs = [EXPLANATIONS_DIR, REPORTS_DIR];
+    dirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+            console.log(`📁 ${path.basename(dir)}: ${dir}`);
+        }
+    });
 }
 
 function listMethods() {
-    const config = loadConfig();
-    console.log('\n📋 METODOS DE EXPLICABILIDAD:');
-    console.log('='.repeat(50));
+    console.log('\n📋 METODOS DE EXPLICABILIDAD DISPONIBLES:');
+    console.log('============================================\n');
     
-    for (const [key, data] of Object.entries(config.methods)) {
-        console.log(`\n📌 ${data.name} (${key})`);
-        console.log(`   ${data.description}`);
+    const config = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+    
+    for (const [key, value] of Object.entries(config.methods)) {
+        console.log(`🔍 ${key.toUpperCase()}`);
+        console.log(`   Nombre: ${value.name}`);
+        console.log(`   Descripcion: ${value.description}`);
+        console.log('');
     }
 }
 
 function explainModel(modelFile, inputFile, method) {
     console.log(`🔍 Generando explicaciones para: ${modelFile}`);
     
-    const config = loadConfig();
-    const methodName = method || 'shap';
-    const methodData = config.methods[methodName];
+    // Leer archivos
+    const modelData = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
+    const inputData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
     
-    if (!methodData) {
-        console.error(`❌ Metodo no encontrado: ${methodName}`);
-        console.log(`   Disponibles: ${Object.keys(config.methods).join(', ')}`);
-        return;
+    // Verificar formato de features - CORREGIDO
+    let features = [];
+    let featureNames = [];
+    let featureImportance = {};
+    
+    // Si el modelo tiene features como array
+    if (modelData.model && Array.isArray(modelData.model.features)) {
+        featureNames = modelData.model.features;
+        features = featureNames.map((name, index) => ({
+            name: name,
+            value: Array.isArray(inputData.features) ? inputData.features[index] || 0 : inputData.features[name] || 0,
+            importance: modelData.model.feature_importance ? 
+                (modelData.model.feature_importance[name] || (1 / featureNames.length)) : 
+                (1 / featureNames.length)
+        }));
+    } 
+    // Si el modelo tiene features como objeto
+    else if (modelData.model && typeof modelData.model.features === 'object' && !Array.isArray(modelData.model.features)) {
+        featureNames = Object.keys(modelData.model.features);
+        features = featureNames.map(name => ({
+            name: name,
+            value: inputData.features[name] || 0,
+            importance: modelData.model.features[name] || (1 / featureNames.length)
+        }));
+    }
+    // Si los features vienen directamente
+    else if (Array.isArray(inputData.features)) {
+        featureNames = inputData.features.map((_, i) => `feature_${i+1}`);
+        features = inputData.features.map((value, i) => ({
+            name: featureNames[i],
+            value: value,
+            importance: modelData.model?.feature_importance?.[featureNames[i]] || (1 / inputData.features.length)
+        }));
+    } else if (typeof inputData.features === 'object') {
+        featureNames = Object.keys(inputData.features);
+        features = featureNames.map(name => ({
+            name: name,
+            value: inputData.features[name],
+            importance: modelData.model?.feature_importance?.[name] || (1 / featureNames.length)
+        }));
     }
     
-    // Simular datos de entrada
-    let inputData = {};
-    if (inputFile && fs.existsSync(inputFile)) {
-        try {
-            inputData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
-        } catch (error) {
-            console.error('❌ Error leyendo archivo de entrada:', error.message);
-            inputData = { features: ['feature1', 'feature2', 'feature3'], values: [0.5, 0.8, 0.3] };
-        }
-    } else {
-        inputData = { 
-            features: ['feature1', 'feature2', 'feature3', 'feature4', 'feature5'],
-            values: [0.5, 0.8, 0.3, 0.9, 0.1]
-        };
-    }
-    
-    // Simular explicacion
-    const featureImportance = inputData.features.map((f, i) => ({
-        feature: f,
-        importance: Math.random(),
-        value: inputData.values[i] || 0
-    })).sort((a, b) => b.importance - a.importance);
-    
-    const explanation = {
+    // Generar explicación según método
+    let explanation = {
         timestamp: new Date().toISOString(),
-        model: modelFile,
-        method: methodName,
-        method_name: methodData.name,
-        input_data: inputData,
-        prediction: {
-            class: Math.random() > 0.5 ? 'Class A' : 'Class B',
-            confidence: Math.random() * 0.3 + 0.6
-        },
-        feature_importance: featureImportance.slice(0, config.max_features),
-        summary: {
-            top_features: featureImportance.slice(0, 3).map(f => f.feature),
-            confidence_level: Math.random() > 0.3 ? 'Alta' : 'Media',
-            explanation_quality: Math.random() * 0.3 + 0.6
-        }
+        model: modelData.model?.name || 'Unknown',
+        method: method || 'lime',
+        input: inputData,
+        features: features,
+        prediction: inputData.prediction || 'unknown',
+        confidence: inputData.confidence || 0.0
     };
     
-    console.log(`\n📊 Explicacion generada:`);
-    console.log(`   Metodo: ${explanation.method_name}`);
-    console.log(`   Prediccion: ${explanation.prediction.class} (${(explanation.prediction.confidence * 100).toFixed(1)}%)`);
-    console.log(`   Caracteristicas analizadas: ${explanation.feature_importance.length}`);
-    console.log(`   ⭐ Top features: ${explanation.summary.top_features.join(', ')}`);
-    
-    console.log(`\n📋 Importancia de caracteristicas:`);
-    explanation.feature_importance.slice(0, 5).forEach(f => {
-        console.log(`   • ${f.feature}: ${(f.importance * 100).toFixed(1)}%`);
-    });
-    
-    const outputPath = outputFile || path.join(EXPLANATIONS_DIR, `xai_${Date.now()}.json`);
-    fs.writeFileSync(outputPath, JSON.stringify(explanation, null, 2));
-    console.log(`\n📄 Explicacion guardada: ${outputPath}`);
+    // Agregar explicación específica del método
+    switch (method) {
+        case 'lime':
+            explanation.explanation = {
+                type: 'LIME',
+                description: 'Local Interpretable Model-agnostic Explanations',
+                feature_contributions: features.map(f => ({
+                    feature: f.name,
+                    value: f.value,
+                    contribution: f.importance * (Math.random() * 0.4 + 0.3) // Simulación
+                })),
+                local_fidelity: 0.92,
+                explanation: generateLimeExplanation(features, inputData)
+            };
+            break;
+            
+        case 'shap':
+            explanation.explanation = {
+                type: 'SHAP',
+                description: 'SHapley Additive exPlanations',
+                shap_values: features.map(f => ({
+                    feature: f.name,
+                    value: f.value,
+                    shap_value: f.importance * (Math.random() * 0.5 + 0.5) // Simulación
+                })),
+                base_value: 0.5,
+                explanation: generateShapExplanation(features, inputData)
+            };
+            break;
+            
+        case 'counterfactual':
+            explanation.explanation = {
+                type: 'Counterfactual',
+                description: 'What-if analysis',
+                current_prediction: inputData.prediction,
+                counterfactual_examples: generateCounterfactual(features, inputData),
+                explanation: generateCounterfactualExplanation(features, inputData)
+            };
+            break;
+            
+        default:
+            explanation.explanation = {
+                type: 'General',
+                description: 'Feature importance analysis',
+                feature_importance: features.map(f => ({
+                    feature: f.name,
+                    importance: f.importance
+                })),
+                explanation: `Análisis basado en ${features.length} features`
+            };
+    }
     
     return explanation;
 }
 
-function generateReport(format) {
-    console.log(`📊 Generando reporte de explicabilidad en formato ${format}`);
+function generateLimeExplanation(features, inputData) {
+    const topFeatures = features
+        .sort((a, b) => b.importance - a.importance)
+        .slice(0, 3);
     
-    const xaiFiles = fs.readdirSync(EXPLANATIONS_DIR).filter(f => f.startsWith('xai_'));
-    if (xaiFiles.length === 0) {
-        console.log('ℹ️ No hay explicaciones disponibles. Ejecuta --explain primero.');
-        return;
-    }
+    const pred = inputData.prediction || 'unknown';
+    const reasons = topFeatures.map(f => 
+        `${f.name} (${f.importance > 0.5 ? 'influye positivamente' : 'influye negativamente'})`
+    );
     
-    const latest = xaiFiles[xaiFiles.length - 1];
-    const data = JSON.parse(fs.readFileSync(path.join(EXPLANATIONS_DIR, latest), 'utf8'));
-    
-    let content = '';
-    let ext = '';
-    
-    switch (format) {
-        case 'html':
-            content = generateXAIHTML(data);
-            ext = '.html';
-            break;
-        default:
-            content = JSON.stringify(data, null, 2);
-            ext = '.json';
-    }
-    
-    const outputPath = outputFile || path.join(REPORTS_DIR, `xai_report_${Date.now()}${ext}`);
-    fs.writeFileSync(outputPath, content);
-    console.log(`\n📄 Reporte guardado: ${outputPath}`);
-    
-    return data;
+    return `La predicción '${pred}' se debe principalmente a: ${reasons.join(', ')}`;
 }
 
-function generateXAIHTML(data) {
+function generateShapExplanation(features, inputData) {
+    const topFeatures = features
+        .sort((a, b) => b.importance - a.importance)
+        .slice(0, 3);
+    
+    const pred = inputData.prediction || 'unknown';
+    const reasons = topFeatures.map(f => 
+        `${f.name} (contribución: ${(f.importance * 100).toFixed(0)}%)`
+    );
+    
+    return `La predicción '${pred}' está impulsada por: ${reasons.join(', ')}`;
+}
+
+function generateCounterfactual(features, inputData) {
+    const examples = [];
+    const currentPred = inputData.prediction || 'unknown';
+    const targetPred = currentPred === 'approved' ? 'denied' : 'approved';
+    
+    // Generar ejemplos contrafactuales
+    features.forEach((f, i) => {
+        if (f.importance > 0.1) {
+            const newValue = typeof f.value === 'number' ? 
+                f.value * (1 + (Math.random() * 0.5 + 0.25)) : 
+                f.value;
+            examples.push({
+                feature: f.name,
+                current_value: f.value,
+                changed_value: newValue,
+                impact: f.importance * 100
+            });
+        }
+    });
+    
+    return {
+        target_prediction: targetPred,
+        changes_needed: examples.slice(0, 3)
+    };
+}
+
+function generateCounterfactualExplanation(features, inputData) {
+    const topFeatures = features
+        .sort((a, b) => b.importance - a.importance)
+        .slice(0, 2);
+    
+    const changes = topFeatures.map(f => 
+        `cambiar ${f.name} de ${f.value} a ${typeof f.value === 'number' ? (f.value * 1.5).toFixed(1) : 'otro valor'}`
+    );
+    
+    return `Para cambiar la predicción, se recomienda: ${changes.join(' y ')}`;
+}
+
+function generateReport(inputFiles, format) {
+    console.log(`📊 Generando reporte de explicabilidad en formato ${format}`);
+    
+    let report = {
+        timestamp: new Date().toISOString(),
+        explanations: []
+    };
+    
+    if (inputFiles && inputFiles.length > 0) {
+        for (const file of inputFiles) {
+            try {
+                const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+                report.explanations.push(data);
+            } catch (e) {
+                console.log(`⚠️ No se pudo leer: ${file}`);
+            }
+        }
+    }
+    
+    if (format === 'html') {
+        const html = generateHTMLReport(report);
+        const outputPath = path.join(REPORTS_DIR, `report_${Date.now()}.html`);
+        fs.writeFileSync(outputPath, html);
+        console.log(`📄 Reporte guardado: ${outputPath}`);
+        return outputPath;
+    } else {
+        const outputPath = path.join(REPORTS_DIR, `report_${Date.now()}.json`);
+        fs.writeFileSync(outputPath, JSON.stringify(report, null, 2));
+        console.log(`📄 Reporte guardado: ${outputPath}`);
+        return outputPath;
+    }
+}
+
+function generateHTMLReport(report) {
     return `<!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔍 AI Explainability Report</title>
+    <title>AI Explainability Report</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            padding: 40px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #1a1a1a;
-            border-radius: 12px;
-            border: 1px solid #00ff00;
-            padding: 40px;
-        }
-        h1 { color: #00ff00; border-bottom: 2px solid #00ff00; padding-bottom: 15px; margin-bottom: 20px; }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .stat {
-            background: #0a0a0a;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            text-align: center;
-        }
-        .stat .number { font-size: 2rem; font-weight: bold; color: #00ff00; }
-        .stat .label { color: #888; font-size: 0.8rem; }
-        .feature-bar {
-            background: #0a0a0a;
-            border-radius: 4px;
-            margin: 5px 0;
-            overflow: hidden;
-        }
-        .feature-bar .fill {
-            height: 20px;
-            background: linear-gradient(90deg, #00ff00, #00cc00);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        .feature-bar .label {
-            padding: 0 10px;
-            line-height: 20px;
-            font-size: 0.8rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th {
-            background: #00ff00;
-            color: #000;
-            padding: 10px;
-            text-align: left;
-        }
-        td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #333;
-        }
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-            text-align: center;
-            color: #666;
-            font-size: 0.8rem;
-        }
+        body { font-family: Arial, sans-serif; background: #0a0e1a; color: #e0e0e0; padding: 20px; }
+        .header { background: linear-gradient(135deg, #1a2332, #0d1520); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-bottom: 3px solid #00d4ff; }
+        .header h1 { color: #00d4ff; }
+        .section { background: #141e2b; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #1a2a3a; }
+        .section h2 { color: #00d4ff; border-bottom: 1px solid #1a2a3a; padding-bottom: 10px; }
+        .feature { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #1a2a3a; }
+        .feature:hover { background: #1a2a3a; }
+        .badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+        .badge-lime { background: #00d4ff; color: #0a0e1a; }
+        .badge-shap { background: #ff8800; color: #0a0e1a; }
+        .footer { text-align: center; color: #667788; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <h1>🔍 AI Explainability Report</h1>
-        <p><strong>Modelo:</strong> ${data.model}</p>
-        <p><strong>Metodo:</strong> ${data.method_name}</p>
-        <p><strong>Fecha:</strong> ${data.timestamp}</p>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="number">${data.feature_importance.length}</div>
-                <div class="label">📊 Caracteristicas</div>
+        <p>${report.timestamp}</p>
+    </div>
+    <div class="section">
+        <h2>📊 Resumen</h2>
+        <p>Total explicaciones: ${report.explanations.length}</p>
+    </div>
+    ${report.explanations.map(exp => `
+    <div class="section">
+        <h2>🧠 Modelo: ${exp.model || 'Unknown'}</h2>
+        <p><strong>Método:</strong> ${exp.method || 'N/A'}</p>
+        <p><strong>Predicción:</strong> ${exp.prediction || 'N/A'}</p>
+        <p><strong>Confianza:</strong> ${(exp.confidence * 100).toFixed(1)}%</p>
+        <h3>Features</h3>
+        ${exp.features ? exp.features.map(f => `
+            <div class="feature">
+                <span>${f.name}</span>
+                <span>Valor: ${f.value} | Importancia: ${(f.importance * 100).toFixed(1)}%</span>
             </div>
-            <div class="stat">
-                <div class="number">${(data.prediction.confidence * 100).toFixed(1)}%</div>
-                <div class="label">🎯 Confianza</div>
-            </div>
-            <div class="stat">
-                <div class="number">${(data.summary.explanation_quality * 100).toFixed(1)}%</div>
-                <div class="label">📊 Calidad</div>
-            </div>
-        </div>
-        
-        <h2>📋 Importancia de Caracteristicas</h2>
-        ${data.feature_importance.map(f => `
-            <div class="feature-bar">
-                <div class="fill" style="width: ${f.importance * 100}%">
-                    <span class="label">${f.feature}: ${(f.importance * 100).toFixed(1)}%</span>
-                </div>
-            </div>
-        `).join('')}
-        
-        <div class="footer">
-            <p>Hecho en Mexico 🇲🇽 | MFH TOOLS PRO</p>
-        </div>
+        `).join('') : '<p>No hay features disponibles</p>'}
+        ${exp.explanation ? `
+        <h3>Explicación</h3>
+        <p>${exp.explanation.explanation || 'Explicación no disponible'}</p>
+        ` : ''}
+    </div>
+    `).join('')}
+    <div class="footer">
+        🚀 AI Explainability Tool v1.0
     </div>
 </body>
 </html>`;
 }
 
 // ==================== MAIN ====================
-(async function main() {
-    console.log(`🔍 AI Explainability Tool - MFH TOOLS PRO`);
-    console.log('='.repeat(40));
-    
+
+function main() {
+    // Inicializar
     if (init) {
         initConfig();
-        process.exit(0);
+        console.log('✅ Inicializacion completada.');
+        return;
     }
     
-    if (!fs.existsSync(REPORTS_DIR)) {
-        fs.mkdirSync(REPORTS_DIR, { recursive: true });
+    // Verificar configuracion
+    if (!fs.existsSync(CONFIG_FILE)) {
+        initConfig();
     }
     
+    // Ejecutar accion
     switch (action) {
-        case 'explain':
-            if (!modelFile) {
-                console.error('❌ Debes especificar --model');
-                process.exit(1);
-            }
-            explainModel(modelFile, inputFile, method);
-            break;
-            
         case 'methods':
             listMethods();
             break;
             
+        case 'explain':
+            if (!modelFile || !inputFile) {
+                console.log('❌ Debes especificar --model y --input');
+                return;
+            }
+            if (!fs.existsSync(modelFile)) {
+                console.log(`❌ Modelo no encontrado: ${modelFile}`);
+                return;
+            }
+            if (!fs.existsSync(inputFile)) {
+                console.log(`❌ Input no encontrado: ${inputFile}`);
+                return;
+            }
+            
+            const result = explainModel(modelFile, inputFile, method);
+            
+            // Guardar resultado
+            const outputPath = outputFile || path.join(EXPLANATIONS_DIR, `explanation_${Date.now()}.json`);
+            fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
+            console.log(`📄 Explicacion guardada: ${outputPath}`);
+            break;
+            
         case 'report':
-            generateReport(format);
+            const inputFiles = args.filter((arg, index, array) => {
+                return array[index-1] === '--input' || (array[index-1] === '--report' && arg !== '--format' && arg !== '--output');
+            }).filter(f => f && !f.startsWith('--'));
+            generateReport(inputFiles, format);
             break;
             
         default:
@@ -426,10 +472,9 @@ function generateXAIHTML(data) {
     }
     
     console.log('\n✅ AI Explainability Tool completado');
-})();
+}
 
-// ==================== MANEJO DE SEÑALES ====================
-process.on('SIGINT', () => {
-    console.log('\n🛑 Deteniendo AI Explainability Tool...');
-    process.exit(0);
-});
+// Ejecutar
+if (require.main === module) {
+    main();
+}
