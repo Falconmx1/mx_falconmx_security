@@ -5,8 +5,8 @@
  * Estándares de seguridad internacionales
  * 
  * Uso: node international-security-standards.js [opciones]
- * Ejemplo: node international-security-standards.js --check --standard ISO27001
- * Ejemplo: node international-security-standards.js --compare --standards ISO27001,NIST
+ * Ejemplo: node international-security-standards.js --check --standard ISO-27001
+ * Ejemplo: node international-security-standards.js --compare --standards ISO-27001,NIST-CSF
  * Ejemplo: node international-security-standards.js --report --format html
  */
 
@@ -15,33 +15,27 @@ const path = require('path');
 const crypto = require('crypto');
 
 // ==================== CONFIGURACION ====================
-const CONFIG_FILE = path.join(__dirname, 'standards_config.json');
-const STANDARDS_DIR = path.join(__dirname, 'standards_data');
-const REPORTS_DIR = path.join(__dirname, 'standards_reports');
+const CONFIG_FILE = path.join(__dirname, 'iss_config.json');
+const STANDARDS_DIR = path.join(__dirname, 'iss_standards');
+const REPORTS_DIR = path.join(__dirname, 'iss_reports');
 
 const DEFAULT_CONFIG = {
     standards: {
-        'ISO27001': { name: 'ISO/IEC 27001', type: 'Management', year: 2022, domains: ['Context', 'Leadership', 'Planning', 'Support', 'Operation', 'Evaluation', 'Improvement'] },
-        'NIST': { name: 'NIST Cybersecurity Framework', type: 'Framework', year: 2018, domains: ['Identify', 'Protect', 'Detect', 'Respond', 'Recover'] },
-        'PCI-DSS': { name: 'PCI DSS', type: 'Compliance', year: 2022, domains: ['Build', 'Maintain', 'Protect', 'Monitor', 'Security'] },
-        'ISO27701': { name: 'ISO/IEC 27701', type: 'Privacy', year: 2019, domains: ['PIMS', 'Privacy Governance', 'Data Protection'] },
-        'SOC2': { name: 'SOC 2', type: 'Audit', year: 2022, domains: ['Security', 'Availability', 'Processing Integrity', 'Confidentiality', 'Privacy'] }
+        'ISO-27001': { name: 'ISO/IEC 27001', version: '2022', category: 'ISMS' },
+        'NIST-CSF': { name: 'NIST Cybersecurity Framework', version: '1.1', category: 'Cybersecurity' },
+        'PCI-DSS': { name: 'PCI Data Security Standard', version: '3.2.1', category: 'Payment Security' },
+        'HIPAA': { name: 'HIPAA Security Rule', version: '2013', category: 'Healthcare' },
+        'SOC2': { name: 'SOC 2', version: '2017', category: 'Service Organization' }
     },
-    requirements: {
-        'ISO27001': ['ISMS', 'Risk Assessment', 'Security Policy', 'Incident Management', 'BCP'],
-        'NIST': ['Asset Management', 'Risk Assessment', 'Protection Measures', 'Detection Mechanisms', 'Response Planning'],
-        'PCI-DSS': ['Firewall', 'Secure Configurations', 'Encryption', 'Access Control', 'Monitoring'],
-        'ISO27701': ['Privacy Framework', 'Data Mapping', 'Consent Management', 'DPIA', 'Data Transfer'],
-        'SOC2': ['Logical Access', 'Change Management', 'System Availability', 'Data Processing']
-    }
+    compliance_levels: ['compliant', 'partial', 'in_progress', 'non_compliant']
 };
 
 // ==================== PARSEAR ARGUMENTOS ====================
 const args = process.argv.slice(2);
 
 let action = null;
-let standardName = null;
-let compareStandards = null;
+let standardId = null;
+let standardsList = null;
 let format = 'json';
 let outputFile = null;
 let init = false;
@@ -52,14 +46,14 @@ for (let i = 0; i < args.length; i++) {
         case '--check':
             action = 'check';
             if (args[i + 1] && !args[i + 1].startsWith('--')) {
-                standardName = args[i + 1];
+                standardId = args[i + 1];
                 i++;
             }
             break;
         case '--compare':
             action = 'compare';
             if (args[i + 1] && !args[i + 1].startsWith('--')) {
-                compareStandards = args[i + 1];
+                standardsList = args[i + 1];
                 i++;
             }
             break;
@@ -67,11 +61,11 @@ for (let i = 0; i < args.length; i++) {
             action = 'report';
             break;
         case '--standard':
-            standardName = args[i + 1];
+            standardId = args[i + 1];
             i++;
             break;
         case '--standards':
-            compareStandards = args[i + 1];
+            standardsList = args[i + 1];
             i++;
             break;
         case '--format':
@@ -92,8 +86,8 @@ for (let i = 0; i < args.length; i++) {
         case '--help':
         case '-h':
             console.log(`
-🌍 International Security Standards - MFH TOOLS PRO
-====================================================
+📋 International Security Standards - MFH TOOLS PRO
+===================================================
 Estándares de seguridad internacionales.
 
 Uso:
@@ -101,11 +95,11 @@ Uso:
 
 Opciones:
   --init                    Crear configuracion por defecto
-  --check <estandar>        Verificar estandar de seguridad
-  --compare <estandares>    Comparar estandares
-  --report                  Generar reporte de estandares
-  --standard <nombre>       Nombre del estandar
-  --standards <lista>       Lista de estandares a comparar
+  --check <standard>        Verificar cumplimiento de estándar
+  --compare <standards>     Comparar estándares
+  --report                  Generar reporte de cumplimiento
+  --standard <id>           ID del estándar (ISO-27001, NIST-CSF, etc)
+  --standards <lista>       Lista de estándares separados por coma
   --format <formato>        Formato de salida (json, html)
   --output <archivo>        Guardar reporte
   --verbose, -v             Mostrar mas detalles
@@ -113,411 +107,270 @@ Opciones:
 
 Ejemplos:
   node international-security-standards.js --init
-  node international-security-standards.js --check --standard ISO27001
-  node international-security-standards.js --compare --standards ISO27001,NIST
+  node international-security-standards.js --check --standard ISO-27001
+  node international-security-standards.js --compare --standards ISO-27001,NIST-CSF
   node international-security-standards.js --report --format html
 `);
             process.exit(0);
+            break;
     }
 }
 
 // ==================== FUNCIONES ====================
-function loadConfig() {
-    try {
-        if (fs.existsSync(CONFIG_FILE)) {
-            return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
-        }
-    } catch (error) {
-        console.error('❌ Error cargando configuracion:', error.message);
-    }
-    return { ...DEFAULT_CONFIG };
-}
-
-function saveConfig(config) {
-    try {
-        fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
-    } catch (error) {
-        console.error('❌ Error guardando configuracion:', error.message);
-    }
-}
 
 function initConfig() {
-    if (!fs.existsSync(STANDARDS_DIR)) {
-        fs.mkdirSync(STANDARDS_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(REPORTS_DIR)) {
-        fs.mkdirSync(REPORTS_DIR, { recursive: true });
+    if (!fs.existsSync(CONFIG_FILE)) {
+        fs.writeFileSync(CONFIG_FILE, JSON.stringify(DEFAULT_CONFIG, null, 2));
+        console.log('✅ Configuracion por defecto creada.');
     }
     
-    const config = { ...DEFAULT_CONFIG };
-    saveConfig(config);
-    
-    console.log('✅ Configuracion por defecto creada.');
-    console.log(`📁 Datos de estandares: ${STANDARDS_DIR}`);
-    console.log(`📁 Reportes: ${REPORTS_DIR}`);
+    const dirs = [STANDARDS_DIR, REPORTS_DIR];
+    dirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+            console.log(`📁 ${path.basename(dir)}: ${dir}`);
+        }
+    });
 }
 
-function checkStandard(standard) {
-    console.log(`🌍 Verificando estandar de seguridad: ${standard}`);
+function checkStandard(standardId) {
+    console.log(`📋 Verificando estándar: ${standardId}`);
     
-    const config = loadConfig();
-    const standards = config.standards;
-    const reqs = config.requirements;
+    const standardFile = path.join(STANDARDS_DIR, `${standardId.toLowerCase()}.json`);
+    let standardData = null;
     
-    if (!standards[standard]) {
-        console.error(`❌ Estandar "${standard}" no encontrado. Opciones: ${Object.keys(standards).join(', ')}`);
-        return;
+    if (fs.existsSync(standardFile)) {
+        standardData = JSON.parse(fs.readFileSync(standardFile, 'utf8'));
+    } else {
+        // Datos de ejemplo si no existe
+        const standardInfo = DEFAULT_CONFIG.standards[standardId] || { name: standardId, version: '1.0', category: 'General' };
+        standardData = {
+            standard: {
+                id: standardId,
+                name: standardInfo.name,
+                version: standardInfo.version,
+                category: standardInfo.category
+            },
+            requirements: [
+                { id: 'REQ-001', name: 'Requirement 1', status: 'partial' },
+                { id: 'REQ-002', name: 'Requirement 2', status: 'in_progress' },
+                { id: 'REQ-003', name: 'Requirement 3', status: 'compliant' }
+            ],
+            compliance_score: 60
+        };
     }
     
-    const stdData = standards[standard];
-    const requirements = reqs[standard] || [];
+    const total = standardData.requirements.length;
+    const compliant = standardData.requirements.filter(r => r.status === 'compliant').length;
+    const partial = standardData.requirements.filter(r => r.status === 'partial').length;
+    const inProgress = standardData.requirements.filter(r => r.status === 'in_progress').length;
+    const nonCompliant = standardData.requirements.filter(r => r.status === 'non_compliant').length;
     
-    const assessment = {
-        standard: standard,
-        name: stdData.name,
-        type: stdData.type,
-        year: stdData.year,
-        timestamp: new Date().toISOString(),
-        domains: stdData.domains,
-        requirements: [],
-        compliance_rate: 0,
-        maturity_level: '',
-        gaps: [],
-        recommendations: []
+    const result = {
+        standard: standardData.standard,
+        status: calculateOverallStatus(compliant, total),
+        statistics: {
+            total,
+            compliant,
+            partial,
+            in_progress: inProgress,
+            non_compliant: nonCompliant,
+            compliance_rate: Math.round((compliant / total) * 100)
+        },
+        requirements: standardData.requirements,
+        timestamp: new Date().toISOString()
     };
     
-    // Evaluar requisitos
-    for (const req of requirements) {
-        const status = ['implemented', 'partially_implemented', 'not_implemented'][Math.floor(Math.random() * 3)];
-        const score = Math.round((Math.random() * 40 + 60) * 10) / 10;
-        assessment.requirements.push({
-            name: req,
-            status: status,
-            score: score,
-            evidence: status === 'implemented' ? 'Evidencia documentada' : 'Evidencia insuficiente'
-        });
-    }
-    
-    // Calcular compliance
-    const implemented = assessment.requirements.filter(r => r.status === 'implemented').length;
-    assessment.compliance_rate = Math.round((implemented / assessment.requirements.length) * 100);
-    
-    // Nivel de madurez
-    const levels = ['Inicial', 'Repetible', 'Definido', 'Gestionado', 'Optimizado'];
-    const levelIndex = Math.min(Math.floor(assessment.compliance_rate / 20), 4);
-    assessment.maturity_level = levels[levelIndex];
-    
-    // Gaps
-    const gaps = assessment.requirements.filter(r => r.status === 'not_implemented');
-    assessment.gaps = gaps.map(r => r.name);
-    
-    // Recomendaciones
-    const recs = [
-        `Implementar controles faltantes para ${standard}`,
-        'Documentar procesos de seguridad',
-        'Realizar auditoria interna',
-        'Establecer mediciones de desempeño',
-        'Actualizar politicas de seguridad'
-    ];
-    assessment.recommendations = recs.slice(0, 2 + Math.floor(Math.random() * 3));
-    
-    console.log(`\n📊 Resultados para ${stdData.name}:`);
-    console.log(`   Tipo: ${assessment.type}`);
-    console.log(`   Año: ${assessment.year}`);
-    console.log(`   Compliance: ${assessment.compliance_rate}%`);
-    console.log(`   Nivel de madurez: ${assessment.maturity_level}`);
-    console.log(`   Dominios: ${assessment.domains.length}`);
-    console.log(`   Brechas detectadas: ${assessment.gaps.length}`);
-    
-    console.log(`\n📋 Requisitos:`);
-    for (const req of assessment.requirements) {
-        const icon = req.status === 'implemented' ? '✅' : req.status === 'partially_implemented' ? '⚠️' : '❌';
-        console.log(`   ${icon} ${req.name}: ${req.score}% (${req.status})`);
-    }
-    
-    if (assessment.gaps.length > 0) {
-        console.log(`\n⚠️ Brechas de cumplimiento:`);
-        assessment.gaps.forEach(g => console.log(`   • ${g}`));
-    }
-    
-    if (assessment.recommendations.length > 0) {
-        console.log(`\n💡 Recomendaciones:`);
-        assessment.recommendations.forEach(r => console.log(`   • ${r}`));
-    }
-    
-    const outputPath = outputFile || path.join(STANDARDS_DIR, `standard_${standard}_${Date.now()}.json`);
-    fs.writeFileSync(outputPath, JSON.stringify(assessment, null, 2));
-    console.log(`\n📄 Evaluacion guardada: ${outputPath}`);
-    
-    return assessment;
+    return result;
 }
 
-function compareStandards(standards) {
-    console.log(`🌍 Comparando estandares: ${standards}`);
+function calculateOverallStatus(compliant, total) {
+    const rate = compliant / total;
+    if (rate === 1) return 'compliant';
+    if (rate >= 0.7) return 'partial';
+    if (rate >= 0.4) return 'in_progress';
+    return 'non_compliant';
+}
+
+function compareStandards(standardsStr) {
+    const standardList = standardsStr.split(',').map(s => s.trim());
+    console.log(`📊 Comparando estándares: ${standardList.join(', ')}`);
     
-    const config = loadConfig();
-    const standardList = standards ? standards.split(',') : ['ISO27001', 'NIST'];
-    const allStandards = config.standards;
-    const reqs = config.requirements;
+    const results = [];
+    for (const standard of standardList) {
+        const result = checkStandard(standard);
+        results.push(result);
+    }
+    
+    const totalStandards = results.length;
+    const compliant = results.filter(r => r.status === 'compliant').length;
+    const partial = results.filter(r => r.status === 'partial').length;
+    const inProgress = results.filter(r => r.status === 'in_progress').length;
+    const nonCompliant = results.filter(r => r.status === 'non_compliant').length;
     
     const comparison = {
-        standards: [],
-        timestamp: new Date().toISOString(),
-        common_requirements: [],
-        differences: [],
-        summary: {}
+        standards: results,
+        summary: {
+            total_standards: totalStandards,
+            compliant,
+            partial,
+            in_progress: inProgress,
+            non_compliant: nonCompliant,
+            average_compliance: Math.round(results.reduce((acc, r) => acc + r.statistics.compliance_rate, 0) / totalStandards)
+        },
+        timestamp: new Date().toISOString()
     };
-    
-    const allReqs = new Set();
-    const standardData = [];
-    
-    for (const std of standardList) {
-        if (!allStandards[std]) {
-            console.warn(`⚠️ Estandar "${std}" no encontrado. Opciones: ${Object.keys(allStandards).join(', ')}`);
-            continue;
-        }
-        
-        const data = allStandards[std];
-        const requirements = reqs[std] || [];
-        const reqStatus = {};
-        for (const req of requirements) {
-            reqStatus[req] = Math.random() > 0.3;
-            allReqs.add(req);
-        }
-        
-        standardData.push({
-            code: std,
-            name: data.name,
-            type: data.type,
-            year: data.year,
-            domains: data.domains,
-            requirements: reqStatus,
-            compliance_rate: Math.round((Object.values(reqStatus).filter(v => v).length / requirements.length) * 100)
-        });
-        
-        comparison.standards.push(std);
-    }
-    
-    // Requisitos comunes
-    const reqArray = Array.from(allReqs);
-    for (const req of reqArray) {
-        const presentInAll = standardData.every(s => s.requirements[req] !== undefined);
-        if (presentInAll) {
-            comparison.common_requirements.push(req);
-        }
-    }
-    
-    // Diferencias
-    for (const s1 of standardData) {
-        for (const s2 of standardData) {
-            if (s1.code < s2.code) {
-                const reqs1 = Object.keys(s1.requirements);
-                const reqs2 = Object.keys(s2.requirements);
-                const onlyIn1 = reqs1.filter(r => !reqs2.includes(r));
-                const onlyIn2 = reqs2.filter(r => !reqs1.includes(r));
-                if (onlyIn1.length > 0 || onlyIn2.length > 0) {
-                    comparison.differences.push({
-                        standard1: s1.code,
-                        standard2: s2.code,
-                        only_in_standard1: onlyIn1,
-                        only_in_standard2: onlyIn2
-                    });
-                }
-            }
-        }
-    }
-    
-    // Resumen
-    comparison.summary = {
-        total_standards: standardData.length,
-        average_compliance: Math.round(standardData.reduce((acc, s) => acc + s.compliance_rate, 0) / standardData.length),
-        common_requirements_count: comparison.common_requirements.length
-    };
-    
-    console.log(`\n📊 Resultados de comparacion:`);
-    console.log(`   Estandares analizados: ${comparison.summary.total_standards}`);
-    console.log(`   Compliance promedio: ${comparison.summary.average_compliance}%`);
-    console.log(`   Requisitos comunes: ${comparison.summary.common_requirements_count}`);
-    
-    console.log(`\n📋 Detalle por estandar:`);
-    for (const s of standardData) {
-        console.log(`   ${s.code} (${s.type}): ${s.compliance_rate}%`);
-    }
-    
-    console.log(`\n📋 Requisitos comunes:`);
-    comparison.common_requirements.forEach(r => console.log(`   • ${r}`));
-    
-    if (comparison.differences.length > 0) {
-        console.log(`\n📋 Diferencias detectadas:`);
-        for (const diff of comparison.differences) {
-            if (diff.only_in_standard1.length > 0) {
-                console.log(`   • Solo en ${diff.standard1}: ${diff.only_in_standard1.join(', ')}`);
-            }
-            if (diff.only_in_standard2.length > 0) {
-                console.log(`   • Solo en ${diff.standard2}: ${diff.only_in_standard2.join(', ')}`);
-            }
-        }
-    }
-    
-    const outputPath = outputFile || path.join(STANDARDS_DIR, `compare_${Date.now()}.json`);
-    fs.writeFileSync(outputPath, JSON.stringify(comparison, null, 2));
-    console.log(`\n📄 Comparacion guardada: ${outputPath}`);
     
     return comparison;
 }
 
-function generateReport(format) {
-    console.log(`📊 Generando reporte de estandares internacionales en formato ${format}`);
+function generateReport(inputData, format) {
+    console.log(`📝 Generando reporte en formato ${format}`);
     
-    const files = fs.readdirSync(STANDARDS_DIR).filter(f => f.startsWith('standard_') || f.startsWith('compare_'));
+    let report = {
+        timestamp: new Date().toISOString(),
+        data: inputData
+    };
     
-    if (files.length === 0) {
-        console.log('ℹ️ No hay datos disponibles. Ejecuta --check o --compare primero.');
-        return;
+    if (format === 'html') {
+        const html = generateHTMLReport(report);
+        const outputPath = path.join(REPORTS_DIR, `iss_report_${Date.now()}.html`);
+        fs.writeFileSync(outputPath, html);
+        console.log(`📄 Reporte guardado: ${outputPath}`);
+        return outputPath;
+    } else {
+        const outputPath = path.join(REPORTS_DIR, `iss_report_${Date.now()}.json`);
+        fs.writeFileSync(outputPath, JSON.stringify(report, null, 2));
+        console.log(`📄 Reporte guardado: ${outputPath}`);
+        return outputPath;
     }
-    
-    const data = [];
-    for (const file of files) {
-        try {
-            const d = JSON.parse(fs.readFileSync(path.join(STANDARDS_DIR, file), 'utf8'));
-            data.push(d);
-        } catch (e) {}
-    }
-    
-    let content = '';
-    let ext = '';
-    
-    switch (format) {
-        case 'html':
-            content = generateStandardsHTML(data);
-            ext = '.html';
-            break;
-        default:
-            content = JSON.stringify({ data, timestamp: new Date().toISOString() }, null, 2);
-            ext = '.json';
-    }
-    
-    const outputPath = outputFile || path.join(REPORTS_DIR, `standards_report_${Date.now()}${ext}`);
-    fs.writeFileSync(outputPath, content);
-    console.log(`\n📄 Reporte guardado: ${outputPath}`);
-    
-    return data;
 }
 
-function generateStandardsHTML(data) {
+function generateHTMLReport(report) {
+    const data = report.data;
+    let content = '';
+    
+    if (data.standards) {
+        // Comparación de estándares
+        content = `
+            <h2>📊 Comparación de Estándares</h2>
+            <p>Total de estándares: ${data.summary.total_standards}</p>
+            <ul>
+                <li>Compliant: ${data.summary.compliant}</li>
+                <li>Partial: ${data.summary.partial}</li>
+                <li>In Progress: ${data.summary.in_progress}</li>
+                <li>Non-Compliant: ${data.summary.non_compliant}</li>
+            </ul>
+            <p>Average Compliance: ${data.summary.average_compliance}%</p>
+            <h3>Detalles por estándar:</h3>
+            ${data.standards.map(s => `
+                <div style="background: #141e2b; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                    <h4>${s.standard.name} (${s.standard.id})</h4>
+                    <p>Status: ${s.status}</p>
+                    <p>Compliance Rate: ${s.statistics.compliance_rate}%</p>
+                </div>
+            `).join('')}
+        `;
+    } else if (data.standard) {
+        // Estándar individual
+        content = `
+            <h2>📍 ${data.standard.name}</h2>
+            <p><strong>ID:</strong> ${data.standard.id}</p>
+            <p><strong>Versión:</strong> ${data.standard.version}</p>
+            <p><strong>Categoría:</strong> ${data.standard.category}</p>
+            <p><strong>Status:</strong> ${data.status}</p>
+            <p><strong>Tasa de cumplimiento:</strong> ${data.statistics.compliance_rate}%</p>
+            <h3>Requisitos:</h3>
+            ${data.requirements.map(r => `
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid #1a2a3a;">
+                    <span>${r.name}</span>
+                    <span>${r.status}</span>
+                </div>
+            `).join('')}
+        `;
+    }
+    
     return `<!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌍 International Security Standards Report</title>
+    <title>International Security Standards Report</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            padding: 40px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #1a1a1a;
-            border-radius: 12px;
-            border: 1px solid #00ff00;
-            padding: 40px;
-        }
-        h1 { color: #00ff00; border-bottom: 2px solid #00ff00; padding-bottom: 15px; margin-bottom: 20px; }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .stat {
-            background: #0a0a0a;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            text-align: center;
-        }
-        .stat .number { font-size: 2rem; font-weight: bold; }
-        .stat .label { color: #888; font-size: 0.8rem; }
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-            text-align: center;
-            color: #666;
-            font-size: 0.8rem;
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0e1a; color: #e0e0e0; padding: 20px; }
+        .header { background: linear-gradient(135deg, #1a2332, #0d1520); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-bottom: 3px solid #00d4ff; }
+        .header h1 { color: #00d4ff; }
+        .section { background: #141e2b; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #1a2a3a; }
+        .footer { text-align: center; color: #667788; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🌍 International Security Standards Report</h1>
-        <p><strong>Fecha:</strong> ${new Date().toISOString()}</p>
-        <p><strong>Evaluaciones:</strong> ${data.length}</p>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="number">${data.length}</div>
-                <div class="label">📋 Registros</div>
-            </div>
-        </div>
-        
-        <h2>📋 Estandares Evaluados</h2>
-        ${data.map(d => {
-            if (d.standard && d.name) {
-                return `
-                    <div style="border:1px solid #333;padding:15px;margin:10px 0;border-radius:8px;">
-                        <h3 style="color:#00ff00;">${d.standard} - ${d.name}</h3>
-                        <p>Compliance: ${d.compliance_rate}% | Madurez: ${d.maturity_level}</p>
-                        <p>Tipo: ${d.type} | Año: ${d.year}</p>
-                        <p>Dominios: ${d.domains.length} | Brechas: ${d.gaps.length}</p>
-                    </div>
-                `;
-            }
-            return '';
-        }).join('')}
-        
-        <div class="footer">
-            <p>Hecho en Mexico 🇲🇽 | MFH TOOLS PRO</p>
-        </div>
+    <div class="header">
+        <h1>📋 International Security Standards Report</h1>
+        <p>${report.timestamp}</p>
+    </div>
+    <div class="section">
+        ${content}
+    </div>
+    <div class="footer">
+        🚀 Standards Compliance v1.0
     </div>
 </body>
 </html>`;
 }
 
 // ==================== MAIN ====================
-(async function main() {
-    console.log(`🌍 International Security Standards - MFH TOOLS PRO`);
-    console.log('='.repeat(50));
-    
+
+function main() {
+    // Inicializar
     if (init) {
         initConfig();
-        process.exit(0);
+        console.log('✅ Inicializacion completada.');
+        return;
     }
     
-    if (!fs.existsSync(REPORTS_DIR)) {
-        fs.mkdirSync(REPORTS_DIR, { recursive: true });
+    // Verificar configuracion
+    if (!fs.existsSync(CONFIG_FILE)) {
+        initConfig();
     }
     
+    let result = null;
+    let inputData = null;
+    
+    // Ejecutar accion
     switch (action) {
         case 'check':
-            if (!standardName) {
-                console.error('❌ Debes especificar --standard');
-                process.exit(1);
+            if (!standardId) {
+                console.log('❌ Debes especificar --standard');
+                return;
             }
-            checkStandard(standardName);
+            result = checkStandard(standardId);
+            inputData = result;
+            console.log(`✅ Estándar verificado: ${standardId}`);
+            console.log(`   Status: ${result.status}`);
+            console.log(`   Compliance Rate: ${result.statistics.compliance_rate}%`);
             break;
             
         case 'compare':
-            compareStandards(compareStandards);
+            if (!standardsList) {
+                console.log('❌ Debes especificar --standards');
+                return;
+            }
+            result = compareStandards(standardsList);
+            inputData = result;
+            console.log(`✅ Comparación completada`);
+            console.log(`   Average Compliance: ${result.summary.average_compliance}%`);
             break;
             
         case 'report':
-            generateReport(format);
+            // Buscar archivos de datos para reporte
+            const files = fs.readdirSync(STANDARDS_DIR).filter(f => f.endsWith('.json'));
+            if (files.length === 0) {
+                console.log('ℹ️ No hay datos disponibles para generar reporte.');
+                console.log('💡 Ejecuta --check o --compare primero.');
+                return;
+            }
+            // Usar el primer archivo como ejemplo
+            const data = JSON.parse(fs.readFileSync(path.join(STANDARDS_DIR, files[0]), 'utf8'));
+            result = generateReport(data, format);
             break;
             
         default:
@@ -526,11 +379,16 @@ function generateStandardsHTML(data) {
             break;
     }
     
+    // Guardar resultado si se especificó output
+    if (result && outputFile) {
+        fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
+        console.log(`📄 Resultado guardado: ${outputFile}`);
+    }
+    
     console.log('\n✅ International Security Standards completado');
-})();
+}
 
-// ==================== MANEJO DE SEÑALES ====================
-process.on('SIGINT', () => {
-    console.log('\n🛑 Deteniendo International Security Standards...');
-    process.exit(0);
-});
+// Ejecutar
+if (require.main === module) {
+    main();
+}
