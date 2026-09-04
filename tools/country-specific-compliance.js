@@ -2,11 +2,11 @@
 
 /**
  * Country-Specific Compliance - MFH TOOLS PRO
- * Cumplimiento por país
+ * Cumplimiento específico por país
  * 
  * Uso: node country-specific-compliance.js [opciones]
- * Ejemplo: node country-specific-compliance.js --check --country ES
- * Ejemplo: node country-specific-compliance.js --compare --countries ES,US
+ * Ejemplo: node country-specific-compliance.js --check --country Mexico
+ * Ejemplo: node country-specific-compliance.js --compare --countries Mexico,Brazil
  * Ejemplo: node country-specific-compliance.js --report --format html
  */
 
@@ -15,30 +15,28 @@ const path = require('path');
 const crypto = require('crypto');
 
 // ==================== CONFIGURACION ====================
-const CONFIG_FILE = path.join(__dirname, 'country_config.json');
-const COUNTRY_DIR = path.join(__dirname, 'country_data');
-const REPORTS_DIR = path.join(__dirname, 'country_reports');
+const CONFIG_FILE = path.join(__dirname, 'csc_config.json');
+const CSC_DIR = path.join(__dirname, 'csc_countries');
+const REPORTS_DIR = path.join(__dirname, 'csc_reports');
 
 const DEFAULT_CONFIG = {
     countries: {
-        'ES': { name: 'Spain', region: 'EU', framework: 'GDPR', requirements: ['DPO', 'DPIA', 'Data Breach Notification', 'Consent'] },
-        'US': { name: 'United States', region: 'NA', framework: 'CCPA', requirements: ['Opt-Out', 'Access', 'Deletion', 'Notice'] },
-        'UK': { name: 'United Kingdom', region: 'EU', framework: 'UK GDPR', requirements: ['DPO', 'DPIA', 'Data Breach Notification'] },
-        'CA': { name: 'Canada', region: 'NA', framework: 'PIPEDA', requirements: ['Consent', 'Access', 'Retention', 'Accountability'] },
-        'BR': { name: 'Brazil', region: 'SA', framework: 'LGPD', requirements: ['DPO', 'Consent', 'Data Breach Notification'] },
-        'SG': { name: 'Singapore', region: 'AS', framework: 'PDPA', requirements: ['Consent', 'Access', 'Retention', 'Data Transfer'] },
-        'AU': { name: 'Australia', region: 'OC', framework: 'Privacy Act', requirements: ['APP', 'Consent', 'Access', 'Security'] },
-        'JP': { name: 'Japan', region: 'AS', framework: 'APPI', requirements: ['Consent', 'Security', 'Data Transfer'] }
+        'Mexico': { regulation: 'LFPDPPP', year: 2010, status: 'active' },
+        'Brazil': { regulation: 'LGPD', year: 2020, status: 'active' },
+        'Colombia': { regulation: 'Ley 1581', year: 2012, status: 'active' },
+        'Argentina': { regulation: 'Ley 25.326', year: 2000, status: 'active' },
+        'Chile': { regulation: 'Ley 19.628', year: 1999, status: 'active' },
+        'Spain': { regulation: 'LOPDGDD', year: 2018, status: 'active' }
     },
-    common_requirements: ['Consent', 'Access', 'Security', 'Data Breach Notification']
+    status_levels: ['compliant', 'partial', 'in_progress', 'non_compliant']
 };
 
 // ==================== PARSEAR ARGUMENTOS ====================
 const args = process.argv.slice(2);
 
 let action = null;
-let countryCode = null;
-let compareCountries = null;
+let countryName = null;
+let countriesList = null;
 let format = 'json';
 let outputFile = null;
 let init = false;
@@ -49,14 +47,14 @@ for (let i = 0; i < args.length; i++) {
         case '--check':
             action = 'check';
             if (args[i + 1] && !args[i + 1].startsWith('--')) {
-                countryCode = args[i + 1];
+                countryName = args[i + 1];
                 i++;
             }
             break;
         case '--compare':
             action = 'compare';
             if (args[i + 1] && !args[i + 1].startsWith('--')) {
-                compareCountries = args[i + 1];
+                countriesList = args[i + 1];
                 i++;
             }
             break;
@@ -64,11 +62,11 @@ for (let i = 0; i < args.length; i++) {
             action = 'report';
             break;
         case '--country':
-            countryCode = args[i + 1];
+            countryName = args[i + 1];
             i++;
             break;
         case '--countries':
-            compareCountries = args[i + 1];
+            countriesList = args[i + 1];
             i++;
             break;
         case '--format':
@@ -90,19 +88,19 @@ for (let i = 0; i < args.length; i++) {
         case '-h':
             console.log(`
 🌍 Country-Specific Compliance - MFH TOOLS PRO
-===============================================
-Cumplimiento por país.
+==============================================
+Cumplimiento específico por país.
 
 Uso:
   node country-specific-compliance.js [opciones]
 
 Opciones:
   --init                    Crear configuracion por defecto
-  --check <pais>            Verificar requisitos por país
-  --compare <paises>        Comparar requisitos entre países
+  --check <pais>            Verificar cumplimiento en país
+  --compare <paises>        Comparar cumplimiento entre países
   --report                  Generar reporte de cumplimiento
-  --country <codigo>        Código del país (ES, US, UK, CA, BR, SG, AU, JP)
-  --countries <lista>       Lista de países a comparar (ES,US,BR)
+  --country <nombre>        Nombre del país
+  --countries <lista>       Lista de países separados por coma
   --format <formato>        Formato de salida (json, html)
   --output <archivo>        Guardar reporte
   --verbose, -v             Mostrar mas detalles
@@ -110,396 +108,271 @@ Opciones:
 
 Ejemplos:
   node country-specific-compliance.js --init
-  node country-specific-compliance.js --check --country ES
-  node country-specific-compliance.js --compare --countries ES,US,BR
+  node country-specific-compliance.js --check --country Mexico
+  node country-specific-compliance.js --compare --countries Mexico,Brazil
   node country-specific-compliance.js --report --format html
 `);
             process.exit(0);
+            break;
     }
 }
 
 // ==================== FUNCIONES ====================
-function loadConfig() {
-    try {
-        if (fs.existsSync(CONFIG_FILE)) {
-            return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
-        }
-    } catch (error) {
-        console.error('❌ Error cargando configuracion:', error.message);
-    }
-    return { ...DEFAULT_CONFIG };
-}
-
-function saveConfig(config) {
-    try {
-        fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
-    } catch (error) {
-        console.error('❌ Error guardando configuracion:', error.message);
-    }
-}
 
 function initConfig() {
-    if (!fs.existsSync(COUNTRY_DIR)) {
-        fs.mkdirSync(COUNTRY_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(REPORTS_DIR)) {
-        fs.mkdirSync(REPORTS_DIR, { recursive: true });
+    if (!fs.existsSync(CONFIG_FILE)) {
+        fs.writeFileSync(CONFIG_FILE, JSON.stringify(DEFAULT_CONFIG, null, 2));
+        console.log('✅ Configuracion por defecto creada.');
     }
     
-    const config = { ...DEFAULT_CONFIG };
-    saveConfig(config);
-    
-    console.log('✅ Configuracion por defecto creada.');
-    console.log(`📁 Datos de paises: ${COUNTRY_DIR}`);
-    console.log(`📁 Reportes: ${REPORTS_DIR}`);
+    const dirs = [CSC_DIR, REPORTS_DIR];
+    dirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+            console.log(`📁 ${path.basename(dir)}: ${dir}`);
+        }
+    });
 }
 
-function checkCountry(country) {
-    console.log(`🌍 Verificando requisitos para: ${country}`);
+function checkCountry(countryName) {
+    console.log(`🌍 Verificando cumplimiento en: ${countryName}`);
     
-    const config = loadConfig();
-    const countries = config.countries;
-    const common = config.common_requirements;
+    // Buscar datos del país
+    const countryFile = path.join(CSC_DIR, `${countryName.toLowerCase()}.json`);
+    let countryData = null;
     
-    if (!countries[country]) {
-        console.error(`❌ Pais "${country}" no encontrado. Opciones: ${Object.keys(countries).join(', ')}`);
-        return;
-    }
-    
-    const countryData = countries[country];
-    const requirements = countryData.requirements;
-    const commonReqs = common.filter(r => requirements.includes(r));
-    const uniqueReqs = requirements.filter(r => !common.includes(r));
-    
-    const compliance = {
-        country: country,
-        country_name: countryData.name,
-        region: countryData.region,
-        framework: countryData.framework,
-        timestamp: new Date().toISOString(),
-        requirements: {},
-        common_requirements: commonReqs,
-        unique_requirements: uniqueReqs,
-        overall_status: '',
-        recommendations: []
-    };
-    
-    // Evaluar cada requisito
-    for (const req of requirements) {
-        const status = ['compliant', 'partial', 'non_compliant'][Math.floor(Math.random() * 3)];
-        const score = Math.round((Math.random() * 40 + 60) * 10) / 10;
-        compliance.requirements[req] = {
-            status: status,
-            score: score,
-            evidence: status === 'compliant' ? 'Documentacion verificada' : 'Requiere revision'
+    if (fs.existsSync(countryFile)) {
+        countryData = JSON.parse(fs.readFileSync(countryFile, 'utf8'));
+    } else {
+        // Datos de ejemplo si no existe
+        countryData = {
+            country: countryName,
+            regulations: {
+                name: DEFAULT_CONFIG.countries[countryName]?.regulation || `${countryName} Data Protection Law`,
+                year: DEFAULT_CONFIG.countries[countryName]?.year || 2020,
+                requirements: [
+                    { id: `${countryName.substring(0,3).toUpperCase()}-001`, name: 'Privacy Notice', status: 'partial' },
+                    { id: `${countryName.substring(0,3).toUpperCase()}-002`, name: 'Data Processing Consent', status: 'in_progress' },
+                    { id: `${countryName.substring(0,3).toUpperCase()}-003`, name: 'Data Subject Rights', status: 'compliant' }
+                ]
+            }
         };
     }
     
-    // Calcular compliance
-    const compliantCount = Object.values(compliance.requirements).filter(r => r.status === 'compliant').length;
-    const rate = Math.round((compliantCount / requirements.length) * 100);
-    compliance.overall_status = rate >= 80 ? 'compliant' : rate >= 60 ? 'partial' : 'non_compliant';
+    // Calcular estadísticas
+    const total = countryData.regulations.requirements.length;
+    const compliant = countryData.regulations.requirements.filter(r => r.status === 'compliant').length;
+    const partial = countryData.regulations.requirements.filter(r => r.status === 'partial').length;
+    const inProgress = countryData.regulations.requirements.filter(r => r.status === 'in_progress').length;
+    const nonCompliant = countryData.regulations.requirements.filter(r => r.status === 'non_compliant').length;
     
-    // Recomendaciones
-    const recs = [
-        `Revisar requisitos especificos de ${countryData.framework}`,
-        'Documentar medidas de cumplimiento',
-        'Realizar auditoria interna',
-        'Actualizar politicas de privacidad'
-    ];
-    compliance.recommendations = recs.slice(0, 2 + Math.floor(Math.random() * 2));
+    const result = {
+        country: countryName,
+        regulation: countryData.regulations.name,
+        year: countryData.regulations.year,
+        status: calculateOverallStatus(compliant, total),
+        statistics: {
+            total,
+            compliant,
+            partial,
+            in_progress: inProgress,
+            non_compliant: nonCompliant,
+            compliance_rate: Math.round((compliant / total) * 100)
+        },
+        requirements: countryData.regulations.requirements,
+        timestamp: new Date().toISOString()
+    };
     
-    console.log(`\n📊 Resultados para ${countryData.name}:`);
-    console.log(`   Framework: ${compliance.framework}`);
-    console.log(`   Region: ${compliance.region}`);
-    console.log(`   Estado general: ${compliance.overall_status}`);
-    console.log(`   Requisitos comunes: ${compliance.common_requirements.length}`);
-    console.log(`   Requisitos unicos: ${compliance.unique_requirements.length}`);
-    
-    console.log(`\n📋 Requisitos:`);
-    for (const [req, data] of Object.entries(compliance.requirements)) {
-        const icon = data.status === 'compliant' ? '✅' : data.status === 'partial' ? '⚠️' : '❌';
-        console.log(`   ${icon} ${req}: ${data.score}% (${data.status})`);
-    }
-    
-    if (compliance.recommendations.length > 0) {
-        console.log(`\n💡 Recomendaciones:`);
-        compliance.recommendations.forEach(r => console.log(`   • ${r}`));
-    }
-    
-    const outputPath = outputFile || path.join(COUNTRY_DIR, `country_${country}_${Date.now()}.json`);
-    fs.writeFileSync(outputPath, JSON.stringify(compliance, null, 2));
-    console.log(`\n📄 Verificacion guardada: ${outputPath}`);
-    
-    return compliance;
+    return result;
 }
 
-function compareCountries(countries) {
-    console.log(`🌍 Comparando requisitos entre paises: ${countries}`);
+function calculateOverallStatus(compliant, total) {
+    const rate = compliant / total;
+    if (rate === 1) return 'compliant';
+    if (rate >= 0.7) return 'partial';
+    if (rate >= 0.4) return 'in_progress';
+    return 'non_compliant';
+}
+
+function compareCountries(countriesStr) {
+    const countryList = countriesStr.split(',').map(c => c.trim());
+    console.log(`📊 Comparando países: ${countryList.join(', ')}`);
     
-    const config = loadConfig();
-    const countryList = countries ? countries.split(',') : ['ES', 'US', 'BR'];
-    const allCountries = config.countries;
+    const results = [];
+    for (const country of countryList) {
+        const result = checkCountry(country);
+        results.push(result);
+    }
+    
+    // Calcular estadísticas globales
+    const totalCountries = results.length;
+    const compliant = results.filter(r => r.status === 'compliant').length;
+    const partial = results.filter(r => r.status === 'partial').length;
+    const inProgress = results.filter(r => r.status === 'in_progress').length;
+    const nonCompliant = results.filter(r => r.status === 'non_compliant').length;
     
     const comparison = {
-        countries: [],
-        timestamp: new Date().toISOString(),
-        common_requirements: [],
-        differences: [],
-        summary: {}
+        countries: results,
+        summary: {
+            total_countries: totalCountries,
+            compliant,
+            partial,
+            in_progress: inProgress,
+            non_compliant: nonCompliant,
+            average_compliance: Math.round(results.reduce((acc, r) => acc + r.statistics.compliance_rate, 0) / totalCountries)
+        },
+        timestamp: new Date().toISOString()
     };
-    
-    // Recolectar datos de cada pais
-    const allReqs = new Set();
-    const countryData = [];
-    
-    for (const code of countryList) {
-        if (!allCountries[code]) {
-            console.warn(`⚠️ Pais "${code}" no encontrado. Opciones: ${Object.keys(allCountries).join(', ')}`);
-            continue;
-        }
-        
-        const data = allCountries[code];
-        const reqStatus = {};
-        for (const req of data.requirements) {
-            reqStatus[req] = Math.random() > 0.3;
-            allReqs.add(req);
-        }
-        
-        countryData.push({
-            code: code,
-            name: data.name,
-            framework: data.framework,
-            requirements: reqStatus,
-            compliance_rate: Math.round((Object.values(reqStatus).filter(v => v).length / data.requirements.length) * 100)
-        });
-        
-        comparison.countries.push(code);
-    }
-    
-    // Identificar requisitos comunes
-    const reqArray = Array.from(allReqs);
-    for (const req of reqArray) {
-        const presentInAll = countryData.every(c => c.requirements[req] !== undefined);
-        if (presentInAll) {
-            comparison.common_requirements.push(req);
-        }
-    }
-    
-    // Identificar diferencias
-    for (const c1 of countryData) {
-        for (const c2 of countryData) {
-            if (c1.code < c2.code) {
-                const reqs1 = Object.keys(c1.requirements);
-                const reqs2 = Object.keys(c2.requirements);
-                const onlyIn1 = reqs1.filter(r => !reqs2.includes(r));
-                const onlyIn2 = reqs2.filter(r => !reqs1.includes(r));
-                if (onlyIn1.length > 0 || onlyIn2.length > 0) {
-                    comparison.differences.push({
-                        country1: c1.code,
-                        country2: c2.code,
-                        only_in_country1: onlyIn1,
-                        only_in_country2: onlyIn2
-                    });
-                }
-            }
-        }
-    }
-    
-    // Resumen
-    comparison.summary = {
-        total_countries: countryData.length,
-        average_compliance: Math.round(countryData.reduce((acc, c) => acc + c.compliance_rate, 0) / countryData.length),
-        common_requirements_count: comparison.common_requirements.length
-    };
-    
-    console.log(`\n📊 Resultados de comparacion:`);
-    console.log(`   Paises analizados: ${comparison.summary.total_countries}`);
-    console.log(`   Compliance promedio: ${comparison.summary.average_compliance}%`);
-    console.log(`   Requisitos comunes: ${comparison.summary.common_requirements_count}`);
-    
-    console.log(`\n📋 Detalle por pais:`);
-    for (const c of countryData) {
-        console.log(`   ${c.code} (${c.framework}): ${c.compliance_rate}%`);
-    }
-    
-    console.log(`\n📋 Requisitos comunes:`);
-    comparison.common_requirements.forEach(r => console.log(`   • ${r}`));
-    
-    if (comparison.differences.length > 0) {
-        console.log(`\n📋 Diferencias detectadas:`);
-        for (const diff of comparison.differences) {
-            if (diff.only_in_country1.length > 0) {
-                console.log(`   • Solo en ${diff.country1}: ${diff.only_in_country1.join(', ')}`);
-            }
-            if (diff.only_in_country2.length > 0) {
-                console.log(`   • Solo en ${diff.country2}: ${diff.only_in_country2.join(', ')}`);
-            }
-        }
-    }
-    
-    const outputPath = outputFile || path.join(COUNTRY_DIR, `compare_${Date.now()}.json`);
-    fs.writeFileSync(outputPath, JSON.stringify(comparison, null, 2));
-    console.log(`\n📄 Comparacion guardada: ${outputPath}`);
     
     return comparison;
 }
 
-function generateReport(format) {
-    console.log(`📊 Generando reporte de cumplimiento por pais en formato ${format}`);
+function generateReport(inputData, format) {
+    console.log(`📝 Generando reporte en formato ${format}`);
     
-    const files = fs.readdirSync(COUNTRY_DIR).filter(f => f.startsWith('country_') || f.startsWith('compare_'));
+    let report = {
+        timestamp: new Date().toISOString(),
+        data: inputData
+    };
     
-    if (files.length === 0) {
-        console.log('ℹ️ No hay datos disponibles. Ejecuta --check o --compare primero.');
-        return;
+    if (format === 'html') {
+        const html = generateHTMLReport(report);
+        const outputPath = path.join(REPORTS_DIR, `csc_report_${Date.now()}.html`);
+        fs.writeFileSync(outputPath, html);
+        console.log(`📄 Reporte guardado: ${outputPath}`);
+        return outputPath;
+    } else {
+        const outputPath = path.join(REPORTS_DIR, `csc_report_${Date.now()}.json`);
+        fs.writeFileSync(outputPath, JSON.stringify(report, null, 2));
+        console.log(`📄 Reporte guardado: ${outputPath}`);
+        return outputPath;
     }
-    
-    const data = [];
-    for (const file of files) {
-        try {
-            const d = JSON.parse(fs.readFileSync(path.join(COUNTRY_DIR, file), 'utf8'));
-            data.push(d);
-        } catch (e) {}
-    }
-    
-    let content = '';
-    let ext = '';
-    
-    switch (format) {
-        case 'html':
-            content = generateCountryHTML(data);
-            ext = '.html';
-            break;
-        default:
-            content = JSON.stringify({ data, timestamp: new Date().toISOString() }, null, 2);
-            ext = '.json';
-    }
-    
-    const outputPath = outputFile || path.join(REPORTS_DIR, `country_report_${Date.now()}${ext}`);
-    fs.writeFileSync(outputPath, content);
-    console.log(`\n📄 Reporte guardado: ${outputPath}`);
-    
-    return data;
 }
 
-function generateCountryHTML(data) {
+function generateHTMLReport(report) {
+    const data = report.data;
+    let content = '';
+    
+    if (data.countries) {
+        // Comparación de países
+        content = `
+            <h2>📊 Comparación de Países</h2>
+            <p>Total de países: ${data.summary.total_countries}</p>
+            <ul>
+                <li>Compliant: ${data.summary.compliant}</li>
+                <li>Partial: ${data.summary.partial}</li>
+                <li>In Progress: ${data.summary.in_progress}</li>
+                <li>Non-Compliant: ${data.summary.non_compliant}</li>
+            </ul>
+            <p>Average Compliance: ${data.summary.average_compliance}%</p>
+            <h3>Detalles por país:</h3>
+            ${data.countries.map(c => `
+                <div style="background: #141e2b; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                    <h4>${c.country} - ${c.regulation}</h4>
+                    <p>Status: ${c.status}</p>
+                    <p>Compliance Rate: ${c.statistics.compliance_rate}%</p>
+                </div>
+            `).join('')}
+        `;
+    } else if (data.country) {
+        // País individual
+        content = `
+            <h2>📍 ${data.country}</h2>
+            <p><strong>Regulación:</strong> ${data.regulation}</p>
+            <p><strong>Año:</strong> ${data.year}</p>
+            <p><strong>Status:</strong> ${data.status}</p>
+            <p><strong>Tasa de cumplimiento:</strong> ${data.statistics.compliance_rate}%</p>
+            <h3>Requisitos:</h3>
+            ${data.requirements.map(r => `
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid #1a2a3a;">
+                    <span>${r.name}</span>
+                    <span>${r.status}</span>
+                </div>
+            `).join('')}
+        `;
+    }
+    
     return `<!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌍 Country-Specific Compliance Report</title>
+    <title>Country-Specific Compliance Report</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            padding: 40px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #1a1a1a;
-            border-radius: 12px;
-            border: 1px solid #00ff00;
-            padding: 40px;
-        }
-        h1 { color: #00ff00; border-bottom: 2px solid #00ff00; padding-bottom: 15px; margin-bottom: 20px; }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .stat {
-            background: #0a0a0a;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            text-align: center;
-        }
-        .stat .number { font-size: 2rem; font-weight: bold; }
-        .stat .label { color: #888; font-size: 0.8rem; }
-        .compliant { color: #00ff00; }
-        .partial { color: #ffc107; }
-        .non_compliant { color: #dc3545; }
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-            text-align: center;
-            color: #666;
-            font-size: 0.8rem;
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0e1a; color: #e0e0e0; padding: 20px; }
+        .header { background: linear-gradient(135deg, #1a2332, #0d1520); padding: 20px; border-radius: 10px; margin-bottom: 20px; border-bottom: 3px solid #00d4ff; }
+        .header h1 { color: #00d4ff; }
+        .section { background: #141e2b; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #1a2a3a; }
+        .footer { text-align: center; color: #667788; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <h1>🌍 Country-Specific Compliance Report</h1>
-        <p><strong>Fecha:</strong> ${new Date().toISOString()}</p>
-        <p><strong>Registros:</strong> ${data.length}</p>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="number">${data.length}</div>
-                <div class="label">📋 Registros</div>
-            </div>
-        </div>
-        
-        <h2>📋 Paises Analizados</h2>
-        ${data.map(d => {
-            if (d.country && d.country_name) {
-                return `
-                    <div style="border:1px solid #333;padding:15px;margin:10px 0;border-radius:8px;">
-                        <h3 style="color:#00ff00;">${d.country} - ${d.country_name}</h3>
-                        <p class="${d.overall_status}">Estado: ${d.overall_status}</p>
-                        <p>Framework: ${d.framework} | Region: ${d.region}</p>
-                        <p>Requisitos: ${Object.keys(d.requirements).length}</p>
-                    </div>
-                `;
-            }
-            return '';
-        }).join('')}
-        
-        <div class="footer">
-            <p>Hecho en Mexico 🇲🇽 | MFH TOOLS PRO</p>
-        </div>
+        <p>${report.timestamp}</p>
+    </div>
+    <div class="section">
+        ${content}
+    </div>
+    <div class="footer">
+        🚀 Country Compliance v1.0
     </div>
 </body>
 </html>`;
 }
 
 // ==================== MAIN ====================
-(async function main() {
-    console.log(`🌍 Country-Specific Compliance - MFH TOOLS PRO`);
-    console.log('='.repeat(50));
-    
+
+function main() {
+    // Inicializar
     if (init) {
         initConfig();
-        process.exit(0);
+        console.log('✅ Inicializacion completada.');
+        return;
     }
     
-    if (!fs.existsSync(REPORTS_DIR)) {
-        fs.mkdirSync(REPORTS_DIR, { recursive: true });
+    // Verificar configuracion
+    if (!fs.existsSync(CONFIG_FILE)) {
+        initConfig();
     }
     
+    let result = null;
+    let inputData = null;
+    
+    // Ejecutar accion
     switch (action) {
         case 'check':
-            if (!countryCode) {
-                console.error('❌ Debes especificar --country');
-                process.exit(1);
+            if (!countryName) {
+                console.log('❌ Debes especificar --country');
+                return;
             }
-            checkCountry(countryCode);
+            result = checkCountry(countryName);
+            inputData = result;
+            console.log(`✅ Cumplimiento verificado para ${countryName}`);
+            console.log(`   Status: ${result.status}`);
+            console.log(`   Compliance Rate: ${result.statistics.compliance_rate}%`);
             break;
             
         case 'compare':
-            compareCountries(compareCountries);
+            if (!countriesList) {
+                console.log('❌ Debes especificar --countries');
+                return;
+            }
+            result = compareCountries(countriesList);
+            inputData = result;
+            console.log(`✅ Comparación completada`);
+            console.log(`   Average Compliance: ${result.summary.average_compliance}%`);
             break;
             
         case 'report':
-            generateReport(format);
+            // Buscar archivos de datos para reporte
+            const files = fs.readdirSync(CSC_DIR).filter(f => f.endsWith('.json'));
+            if (files.length === 0) {
+                console.log('ℹ️ No hay datos disponibles para generar reporte.');
+                console.log('💡 Ejecuta --check o --compare primero.');
+                return;
+            }
+            // Usar el primer archivo como ejemplo
+            const data = JSON.parse(fs.readFileSync(path.join(CSC_DIR, files[0]), 'utf8'));
+            result = generateReport(data, format);
             break;
             
         default:
@@ -508,11 +381,16 @@ function generateCountryHTML(data) {
             break;
     }
     
+    // Guardar resultado si se especificó output
+    if (result && outputFile) {
+        fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
+        console.log(`📄 Resultado guardado: ${outputFile}`);
+    }
+    
     console.log('\n✅ Country-Specific Compliance completado');
-})();
+}
 
-// ==================== MANEJO DE SEÑALES ====================
-process.on('SIGINT', () => {
-    console.log('\n🛑 Deteniendo Country-Specific Compliance...');
-    process.exit(0);
-});
+// Ejecutar
+if (require.main === module) {
+    main();
+}
