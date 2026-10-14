@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Fase 1: Reconocimiento. Host Information, Identity Information, Network Information, DNS.">
+    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Fase 1: Reconocimiento. Fase 2: Web Scanning, Vulnerability Scanning, Web Vulnerability Scanning.">
     <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
     
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -87,6 +87,8 @@
             overflow-y: auto;
             font-size: 0.8rem;
             line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         .console-output::-webkit-scrollbar { width: 5px; }
         .console-output::-webkit-scrollbar-track { background: #1a1a1a; }
@@ -176,10 +178,34 @@
         }
         .tool-card { animation: fadeInUp 0.5s ease-out; }
         
+        .code-block {
+            background: #000;
+            color: #00ff00;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            border-left: 3px solid #00ff00;
+            margin: 6px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .section-divider {
+            text-align: center;
+            color: #00ff00;
+            font-weight: bold;
+            margin: 15px 0 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
         @media (max-width: 768px) {
             .navbar-brand { font-size: 1rem; }
             .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
             .btn-mfh { padding: 4px 10px; font-size: 0.75rem; }
+            .console-output { height: 180px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -216,20 +242,23 @@
                 
                 <div class="d-flex gap-2 flex-wrap mb-3">
                     <span class="badge-mfh"><i class="fas fa-search me-1"></i> Fase 1: Reconocimiento</span>
+                    <span class="badge-mfh"><i class="fas fa-globe me-1"></i> Fase 2: Scanning</span>
                     <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
-                    <span class="badge-mfh"><i class="fab fa-github me-1"></i> Open Source</span>
                     <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
                 </div>
                 <button class="btn-mfh" onclick="document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play me-2"></i>Usar Herramientas</button>
             </div>
             <div class="col-lg-4">
                 <div class="console-output" style="height: auto;">
-                    <span class="text-warning">$</span> mfh-tools --fase 1 --recon<br>
+                    <span class="text-warning">$</span> mfh-tools --fase 1,2<br>
                     <span class="text-info">[🔍]</span> Host Information<br>
                     <span class="text-info">[👤]</span> Identity Information<br>
                     <span class="text-info">[🌐]</span> Network Information<br>
                     <span class="text-info">[📡]</span> Network Information - DNS<br>
-                    <span class="text-success">✅ 4 herramientas cargadas</span>
+                    <span class="text-info">[🌐]</span> Web Scanning<br>
+                    <span class="text-info">[🛡️]</span> Vulnerability Scanning<br>
+                    <span class="text-info">[🔒]</span> Web Vulnerability Scanning<br>
+                    <span class="text-success">✅ 7 herramientas cargadas</span>
                 </div>
             </div>
         </div>
@@ -239,7 +268,7 @@
 <!-- ==================== GRID RECONOCIMIENTO ==================== -->
 <section id="recon" class="py-3">
     <div class="container">
-        <h2 class="text-center mb-3 glow-text"><i class="fas fa-search me-2"></i>Fase 1: Reconocimiento</h2>
+        <h2 class="text-center mb-3 glow-text"><i class="fas fa-search me-2"></i>Fase 1 y 2: Reconocimiento y Scanning</h2>
         <div class="row g-2">
             <div class="col-md-3 col-6">
                 <div class="tool-card p-3 text-center" onclick="showTool('host')">
@@ -269,6 +298,27 @@
                     <small class="text-muted">Info DNS</small>
                 </div>
             </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('webscan')">
+                    <i class="fas fa-globe tool-icon"></i>
+                    <div class="mt-2 fw-bold">🌐 Web Scanning</div>
+                    <small class="text-muted">DIRB, DirBuster, Gobuster</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('vulnscan')">
+                    <i class="fas fa-shield-alt tool-icon"></i>
+                    <div class="mt-2 fw-bold">🛡️ Vulnerability Scanning</div>
+                    <small class="text-muted">Nmap, Zenmap</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('webvuln')">
+                    <i class="fas fa-bug tool-icon"></i>
+                    <div class="mt-2 fw-bold">🔒 Web Vuln Scanning</div>
+                    <small class="text-muted">Nikto, ZAP</small>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -277,13 +327,16 @@
 <section id="herramientas" class="py-3">
     <div class="container">
         <div class="tool-card p-3">
-            <h4 class="text-center mb-2"><i class="fas fa-cogs me-2"></i>Panel de Reconocimiento</h4>
+            <h4 class="text-center mb-2"><i class="fas fa-cogs me-2"></i>Panel de Herramientas</h4>
             
             <ul class="nav nav-tabs justify-content-center mb-3 flex-wrap" id="mainTab" role="tablist">
-                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#hostTab"><i class="fas fa-server me-1"></i> Host Info</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#identityTab"><i class="fas fa-user-secret me-1"></i> Identity Info</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#networkTab"><i class="fas fa-network-wired me-1"></i> Network Info</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dnsTab"><i class="fas fa-globe me-1"></i> DNS Info</button></li>
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#hostTab"><i class="fas fa-server me-1"></i> Host</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#identityTab"><i class="fas fa-user-secret me-1"></i> Identity</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#networkTab"><i class="fas fa-network-wired me-1"></i> Network</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dnsTab"><i class="fas fa-globe me-1"></i> DNS</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#webscanTab"><i class="fas fa-globe me-1"></i> Web Scan</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#vulnscanTab"><i class="fas fa-shield-alt me-1"></i> Vuln Scan</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#webvulnTab"><i class="fas fa-bug me-1"></i> Web Vuln</button></li>
             </ul>
             
             <div class="tab-content">
@@ -359,6 +412,75 @@
                     </div>
                 </div>
                 
+                <!-- ====== WEB SCANNING ====== -->
+                <div class="tab-pane fade" id="webscanTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🌐 URL objetivo</label>
+                            <input type="text" class="form-control" id="webscanTarget" placeholder="https://ejemplo.com" value="https://example.com">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="webscanTool">
+                                <option value="all">Todas (DIRB + DirBuster + Gobuster)</option>
+                                <option value="dirb">DIRB</option>
+                                <option value="dirbuster">DirBuster</option>
+                                <option value="gobuster">Gobuster</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runWebScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-scanning.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="webscanResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== VULNERABILITY SCANNING ====== -->
+                <div class="tab-pane fade" id="vulnscanTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🎯 IP o Host</label>
+                            <input type="text" class="form-control" id="vulnscanTarget" placeholder="192.168.1.1" value="scanme.nmap.org">
+                            <label class="form-label mt-2">🔧 Tipo de escaneo</label>
+                            <select class="form-select" id="vulnscanType">
+                                <option value="all">Todos los comandos</option>
+                                <option value="basic">Básico (nmap -sT)</option>
+                                <option value="stealth">SYN Stealth (nmap -sS)</option>
+                                <option value="version">Versiones (nmap -sV -sC)</option>
+                                <option value="os">Detección SO (nmap -O)</option>
+                                <option value="vuln">Vulnerabilidades NSE (--script=vuln)</option>
+                                <option value="allports">Todos los puertos (-p-)</option>
+                                <option value="udp">UDP (--top-ports 100)</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runVulnScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="vulnscanResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== WEB VULNERABILITY SCANNING ====== -->
+                <div class="tab-pane fade" id="webvulnTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🌐 URL objetivo</label>
+                            <input type="text" class="form-control" id="webvulnTarget" placeholder="https://ejemplo.com" value="https://testphp.vulnweb.com">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="webvulnTool">
+                                <option value="all">Todas (Nikto + ZAP)</option>
+                                <option value="nikto">Nikto</option>
+                                <option value="zap">OWASP ZAP</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runWebVulnScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="webvulnResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -370,7 +492,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h6 class="text-success">MFH TOOLS</h6>
-                <p class="small">Herramientas de Ciberseguridad. Fase 1: Reconocimiento. Hecho con 🌮 en México.</p>
+                <p class="small">Herramientas de Ciberseguridad. Fases 1 y 2 completas. Hecho con 🌮 en México.</p>
             </div>
             <div class="col-md-4">
                 <h6 class="text-success">Enlaces</h6>
