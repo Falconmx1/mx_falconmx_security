@@ -7,21 +7,16 @@
     <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Fase 1: Reconocimiento. Host Information, Identity Information, Network Information, DNS.">
     <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
     
-    <!-- ===== FAVICON ===== -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
-    <meta name="theme-color" content="#ffffff">
     
-    <!-- ===== BOOTSTRAP Y FONTS ===== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
     <style>
-        /* ===== ESTILOS BASE (copiados del index) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
@@ -41,7 +36,6 @@
         body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
         body.light-mode .card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
         
-        /* ===== NAVBAR ===== */
         .navbar {
             background: rgba(0,0,0,0.95);
             backdrop-filter: blur(10px);
@@ -66,7 +60,6 @@
         .theme-toggle { cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; }
         .theme-toggle:hover { transform: rotate(180deg); }
         
-        /* ===== TOOL CARDS ===== */
         .tool-card {
             background: rgba(20,20,20,0.95);
             border: 1px solid rgba(0,255,0,0.15);
@@ -84,7 +77,6 @@
         .tool-icon { font-size: 1.8rem; color: #00ff00; transition: all 0.3s ease; }
         .tool-card:hover .tool-icon { transform: rotate(360deg) scale(1.1); }
         
-        /* ===== CONSOLA ===== */
         .console-output {
             background: #0a0a0a;
             border: 2px solid #00ff00;
@@ -100,7 +92,6 @@
         .console-output::-webkit-scrollbar-track { background: #1a1a1a; }
         .console-output::-webkit-scrollbar-thumb { background: #00ff00; border-radius: 3px; }
         
-        /* ===== BOTONES ===== */
         .btn-mfh {
             background: linear-gradient(135deg, #00ff00, #00cc00);
             border: none;
@@ -124,7 +115,6 @@
         .btn-outline-mfh:hover { background: #00ff00; color: #000; }
         .btn-outline-mfh:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        /* ===== BADGES ===== */
         .badge-mfh {
             background: rgba(0,255,0,0.15);
             color: #00ff00;
@@ -134,7 +124,6 @@
             font-size: 0.7rem;
         }
         
-        /* ===== TABS ===== */
         .nav-tabs { border-bottom: none; gap: 3px; flex-wrap: wrap; }
         .nav-tabs .nav-link {
             color: #e0e0e0;
@@ -153,7 +142,6 @@
         body.light-mode .nav-tabs .nav-link { color: #333; }
         body.light-mode .nav-tabs .nav-link.active { color: #00aa00; background: rgba(0,170,0,0.1); }
         
-        /* ===== FORMULARIOS ===== */
         .form-control, .form-select {
             background: #0a0a0a;
             border: 1px solid rgba(0,255,0,0.3);
@@ -172,12 +160,10 @@
             border-color: #ccc;
         }
         
-        /* ===== FOOTER ===== */
         footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.2); padding: 20px 0 15px; margin-top: 30px; }
         footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease; }
         footer a:hover { color: #00ff00; }
         
-        /* ===== ANIMACIONES ===== */
         @keyframes glow {
             0%,100% { text-shadow: 0 0 5px rgba(0,255,0,0.5); }
             50% { text-shadow: 0 0 15px rgba(0,255,0,0.8); }
@@ -190,7 +176,6 @@
         }
         .tool-card { animation: fadeInUp 0.5s ease-out; }
         
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .navbar-brand { font-size: 1rem; }
             .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
@@ -413,6 +398,7 @@
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script-tools.js"></script>
 </body>
 </html>
