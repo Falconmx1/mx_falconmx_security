@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Fase 1: Reconocimiento. Fase 2: Web Scanning, Vulnerability Scanning, Web Vulnerability Scanning.">
+    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento, Web Scanning, Vulnerability Scanning.">
     <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
     
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -34,7 +34,6 @@
         body.light-mode .badge-mfh { background: rgba(0,170,0,0.1); color: #008800; }
         body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
         body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
-        body.light-mode .card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
         
         .navbar {
             background: rgba(0,0,0,0.95);
@@ -83,7 +82,7 @@
             border-radius: 10px;
             font-family: 'Courier New', monospace;
             padding: 12px;
-            height: 220px;
+            height: 280px;
             overflow-y: auto;
             font-size: 0.8rem;
             line-height: 1.6;
@@ -104,7 +103,6 @@
             transition: all 0.3s ease;
         }
         .btn-mfh:hover { transform: scale(1.02); box-shadow: 0 0 12px rgba(0,255,0,0.4); }
-        .btn-mfh:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-outline-mfh {
             background: transparent;
             border: 2px solid #00ff00;
@@ -115,7 +113,6 @@
             transition: all 0.3s ease;
         }
         .btn-outline-mfh:hover { background: #00ff00; color: #000; }
-        .btn-outline-mfh:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .badge-mfh {
             background: rgba(0,255,0,0.15);
@@ -178,34 +175,11 @@
         }
         .tool-card { animation: fadeInUp 0.5s ease-out; }
         
-        .code-block {
-            background: #000;
-            color: #00ff00;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.78rem;
-            border-left: 3px solid #00ff00;
-            margin: 6px 0;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        
-        .section-divider {
-            text-align: center;
-            color: #00ff00;
-            font-weight: bold;
-            margin: 15px 0 10px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
         @media (max-width: 768px) {
             .navbar-brand { font-size: 1rem; }
             .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
             .btn-mfh { padding: 4px 10px; font-size: 0.75rem; }
-            .console-output { height: 180px; font-size: 0.7rem; }
+            .console-output { height: 220px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -218,16 +192,6 @@
         <div class="ms-auto d-flex align-items-center gap-2">
             <a href="index.html" class="btn btn-sm btn-outline-mfh"><i class="fas fa-arrow-left me-1"></i>Volver</a>
             <i class="fas fa-sun theme-toggle" id="themeToggle"></i>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="#recon">Reconocimiento</a></li>
-                <li class="nav-item"><a class="nav-link" href="#herramientas">Herramientas</a></li>
-            </ul>
         </div>
     </div>
 </nav>
@@ -235,41 +199,24 @@
 <!-- ==================== HERO ==================== -->
 <section id="inicio" class="pt-5 mt-5">
     <div class="container pt-3">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS</h1>
-                <p class="lead text-success">Herramientas de Ciberseguridad</p>
-                
-                <div class="d-flex gap-2 flex-wrap mb-3">
-                    <span class="badge-mfh"><i class="fas fa-search me-1"></i> Fase 1: Reconocimiento</span>
-                    <span class="badge-mfh"><i class="fas fa-globe me-1"></i> Fase 2: Scanning</span>
-                    <span class="badge-mfh"><i class="fas fa-gem me-1"></i> 100% Gratis</span>
-                    <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
-                </div>
-                <button class="btn-mfh" onclick="document.getElementById('herramientas').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play me-2"></i>Usar Herramientas</button>
-            </div>
-            <div class="col-lg-4">
-                <div class="console-output" style="height: auto;">
-                    <span class="text-warning">$</span> mfh-tools --fase 1,2<br>
-                    <span class="text-info">[🔍]</span> Host Information<br>
-                    <span class="text-info">[👤]</span> Identity Information<br>
-                    <span class="text-info">[🌐]</span> Network Information<br>
-                    <span class="text-info">[📡]</span> Network Information - DNS<br>
-                    <span class="text-info">[🌐]</span> Web Scanning<br>
-                    <span class="text-info">[🛡️]</span> Vulnerability Scanning<br>
-                    <span class="text-info">[🔒]</span> Web Vulnerability Scanning<br>
-                    <span class="text-success">✅ 7 herramientas cargadas</span>
-                </div>
+        <div class="text-center">
+            <h1 class="display-4 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS</h1>
+            <p class="lead text-success">Herramientas de Ciberseguridad</p>
+            <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
+                <span class="badge-mfh"><i class="fas fa-search me-1"></i> Reconocimiento</span>
+                <span class="badge-mfh"><i class="fas fa-globe me-1"></i> Web Scanning</span>
+                <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> Vulnerability Scanning</span>
+                <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ==================== GRID RECONOCIMIENTO ==================== -->
+<!-- ==================== GRID HERRAMIENTAS ==================== -->
 <section id="recon" class="py-3">
     <div class="container">
-        <h2 class="text-center mb-3 glow-text"><i class="fas fa-search me-2"></i>Fase 1 y 2: Reconocimiento y Scanning</h2>
-        <div class="row g-2">
+        <h2 class="text-center mb-4 glow-text"><i class="fas fa-search me-2"></i>Reconocimiento</h2>
+        <div class="row g-3">
             <div class="col-md-3 col-6">
                 <div class="tool-card p-3 text-center" onclick="showTool('host')">
                     <i class="fas fa-server tool-icon"></i>
@@ -294,7 +241,7 @@
             <div class="col-md-3 col-6">
                 <div class="tool-card p-3 text-center" onclick="showTool('dns')">
                     <i class="fas fa-globe tool-icon"></i>
-                    <div class="mt-2 fw-bold">📡 Network Info - DNS</div>
+                    <div class="mt-2 fw-bold">📡 DNS Information</div>
                     <small class="text-muted">Info DNS</small>
                 </div>
             </div>
@@ -315,7 +262,7 @@
             <div class="col-md-3 col-6">
                 <div class="tool-card p-3 text-center" onclick="showTool('webvuln')">
                     <i class="fas fa-bug tool-icon"></i>
-                    <div class="mt-2 fw-bold">🔒 Web Vuln Scanning</div>
+                    <div class="mt-2 fw-bold">🔒 Web Vulnerability</div>
                     <small class="text-muted">Nikto, ZAP</small>
                 </div>
             </div>
@@ -327,7 +274,7 @@
 <section id="herramientas" class="py-3">
     <div class="container">
         <div class="tool-card p-3">
-            <h4 class="text-center mb-2"><i class="fas fa-cogs me-2"></i>Panel de Herramientas</h4>
+            <h4 class="text-center mb-3"><i class="fas fa-cogs me-2"></i>Panel de Herramientas</h4>
             
             <ul class="nav nav-tabs justify-content-center mb-3 flex-wrap" id="mainTab" role="tablist">
                 <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#hostTab"><i class="fas fa-server me-1"></i> Host</button></li>
@@ -341,13 +288,13 @@
             
             <div class="tab-content">
                 
-                <!-- ====== HOST INFORMATION ====== -->
+                <!-- ====== HOST ====== -->
                 <div class="tab-pane fade show active" id="hostTab">
                     <div class="row">
                         <div class="col-md-6">
                             <label class="form-label">🎯 Dominio o IP</label>
                             <input type="text" class="form-control" id="hostTarget" placeholder="ejemplo.com o 8.8.8.8" value="google.com">
-                            <button class="btn-mfh mt-2 w-100" onclick="runHostInfo()"><i class="fas fa-play me-2"></i>Obtener Información</button>
+                            <button class="btn-mfh mt-2 w-100" onclick="runHostInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
                             <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('host-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
                         </div>
                         <div class="col-md-6">
@@ -356,13 +303,13 @@
                     </div>
                 </div>
                 
-                <!-- ====== IDENTITY INFORMATION ====== -->
+                <!-- ====== IDENTITY ====== -->
                 <div class="tab-pane fade" id="identityTab">
                     <div class="row">
                         <div class="col-md-6">
                             <label class="form-label">👤 Email o Usuario</label>
                             <input type="text" class="form-control" id="identityTarget" placeholder="usuario@dominio.com" value="test@example.com">
-                            <button class="btn-mfh mt-2 w-100" onclick="runIdentityInfo()"><i class="fas fa-play me-2"></i>Obtener Información</button>
+                            <button class="btn-mfh mt-2 w-100" onclick="runIdentityInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
                             <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('identity-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
                         </div>
                         <div class="col-md-6">
@@ -371,13 +318,13 @@
                     </div>
                 </div>
                 
-                <!-- ====== NETWORK INFORMATION ====== -->
+                <!-- ====== NETWORK ====== -->
                 <div class="tab-pane fade" id="networkTab">
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="form-label">🌐 IP o Rango</label>
+                            <label class="form-label">🌐 IP o Rango CIDR</label>
                             <input type="text" class="form-control" id="networkTarget" placeholder="192.168.1.1" value="8.8.8.8">
-                            <button class="btn-mfh mt-2 w-100" onclick="runNetworkInfo()"><i class="fas fa-play me-2"></i>Obtener Información</button>
+                            <button class="btn-mfh mt-2 w-100" onclick="runNetworkInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
                             <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('network-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
                         </div>
                         <div class="col-md-6">
@@ -386,7 +333,7 @@
                     </div>
                 </div>
                 
-                <!-- ====== DNS INFORMATION ====== -->
+                <!-- ====== DNS ====== -->
                 <div class="tab-pane fade" id="dnsTab">
                     <div class="row">
                         <div class="col-md-6">
@@ -403,7 +350,7 @@
                                 <option value="SOA">SOA</option>
                                 <option value="ALL">Todos</option>
                             </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runDnsInfo()"><i class="fas fa-play me-2"></i>Consultar DNS</button>
+                            <button class="btn-mfh mt-2 w-100" onclick="runDnsInfo()"><i class="fas fa-play me-2"></i>Consultar</button>
                             <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('dns-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
                         </div>
                         <div class="col-md-6">
@@ -420,7 +367,7 @@
                             <input type="text" class="form-control" id="webscanTarget" placeholder="https://ejemplo.com" value="https://example.com">
                             <label class="form-label mt-2">🔧 Herramienta</label>
                             <select class="form-select" id="webscanTool">
-                                <option value="all">Todas (DIRB + DirBuster + Gobuster)</option>
+                                <option value="all">Todas las herramientas</option>
                                 <option value="dirb">DIRB</option>
                                 <option value="dirbuster">DirBuster</option>
                                 <option value="gobuster">Gobuster</option>
@@ -447,9 +394,9 @@
                                 <option value="stealth">SYN Stealth (nmap -sS)</option>
                                 <option value="version">Versiones (nmap -sV -sC)</option>
                                 <option value="os">Detección SO (nmap -O)</option>
-                                <option value="vuln">Vulnerabilidades NSE (--script=vuln)</option>
-                                <option value="allports">Todos los puertos (-p-)</option>
-                                <option value="udp">UDP (--top-ports 100)</option>
+                                <option value="vuln">Vulnerabilidades NSE</option>
+                                <option value="allports">Todos los puertos</option>
+                                <option value="udp">UDP (top 100)</option>
                             </select>
                             <button class="btn-mfh mt-2 w-100" onclick="runVulnScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
                             <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
@@ -468,7 +415,7 @@
                             <input type="text" class="form-control" id="webvulnTarget" placeholder="https://ejemplo.com" value="https://testphp.vulnweb.com">
                             <label class="form-label mt-2">🔧 Herramienta</label>
                             <select class="form-select" id="webvulnTool">
-                                <option value="all">Todas (Nikto + ZAP)</option>
+                                <option value="all">Todas las herramientas</option>
                                 <option value="nikto">Nikto</option>
                                 <option value="zap">OWASP ZAP</option>
                             </select>
@@ -492,7 +439,7 @@
         <div class="row">
             <div class="col-md-4">
                 <h6 class="text-success">MFH TOOLS</h6>
-                <p class="small">Herramientas de Ciberseguridad. Fases 1 y 2 completas. Hecho con 🌮 en México.</p>
+                <p class="small">Herramientas de Ciberseguridad. Hecho con 🌮 en México.</p>
             </div>
             <div class="col-md-4">
                 <h6 class="text-success">Enlaces</h6>
@@ -504,7 +451,7 @@
                 </ul>
             </div>
             <div class="col-md-4">
-                <h6 class="text-success">Legal</h6>
+                <h6 class="text-success">Contacto</h6>
                 <ul class="list-unstyled small">
                     <li><a href="mailto:mfalconh1@gmail.com"><i class="fas fa-envelope me-1"></i> mfalconh1@gmail.com</a></li>
                 </ul>
