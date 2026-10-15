@@ -332,7 +332,7 @@
             <div class="category-header">
                 <span class="category-icon">🔐</span>
                 <h3>Acceso con Credenciales</h3>
-                <span class="category-count">6 herramientas</span>
+                <span class="category-count">9 herramientas</span>
             </div>
             <div class="row g-3">
                 <div class="col-md-3 col-6">
@@ -377,6 +377,27 @@
                         <small class="text-muted">SSH, Cloud, History</small>
                     </div>
                 </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('wificred')">
+                        <i class="fas fa-wifi tool-icon"></i>
+                        <div class="mt-2 fw-bold">📶 WiFi Credential Access</div>
+                        <small class="text-muted">Aircrack-ng, Wifiphisher</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('keylogger')">
+                        <i class="fas fa-keyboard tool-icon"></i>
+                        <div class="mt-2 fw-bold">⌨️ Keylogger</div>
+                        <small class="text-muted">xspy (X11)</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('voip')">
+                        <i class="fas fa-phone tool-icon"></i>
+                        <div class="mt-2 fw-bold">📞 VoIP Credential Access</div>
+                        <small class="text-muted">svcrack, enumiax</small>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -406,6 +427,9 @@
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#bruteforceTab"><i class="fas fa-hammer me-1"></i> Brute</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#passcrackTab"><i class="fas fa-key me-1"></i> Crack</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#unsecuredTab"><i class="fas fa-folder-open me-1"></i> Unsecured</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wificredTab"><i class="fas fa-wifi me-1"></i> WiFi Cred</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#keyloggerTab"><i class="fas fa-keyboard me-1"></i> Keylogger</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#voipTab"><i class="fas fa-phone me-1"></i> VoIP</button></li>
             </ul>
             
             <div class="tab-content">
@@ -791,6 +815,75 @@
                         </div>
                         <div class="col-md-6">
                             <div id="unsecuredResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== WIFI CREDENTIAL ACCESS ====== -->
+                <div class="tab-pane fade" id="wificredTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📶 BSSID o ESSID</label>
+                            <input type="text" class="form-control" id="wificredTarget" placeholder="AA:BB:CC:DD:EE:FF o MiWiFi" value="AA:BB:CC:DD:EE:FF">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="wificredTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="aircrack-ng">Aircrack-ng</option>
+                                <option value="wifi-honey">Wifi-honey</option>
+                                <option value="wifiphisher">Wifiphisher</option>
+                                <option value="wifite">Wifite</option>
+                                <option value="airgeddon">Airgeddon</option>
+                                <option value="bully">Bully</option>
+                                <option value="fern-wifi-cracker">Fern WiFi Cracker</option>
+                                <option value="eapmd5pass">eapmd5pass</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runWifiCredentialAccess()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('wifi-credential-access.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="wificredResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== KEYLOGGER ====== -->
+                <div class="tab-pane fade" id="keyloggerTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">⌨️ IP objetivo</label>
+                            <input type="text" class="form-control" id="keyloggerTarget" placeholder="192.168.1.100" value="192.168.1.100">
+                            <label class="form-label mt-2">🔌 Puerto X11</label>
+                            <input type="text" class="form-control" id="keyloggerPort" placeholder="6000" value="6000">
+                            <label class="form-label mt-2">⏱️ Timeout (segundos)</label>
+                            <input type="text" class="form-control" id="keyloggerTimeout" placeholder="600" value="600">
+                            <button class="btn-mfh mt-2 w-100" onclick="runKeylogger()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('keylogger.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="keyloggerResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== VoIP CREDENTIAL ACCESS ====== -->
+                <div class="tab-pane fade" id="voipTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📞 IP objetivo</label>
+                            <input type="text" class="form-control" id="voipTarget" placeholder="192.168.1.100" value="192.168.1.100">
+                            <label class="form-label mt-2">👤 Usuario (opcional)</label>
+                            <input type="text" class="form-control" id="voipUser" placeholder="100" value="100">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="voipTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="svcrack">SVCrack</option>
+                                <option value="enumiax">Enumiax</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runVoipCredentialAccess()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('voip-credential-access.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="voipResult" class="console-output">🔍 Esperando consulta...</div>
                         </div>
                     </div>
                 </div>
