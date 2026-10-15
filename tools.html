@@ -160,10 +160,7 @@
             border-color: #ccc;
         }
         
-        /* ====== CATEGORÍAS ====== */
-        .category-section {
-            margin-bottom: 40px;
-        }
+        .category-section { margin-bottom: 40px; }
         .category-header {
             background: rgba(0,255,0,0.08);
             border: 2px solid rgba(0,255,0,0.3);
@@ -180,10 +177,7 @@
             font-size: 1.5rem;
             font-weight: 700;
         }
-        .category-header .category-icon {
-            font-size: 2rem;
-            color: #00ff00;
-        }
+        .category-header .category-icon { font-size: 2rem; color: #00ff00; }
         .category-header .category-count {
             margin-left: auto;
             background: rgba(0,255,0,0.2);
@@ -338,7 +332,7 @@
             <div class="category-header">
                 <span class="category-icon">🔐</span>
                 <h3>Acceso con Credenciales</h3>
-                <span class="category-count">3 herramientas</span>
+                <span class="category-count">6 herramientas</span>
             </div>
             <div class="row g-3">
                 <div class="col-md-3 col-6">
@@ -360,6 +354,27 @@
                         <i class="fas fa-list tool-icon"></i>
                         <div class="mt-2 fw-bold">📝 Password Profiling</div>
                         <small class="text-muted">CeWL, Crunch, RSMangler</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('bruteforce')">
+                        <i class="fas fa-hammer tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔨 Brute Force</div>
+                        <small class="text-muted">Hydra, Medusa, NetExec</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('passcrack')">
+                        <i class="fas fa-key tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔓 Password Cracking</div>
+                        <small class="text-muted">Hashcat, John, fcrackzip</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('unsecured')">
+                        <i class="fas fa-folder-open tool-icon"></i>
+                        <div class="mt-2 fw-bold">📂 Unsecured Credentials</div>
+                        <small class="text-muted">SSH, Cloud, History</small>
                     </div>
                 </div>
             </div>
@@ -388,6 +403,9 @@
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#creddumpTab"><i class="fas fa-unlock-alt me-1"></i> Credential</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#hashidTab"><i class="fas fa-hashtag me-1"></i> Hash ID</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wordlistTab"><i class="fas fa-list me-1"></i> Wordlist</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#bruteforceTab"><i class="fas fa-hammer me-1"></i> Brute</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#passcrackTab"><i class="fas fa-key me-1"></i> Crack</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#unsecuredTab"><i class="fas fa-folder-open me-1"></i> Unsecured</button></li>
             </ul>
             
             <div class="tab-content">
@@ -676,6 +694,103 @@
                         </div>
                         <div class="col-md-6">
                             <div id="wordlistResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== BRUTE FORCE ====== -->
+                <div class="tab-pane fade" id="bruteforceTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🔨 Target (IP o host)</label>
+                            <input type="text" class="form-control" id="bruteforceTarget" placeholder="192.168.1.1" value="192.168.1.1">
+                            <label class="form-label mt-2">🌐 Servicio</label>
+                            <select class="form-select" id="bruteforceService">
+                                <option value="ssh">SSH</option>
+                                <option value="ftp">FTP</option>
+                                <option value="http">HTTP</option>
+                                <option value="rdp">RDP</option>
+                                <option value="smb">SMB</option>
+                                <option value="telnet">Telnet</option>
+                            </select>
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="bruteforceTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="hydra">Hydra</option>
+                                <option value="hydra-gtk">Hydra-GTK</option>
+                                <option value="medusa">Medusa</option>
+                                <option value="netexec">NetExec</option>
+                                <option value="ncrack">Ncrack</option>
+                                <option value="crowbar">Crowbar</option>
+                                <option value="cat">CAT</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runBruteForce()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('brute-force.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="bruteforceResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== PASSWORD CRACKING ====== -->
+                <div class="tab-pane fade" id="passcrackTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🔓 Hash o archivo</label>
+                            <input type="text" class="form-control" id="passcrackTarget" placeholder="hashes.txt o secret.zip" value="hashes.txt">
+                            <label class="form-label mt-2">📝 Tipo</label>
+                            <select class="form-select" id="passcrackType">
+                                <option value="md5">MD5</option>
+                                <option value="ntlm">NTLM</option>
+                                <option value="sha1">SHA1</option>
+                                <option value="sha256">SHA256</option>
+                                <option value="bcrypt">bcrypt</option>
+                                <option value="zip">ZIP</option>
+                                <option value="tc">TrueCrypt</option>
+                                <option value="ble">BLE Pairing</option>
+                            </select>
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="passcrackTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="hashcat">Hashcat</option>
+                                <option value="john">John the Ripper</option>
+                                <option value="fcrackzip">fcrackzip</option>
+                                <option value="cmospwd">cmospwd</option>
+                                <option value="crackle">Crackle</option>
+                                <option value="truecrack">Truecrack</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runPasswordCracking()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('password-cracking.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="passcrackResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== UNSECURED CREDENTIALS ====== -->
+                <div class="tab-pane fade" id="unsecuredTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📂 Directorio home</label>
+                            <input type="text" class="form-control" id="unsecuredTarget" placeholder="~/" value="~/">
+                            <label class="form-label mt-2">🔍 Categoría</label>
+                            <select class="form-select" id="unsecuredCategory">
+                                <option value="all">Todas las categorías</option>
+                                <option value="ssh">SSH Keys</option>
+                                <option value="cloud">Cloud Credentials</option>
+                                <option value="history">Shell History</option>
+                                <option value="browser">Browser Credentials</option>
+                                <option value="keyring">Keyring</option>
+                                <option value="git">Git Credentials</option>
+                                <option value="tokens">App Tokens</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runUnsecuredCredentials()"><i class="fas fa-play me-2"></i>Enumerar</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('unsecured-credentials.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="unsecuredResult" class="console-output">🔍 Esperando consulta...</div>
                         </div>
                     </div>
                 </div>
