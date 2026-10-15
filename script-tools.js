@@ -1,6 +1,7 @@
 /**
  * MFH TOOLS - Script del apartado Herramientas de Ciberseguridad
- * Reconocimiento + Web Scanning + Vulnerability Scanning
+ * Reconocimiento completo: Host, Identity, Network, DNS, Web Scanning,
+ * Vulnerability Scanning, Web Vulnerability, Bluetooth, Radio Frequency, WiFi
  */
 
 'use strict';
@@ -69,6 +70,10 @@ function isValidUrl(url) {
     return /^https?:\/\/[^\s]+$/i.test(url);
 }
 
+function isValidMAC(mac) {
+    return /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i.test(mac);
+}
+
 function normalizeUrl(url) {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
         return 'http://' + url;
@@ -78,6 +83,10 @@ function normalizeUrl(url) {
 
 function codeBlock(text) {
     return '<div style="background:#000;color:#0f0;padding:6px 10px;border-radius:5px;font-family:Courier New,monospace;font-size:0.75rem;border-left:3px solid #0f0;margin:4px 0;white-space:pre-wrap;word-break:break-all;">' + esc(text) + '</div>';
+}
+
+function divider() {
+    return '<div style="border-top:1px solid #0f0;opacity:0.3;margin:10px 0;"></div>';
 }
 
 // ============================================================
@@ -91,7 +100,10 @@ function showTool(tool) {
         dns: 'dnsTab',
         webscan: 'webscanTab',
         vulnscan: 'vulnscanTab',
-        webvuln: 'webvulnTab'
+        webvuln: 'webvulnTab',
+        bluetooth: 'bluetoothTab',
+        radio: 'radioTab',
+        wifi: 'wifiTab'
     };
     var tabId = tabMap[tool];
     if (!tabId) return;
@@ -113,7 +125,10 @@ var AVAILABLE_TOOLS = [
     'dns-information.js',
     'web-scanning.js',
     'vulnerability-scanning.js',
-    'web-vulnerability-scanning.js'
+    'web-vulnerability-scanning.js',
+    'bluetooth-scanning.js',
+    'radio-frequency-scanning.js',
+    'wifi-scanning.js'
 ];
 
 function downloadTool(filename) {
@@ -562,6 +577,306 @@ function runWebVulnScanning() {
 }
 
 // ============================================================
+// BLUETOOTH SCANNING
+// ============================================================
+function runBluetoothScanning() {
+    var target = ($('bluetoothTarget') ? $('bluetoothTarget').value : '').trim() || 'all';
+    var tool = ($('bluetoothTool') ? $('bluetoothTool').value : 'all');
+
+    if (target !== 'all' && !isValidMAC(target)) {
+        setOutput('bluetoothResult', '❌ MAC inválida. Formato: AA:BB:CC:DD:EE:FF');
+        return;
+    }
+
+    setOutput('bluetoothResult', '🔍 Generando comandos Bluetooth...');
+
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📶 BLUETOOTH SCANNING COMMANDS');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Fecha: ' + now());
+        lines.push('═'.repeat(50));
+        lines.push('');
+
+        var allTools = {
+            bettercap: {
+                name: 'Bettercap',
+                install: 'sudo apt install bettercap',
+                cmds: [
+                    'sudo bettercap -iface hci0',
+                    'ble.recon on',
+                    'ble.show',
+                    'ble.enum ' + target
+                ]
+            },
+            bluetoothctl: {
+                name: 'bluetoothctl',
+                install: 'sudo apt install bluez bluez-tools',
+                cmds: [
+                    'bluetoothctl',
+                    'scan on',
+                    'devices',
+                    'info ' + target
+                ]
+            },
+            hcitool: {
+                name: 'hcitool',
+                install: 'sudo apt install bluez',
+                cmds: [
+                    'sudo hcitool dev',
+                    'sudo hcitool scan',
+                    'sudo hcitool lescan',
+                    'sudo hcitool name ' + target
+                ]
+            },
+            btmon: {
+                name: 'btmon',
+                install: 'sudo apt install bluez',
+                cmds: [
+                    'sudo btmon',
+                    'sudo btmon -w capture.log'
+                ]
+            },
+            bluelog: {
+                name: 'Bluelog',
+                install: 'sudo apt install bluelog',
+                cmds: [
+                    'sudo bluelog -i hci0 -o scan.log -v'
+                ]
+            }
+        };
+
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.name);
+            lines.push('   Instalar: ' + t.install);
+            lines.push('   Comandos:');
+            t.cmds.forEach(function(c) {
+                lines.push(codeBlock(c));
+            });
+            lines.push('');
+        });
+
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo escanea dispositivos con autorización');
+
+        setOutput('bluetoothResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// RADIO FREQUENCY SCANNING
+// ============================================================
+function runRadioScanning() {
+    var freq = ($('radioFreq') ? $('radioFreq').value : '').trim() || '100000000';
+    var tool = ($('radioTool') ? $('radioTool').value : 'all');
+
+    setOutput('radioResult', '🔍 Generando comandos SDR...');
+
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📻 RADIO FREQUENCY COMMANDS');
+        lines.push('  Frecuencia: ' + esc(freq) + ' Hz');
+        lines.push('  Fecha: ' + now());
+        lines.push('═'.repeat(50));
+        lines.push('');
+
+        var allTools = {
+            hackrf: {
+                name: 'HackRF One',
+                install: 'sudo apt install hackrf',
+                cmds: [
+                    'hackrf_info',
+                    'hackrf_transfer -r capture.iq -f ' + freq + ' -s 2000000',
+                    'hackrf_sweep -f 88:108'
+                ]
+            },
+            gnurdio: {
+                name: 'GNU Radio',
+                install: 'sudo apt install gnuradio',
+                cmds: [
+                    'gnuradio-companion',
+                    'gnuradio-config-info'
+                ]
+            },
+            rtlsdr: {
+                name: 'RTL-SDR',
+                install: 'sudo apt install rtl-sdr',
+                cmds: [
+                    'rtl_test',
+                    'rtl_sdr -f ' + freq + ' -s 2000000 out.iq',
+                    'rtl_fm -f ' + freq + ' -M fm -s 200000 -r 48000 - | aplay -f S16_LE',
+                    'rtl_power -f 88M:108M:100k -i 1 scan.csv'
+                ]
+            },
+            gqrx: {
+                name: 'GQRX',
+                install: 'sudo apt install gqrx-sdr',
+                cmds: [
+                    'gqrx'
+                ]
+            },
+            'sdr-sharp': {
+                name: 'SDR#',
+                install: 'Descargar de https://airspy.com/download/',
+                cmds: [
+                    'SDRSharp.exe'
+                ]
+            },
+            'universal-radio-hacker': {
+                name: 'Universal Radio Hacker',
+                install: 'pip install urh',
+                cmds: [
+                    'urh'
+                ]
+            }
+        };
+
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.name);
+            lines.push('   Instalar: ' + t.install);
+            lines.push('   Comandos:');
+            t.cmds.forEach(function(c) {
+                lines.push(codeBlock(c));
+            });
+            lines.push('');
+        });
+
+        lines.push('─'.repeat(50));
+        lines.push('📡 Bandas comunes:');
+        lines.push('   FM: 88-108 MHz | GPS: 1575 MHz | WiFi: 2.4/5 GHz');
+        lines.push('');
+        lines.push('⚠️ Transmitir sin licencia es ilegal');
+
+        setOutput('radioResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// WIFI SCANNING
+// ============================================================
+function runWifiScanning() {
+    var iface = ($('wifiIface') ? $('wifiIface').value : '').trim() || 'wlan0';
+    var tool = ($('wifiTool') ? $('wifiTool').value : 'all');
+
+    setOutput('wifiResult', '🔍 Generando comandos WiFi...');
+
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📡 WIFI SCANNING COMMANDS');
+        lines.push('  Interface: ' + esc(iface));
+        lines.push('  Fecha: ' + now());
+        lines.push('═'.repeat(50));
+        lines.push('');
+
+        var allTools = {
+            bettercap: {
+                name: 'Bettercap',
+                install: 'sudo apt install bettercap',
+                cmds: [
+                    'sudo bettercap -iface ' + iface,
+                    'wifi.recon on',
+                    'wifi.show'
+                ]
+            },
+            'sparrow-wifi': {
+                name: 'Sparrow-WiFi',
+                install: 'git clone https://github.com/ghostop14/sparrow-wifi',
+                cmds: [
+                    'python3 sparrow-wifi.py'
+                ]
+            },
+            kismet: {
+                name: 'Kismet',
+                install: 'sudo apt install kismet',
+                cmds: [
+                    'sudo kismet -c ' + iface,
+                    '# Web UI: http://localhost:2501'
+                ]
+            },
+            airodump: {
+                name: 'Airodump-ng',
+                install: 'sudo apt install aircrack-ng',
+                cmds: [
+                    'sudo airmon-ng start ' + iface,
+                    'sudo airodump-ng ' + iface + 'mon',
+                    'sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w capture ' + iface + 'mon'
+                ]
+            },
+            airoplay: {
+                name: 'Aireplay-ng',
+                install: 'sudo apt install aircrack-ng',
+                cmds: [
+                    'sudo aireplay-ng --test ' + iface + 'mon',
+                    'sudo aireplay-ng --deauth 10 -a <BSSID> ' + iface + 'mon'
+                ]
+            },
+            wifite: {
+                name: 'Wifite',
+                install: 'git clone https://github.com/derv82/wifite2',
+                cmds: [
+                    'sudo wifite',
+                    'sudo wifite --wpa',
+                    'sudo wifite --dict /usr/share/wordlists/rockyou.txt'
+                ]
+            },
+            wash: {
+                name: 'Wash',
+                install: 'sudo apt install reaver',
+                cmds: [
+                    'sudo wash -i ' + iface + 'mon',
+                    'sudo wash -i ' + iface + 'mon -C'
+                ]
+            },
+            reaver: {
+                name: 'Reaver',
+                install: 'sudo apt install reaver',
+                cmds: [
+                    'sudo reaver -i ' + iface + 'mon -b <BSSID> -vv',
+                    'sudo reaver -i ' + iface + 'mon -b <BSSID> -K 1'
+                ]
+            }
+        };
+
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.name);
+            lines.push('   Instalar: ' + t.install);
+            lines.push('   Comandos:');
+            t.cmds.forEach(function(c) {
+                lines.push(codeBlock(c));
+            });
+            lines.push('');
+        });
+
+        lines.push('─'.repeat(50));
+        lines.push('📋 Flujo recomendado:');
+        lines.push('   1. airmon-ng start ' + iface);
+        lines.push('   2. airodump-ng ' + iface + 'mon');
+        lines.push('   3. airodump-ng -c <CANAL> --bssid <BSSID> -w capture ' + iface + 'mon');
+        lines.push('   4. aireplay-ng --deauth 10 -a <BSSID> ' + iface + 'mon');
+        lines.push('   5. aircrack-ng capture-01.cap -w rockyou.txt');
+        lines.push('');
+        lines.push('⚠️ Solo audita tu propia red o con autorización escrita');
+
+        setOutput('wifiResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
 // EXPORTAR FUNCIONES GLOBALES
 // ============================================================
 window.showTool = showTool;
@@ -573,11 +888,15 @@ window.runDnsInfo = runDnsInfo;
 window.runWebScanning = runWebScanning;
 window.runVulnScanning = runVulnScanning;
 window.runWebVulnScanning = runWebVulnScanning;
+window.runBluetoothScanning = runBluetoothScanning;
+window.runRadioScanning = runRadioScanning;
+window.runWifiScanning = runWifiScanning;
 
 // ============================================================
 // INICIALIZACIÓN
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ MFH TOOLS - script-tools.js cargado correctamente');
-    console.log('📦 Herramientas disponibles: ' + AVAILABLE_TOOLS.join(', '));
+    console.log('📦 Herramientas disponibles: ' + AVAILABLE_TOOLS.length);
+    console.log('   ' + AVAILABLE_TOOLS.join(', '));
 });
