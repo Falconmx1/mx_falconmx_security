@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento, Web Scanning, Vulnerability Scanning.">
+    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento: Host, Identity, Network, DNS, Web Scanning, Vulnerability Scanning, Bluetooth, Radio Frequency, WiFi.">
     <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
     
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -82,7 +82,7 @@
             border-radius: 10px;
             font-family: 'Courier New', monospace;
             padding: 12px;
-            height: 280px;
+            height: 300px;
             overflow-y: auto;
             font-size: 0.8rem;
             line-height: 1.6;
@@ -205,8 +205,11 @@
             <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
                 <span class="badge-mfh"><i class="fas fa-search me-1"></i> Reconocimiento</span>
                 <span class="badge-mfh"><i class="fas fa-globe me-1"></i> Web Scanning</span>
-                <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> Vulnerability Scanning</span>
-                <span class="badge-mfh"><i class="fas fa-flag me-1"></i> Hecho en México</span>
+                <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> Vulnerability</span>
+                <span class="badge-mfh"><i class="fas fa-bluetooth me-1"></i> Bluetooth</span>
+                <span class="badge-mfh"><i class="fas fa-broadcast-tower me-1"></i> Radio</span>
+                <span class="badge-mfh"><i class="fas fa-wifi me-1"></i> WiFi</span>
+                <span class="badge-mfh"><i class="fas fa-flag me-1"></i> México</span>
             </div>
         </div>
     </div>
@@ -266,6 +269,27 @@
                     <small class="text-muted">Nikto, ZAP</small>
                 </div>
             </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('bluetooth')">
+                    <i class="fas fa-bluetooth tool-icon"></i>
+                    <div class="mt-2 fw-bold">📶 Bluetooth Scanning</div>
+                    <small class="text-muted">Bettercap, BlueZ, hcitool</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('radio')">
+                    <i class="fas fa-broadcast-tower tool-icon"></i>
+                    <div class="mt-2 fw-bold">📻 Radio Frequency</div>
+                    <small class="text-muted">HackRF, GNU Radio, RTL-SDR</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('wifi')">
+                    <i class="fas fa-wifi tool-icon"></i>
+                    <div class="mt-2 fw-bold">📡 WiFi Scanning</div>
+                    <small class="text-muted">Bettercap, Kismet, Sparrow</small>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -284,6 +308,9 @@
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#webscanTab"><i class="fas fa-globe me-1"></i> Web Scan</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#vulnscanTab"><i class="fas fa-shield-alt me-1"></i> Vuln Scan</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#webvulnTab"><i class="fas fa-bug me-1"></i> Web Vuln</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#bluetoothTab"><i class="fas fa-bluetooth me-1"></i> Bluetooth</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#radioTab"><i class="fas fa-broadcast-tower me-1"></i> Radio</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wifiTab"><i class="fas fa-wifi me-1"></i> WiFi</button></li>
             </ul>
             
             <div class="tab-content">
@@ -295,7 +322,7 @@
                             <label class="form-label">🎯 Dominio o IP</label>
                             <input type="text" class="form-control" id="hostTarget" placeholder="ejemplo.com o 8.8.8.8" value="google.com">
                             <button class="btn-mfh mt-2 w-100" onclick="runHostInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('host-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('host-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
                         </div>
                         <div class="col-md-6">
                             <div id="hostResult" class="console-output">🔍 Esperando consulta...</div>
@@ -310,7 +337,7 @@
                             <label class="form-label">👤 Email o Usuario</label>
                             <input type="text" class="form-control" id="identityTarget" placeholder="usuario@dominio.com" value="test@example.com">
                             <button class="btn-mfh mt-2 w-100" onclick="runIdentityInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('identity-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('identity-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
                         </div>
                         <div class="col-md-6">
                             <div id="identityResult" class="console-output">🔍 Esperando consulta...</div>
@@ -325,7 +352,7 @@
                             <label class="form-label">🌐 IP o Rango CIDR</label>
                             <input type="text" class="form-control" id="networkTarget" placeholder="192.168.1.1" value="8.8.8.8">
                             <button class="btn-mfh mt-2 w-100" onclick="runNetworkInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('network-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('network-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
                         </div>
                         <div class="col-md-6">
                             <div id="networkResult" class="console-output">🔍 Esperando consulta...</div>
@@ -351,7 +378,7 @@
                                 <option value="ALL">Todos</option>
                             </select>
                             <button class="btn-mfh mt-2 w-100" onclick="runDnsInfo()"><i class="fas fa-play me-2"></i>Consultar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('dns-information.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('dns-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
                         </div>
                         <div class="col-md-6">
                             <div id="dnsResult" class="console-output">🔍 Esperando consulta...</div>
@@ -373,7 +400,7 @@
                                 <option value="gobuster">Gobuster</option>
                             </select>
                             <button class="btn-mfh mt-2 w-100" onclick="runWebScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-scanning.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
                         </div>
                         <div class="col-md-6">
                             <div id="webscanResult" class="console-output">🔍 Esperando consulta...</div>
@@ -399,7 +426,7 @@
                                 <option value="udp">UDP (top 100)</option>
                             </select>
                             <button class="btn-mfh mt-2 w-100" onclick="runVulnScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
                         </div>
                         <div class="col-md-6">
                             <div id="vulnscanResult" class="console-output">🔍 Esperando consulta...</div>
@@ -420,10 +447,86 @@
                                 <option value="zap">OWASP ZAP</option>
                             </select>
                             <button class="btn-mfh mt-2 w-100" onclick="runWebVulnScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar .js</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
                         </div>
                         <div class="col-md-6">
                             <div id="webvulnResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== BLUETOOTH SCANNING ====== -->
+                <div class="tab-pane fade" id="bluetoothTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📶 MAC objetivo (o "all")</label>
+                            <input type="text" class="form-control" id="bluetoothTarget" placeholder="AA:BB:CC:DD:EE:FF" value="all">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="bluetoothTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="bettercap">Bettercap</option>
+                                <option value="bluetoothctl">bluetoothctl</option>
+                                <option value="hcitool">hcitool</option>
+                                <option value="btmon">btmon</option>
+                                <option value="bluelog">Bluelog</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runBluetoothScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('bluetooth-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="bluetoothResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== RADIO FREQUENCY ====== -->
+                <div class="tab-pane fade" id="radioTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📻 Frecuencia (Hz, opcional)</label>
+                            <input type="text" class="form-control" id="radioFreq" placeholder="100000000" value="100000000">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="radioTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="hackrf">HackRF</option>
+                                <option value="gnurdio">GNU Radio</option>
+                                <option value="rtlsdr">RTL-SDR</option>
+                                <option value="gqrx">GQRX</option>
+                                <option value="sdr-sharp">SDR#</option>
+                                <option value="universal-radio-hacker">URH</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runRadioScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('radio-frequency-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="radioResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== WIFI SCANNING ====== -->
+                <div class="tab-pane fade" id="wifiTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📡 Interface WiFi</label>
+                            <input type="text" class="form-control" id="wifiIface" placeholder="wlan0" value="wlan0">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="wifiTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="bettercap">Bettercap</option>
+                                <option value="sparrow-wifi">Sparrow-WiFi</option>
+                                <option value="kismet">Kismet</option>
+                                <option value="airodump">Airodump-ng</option>
+                                <option value="airoplay">Aireplay-ng</option>
+                                <option value="wifite">Wifite</option>
+                                <option value="wash">Wash</option>
+                                <option value="reaver">Reaver</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runWifiScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('wifi-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="wifiResult" class="console-output">🔍 Esperando consulta...</div>
                         </div>
                     </div>
                 </div>
