@@ -1,6 +1,6 @@
 /**
  * MFH TOOLS - Script del apartado Herramientas de Ciberseguridad
- * Reconocimiento + Acceso con Credenciales
+ * Categorías: Reconocimiento | Acceso con Credenciales
  */
 
 'use strict';
@@ -150,7 +150,7 @@ function downloadTool(filename) {
 }
 
 // ============================================================
-// HOST INFORMATION
+// HOST INFORMATION (Reconocimiento)
 // ============================================================
 function runHostInfo() {
     var target = ($('hostTarget') ? $('hostTarget').value : '').trim();
@@ -212,7 +212,7 @@ function runHostInfo() {
 }
 
 // ============================================================
-// IDENTITY INFORMATION
+// IDENTITY INFORMATION (Reconocimiento)
 // ============================================================
 function runIdentityInfo() {
     var target = ($('identityTarget') ? $('identityTarget').value : '').trim();
@@ -269,7 +269,7 @@ function runIdentityInfo() {
 }
 
 // ============================================================
-// NETWORK INFORMATION
+// NETWORK INFORMATION (Reconocimiento)
 // ============================================================
 function runNetworkInfo() {
     var target = ($('networkTarget') ? $('networkTarget').value : '').trim();
@@ -340,7 +340,7 @@ function runNetworkInfo() {
 }
 
 // ============================================================
-// DNS INFORMATION
+// DNS INFORMATION (Reconocimiento)
 // ============================================================
 function runDnsInfo() {
     var target = ($('dnsTarget') ? $('dnsTarget').value : '').trim();
@@ -387,7 +387,7 @@ function runDnsInfo() {
 }
 
 // ============================================================
-// WEB SCANNING
+// WEB SCANNING (Reconocimiento)
 // ============================================================
 function runWebScanning() {
     var target = ($('webscanTarget') ? $('webscanTarget').value : '').trim();
@@ -453,7 +453,7 @@ function runWebScanning() {
 }
 
 // ============================================================
-// VULNERABILITY SCANNING
+// VULNERABILITY SCANNING (Reconocimiento)
 // ============================================================
 function runVulnScanning() {
     var target = ($('vulnscanTarget') ? $('vulnscanTarget').value : '').trim();
@@ -510,7 +510,7 @@ function runVulnScanning() {
 }
 
 // ============================================================
-// WEB VULNERABILITY SCANNING
+// WEB VULNERABILITY SCANNING (Reconocimiento)
 // ============================================================
 function runWebVulnScanning() {
     var target = ($('webvulnTarget') ? $('webvulnTarget').value : '').trim();
@@ -574,7 +574,7 @@ function runWebVulnScanning() {
 }
 
 // ============================================================
-// BLUETOOTH SCANNING
+// BLUETOOTH SCANNING (Reconocimiento)
 // ============================================================
 function runBluetoothScanning() {
     var target = ($('bluetoothTarget') ? $('bluetoothTarget').value : '').trim() || 'all';
@@ -666,7 +666,7 @@ function runBluetoothScanning() {
 }
 
 // ============================================================
-// RADIO FREQUENCY SCANNING
+// RADIO FREQUENCY SCANNING (Reconocimiento)
 // ============================================================
 function runRadioScanning() {
     var freq = ($('radioFreq') ? $('radioFreq').value : '').trim() || '100000000';
@@ -759,7 +759,7 @@ function runRadioScanning() {
 }
 
 // ============================================================
-// WIFI SCANNING
+// WIFI SCANNING (Reconocimiento)
 // ============================================================
 function runWifiScanning() {
     var iface = ($('wifiIface') ? $('wifiIface').value : '').trim() || 'wlan0';
@@ -874,7 +874,7 @@ function runWifiScanning() {
 }
 
 // ============================================================
-// CREDENTIAL DUMPING
+// CREDENTIAL DUMPING (Acceso con Credenciales)
 // ============================================================
 function runCredentialDumping() {
     var target = ($('creddumpTarget') ? $('creddumpTarget').value : '').trim() || '/mnt/win';
@@ -957,7 +957,7 @@ function runCredentialDumping() {
 }
 
 // ============================================================
-// HASH IDENTIFICATION
+// HASH IDENTIFICATION (Acceso con Credenciales)
 // ============================================================
 function runHashIdentification() {
     var hash = ($('hashidTarget') ? $('hashidTarget').value : '').trim();
@@ -1043,7 +1043,7 @@ function runHashIdentification() {
 }
 
 // ============================================================
-// PASSWORD PROFILING
+// PASSWORD PROFILING (Acceso con Credenciales)
 // ============================================================
 function runWordlistProfiling() {
     var target = ($('wordlistTarget') ? $('wordlistTarget').value : '').trim();
@@ -1175,5 +1175,6 @@ window.runWordlistProfiling = runWordlistProfiling;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ MFH TOOLS - script-tools.js cargado correctamente');
     console.log('📦 Herramientas disponibles: ' + AVAILABLE_TOOLS.length);
-    console.log('   ' + AVAILABLE_TOOLS.join(', '));
+    console.log('🔍 Reconocimiento: 10 herramientas');
+    console.log('🔐 Acceso con Credenciales: 3 herramientas');
 });
