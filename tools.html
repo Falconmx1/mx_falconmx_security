@@ -34,6 +34,7 @@
         body.light-mode .badge-mfh { background: rgba(0,170,0,0.1); color: #008800; }
         body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
         body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
+        body.light-mode .category-header { background: rgba(0,170,0,0.08); border-color: rgba(0,170,0,0.3); }
         
         .navbar {
             background: rgba(0,0,0,0.95);
@@ -159,6 +160,40 @@
             border-color: #ccc;
         }
         
+        /* ====== CATEGORÍAS ====== */
+        .category-section {
+            margin-bottom: 40px;
+        }
+        .category-header {
+            background: rgba(0,255,0,0.08);
+            border: 2px solid rgba(0,255,0,0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .category-header h3 {
+            color: #00ff00;
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .category-header .category-icon {
+            font-size: 2rem;
+            color: #00ff00;
+        }
+        .category-header .category-count {
+            margin-left: auto;
+            background: rgba(0,255,0,0.2);
+            color: #00ff00;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
         footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.2); padding: 20px 0 15px; margin-top: 30px; }
         footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease; }
         footer a:hover { color: #00ff00; }
@@ -180,6 +215,8 @@
             .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
             .btn-mfh { padding: 4px 10px; font-size: 0.75rem; }
             .console-output { height: 220px; font-size: 0.7rem; }
+            .category-header h3 { font-size: 1.1rem; }
+            .category-header .category-icon { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -204,115 +241,130 @@
             <p class="lead text-success">Herramientas de Ciberseguridad</p>
             <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
                 <span class="badge-mfh"><i class="fas fa-search me-1"></i> Reconocimiento</span>
-                <span class="badge-mfh"><i class="fas fa-unlock-alt me-1"></i> Credenciales</span>
-                <span class="badge-mfh"><i class="fas fa-globe me-1"></i> Web Scanning</span>
-                <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> Vulnerability</span>
-                <span class="badge-mfh"><i class="fas fa-bluetooth me-1"></i> Bluetooth</span>
-                <span class="badge-mfh"><i class="fas fa-broadcast-tower me-1"></i> Radio</span>
-                <span class="badge-mfh"><i class="fas fa-wifi me-1"></i> WiFi</span>
+                <span class="badge-mfh"><i class="fas fa-unlock-alt me-1"></i> Acceso con Credenciales</span>
                 <span class="badge-mfh"><i class="fas fa-flag me-1"></i> México</span>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ==================== GRID HERRAMIENTAS ==================== -->
-<section id="recon" class="py-3">
+<!-- ==================== GRID DE CATEGORÍAS ==================== -->
+<section id="categorias" class="py-3">
     <div class="container">
-        <h2 class="text-center mb-4 glow-text"><i class="fas fa-search me-2"></i>Herramientas</h2>
-        <div class="row g-3">
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('host')">
-                    <i class="fas fa-server tool-icon"></i>
-                    <div class="mt-2 fw-bold">🔍 Host Information</div>
-                    <small class="text-muted">Info del host</small>
-                </div>
+
+        <!-- ========== CATEGORÍA 1: RECONOCIMIENTO ========== -->
+        <div class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🔍</span>
+                <h3>Reconocimiento</h3>
+                <span class="category-count">10 herramientas</span>
             </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('identity')">
-                    <i class="fas fa-user-secret tool-icon"></i>
-                    <div class="mt-2 fw-bold">👤 Identity Information</div>
-                    <small class="text-muted">Info de identidad</small>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('host')">
+                        <i class="fas fa-server tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔍 Host Information</div>
+                        <small class="text-muted">Info del host</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('network')">
-                    <i class="fas fa-network-wired tool-icon"></i>
-                    <div class="mt-2 fw-bold">🌐 Network Information</div>
-                    <small class="text-muted">Info de red</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('identity')">
+                        <i class="fas fa-user-secret tool-icon"></i>
+                        <div class="mt-2 fw-bold">👤 Identity Information</div>
+                        <small class="text-muted">Info de identidad</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('dns')">
-                    <i class="fas fa-globe tool-icon"></i>
-                    <div class="mt-2 fw-bold">📡 DNS Information</div>
-                    <small class="text-muted">Info DNS</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('network')">
+                        <i class="fas fa-network-wired tool-icon"></i>
+                        <div class="mt-2 fw-bold">🌐 Network Information</div>
+                        <small class="text-muted">Info de red</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('webscan')">
-                    <i class="fas fa-globe tool-icon"></i>
-                    <div class="mt-2 fw-bold">🌐 Web Scanning</div>
-                    <small class="text-muted">DIRB, DirBuster, Gobuster</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('dns')">
+                        <i class="fas fa-globe tool-icon"></i>
+                        <div class="mt-2 fw-bold">📡 DNS Information</div>
+                        <small class="text-muted">Info DNS</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('vulnscan')">
-                    <i class="fas fa-shield-alt tool-icon"></i>
-                    <div class="mt-2 fw-bold">🛡️ Vulnerability Scanning</div>
-                    <small class="text-muted">Nmap, Zenmap</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('webscan')">
+                        <i class="fas fa-globe tool-icon"></i>
+                        <div class="mt-2 fw-bold">🌐 Web Scanning</div>
+                        <small class="text-muted">DIRB, DirBuster, Gobuster</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('webvuln')">
-                    <i class="fas fa-bug tool-icon"></i>
-                    <div class="mt-2 fw-bold">🔒 Web Vulnerability</div>
-                    <small class="text-muted">Nikto, ZAP</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('vulnscan')">
+                        <i class="fas fa-shield-alt tool-icon"></i>
+                        <div class="mt-2 fw-bold">🛡️ Vulnerability Scanning</div>
+                        <small class="text-muted">Nmap, Zenmap</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('bluetooth')">
-                    <i class="fas fa-bluetooth tool-icon"></i>
-                    <div class="mt-2 fw-bold">📶 Bluetooth Scanning</div>
-                    <small class="text-muted">Bettercap, BlueZ, hcitool</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('webvuln')">
+                        <i class="fas fa-bug tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔒 Web Vulnerability</div>
+                        <small class="text-muted">Nikto, ZAP</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('radio')">
-                    <i class="fas fa-broadcast-tower tool-icon"></i>
-                    <div class="mt-2 fw-bold">📻 Radio Frequency</div>
-                    <small class="text-muted">HackRF, GNU Radio, RTL-SDR</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('bluetooth')">
+                        <i class="fas fa-bluetooth tool-icon"></i>
+                        <div class="mt-2 fw-bold">📶 Bluetooth Scanning</div>
+                        <small class="text-muted">Bettercap, BlueZ, hcitool</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('wifi')">
-                    <i class="fas fa-wifi tool-icon"></i>
-                    <div class="mt-2 fw-bold">📡 WiFi Scanning</div>
-                    <small class="text-muted">Bettercap, Kismet, Sparrow</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('radio')">
+                        <i class="fas fa-broadcast-tower tool-icon"></i>
+                        <div class="mt-2 fw-bold">📻 Radio Frequency</div>
+                        <small class="text-muted">HackRF, GNU Radio, RTL-SDR</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('creddump')">
-                    <i class="fas fa-unlock-alt tool-icon"></i>
-                    <div class="mt-2 fw-bold">🔐 Credential Dumping</div>
-                    <small class="text-muted">SAM, LSA, secretsdump</small>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('hashid')">
-                    <i class="fas fa-hashtag tool-icon"></i>
-                    <div class="mt-2 fw-bold">#️⃣ Hash Identification</div>
-                    <small class="text-muted">hashid, hash-identifier</small>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="tool-card p-3 text-center" onclick="showTool('wordlist')">
-                    <i class="fas fa-list tool-icon"></i>
-                    <div class="mt-2 fw-bold">📝 Password Profiling</div>
-                    <small class="text-muted">CeWL, Crunch, RSMangler</small>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('wifi')">
+                        <i class="fas fa-wifi tool-icon"></i>
+                        <div class="mt-2 fw-bold">📡 WiFi Scanning</div>
+                        <small class="text-muted">Bettercap, Kismet, Sparrow</small>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- ========== CATEGORÍA 2: ACCESO CON CREDENCIALES ========== -->
+        <div class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🔐</span>
+                <h3>Acceso con Credenciales</h3>
+                <span class="category-count">3 herramientas</span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('creddump')">
+                        <i class="fas fa-unlock-alt tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔐 Credential Dumping</div>
+                        <small class="text-muted">SAM, LSA, secretsdump</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('hashid')">
+                        <i class="fas fa-hashtag tool-icon"></i>
+                        <div class="mt-2 fw-bold">#️⃣ Hash Identification</div>
+                        <small class="text-muted">hashid, hash-identifier</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('wordlist')">
+                        <i class="fas fa-list tool-icon"></i>
+                        <div class="mt-2 fw-bold">📝 Password Profiling</div>
+                        <small class="text-muted">CeWL, Crunch, RSMangler</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -646,7 +698,7 @@
                 <ul class="list-unstyled small">
                     <li><a href="index.html"><i class="fas fa-arrow-left me-1"></i>Volver al inicio</a></li>
                     <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#recon">Herramientas</a></li>
+                    <li><a href="#categorias">Categorías</a></li>
                     <li><a href="#herramientas">Panel</a></li>
                 </ul>
             </div>
