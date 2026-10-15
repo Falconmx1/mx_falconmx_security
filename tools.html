@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento: Host, Identity, Network, DNS, Web Scanning, Vulnerability Scanning, Bluetooth, Radio Frequency, WiFi.">
+    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento y Acceso con Credenciales.">
     <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
     
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -204,6 +204,7 @@
             <p class="lead text-success">Herramientas de Ciberseguridad</p>
             <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
                 <span class="badge-mfh"><i class="fas fa-search me-1"></i> Reconocimiento</span>
+                <span class="badge-mfh"><i class="fas fa-unlock-alt me-1"></i> Credenciales</span>
                 <span class="badge-mfh"><i class="fas fa-globe me-1"></i> Web Scanning</span>
                 <span class="badge-mfh"><i class="fas fa-shield-alt me-1"></i> Vulnerability</span>
                 <span class="badge-mfh"><i class="fas fa-bluetooth me-1"></i> Bluetooth</span>
@@ -218,7 +219,7 @@
 <!-- ==================== GRID HERRAMIENTAS ==================== -->
 <section id="recon" class="py-3">
     <div class="container">
-        <h2 class="text-center mb-4 glow-text"><i class="fas fa-search me-2"></i>Reconocimiento</h2>
+        <h2 class="text-center mb-4 glow-text"><i class="fas fa-search me-2"></i>Herramientas</h2>
         <div class="row g-3">
             <div class="col-md-3 col-6">
                 <div class="tool-card p-3 text-center" onclick="showTool('host')">
@@ -290,6 +291,27 @@
                     <small class="text-muted">Bettercap, Kismet, Sparrow</small>
                 </div>
             </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('creddump')">
+                    <i class="fas fa-unlock-alt tool-icon"></i>
+                    <div class="mt-2 fw-bold">🔐 Credential Dumping</div>
+                    <small class="text-muted">SAM, LSA, secretsdump</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('hashid')">
+                    <i class="fas fa-hashtag tool-icon"></i>
+                    <div class="mt-2 fw-bold">#️⃣ Hash Identification</div>
+                    <small class="text-muted">hashid, hash-identifier</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="tool-card p-3 text-center" onclick="showTool('wordlist')">
+                    <i class="fas fa-list tool-icon"></i>
+                    <div class="mt-2 fw-bold">📝 Password Profiling</div>
+                    <small class="text-muted">CeWL, Crunch, RSMangler</small>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -311,6 +333,9 @@
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#bluetoothTab"><i class="fas fa-bluetooth me-1"></i> Bluetooth</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#radioTab"><i class="fas fa-broadcast-tower me-1"></i> Radio</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wifiTab"><i class="fas fa-wifi me-1"></i> WiFi</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#creddumpTab"><i class="fas fa-unlock-alt me-1"></i> Credential</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#hashidTab"><i class="fas fa-hashtag me-1"></i> Hash ID</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wordlistTab"><i class="fas fa-list me-1"></i> Wordlist</button></li>
             </ul>
             
             <div class="tab-content">
@@ -531,6 +556,78 @@
                     </div>
                 </div>
                 
+                <!-- ====== CREDENTIAL DUMPING ====== -->
+                <div class="tab-pane fade" id="creddumpTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🔐 Ruta de hives (o "local")</label>
+                            <input type="text" class="form-control" id="creddumpTarget" placeholder="/mnt/win o local" value="/mnt/win">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="creddumpTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="samdump2">samdump2</option>
+                                <option value="chntpw">chntpw</option>
+                                <option value="creddump7">creddump7</option>
+                                <option value="secretsdump">secretsdump</option>
+                                <option value="mimikatz">Mimikatz</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runCredentialDumping()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('credential-dumping.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="creddumpResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== HASH IDENTIFICATION ====== -->
+                <div class="tab-pane fade" id="hashidTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">#️⃣ Hash a identificar</label>
+                            <input type="text" class="form-control" id="hashidTarget" placeholder="5d41402abc4b2a76b9719d911017c592" value="5d41402abc4b2a76b9719d911017c592">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="hashidTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="hashid">hashID</option>
+                                <option value="hash-identifier">Hash-Identifier</option>
+                                <option value="hashcrack">hashcrack</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runHashIdentification()"><i class="fas fa-play me-2"></i>Identificar</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('hash-identification.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="hashidResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== PASSWORD PROFILING ====== -->
+                <div class="tab-pane fade" id="wordlistTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📝 Target (nombre o URL)</label>
+                            <input type="text" class="form-control" id="wordlistTarget" placeholder="John Doe o https://example.com" value="John Doe">
+                            <label class="form-label mt-2">🔧 Herramienta</label>
+                            <select class="form-select" id="wordlistTool">
+                                <option value="all">Todas las herramientas</option>
+                                <option value="bopscrk">bopscrk</option>
+                                <option value="cewl">CeWL</option>
+                                <option value="crunch">Crunch</option>
+                                <option value="pack">PACK</option>
+                                <option value="rsmangler">RSMangler</option>
+                                <option value="seclists">SecLists</option>
+                                <option value="twofi">Twofi</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runWordlistProfiling()"><i class="fas fa-play me-2"></i>Generar Wordlist</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('wordlist-profiling.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="wordlistResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -549,8 +646,8 @@
                 <ul class="list-unstyled small">
                     <li><a href="index.html"><i class="fas fa-arrow-left me-1"></i>Volver al inicio</a></li>
                     <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#recon">Reconocimiento</a></li>
-                    <li><a href="#herramientas">Herramientas</a></li>
+                    <li><a href="#recon">Herramientas</a></li>
+                    <li><a href="#herramientas">Panel</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
