@@ -100,7 +100,10 @@ function showTool(tool) {
         wordlist: 'wordlistTab',
         bruteforce: 'bruteforceTab',
         passcrack: 'passcrackTab',
-        unsecured: 'unsecuredTab'
+        unsecured: 'unsecuredTab',
+        wificred: 'wificredTab',
+        keylogger: 'keyloggerTab',
+        voip: 'voipTab'
     };
     var tabId = tabMap[tool];
     if (!tabId) return;
@@ -131,7 +134,10 @@ var AVAILABLE_TOOLS = [
     'wordlist-profiling.js',
     'brute-force.js',
     'password-cracking.js',
-    'unsecured-credentials.js'
+    'unsecured-credentials.js',
+    'wifi-credential-access.js',
+    'keylogger.js',
+    'voip-credential-access.js'
 ];
 
 function downloadTool(filename) {
@@ -675,60 +681,13 @@ function runBruteForce() {
         lines.push('═'.repeat(50));
         lines.push('');
         var allTools = {
-            hydra: {
-                n: 'Hydra',
-                i: 'sudo apt install hydra',
-                c: [
-                    'hydra -l admin -P /usr/share/wordlists/rockyou.txt ' + target + ' ' + service,
-                    'hydra -L users.txt -P pass.txt ' + service + '://' + target
-                ]
-            },
-            'hydra-gtk': {
-                n: 'Hydra-GTK',
-                i: 'sudo apt install hydra-gtk',
-                c: ['xhydra', '# GUI: lanzar xhydra']
-            },
-            medusa: {
-                n: 'Medusa',
-                i: 'sudo apt install medusa',
-                c: [
-                    'medusa -h ' + target + ' -u admin -P /usr/share/wordlists/rockyou.txt -M ' + service,
-                    'medusa -H hosts.txt -U users.txt -P pass.txt -M ' + service
-                ]
-            },
-            netexec: {
-                n: 'NetExec',
-                i: 'pip install netexec',
-                c: [
-                    'nxc ' + service + ' ' + target + ' -u admin -p password',
-                    'nxc ' + service + ' ' + target + ' -u users.txt -p pass.txt'
-                ]
-            },
-            ncrack: {
-                n: 'Ncrack',
-                i: 'sudo apt install ncrack',
-                c: [
-                    'ncrack -U users.txt -P pass.txt ' + service + '://' + target,
-                    'ncrack --user admin -P rockyou.txt ' + service + '://' + target
-                ]
-            },
-            crowbar: {
-                n: 'Crowbar',
-                i: 'sudo apt install crowbar',
-                c: [
-                    'crowbar -b rdp -s ' + target + '/32 -u admin -C pass.txt',
-                    'crowbar -b sshkey -s ' + target + '/32 -u root -k keys/'
-                ]
-            },
-            cat: {
-                n: 'CAT (Context Application Tool)',
-                i: 'Herramienta manual de pentest web con fuzzer',
-                c: [
-                    '# CAT es una herramienta manual de pentest web',
-                    '# No es un brute forcer tradicional',
-                    '# Usa: python3 cat.py -u http://' + target
-                ]
-            }
+            hydra: {n: 'Hydra', i: 'sudo apt install hydra', c: ['hydra -l admin -P /usr/share/wordlists/rockyou.txt ' + target + ' ' + service, 'hydra -L users.txt -P pass.txt ' + service + '://' + target]},
+            'hydra-gtk': {n: 'Hydra-GTK', i: 'sudo apt install hydra-gtk', c: ['xhydra']},
+            medusa: {n: 'Medusa', i: 'sudo apt install medusa', c: ['medusa -h ' + target + ' -u admin -P /usr/share/wordlists/rockyou.txt -M ' + service]},
+            netexec: {n: 'NetExec', i: 'pip install netexec', c: ['nxc ' + service + ' ' + target + ' -u admin -p password', 'nxc ' + service + ' ' + target + ' -u users.txt -p pass.txt']},
+            ncrack: {n: 'Ncrack', i: 'sudo apt install ncrack', c: ['ncrack -U users.txt -P pass.txt ' + service + '://' + target]},
+            crowbar: {n: 'Crowbar', i: 'sudo apt install crowbar', c: ['crowbar -b rdp -s ' + target + '/32 -u admin -C pass.txt']},
+            cat: {n: 'CAT (Context Application Tool)', i: 'Herramienta manual de pentest web', c: ['python3 cat.py -u http://' + target]}
         };
         var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
         keys.forEach(function(k) {
@@ -764,55 +723,12 @@ function runPasswordCracking() {
         lines.push('');
         var hashcatModes = {md5: '0', ntlm: '1000', sha1: '100', sha256: '1400', bcrypt: '3200'};
         var allTools = {
-            hashcat: {
-                n: 'Hashcat',
-                i: 'sudo apt install hashcat hashcat-data',
-                c: [
-                    'hashcat -m ' + (hashcatModes[type] || '0') + ' -a 0 ' + target + ' /usr/share/wordlists/rockyou.txt',
-                    'hashcat -m ' + (hashcatModes[type] || '0') + ' -a 3 ' + target + ' ?a?a?a?a?a?a'
-                ]
-            },
-            john: {
-                n: 'John the Ripper',
-                i: 'sudo apt install john john-data',
-                c: [
-                    'john --wordlist=/usr/share/wordlists/rockyou.txt ' + target,
-                    'john --format=' + type + ' ' + target + ' --wordlist=rockyou.txt',
-                    'john --show ' + target
-                ]
-            },
-            fcrackzip: {
-                n: 'fcrackzip',
-                i: 'sudo apt install fcrackzip',
-                c: [
-                    'fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt ' + target,
-                    'fcrackzip -u -b -c a1 -l 1-6 ' + target
-                ]
-            },
-            cmospwd: {
-                n: 'cmospwd',
-                i: 'sudo apt install cmospwd',
-                c: [
-                    'cmospwd',
-                    'cmospwd /k backup.bin'
-                ]
-            },
-            crackle: {
-                n: 'Crackle',
-                i: 'sudo apt install crackle',
-                c: [
-                    'crackle -i ' + target,
-                    'crackle -i ' + target + ' -o output'
-                ]
-            },
-            truecrack: {
-                n: 'Truecrack',
-                i: 'git clone https://github.com/lvaccaro/truecrack && cd truecrack && ./configure && make',
-                c: [
-                    'truecrack -t ' + target + ' -w /usr/share/wordlists/rockyou.txt',
-                    'truecrack -t ' + target + ' -k keyfile -w passwords.txt'
-                ]
-            }
+            hashcat: {n: 'Hashcat', i: 'sudo apt install hashcat hashcat-data', c: ['hashcat -m ' + (hashcatModes[type] || '0') + ' -a 0 ' + target + ' /usr/share/wordlists/rockyou.txt', 'hashcat -m ' + (hashcatModes[type] || '0') + ' -a 3 ' + target + ' ?a?a?a?a?a?a']},
+            john: {n: 'John the Ripper', i: 'sudo apt install john john-data', c: ['john --wordlist=/usr/share/wordlists/rockyou.txt ' + target, 'john --format=' + type + ' ' + target + ' --wordlist=rockyou.txt']},
+            fcrackzip: {n: 'fcrackzip', i: 'sudo apt install fcrackzip', c: ['fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt ' + target, 'fcrackzip -u -b -c a1 -l 1-6 ' + target]},
+            cmospwd: {n: 'cmospwd', i: 'sudo apt install cmospwd', c: ['cmospwd']},
+            crackle: {n: 'Crackle', i: 'sudo apt install crackle', c: ['crackle -i ' + target, 'crackle -i ' + target + ' -o output']},
+            truecrack: {n: 'Truecrack', i: 'git clone https://github.com/lvaccaro/truecrack', c: ['truecrack -t ' + target + ' -w /usr/share/wordlists/rockyou.txt']}
         };
         var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
         keys.forEach(function(k) {
@@ -841,19 +757,18 @@ function runUnsecuredCredentials() {
         lines.push('═'.repeat(50));
         lines.push('  📂 UNSECURED CREDENTIALS');
         lines.push('  Home: ' + esc(target));
-        lines.push('  Fecha: ' + now());
         lines.push('═'.repeat(50));
         lines.push('');
         lines.push('  参考: MITRE ATT&CK T1552');
         lines.push('');
         var categories = {
-            ssh: {n: 'SSH Keys', paths: ['~/.ssh/id_rsa', '~/.ssh/id_ed25519', '~/.ssh/authorized_keys', '~/.ssh/known_hosts'], risk: 'Permisos 0644 en privadas; sin passphrase'},
-            cloud: {n: 'Cloud Credentials', paths: ['~/.aws/credentials', '~/.config/gcloud/credentials.db', '~/.azure/accessTokens.json', '~/.kube/config'], risk: 'Acceso a producción'},
-            history: {n: 'Shell History', paths: ['~/.bash_history', '~/.zsh_history', '~/.mysql_history'], risk: 'Passwords en texto plano'},
+            ssh: {n: 'SSH Keys', paths: ['~/.ssh/id_rsa', '~/.ssh/id_ed25519', '~/.ssh/authorized_keys'], risk: 'Permisos 0644 en privadas'},
+            cloud: {n: 'Cloud Credentials', paths: ['~/.aws/credentials', '~/.config/gcloud/credentials.db', '~/.kube/config'], risk: 'Acceso a producción'},
+            history: {n: 'Shell History', paths: ['~/.bash_history', '~/.zsh_history'], risk: 'Passwords en texto plano'},
             browser: {n: 'Browser', paths: ['~/.mozilla/firefox/*/logins.json', '~/.config/google-chrome/Default/Login Data'], risk: 'Passwords guardados'},
             keyring: {n: 'Keyring', paths: ['~/.local/share/keyrings/'], risk: 'Descifrado offline'},
             git: {n: 'Git', paths: ['~/.git-credentials', '~/.gitconfig'], risk: 'Tokens en texto plano'},
-            tokens: {n: 'App Tokens', paths: ['~/.netrc', '~/.npmrc', '~/.pypirc', '~/.config/gh/hosts.yml'], risk: 'Tokens de publicación'}
+            tokens: {n: 'App Tokens', paths: ['~/.netrc', '~/.npmrc', '~/.config/gh/hosts.yml'], risk: 'Tokens de publicación'}
         };
         var cats = (category === 'all') ? Object.keys(categories) : [category];
         cats.forEach(function(k) {
@@ -865,7 +780,7 @@ function runUnsecuredCredentials() {
             lines.push('   ⚠️ ' + c.risk);
             lines.push('');
         });
-        lines.push('🔧 Comandos de verificación:');
+        lines.push('🔧 Comandos:');
         lines.push(codeBlock('find ~/.ssh -name "id_*" -type f ! -name "*.pub" -perm /o+r'));
         lines.push(codeBlock('grep -iE "password|secret|token" ~/.bash_history'));
         lines.push(codeBlock('ls -la ~/.aws/ ~/.config/gcloud/ ~/.kube/ 2>/dev/null'));
@@ -873,6 +788,201 @@ function runUnsecuredCredentials() {
         lines.push('─'.repeat(50));
         lines.push('⚠️ Solo enumera sistemas con autorización');
         setOutput('unsecuredResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// WIFI CREDENTIAL ACCESS
+// ============================================================
+function runWifiCredentialAccess() {
+    var target = ($('wificredTarget') ? $('wificredTarget').value : '').trim();
+    var tool = ($('wificredTool') ? $('wificredTool').value : 'all');
+    if (!target) { setOutput('wificredResult', '❌ Ingresa un BSSID o ESSID'); return; }
+    setOutput('wificredResult', '📶 Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📶 WIFI CREDENTIAL ACCESS');
+        lines.push('  Target: ' + esc(target));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        var allTools = {
+            'aircrack-ng': {
+                n: 'Aircrack-ng',
+                i: 'sudo apt install aircrack-ng',
+                c: [
+                    'aircrack-ng -w /usr/share/wordlists/rockyou.txt -b ' + target + ' capture-01.cap',
+                    'aircrack-ng -w wordlist.txt capture-01.cap'
+                ]
+            },
+            'wifi-honey': {
+                n: 'Wifi-honey',
+                i: 'sudo apt install wifi-honey',
+                c: ['wifi-honey ' + target + ' 6 wlan0']
+            },
+            wifiphisher: {
+                n: 'Wifiphisher',
+                i: 'sudo apt install wifiphisher',
+                c: [
+                    'sudo wifiphisher -e "' + target + '" -p firmware-upgrade',
+                    'sudo wifiphisher --essid ' + target + ' -p plugin_update'
+                ]
+            },
+            wifite: {
+                n: 'Wifite',
+                i: 'sudo apt install wifite',
+                c: [
+                    'sudo wifite --bssid ' + target,
+                    'sudo wifite --wpa --dict /usr/share/wordlists/rockyou.txt',
+                    'sudo wifite --pmkid'
+                ]
+            },
+            airgeddon: {
+                n: 'Airgeddon',
+                i: 'git clone https://github.com/v1s1t0r1sh3r3/airgeddon.git',
+                c: [
+                    'sudo bash ./airgeddon.sh',
+                    '# Menu interactivo: seleccionar ataque'
+                ]
+            },
+            bully: {
+                n: 'Bully',
+                i: 'sudo apt install bully pixiewps',
+                c: [
+                    'bully wlan0mon -b ' + target + ' -c 6 -d -v 3',
+                    'bully wlan0mon -b ' + target + ' -c 6 -v 3'
+                ]
+            },
+            'fern-wifi-cracker': {
+                n: 'Fern WiFi Cracker',
+                i: 'sudo apt install fern-wifi-cracker',
+                c: [
+                    'sudo fern-wifi-cracker',
+                    '# GUI: Refresh -> Attack'
+                ]
+            },
+            eapmd5pass: {
+                n: 'eapmd5pass',
+                i: 'sudo apt install eapmd5pass',
+                c: [
+                    'eapmd5pass -r capture.pcap -w /usr/share/wordlists/rockyou.txt',
+                    'eapmd5pass -i wlan0 -w wordlist.txt'
+                ]
+            }
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.n);
+            lines.push('   Instalar: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca redes con autorización escrita');
+        setOutput('wificredResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// KEYLOGGER
+// ============================================================
+function runKeylogger() {
+    var target = ($('keyloggerTarget') ? $('keyloggerTarget').value : '').trim();
+    var port = ($('keyloggerPort') ? $('keyloggerPort').value : '').trim() || '6000';
+    var timeout = ($('keyloggerTimeout') ? $('keyloggerTimeout').value : '').trim() || '600';
+    if (!target) { setOutput('keyloggerResult', '❌ Ingresa una IP objetivo'); return; }
+    setOutput('keyloggerResult', '⌨️ Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  ⌨️ KEYLOGGER (X11 Keyboard Spy)');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Puerto: ' + esc(port));
+        lines.push('  Timeout: ' + esc(timeout) + ' segundos');
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 Xspy via Metasploit');
+        lines.push('   Instalar: Kali Linux自带 metasploit-framework');
+        lines.push('');
+        lines.push('🔧 步骤 1: 扫描 X11 端口');
+        lines.push(codeBlock('msfconsole'));
+        lines.push(codeBlock('use auxiliary/scanner/x11/open_x11'));
+        lines.push(codeBlock('set rhosts ' + target));
+        lines.push(codeBlock('run'));
+        lines.push('');
+        lines.push('🔧 步骤 2: 键盘记录');
+        lines.push(codeBlock('use auxiliary/gather/x11_keyboard_spy'));
+        lines.push(codeBlock('set rhosts ' + target));
+        lines.push(codeBlock('set rport ' + port));
+        lines.push(codeBlock('set LISTENER_TIMEOUT ' + timeout));
+        lines.push(codeBlock('run'));
+        lines.push('');
+        lines.push('📝 备注:');
+        lines.push('   • LISTENER_TIMEOUT 0 = 永久监听');
+        lines.push('   • PRINTERVAL 设置输出间隔');
+        lines.push('   • 需目标开放 X11 端口（默认 6000）');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ 仅监控你有权的系统');
+        setOutput('keyloggerResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// VOIP CREDENTIAL ACCESS
+// ============================================================
+function runVoipCredentialAccess() {
+    var target = ($('voipTarget') ? $('voipTarget').value : '').trim();
+    var user = ($('voipUser') ? $('voipUser').value : '').trim();
+    var tool = ($('voipTool') ? $('voipTool').value : 'all');
+    if (!target) { setOutput('voipResult', '❌ Ingresa una IP objetivo'); return; }
+    setOutput('voipResult', '📞 Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📞 VOIP CREDENTIAL ACCESS');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Usuario: ' + (esc(user) || 'No especificado'));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        var allTools = {
+            svcrack: {
+                n: 'SVCrack (SIPVicious)',
+                i: 'sudo apt install sipvicious',
+                c: [
+                    'sipvicious_svcrack -u' + (user || '100') + ' -r1-9999 ' + target,
+                    'sipvicious_svcrack -u' + (user || '100') + ' -d dictionary.txt ' + target
+                ]
+            },
+            enumiax: {
+                n: 'Enumiax',
+                i: 'sudo apt install enumiax',
+                c: [
+                    'enumiax ' + target,
+                    'enumiax ' + target + ' -p 4569',
+                    'enumiax -v -o results.txt ' + target
+                ]
+            }
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.n);
+            lines.push('   Instalar: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push('🔧 推荐流程:');
+        lines.push(codeBlock('sipvicious_svmap ' + target));
+        lines.push(codeBlock('sipvicious_svwar -e100-999 ' + target));
+        lines.push(codeBlock('sipvicious_svcrack -u' + (user || '100') + ' -r1-9999 ' + target));
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas VoIP con autorización');
+        setOutput('voipResult', lines.join('<br>'));
     }, 400);
 }
 
@@ -897,6 +1007,9 @@ window.runWordlistProfiling = runWordlistProfiling;
 window.runBruteForce = runBruteForce;
 window.runPasswordCracking = runPasswordCracking;
 window.runUnsecuredCredentials = runUnsecuredCredentials;
+window.runWifiCredentialAccess = runWifiCredentialAccess;
+window.runKeylogger = runKeylogger;
+window.runVoipCredentialAccess = runVoipCredentialAccess;
 
 // ============================================================
 // INICIALIZACIÓN
@@ -905,5 +1018,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ MFH TOOLS - script-tools.js cargado correctamente');
     console.log('📦 Herramientas disponibles: ' + AVAILABLE_TOOLS.length);
     console.log('🔍 Reconocimiento: 10 herramientas');
-    console.log('🔐 Acceso con Credenciales: 6 herramientas');
+    console.log('🔐 Acceso con Credenciales: 9 herramientas');
 });
