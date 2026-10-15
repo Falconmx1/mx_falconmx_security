@@ -1,7 +1,6 @@
 /**
  * MFH TOOLS - Script del apartado Herramientas de Ciberseguridad
- * Reconocimiento completo: Host, Identity, Network, DNS, Web Scanning,
- * Vulnerability Scanning, Web Vulnerability, Bluetooth, Radio Frequency, WiFi
+ * Reconocimiento + Acceso con Credenciales
  */
 
 'use strict';
@@ -66,10 +65,6 @@ function isValidIP(ip) {
     });
 }
 
-function isValidUrl(url) {
-    return /^https?:\/\/[^\s]+$/i.test(url);
-}
-
 function isValidMAC(mac) {
     return /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i.test(mac);
 }
@@ -83,10 +78,6 @@ function normalizeUrl(url) {
 
 function codeBlock(text) {
     return '<div style="background:#000;color:#0f0;padding:6px 10px;border-radius:5px;font-family:Courier New,monospace;font-size:0.75rem;border-left:3px solid #0f0;margin:4px 0;white-space:pre-wrap;word-break:break-all;">' + esc(text) + '</div>';
-}
-
-function divider() {
-    return '<div style="border-top:1px solid #0f0;opacity:0.3;margin:10px 0;"></div>';
 }
 
 // ============================================================
@@ -103,7 +94,10 @@ function showTool(tool) {
         webvuln: 'webvulnTab',
         bluetooth: 'bluetoothTab',
         radio: 'radioTab',
-        wifi: 'wifiTab'
+        wifi: 'wifiTab',
+        creddump: 'creddumpTab',
+        hashid: 'hashidTab',
+        wordlist: 'wordlistTab'
     };
     var tabId = tabMap[tool];
     if (!tabId) return;
@@ -128,7 +122,10 @@ var AVAILABLE_TOOLS = [
     'web-vulnerability-scanning.js',
     'bluetooth-scanning.js',
     'radio-frequency-scanning.js',
-    'wifi-scanning.js'
+    'wifi-scanning.js',
+    'credential-dumping.js',
+    'hash-identification.js',
+    'wordlist-profiling.js'
 ];
 
 function downloadTool(filename) {
@@ -877,6 +874,283 @@ function runWifiScanning() {
 }
 
 // ============================================================
+// CREDENTIAL DUMPING
+// ============================================================
+function runCredentialDumping() {
+    var target = ($('creddumpTarget') ? $('creddumpTarget').value : '').trim() || '/mnt/win';
+    var tool = ($('creddumpTool') ? $('creddumpTool').value : 'all');
+
+    setOutput('creddumpResult', '🔐 Generando comandos de Credential Dumping...');
+
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  🔐 OS CREDENTIAL DUMPING');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Fecha: ' + now());
+        lines.push('═'.repeat(50));
+        lines.push('');
+
+        var allTools = {
+            samdump2: {
+                name: 'samdump2',
+                install: 'sudo apt install samdump2',
+                cmds: [
+                    'samdump2 ' + target + '/SYSTEM ' + target + '/SAM > hashes.txt',
+                    'cat hashes.txt'
+                ]
+            },
+            chntpw: {
+                name: 'chntpw',
+                install: 'sudo apt install chntpw',
+                cmds: [
+                    'chntpw -l ' + target + '/SAM',
+                    'chntpw -i ' + target + '/SAM'
+                ]
+            },
+            creddump7: {
+                name: 'creddump7',
+                install: 'sudo apt install creddump7',
+                cmds: [
+                    'pwdump.py ' + target + '/SYSTEM ' + target + '/SAM',
+                    'lsadump.py ' + target + '/SYSTEM ' + target + '/SECURITY',
+                    'cachedump.py ' + target + '/SYSTEM ' + target + '/SECURITY true'
+                ]
+            },
+            secretsdump: {
+                name: 'secretsdump',
+                install: 'pip install impacket',
+                cmds: [
+                    'secretsdump.py -sam ' + target + '/SAM -system ' + target + '/SYSTEM -security ' + target + '/SECURITY LOCAL',
+                    'secretsdump.py domain/user:pass@target'
+                ]
+            },
+            mimikatz: {
+                name: 'Mimikatz',
+                install: 'Descargar de GitHub',
+                cmds: [
+                    'mimikatz.exe "privilege::debug" "sekurlsa::logonpasswords" "exit"',
+                    'mimikatz.exe "lsadump::sam" "exit"'
+                ]
+            }
+        };
+
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.name);
+            lines.push('   Instalar: ' + t.install);
+            lines.push('   Comandos:');
+            t.cmds.forEach(function(c) {
+                lines.push(codeBlock(c));
+            });
+            lines.push('');
+        });
+
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo extrae credenciales de sistemas con autorización');
+
+        setOutput('creddumpResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// HASH IDENTIFICATION
+// ============================================================
+function runHashIdentification() {
+    var hash = ($('hashidTarget') ? $('hashidTarget').value : '').trim();
+    var tool = ($('hashidTool') ? $('hashidTool').value : 'all');
+
+    if (!hash) {
+        setOutput('hashidResult', '❌ Ingresa un hash');
+        return;
+    }
+
+    setOutput('hashidResult', '🔍 Identificando hash...');
+
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  #️⃣ HASH IDENTIFICATION');
+        lines.push('  Hash: ' + esc(hash));
+        lines.push('  Longitud: ' + hash.length + ' caracteres');
+        lines.push('  Fecha: ' + now());
+        lines.push('═'.repeat(50));
+        lines.push('');
+
+        var detected = 'Desconocido';
+        if (/^\$2[aby]\$/.test(hash)) detected = 'bcrypt';
+        else if (/^\$1\$/.test(hash)) detected = 'MD5 Crypt';
+        else if (/^\$5\$/.test(hash)) detected = 'SHA-256 Crypt';
+        else if (/^\$6\$/.test(hash)) detected = 'SHA-512 Crypt';
+        else if (/^\$argon2/.test(hash)) detected = 'Argon2';
+        else if (hash.length === 32) detected = 'MD5 / NTLM / MD4';
+        else if (hash.length === 40) detected = 'SHA-1';
+        else if (hash.length === 64) detected = 'SHA-256';
+        else if (hash.length === 128) detected = 'SHA-512';
+
+        lines.push('📊 Análisis básico:');
+        lines.push('   • Tipo probable: ' + detected);
+        lines.push('');
+
+        var allTools = {
+            hashid: {
+                name: 'hashID',
+                install: 'pip install hashid',
+                cmds: [
+                    'hashid \'' + hash + '\'',
+                    'hashid -m \'' + hash + '\''
+                ]
+            },
+            'hash-identifier': {
+                name: 'Hash-Identifier',
+                install: 'sudo apt install hash-identifier',
+                cmds: [
+                    'hash-identifier ' + hash
+                ]
+            },
+            hashcrack: {
+                name: 'hashcrack',
+                install: 'pip install hashcrack-cli',
+                cmds: [
+                    'hashcrack identify ' + hash,
+                    'hashcrack analyze ' + hash
+                ]
+            }
+        };
+
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.name);
+            lines.push('   Instalar: ' + t.install);
+            lines.push('   Comandos:');
+            t.cmds.forEach(function(c) {
+                lines.push(codeBlock(c));
+            });
+            lines.push('');
+        });
+
+        lines.push('─'.repeat(50));
+        lines.push('💡 Usa hashid -m para obtener el modo hashcat');
+
+        setOutput('hashidResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// PASSWORD PROFILING
+// ============================================================
+function runWordlistProfiling() {
+    var target = ($('wordlistTarget') ? $('wordlistTarget').value : '').trim();
+    var tool = ($('wordlistTool') ? $('wordlistTool').value : 'all');
+
+    if (!target) {
+        setOutput('wordlistResult', '❌ Ingresa un nombre o URL');
+        return;
+    }
+
+    setOutput('wordlistResult', '📝 Generando comandos de Wordlist...');
+
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📝 PASSWORD PROFILING & WORDLIST');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Fecha: ' + now());
+        lines.push('═'.repeat(50));
+        lines.push('');
+
+        var allTools = {
+            bopscrk: {
+                name: 'bopscrk',
+                install: 'pip install bopscrk',
+                cmds: [
+                    'bopscrk -i',
+                    'bopscrk -w "' + target + '" -o bopscrk_wordlist.txt'
+                ]
+            },
+            cewl: {
+                name: 'CeWL',
+                install: 'sudo apt install cewl',
+                cmds: [
+                    'cewl ' + target + ' -d 3 -m 5 -w cewl_wordlist.txt',
+                    'cewl ' + target + ' --email -w emails.txt'
+                ]
+            },
+            crunch: {
+                name: 'Crunch',
+                install: 'sudo apt install crunch',
+                cmds: [
+                    'crunch 8 8 -f /usr/share/crunch/charset.lst numeric -o numeric_8.txt',
+                    'crunch 6 6 -t ddd%%% -p "palabra1" "palabra2" -o pattern.txt'
+                ]
+            },
+            pack: {
+                name: 'PACK',
+                install: 'git clone https://github.com/iphelix/pack',
+                cmds: [
+                    'python statsgen.py wordlist.txt',
+                    'python maskgen.py wordlist.txt'
+                ]
+            },
+            rsmangler: {
+                name: 'RSMangler',
+                install: 'sudo apt install rsmangler',
+                cmds: [
+                    'rsmangler -f base_words.txt -e -a -o mangled.txt',
+                    'rsmangler -f words.txt -p "pre_" -s "_suf" -o prefixed.txt'
+                ]
+            },
+            seclists: {
+                name: 'SecLists',
+                install: 'sudo apt install seclists',
+                cmds: [
+                    'ls /usr/share/seclists/Passwords/',
+                    'cat /usr/share/seclists/Passwords/rockyou.txt'
+                ]
+            },
+            twofi: {
+                name: 'Twofi',
+                install: 'sudo apt install twofi',
+                cmds: [
+                    'twofi -u ' + target + ' -o twitter_wordlist.txt'
+                ]
+            }
+        };
+
+        var keys = (tool === 'all') ? Object.keys(allTools) : [tool];
+
+        keys.forEach(function(k) {
+            var t = allTools[k];
+            if (!t) return;
+            lines.push('📌 ' + t.name);
+            lines.push('   Instalar: ' + t.install);
+            lines.push('   Comandos:');
+            t.cmds.forEach(function(c) {
+                lines.push(codeBlock(c));
+            });
+            lines.push('');
+        });
+
+        lines.push('─'.repeat(50));
+        lines.push('🔄 Flujo recomendado:');
+        lines.push('   1. bopscrk -i');
+        lines.push('   2. cewl <url> -d 3 -m 5 -w cewl.txt');
+        lines.push('   3. rsmangler -f cewl.txt -e -a -o mangled.txt');
+        lines.push('   4. cat mangled.txt rockyou.txt | sort -u > final.txt');
+        lines.push('');
+        lines.push('⚠️ Solo para auditorías con autorización');
+
+        setOutput('wordlistResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
 // EXPORTAR FUNCIONES GLOBALES
 // ============================================================
 window.showTool = showTool;
@@ -891,6 +1165,9 @@ window.runWebVulnScanning = runWebVulnScanning;
 window.runBluetoothScanning = runBluetoothScanning;
 window.runRadioScanning = runRadioScanning;
 window.runWifiScanning = runWifiScanning;
+window.runCredentialDumping = runCredentialDumping;
+window.runHashIdentification = runHashIdentification;
+window.runWordlistProfiling = runWordlistProfiling;
 
 // ============================================================
 // INICIALIZACIÓN
