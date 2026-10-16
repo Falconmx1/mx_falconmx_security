@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento y Acceso con Credenciales.">
+    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento, Acceso con Credenciales, NFC y Kerberoasting.">
     <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
     
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -236,6 +236,8 @@
             <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
                 <span class="badge-mfh"><i class="fas fa-search me-1"></i> Reconocimiento</span>
                 <span class="badge-mfh"><i class="fas fa-unlock-alt me-1"></i> Acceso con Credenciales</span>
+                <span class="badge-mfh"><i class="fas fa-id-card me-1"></i> NFC</span>
+                <span class="badge-mfh"><i class="fas fa-key me-1"></i> Kerberoasting</span>
                 <span class="badge-mfh"><i class="fas fa-flag me-1"></i> México</span>
             </div>
         </div>
@@ -401,6 +403,45 @@
             </div>
         </div>
 
+        <!-- ========== CATEGORÍA 3: NFC / KERBEROASTING ========== -->
+        <div class="category-section">
+            <div class="category-header">
+                <span class="category-icon">📡</span>
+                <h3>NFC / Kerberoasting</h3>
+                <span class="category-count">4 herramientas</span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('libnfc')">
+                        <i class="fas fa-id-card tool-icon"></i>
+                        <div class="mt-2 fw-bold">📡 LibNFC</div>
+                        <small class="text-muted">nfc-list, nfc-poll</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('nfcmfclassic')">
+                        <i class="fas fa-credit-card tool-icon"></i>
+                        <div class="mt-2 fw-bold">💳 NFC MIFARE Classic</div>
+                        <small class="text-muted">nfc-mfclassic</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('kerberoast')">
+                        <i class="fas fa-key tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔑 Kerberoast</div>
+                        <small class="text-muted">GetUserSPNs, NetExec</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('krbrelayx')">
+                        <i class="fas fa-exchange-alt tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔄 KrbRelayX</div>
+                        <small class="text-muted">Kerberos relay</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -430,6 +471,10 @@
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#wificredTab"><i class="fas fa-wifi me-1"></i> WiFi Cred</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#keyloggerTab"><i class="fas fa-keyboard me-1"></i> Keylogger</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#voipTab"><i class="fas fa-phone me-1"></i> VoIP</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#libnfcTab"><i class="fas fa-id-card me-1"></i> LibNFC</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#nfcmfclassicTab"><i class="fas fa-credit-card me-1"></i> MIFARE</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#kerberoastTab"><i class="fas fa-key me-1"></i> Kerberoast</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#krbrelayxTab"><i class="fas fa-exchange-alt me-1"></i> KrbRelayX</button></li>
             </ul>
             
             <div class="tab-content">
@@ -884,6 +929,103 @@
                         </div>
                         <div class="col-md-6">
                             <div id="voipResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== LIBNFC ====== -->
+                <div class="tab-pane fade" id="libnfcTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📡 Interface (SPI/I2C/UART)</label>
+                            <input type="text" class="form-control" id="libnfcIface" placeholder="pn532_spi:/dev/spidev0.1:50000" value="pn532_spi:/dev/spidev0.1:50000">
+                            <label class="form-label mt-2">🔧 Comando</label>
+                            <select class="form-select" id="libnfcCmd">
+                                <option value="list">nfc-list (listar dispositivos)</option>
+                                <option value="poll">nfc-poll (polling tarjetas)</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runLibNFC()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('libnfc.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="libnfcResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== NFC MIFARE CLASSIC ====== -->
+                <div class="tab-pane fade" id="nfcmfclassicTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">💳 Acción</label>
+                            <select class="form-select" id="mfAction">
+                                <option value="r">r (read - leer)</option>
+                                <option value="w">w (write - escribir)</option>
+                                <option value="R">R (unlocked read - clon)</option>
+                                <option value="W">W (unlocked write - clon)</option>
+                                <option value="f">f (format - formatear)</option>
+                            </select>
+                            <label class="form-label mt-2">🔑 Tipo de llave</label>
+                            <select class="form-select" id="mfKey">
+                                <option value="a">a (Key A, halt on error)</option>
+                                <option value="A">A (Key A, ignore errors)</option>
+                                <option value="b">b (Key B, halt on error)</option>
+                                <option value="B">B (Key B, ignore errors)</option>
+                            </select>
+                            <label class="form-label mt-2">🆔 UID (opcional: U01ab23cd)</label>
+                            <input type="text" class="form-control" id="mfUid" placeholder="u (default)" value="u">
+                            <label class="form-label mt-2">📁 DUMP file</label>
+                            <input type="text" class="form-control" id="mfDump" placeholder="dump.mfd" value="dump.mfd">
+                            <button class="btn-mfh mt-2 w-100" onclick="runNfcMfclassic()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('nfc-mfclassic.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="mfResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== KERBEROAST ====== -->
+                <div class="tab-pane fade" id="kerberoastTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🏢 Dominio (ej: example.local)</label>
+                            <input type="text" class="form-control" id="kerbDomain" placeholder="example.local" value="example.local">
+                            <label class="form-label mt-2">👤 Usuario</label>
+                            <input type="text" class="form-control" id="kerbUser" placeholder="username" value="username">
+                            <label class="form-label mt-2">🔑 Password o Hash (LM:NT)</label>
+                            <input type="text" class="form-control" id="kerbPass" placeholder="password o LM:NT hash">
+                            <label class="form-label mt-2">🖥️ DC IP</label>
+                            <input type="text" class="form-control" id="kerbDc" placeholder="192.168.1.10" value="192.168.1.10">
+                            <button class="btn-mfh mt-2 w-100" onclick="runKerberoast()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('kerberoast.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="kerbResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== KRBRELAYX ====== -->
+                <div class="tab-pane fade" id="krbrelayxTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🎯 Target (HOSTNAME obligatorio)</label>
+                            <input type="text" class="form-control" id="krbRelayTarget" placeholder="smb://server:445" value="smb://server:445">
+                            <label class="form-label mt-2">🌐 Interface IP local</label>
+                            <input type="text" class="form-control" id="krbRelayIface" placeholder="192.168.1.50" value="192.168.1.50">
+                            <label class="form-label mt-2">📁 Loot dir</label>
+                            <input type="text" class="form-control" id="krbRelayLoot" placeholder="./loot" value="./loot">
+                            <label class="form-label mt-2">📄 Formato de ticket</label>
+                            <select class="form-select" id="krbRelayFormat">
+                                <option value="ccache">ccache (Impacket)</option>
+                                <option value="kirbi">kirbi (Mimikatz)</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runKrbRelayX()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('krbrelayx.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="krbRelayResult" class="console-output">🔍 Esperando consulta...</div>
                         </div>
                     </div>
                 </div>
