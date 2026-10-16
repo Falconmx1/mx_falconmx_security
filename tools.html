@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento y Acceso con Credenciales.">
+    <meta name="description" content="MFH TOOLS - Herramientas de Ciberseguridad. Reconocimiento, Acceso con Credenciales y Acceso Inicial.">
     <title>🔥 MFH TOOLS - Herramientas de Ciberseguridad</title>
     
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -236,6 +236,7 @@
             <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
                 <span class="badge-mfh"><i class="fas fa-search me-1"></i> Reconocimiento</span>
                 <span class="badge-mfh"><i class="fas fa-unlock-alt me-1"></i> Acceso con Credenciales</span>
+                <span class="badge-mfh"><i class="fas fa-door-open me-1"></i> Acceso Inicial</span>
                 <span class="badge-mfh"><i class="fas fa-flag me-1"></i> México</span>
             </div>
         </div>
@@ -429,6 +430,73 @@
             </div>
         </div>
 
+        <!-- ========== CATEGORÍA 3: ACCESO INICIAL ========== -->
+        <div class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🚪</span>
+                <h3>Acceso Inicial</h3>
+                <span class="category-count">8 herramientas</span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('dnsrebind')">
+                        <i class="fas fa-sync-alt tool-icon"></i>
+                        <div class="mt-2 fw-bold">🔄 DNS Rebind</div>
+                        <small class="text-muted">rebind, dns-rebind</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('sqlmap')">
+                        <i class="fas fa-database tool-icon"></i>
+                        <div class="mt-2 fw-bold">💉 SQLMap</div>
+                        <small class="text-muted">Detección/exploit SQLi</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('sqlninja')">
+                        <i class="fas fa-database tool-icon"></i>
+                        <div class="mt-2 fw-bold">🥷 SQLNinja</div>
+                        <small class="text-muted">MSSQL injection/takeover</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('sqlsus')">
+                        <i class="fas fa-database tool-icon"></i>
+                        <div class="mt-2 fw-bold">🐬 SQLSus</div>
+                        <small class="text-muted">MySQL injection/takeover</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('jsqlinjection')">
+                        <i class="fas fa-coffee tool-icon"></i>
+                        <div class="mt-2 fw-bold">☕ jSQL Injection</div>
+                        <small class="text-muted">Java SQL injection tool</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('commix')">
+                        <i class="fas fa-terminal tool-icon"></i>
+                        <div class="mt-2 fw-bold">💻 Commix</div>
+                        <small class="text-muted">Command injection tool</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('jbosswin')">
+                        <i class="fas fa-box tool-icon"></i>
+                        <div class="mt-2 fw-bold">📦 JBoss Linux</div>
+                        <small class="text-muted">jboss-linux</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="tool-card p-3 text-center" onclick="showTool('jbossautopwn')">
+                        <i class="fas fa-bomb tool-icon"></i>
+                        <div class="mt-2 fw-bold">💣 JBoss AutoPwn</div>
+                        <small class="text-muted">jboss-autopwn</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -462,6 +530,14 @@
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#nfcmfclassicTab"><i class="fas fa-credit-card me-1"></i> MIFARE</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#kerberoastTab"><i class="fas fa-key me-1"></i> Kerberoast</button></li>
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#krbrelayxTab"><i class="fas fa-exchange-alt me-1"></i> KrbRelayX</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dnsrebindTab"><i class="fas fa-sync-alt me-1"></i> DNS Rebind</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sqlmapTab"><i class="fas fa-database me-1"></i> SQLMap</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sqlninjaTab"><i class="fas fa-database me-1"></i> SQLNinja</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sqlsusTab"><i class="fas fa-database me-1"></i> SQLSus</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#jsqlinjectionTab"><i class="fas fa-coffee me-1"></i> jSQL</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#commixTab"><i class="fas fa-terminal me-1"></i> Commix</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#jbosswinTab"><i class="fas fa-box me-1"></i> JBoss Linux</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#jbossautopwnTab"><i class="fas fa-bomb me-1"></i> JBoss AutoPwn</button></li>
             </ul>
             
             <div class="tab-content">
@@ -1013,6 +1089,177 @@
                         </div>
                         <div class="col-md-6">
                             <div id="krbRelayResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== DNS REBIND ====== -->
+                <div class="tab-pane fade" id="dnsrebindTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🔄 Interface</label>
+                            <input type="text" class="form-control" id="dnsrebindIface" placeholder="eth0" value="eth0">
+                            <label class="form-label mt-2">🌐 Dominio registrado</label>
+                            <input type="text" class="form-control" id="dnsrebindDomain" placeholder="kali.local" value="kali.local">
+                            <label class="form-label mt-2">🎯 IPs target (separadas por coma)</label>
+                            <input type="text" class="form-control" id="dnsrebindTargets" placeholder="192.168.1.1,192.168.1.2" value="">
+                            <button class="btn-mfh mt-2 w-100" onclick="runDnsRebind()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('dns-rebind.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="dnsrebindResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== SQLMAP ====== -->
+                <div class="tab-pane fade" id="sqlmapTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">💉 URL objetivo</label>
+                            <input type="text" class="form-control" id="sqlmapTarget" placeholder="http://ejemplo.com/page.php?id=1" value="http://testphp.vulnweb.com/artists.php?artist=1">
+                            <label class="form-label mt-2">📝 Datos POST (opcional)</label>
+                            <input type="text" class="form-control" id="sqlmapData" placeholder="user=admin&pass=test" value="">
+                            <label class="form-label mt-2">🍪 Cookie (opcional)</label>
+                            <input type="text" class="form-control" id="sqlmapCookie" placeholder="PHPSESSID=abc123" value="">
+                            <button class="btn-mfh mt-2 w-100" onclick="runSqlmap()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('sqlmap.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="sqlmapResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== SQLNINJA ====== -->
+                <div class="tab-pane fade" id="sqlninjaTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🎯 Target</label>
+                            <input type="text" class="form-control" id="sqlninjaTarget" placeholder="192.168.1.51:80" value="192.168.1.51:80">
+                            <label class="form-label mt-2">🔧 Modo</label>
+                            <select class="form-select" id="sqlninjaMode">
+                                <option value="t">t (test - probar inyección)</option>
+                                <option value="f">f (fingerprint - fingerprint)</option>
+                                <option value="b">b (bruteforce - brute force sa)</option>
+                                <option value="e">e (escalation - escalar privilegios)</option>
+                                <option value="x">x (resurrectxp - recrear xp_cmdshell)</option>
+                                <option value="u">u (upload - subir .scr)</option>
+                                <option value="s">s (dirshell - shell directo)</option>
+                                <option value="r">r (revshell - reverse shell)</option>
+                                <option value="d">d (dnstunnel - túnel DNS)</option>
+                                <option value="m">m (metasploit - wrapper MSF)</option>
+                            </select>
+                            <label class="form-label mt-2">📄 Config file</label>
+                            <input type="text" class="form-control" id="sqlninjaConfig" placeholder="sqlninja.conf" value="sqlninja.conf">
+                            <button class="btn-mfh mt-2 w-100" onclick="runSqlninja()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('sqlninja.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="sqlninjaResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== SQLSUS ====== -->
+                <div class="tab-pane fade" id="sqlsusTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">🐬 Target host</label>
+                            <input type="text" class="form-control" id="sqlsusTarget" placeholder="http://ejemplo.com/page.php?id=1" value="http://ejemplo.com/page.php?id=1">
+                            <label class="form-label mt-2">📄 Config file</label>
+                            <input type="text" class="form-control" id="sqlsusConfig" placeholder="target.cfg" value="target.cfg">
+                            <label class="form-label mt-2">🔧 Comando (opcional, con -e)</label>
+                            <input type="text" class="form-control" id="sqlsusCmd" placeholder="start;get tables;get columns" value="">
+                            <button class="btn-mfh mt-2 w-100" onclick="runSqlsus()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('sqlsus.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="sqlsusResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== jSQL Injection ====== -->
+                <div class="tab-pane fade" id="jsqlinjectionTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">☕ URL objetivo</label>
+                            <input type="text" class="form-control" id="jsqlTarget" placeholder="http://target.com/page.php?id=1" value="http://target.com/item.php?id=1">
+                            <label class="form-label mt-2">📝 Método POST (opcional)</label>
+                            <input type="text" class="form-control" id="jsqlData" placeholder="user=admin&pass=test" value="">
+                            <label class="form-label mt-2">🖥️ Modo headless (sin GUI)</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="jsqlHeadless" checked>
+                                <label class="form-check-label" for="jsqlHeadless">Ejecutar en modo headless</label>
+                            </div>
+                            <button class="btn-mfh mt-2 w-100" onclick="runJsqlInjection()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('jsql-injection.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="jsqlResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== COMMIX ====== -->
+                <div class="tab-pane fade" id="commixTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">💻 URL objetivo</label>
+                            <input type="text" class="form-control" id="commixTarget" placeholder="http://target.com/ping?ip=127.0.0.1" value="http://target.com/ping?ip=127.0.0.1">
+                            <label class="form-label mt-2">📝 Datos POST (opcional)</label>
+                            <input type="text" class="form-control" id="commixData" placeholder="ip=127.0.0.1" value="">
+                            <label class="form-label mt-2">📊 Nivel (1-3)</label>
+                            <select class="form-select" id="commixLevel">
+                                <option value="1">1 (default)</option>
+                                <option value="2">2</option>
+                                <option value="3">3 (más exhaustivo)</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runCommix()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('commix.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="commixResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== JBOSS LINUX ====== -->
+                <div class="tab-pane fade" id="jbosswinTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">📦 Target IP</label>
+                            <input type="text" class="form-control" id="jbosswinTarget" placeholder="192.168.1.200" value="192.168.1.200">
+                            <label class="form-label mt-2">🔌 Puerto</label>
+                            <input type="text" class="form-control" id="jbosswinPort" placeholder="8080" value="8080">
+                            <button class="btn-mfh mt-2 w-100" onclick="runJbossLinux()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('jboss-linux.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="jbosswinResult" class="console-output">🔍 Esperando consulta...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ====== JBOSS AUTOPWN ====== -->
+                <div class="tab-pane fade" id="jbossautopwnTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">💣 Target IP</label>
+                            <input type="text" class="form-control" id="jbossTarget" placeholder="192.168.1.200" value="192.168.1.200">
+                            <label class="form-label mt-2">🔌 Puerto</label>
+                            <input type="text" class="form-control" id="jbossPort" placeholder="8080" value="8080">
+                            <label class="form-label mt-2">🖥️ Tipo de target</label>
+                            <select class="form-select" id="jbossOs">
+                                <option value="linux">Linux (jboss-linux / e.sh)</option>
+                                <option value="windows">Windows (jboss-win / e2.sh)</option>
+                            </select>
+                            <button class="btn-mfh mt-2 w-100" onclick="runJbossAutopwn()"><i class="fas fa-play me-2"></i>Generar Comandos</button>
+                            <button class="btn-outline-mfh mt-2 w-100" onclick="downloadTool('jboss-autopwn.js')"><i class="fas fa-download me-2"></i>Descargar</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="jbossResult" class="console-output">🔍 Esperando consulta...</div>
                         </div>
                     </div>
                 </div>
