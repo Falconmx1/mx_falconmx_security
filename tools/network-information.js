@@ -49,6 +49,11 @@ function isValidCIDR(cidr) {
  * No valida si la IP está en los rangos que lista — solo imprime la lista fija.
  * No acepta dominios (a diferencia de Host Info).
  * No hace ninguna consulta de red.
+ *
+ * No hace ping, traceroute, PTR, ASN, geolocalización, puertos, whois.
+ * No valida si la IP está en los rangos que lista (solo imprime la lista fija).
+ * No acepta dominios.
+ * No hace ninguna consulta de red.
  */
 function analyzeNetwork(target) {
     let ip = target;
