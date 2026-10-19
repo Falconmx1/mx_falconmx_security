@@ -47,6 +47,10 @@ function isValidUser(u) {
  * no detecta desechables, no verifica SPF/DKIM/DMARC.
  * El nombre "Identity Information" promete investigación de identidad;
  * entrega parseo y regex.
+ *
+ * No hace reconocimiento real. Bugs funcionales nuevos: acepta usuarios
+ * sin letras (..., ---) y es inconsistente con unicode entre email y
+ * usuario suelto.
  */
 function analyzeIdentity(target) {
     const isEmail = isValidEmail(target);
