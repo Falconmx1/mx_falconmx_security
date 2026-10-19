@@ -3,7 +3,7 @@
  * MFH TOOLS - DNS Information
  * Fase 1: Reconocimiento
  * 
- * Uso: node dns-information.js --target <dominio.com> [--type A|AAAA|MX|NS|TXT|CNAME|SOA|ALL]
+ * Uso: node dns-information.js --target <dominio> [--type <tipo>]
  * 
  * Autor: FalconMX Security
  * GitHub: https://github.com/Falconmx1/mx_falconmx_security
@@ -12,10 +12,13 @@
 'use strict';
 
 const dns = require('dns').promises;
+
 const CONFIG = {
     version: '2.0.0',
     author: 'FalconMX Security'
 };
+
+const TIPOS_VALIDOS = ['A', 'AAAA', 'MX', 'NS', 'TXT', 'CNAME', 'SOA', 'PTR', 'SRV', 'CAA', 'ALL'];
 
 // ============================================================
 // VALIDACIONES
@@ -25,87 +28,124 @@ function isValidDomain(d) {
 }
 
 // ============================================================
-// CONSULTAS DNS
+// ANÁLISIS
 // ============================================================
-async function queryDNS(domain, type) {
+/**
+ * No valida DNSSEC.
+ * No hace WHOIS.
+ * No hace AXFR.
+ * No hace reverse DNS de las IPs obtenidas.
+ * No hace enumeración de subdominios.
+ * No hace ping/traceroute.
+ * Tips estáticos.
+ *
+ * Bugs funcionales conocidos:
+ * - PTR listado pero inutilizable (validador rechaza IPs).
+ * - SRV listado pero inutilizable (validador rechaza etiquetas con _).
+ * - Exit code 0 en error.
+ */
+async function analyzeDNS(domain, tipo) {
+    if (!isValidDomain(domain)) {
+        return { error: 'Dominio inválido: ' + domain };
+    }
+
+    const type = (tipo || 'ALL').toUpperCase();
+    const typeDisplay = type === '' ? '(vacío)' : type;
     const results = {};
-    const errors = [];
+    const warnings = [];
 
-    const queries = {
-        A: () => dns.resolve4(domain),
-        AAAA: () => dns.resolve6(domain),
-        MX: () => dns.resolveMx(domain),
-        NS: () => dns.resolveNs(domain),
-        TXT: () => dns.resolveTxt(domain),
-        CNAME: () => dns.resolveCname(domain),
-        SOA: () => dns.resolveSoa(domain),
-        PTR: () => dns.reverse(domain),
-        SRV: () => dns.resolveSrv(domain),
-        CAA: () => dns.resolveCaa(domain),
-        NAPTR: () => dns.resolveNaptr(domain)
-    };
+    if (!TIPOS_VALIDOS.includes(type)) {
+        warnings.push('Tipo desconocido: ' + typeDisplay);
+    }
 
-    const typesToQuery = type === 'ALL' ? Object.keys(queries) : [type];
+    const queries = type === 'ALL'
+        ? ['A', 'AAAA', 'MX', 'NS', 'TXT', 'SOA', 'CAA']
+        : [type];
 
-    for (const t of typesToQuery) {
-        if (!queries[t]) {
-            errors.push('Tipo desconocido: ' + t);
-            continue;
-        }
+    for (const q of queries) {
+        if (!TIPOS_VALIDOS.includes(q)) continue;
         try {
-            const result = await queries[t]();
-            if (result && (Array.isArray(result) ? result.length : true)) {
-                results[t] = result;
-            }
+            if (q === 'A') results.A = await dns.resolve4(domain);
+            else if (q === 'AAAA') results.AAAA = await dns.resolve6(domain);
+            else if (q === 'MX') results.MX = await dns.resolveMx(domain);
+            else if (q === 'NS') results.NS = await dns.resolveNs(domain);
+            else if (q === 'TXT') results.TXT = await dns.resolveTxt(domain);
+            else if (q === 'SOA') results.SOA = await dns.resolveSoa(domain);
+            else if (q === 'CAA') results.CAA = await dns.resolveCaa(domain);
+            else if (q === 'CNAME') results.CNAME = await dns.resolveCname(domain);
+            else if (q === 'PTR') results.PTR = await dns.resolvePtr(domain);
+            else if (q === 'SRV') results.SRV = await dns.resolveSrv(domain);
         } catch (e) {
-            // Silencioso: muchos registros no existen, es normal
+            // Ignorar errores de registros inexistentes
         }
     }
 
-    return { results, errors };
+    return {
+        domain,
+        type: typeDisplay,
+        results,
+        warnings,
+        timestamp: new Date().toISOString()
+    };
 }
 
 // ============================================================
 // REPORTE
 // ============================================================
-function printReport(domain, type, data) {
+function printReport(data) {
+    if (data.error) {
+        console.log('\n❌ ' + data.error + '\n');
+        return;
+    }
+
     console.log('');
     console.log('═'.repeat(60));
     console.log('  📡 DNS INFORMATION REPORT');
-    console.log('  Dominio: ' + domain);
-    console.log('  Tipo: ' + type);
-    console.log('  Fecha: ' + new Date().toISOString());
+    console.log('  Dominio: ' + data.domain);
+    console.log('  Tipo: ' + data.type);
+    console.log('  Fecha: ' + data.timestamp);
     console.log('═'.repeat(60));
     console.log('');
 
-    if (Object.keys(data.results).length === 0) {
-        console.log('  ⚠️ No se encontraron registros DNS para este tipo.');
-        console.log('');
-    } else {
-        for (const [t, values] of Object.entries(data.results)) {
-            console.log('  📋 Registros ' + t + ':');
-            if (Array.isArray(values)) {
-                values.forEach(v => {
-                    if (Array.isArray(v)) {
-                        console.log('     • ' + v.join(' '));
-                    } else if (typeof v === 'object') {
-                        console.log('     • ' + JSON.stringify(v));
-                    } else {
-                        console.log('     • ' + v);
-                    }
-                });
-            } else if (typeof values === 'object') {
-                console.log('     • ' + JSON.stringify(values, null, 2));
-            } else {
-                console.log('     • ' + values);
-            }
-            console.log('');
+    const labels = {
+        A: 'Registros A',
+        AAAA: 'Registros AAAA',
+        MX: 'Registros MX',
+        NS: 'Registros NS',
+        TXT: 'Registros TXT',
+        SOA: 'Registros SOA',
+        CAA: 'Registros CAA',
+        CNAME: 'Registros CNAME',
+        PTR: 'Registros PTR',
+        SRV: 'Registros SRV'
+    };
+
+    let hayRegistros = false;
+    for (const [key, val] of Object.entries(data.results)) {
+        if (!val || (Array.isArray(val) && val.length === 0)) continue;
+        hayRegistros = true;
+        console.log('  📋 ' + (labels[key] || key) + ':');
+        if (Array.isArray(val)) {
+            val.forEach(v => {
+                if (typeof v === 'object') console.log('     • ' + JSON.stringify(v));
+                else console.log('     • ' + v);
+            });
+        } else if (typeof val === 'object') {
+            console.log('     • ' + JSON.stringify(val, null, 2));
+        } else {
+            console.log('     • ' + val);
         }
+        console.log('');
     }
 
-    if (data.errors.length) {
+    if (!hayRegistros) {
+        console.log('  ⚠️ No se encontraron registros DNS para este tipo.');
+        console.log('');
+    }
+
+    if (data.warnings.length) {
         console.log('  ⚠️ Advertencias:');
-        data.errors.forEach(e => console.log('     • ' + e));
+        data.warnings.forEach(w => console.log('     • ' + w));
         console.log('');
     }
 
@@ -117,28 +157,28 @@ function printReport(domain, type, data) {
     console.log('     Instalación:');
     console.log('       pip install dnsrecon');
     console.log('     Uso:');
-    console.log('       dnsrecon -d ' + domain + ' -t std');
+    console.log('       dnsrecon -d ' + data.domain + ' -t std');
     console.log('');
     console.log('  📦 dnsenum - Enumeración de subdominios');
     console.log('     Instalación:');
     console.log('       apt install dnsenum');
     console.log('     Uso:');
-    console.log('       dnsenum ' + domain);
+    console.log('       dnsenum ' + data.domain);
     console.log('');
     console.log('  📦 fierce - DNS recon agresivo');
     console.log('     Instalación:');
     console.log('       pip install fierce');
     console.log('     Uso:');
-    console.log('       fierce --domain ' + domain);
+    console.log('       fierce --domain ' + data.domain);
     console.log('');
     console.log('  📦 dig - Consultas DNS manuales');
     console.log('     Uso:');
-    console.log('       dig ' + domain + ' ANY');
-    console.log('       dig ' + domain + ' MX');
+    console.log('       dig ' + data.domain + ' ANY');
+    console.log('       dig ' + data.domain + ' MX');
     console.log('');
     console.log('  📦 nslookup - Consultas DNS cross-platform');
     console.log('     Uso:');
-    console.log('       nslookup -type=MX ' + domain);
+    console.log('       nslookup -type=MX ' + data.domain);
     console.log('');
     console.log('─'.repeat(60));
     console.log('');
@@ -171,21 +211,16 @@ async function main() {
         process.exit(0);
     }
 
-    const target = args[targetIdx + 1].replace(/^https?:\/\//, '').split('/')[0];
-    const type = typeIdx !== -1 ? args[typeIdx + 1].toUpperCase() : 'ALL';
+    const domain = args[targetIdx + 1];
+    const tipo = typeIdx !== -1 ? (args[typeIdx + 1] || '') : 'ALL';
 
-    if (!isValidDomain(target)) {
-        console.log('\n❌ Dominio inválido: ' + target + '\n');
-        process.exit(1);
-    }
+    console.log('\n🔍 Consultando registros ' + (tipo || 'ALL').toUpperCase() + ' para ' + domain + '...\n');
 
-    console.log('\n🔍 Consultando registros ' + type + ' para ' + target + '...\n');
-
-    const data = await queryDNS(target, type);
-    printReport(target, type, data);
+    const data = await analyzeDNS(domain, tipo);
+    printReport(data);
 }
 
-main().catch(err => {
-    console.error('\n❌ Error:', err.message, '\n');
+main().catch(e => {
+    console.error('\n❌ Error: ' + e.message + '\n');
     process.exit(1);
 });
