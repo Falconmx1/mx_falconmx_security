@@ -30,6 +30,18 @@ function isValidUser(u) {
 // ============================================================
 // ANÁLISIS
 // ============================================================
+/**
+ * Lo que es: un validador de email/usuario + un checklist heurístico de 5 regex +
+ * un detector de patrones de 3 regex + un bloque de tips estático.
+ * No hace reconocimiento real.
+ * No resuelve MX del dominio (para verificar si acepta correo).
+ * No hace SMTP handshake ni verifica existencia del buzón.
+ * No consulta HaveIBeenPwned, Hunter.io, IntelX, ni ninguna API real.
+ * No busca en redes sociales (solo sugiere Sherlock/Maigret).
+ * No valida el dominio contra DNS.
+ * No detecta emails desechables (temp-mail, etc.).
+ * No verifica SPF/DKIM/DMARC.
+ */
 function analyzeIdentity(target) {
     const isEmail = isValidEmail(target);
     const parts = target.split('@');
