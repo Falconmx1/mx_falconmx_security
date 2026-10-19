@@ -41,6 +41,12 @@ function isValidUser(u) {
  * No valida el dominio contra DNS.
  * No detecta emails desechables (temp-mail, etc.).
  * No verifica SPF/DKIM/DMARC.
+ *
+ * No hace reconocimiento real: no resuelve MX, no hace SMTP,
+ * no consulta APIs OSINT, no busca en redes, no valida DNS,
+ * no detecta desechables, no verifica SPF/DKIM/DMARC.
+ * El nombre "Identity Information" promete investigación de identidad;
+ * entrega parseo y regex.
  */
 function analyzeIdentity(target) {
     const isEmail = isValidEmail(target);
