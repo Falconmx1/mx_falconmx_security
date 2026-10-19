@@ -35,6 +35,13 @@ function isValidIP(ip) {
 // ============================================================
 // ANÁLISIS
 // ============================================================
+/**
+ * Lo que es: un validador de formato + un checklist heurístico de 5 regex +
+ * un contador de puntos + un bloque de tips estático. No hace reconocimiento real.
+ * No resuelve DNS, no hace WHOIS, no hace ping, no consulta APIs, no lee headers,
+ * no obtiene certificados, no geolocaliza, no hace ASN. El nombre "Host Information"
+ * promete mucho más de lo que entrega.
+ */
 function analyzeHost(target) {
     const clean = target.replace(/^https?:\/\//, '').split('/')[0];
     const isIP = isValidIP(clean);
