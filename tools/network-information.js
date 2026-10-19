@@ -38,6 +38,18 @@ function isValidCIDR(cidr) {
 // ============================================================
 // ANÁLISIS
 // ============================================================
+/**
+ * No hace ping.
+ * No hace traceroute.
+ * No resuelve PTR (DNS inverso).
+ * No consulta ASN (8.8.8.8 es Google, no lo dice).
+ * No geolocaliza.
+ * No escanea puertos.
+ * No consulta whois.
+ * No valida si la IP está en los rangos que lista — solo imprime la lista fija.
+ * No acepta dominios (a diferencia de Host Info).
+ * No hace ninguna consulta de red.
+ */
 function analyzeNetwork(target) {
     let ip = target;
     let cidr = null;
