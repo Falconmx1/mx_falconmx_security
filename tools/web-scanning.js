@@ -104,6 +104,28 @@ function normalizeUrl(url) {
 // ============================================================
 // GENERADOR DE COMANDOS
 // ============================================================
+/**
+ * Web Scanning es un generador de comandos, no un escáner.
+ * No hace red, no valida target, no sanitiza, no escanea.
+ *
+ * Lo que realmente hace:
+ * - Normaliza la URL (añade http:// si falta esquema).
+ * - Genera un comando de DIRB, DirBuster o Gobuster con el target metido.
+ * - Imprime un reporte con instalación, uso, opciones y comando recomendado.
+ *
+ * Bugs funcionales conocidos:
+ * - No valida target: acepta "noesunaURL", "example", "javascript:alert(1)".
+ * - No sanitiza backticks: genera comandos peligrosos si se copian/pegan.
+ * - Exit code 0 en algunos errores (aunque aquí sí usa exit 1 en URL inválida).
+ *
+ * Lo que NO hace:
+ * - No hace peticiones HTTP.
+ * - No consulta headers.
+ * - No detecta tecnologías.
+ * - No verifica TLS.
+ * - No lee robots.txt.
+ * - No escanea directorios.
+ */
 function generateCommand(tool, target, options = {}) {
     const cleanTarget = normalizeUrl(target);
     
