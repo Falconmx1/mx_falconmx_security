@@ -172,6 +172,37 @@ function isValidBSSID(bssid) {
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * WiFi Scanning es un generador de comandos, no un escáner.
+ * No hace WiFi real: no lanza bettercap, kismet, airodump-ng,
+ * aireplay-ng, wifite, wash ni reaver. Solo imprime comandos
+ * genéricos de 8 herramientas + un flujo recomendado de 5 pasos.
+ *
+ * Lo que realmente hace:
+ * - Valida la interfaz con regex (filtra ;, backticks, $()).
+ * - Imprime un reporte con instalación, uso y comandos de 8 herramientas.
+ * - Imprime un flujo recomendado de auditoría de 5 pasos con iface interpolado.
+ * - Advertencia legal específica.
+ *
+ * Ventaja de seguridad:
+ * - El iface SÍ se interpola en el flujo, pero el validador
+ *   /^[a-zA-Z0-9:_-]+$/ filtra ;, backticks, $(), espacios.
+ *   No hay inyección por copiar/pegar en el flujo.
+ *
+ * Bugs funcionales conocidos:
+ * - 'wlan0mon' se duplica a 'wlan0monmon' en el flujo (hace iface + 'mon'
+ *   sin verificar si ya termina en 'mon'). El banner sugiere --iface wlan0mon,
+ *   pero ese mismo iface rompe el flujo. Contradicción de UX.
+ * - isValidBSSID es código muerto: definida pero nunca llamada.
+ * - 'airodump_ng' tiene name 'Aireplay-ng' (naming confuso: la clave dice
+ *   airodump_ng pero muestra Aireplay-ng).
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - Exit code 0 en --tool inválida (debería ser 1).
+ *
+ * Limitaciones:
+ * - No escanea nada (solo imprime comandos).
+ * - No hace WiFi real.
+ */
 function printReport(iface, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
