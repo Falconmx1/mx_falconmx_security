@@ -123,6 +123,34 @@ function isValidMAC(mac) {
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * Bluetooth Scanning es un generador de comandos, no un escáner.
+ * No hace Bluetooth real: no lanza bluetoothctl, hcitool, btmon,
+ * bettercap ni bluelog. Solo imprime comandos genéricos de 5 herramientas.
+ *
+ * Lo que realmente hace:
+ * - Valida el target como MAC (si no es 'all').
+ * - Imprime un reporte con instalación, uso y comandos de las 5 herramientas.
+ * - Acepta --tool para elegir una herramienta específica o 'all'.
+ *
+ * Ventaja de seguridad:
+ * - El target NO se interpola en los comandos. Los comandos son genéricos
+ *   (info <MAC>, hcitool lescan, ble.recon on, etc.). No hay riesgo de
+ *   inyección por copiar/pegar, a diferencia de Web Scanning, Vuln Scanning
+ *   y Web Vuln Scanning, que sí interpolaban el target.
+ *
+ * Bugs funcionales conocidos:
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ *   (Contraste con Web Scanning/Web Vuln Scanning que sí advierten.)
+ * - Exit code 0 en --tool inválida (debería ser 1).
+ * - MAC con guion no se normaliza a ':' en el header del reporte.
+ *
+ * Limitaciones:
+ * - No escanea nada (solo imprime comandos).
+ * - Los comandos son genéricos, no específicos para el target.
+ *   Si pasas --target AA:BB:..., no recibes "bluetoothctl info AA:BB:...".
+ * - No hace Bluetooth real.
+ */
 function printReport(target, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
