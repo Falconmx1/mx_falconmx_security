@@ -154,6 +154,38 @@ const BANDS = [
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * Radio Frequency Scanning es un generador de comandos, no un escáner.
+ * No hace RF real: no lanza hackrf_transfer, rtl_sdr, gqrx,
+ * gnuradio-companion ni urh. Solo imprime comandos genéricos de 6 herramientas SDR.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso y comandos de 6 herramientas SDR.
+ * - Muestra 14 bandas de frecuencia comunes.
+ * - Acepta --tool para elegir herramienta y --freq para mostrar frecuencia.
+ * - Advertencia legal específica (menciona IFT México).
+ *
+ * Ventaja de seguridad:
+ * - El target y la freq NO se interpolan en los comandos. Los comandos son
+ *   genéricos (frecuencias fijas como 100M, 88:108, etc.). No hay riesgo de
+ *   inyección por copiar/pegar, igual que Bluetooth Scanning.
+ *
+ * Bugs funcionales conocidos:
+ * - --freq es DECORATIVA: solo se muestra en el header, no se usa en ningún
+ *   comando. Todos los comandos tienen frecuencias fijas. El usuario pasa
+ *   --freq 433920000 esperando comandos para 433.92 MHz y recibe comandos
+ *   para 100 MHz (fijo).
+ * - 'gnurdio' tiene typo (falta la 'a'). --tool gnuradio no funciona;
+ *   cae a mostrar todas. La clave real es 'gnurdio'.
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - --freq no valida: acepta 'noesunafrecuencia', -100, strings arbitrarios.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Limitaciones:
+ * - No escanea nada (solo imprime comandos).
+ * - No hace RF real.
+ * - SDR# es para Windows (.NET), no Linux, aunque se documenta.
+ */
 function printReport(selectedTool, freq) {
     console.log('');
     console.log('═'.repeat(65));
