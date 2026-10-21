@@ -1,214 +1,222 @@
 #!/usr/bin/env node
-
 /**
- * DNS Brute Forcer - MFH TOOLS PRO
- * Encuentra subdominios usando fuerza bruta con wordlists
+ * MFH TOOLS - Brute Force
+ * Acceso con Credenciales
  * 
- * Uso: node dns-brute-forcer.js <dominio> [opciones]
- * Ejemplo: node dns-brute-forcer.js google.com
- * Ejemplo: node dns-brute-forcer.js ejemplo.com --wordlist wordlist.txt
- * Ejemplo: node dns-brute-forcer.js ejemplo.com --threads 50 --output subs.txt
+ * Integra: Hydra, Medusa, CrackMapExec, Ncrack
+ * 
+ * Uso: node brute-force.js --target <IP> [--service <ssh|ftp|http>] [--tool <nombre>]
+ * 
+ * Autor: FalconMX Security
  */
 
-const dns = require('dns').promises;
-const fs = require('fs');
+'use strict';
 
-// ==================== CONFIGURACIÓN ====================
-const CONFIG = {
-    timeout: 3000,
-    concurrency: 20,
-    maxRetries: 2,
-    defaultWordlist: [
-        'www', 'mail', 'ftp', 'localhost', 'webmail', 'smtp', 'pop', 'ns1', 'webdisk',
-        'ns2', 'cpanel', 'whm', 'autodiscover', 'autoconfig', 'm', 'imap', 'test', 'ns',
-        'blog', 'pop3', 'dev', 'www2', 'admin', 'forum', 'news', 'vpn', 'ns3', 'mail2',
-        'new', 'mysql', 'old', 'lists', 'support', 'mobile', 'mx', 'static', 'docs',
-        'beta', 'shop', 'sql', 'secure', 'demo', 'cp', 'calendar', 'wiki', 'web',
-        'media', 'email', 'images', 'img', 'video', 'downloads', 'dns', 'api',
-        'app', 'apps', 'stage', 'staging', 'backup', 'files', 'cache', 'cdn',
-        'cloud', 'monitor', 'monitoring', 'log', 'logs', 'info', 'portal', 'help',
-        'remote', 'server', 'test2', 'test3', 'web1', 'web2', 'mail1', 'mail3',
-        'ns4', 'ns5', 'mx1', 'mx2', 'pop3', 'imap', 'smtp', 'webmail', 'exchange',
-        'owa', 'vpn', 'remote', 'rdp', 'ssh', 'sftp', 'ftp', 'sip', 'voip',
-        'asterisk', 'pbx', 'phone', 'fax', 'print', 'printer', 'scanner', 'scan',
-        'backup', 'storage', 'nas', 'san', 'iscsi', 'nfs', 'cifs', 'smb'
-    ]
+const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
+
+// ============================================================
+// HERRAMIENTAS DE FUERZA BRUTA
+// ============================================================
+const TOOLS = {
+    hydra: {
+        name: 'Hydra',
+        description: 'Herramienta rápida de cracking de login por red que soporta múltiples protocolos',
+        install: [
+            'sudo apt install hydra'
+        ],
+        usage: [
+            'hydra -l <user> -P <wordlist> <target> <service>',
+            'hydra -L users.txt -P passwords.txt ssh://<target>',
+            'hydra -C creds.txt <target> http-get /'
+        ],
+        examples: [
+            'hydra -l admin -P /usr/share/wordlists/rockyou.txt 192.168.1.1 ssh',
+            'hydra -L users.txt -P pass.txt ftp://192.168.1.1',
+            'hydra -I admin -P rockyou.txt <target> http-post-form "/login.php:username=^USER^&password=^PASS^:F=form name=\'login\'"'
+        ],
+        notes: [
+            'Soporta SSH, FTP, HTTP, RDP, SMB y otros protocolos',
+            '-C se usa para archivos con formato combinado user:pass',
+            '-f detiene el ataque al encontrar la primera credencial válida'
+        ]
+    },
+    medusa: {
+        name: 'Medusa',
+        description: 'Herramienta de fuerza bruta de login paralelizada, más rápida en ciertos escenarios',
+        install: [
+            'sudo apt install medusa'
+        ],
+        usage: [
+            'medusa -h <target> -u <user> -P <wordlist> -M <module>',
+            'medusa -H hosts.txt -U users.txt -P pass.txt -M ssh'
+        ],
+        examples: [
+            'medusa -h 192.168.1.1 -u admin -P rockyou.txt -M ssh',
+            'medusa -H targets.txt -U users.txt -P pass.txt -M ftp'
+        ],
+        notes: [
+            'Soporta escaneo paralelo en múltiples hosts',
+            'Diseño modular, -M especifica el módulo de servicio',
+            'Más rápida que Hydra en algunos escenarios'
+        ]
+    },
+    crackmapexec: {
+        name: 'CrackMapExec',
+        description: 'Herramienta post-explotación para validación automatizada de credenciales, soporta SMB/WinRM y otros protocolos',
+        install: [
+            'pip install crackmapexec'
+        ],
+        usage: [
+            'crackmapexec <protocol> <target> -u <user> -p <password>',
+            'crackmapexec winrm <target> -u users.txt -p passwords.txt'
+        ],
+        examples: [
+            'crackmapexec winrm 192.168.1.1 -u administrator -p password123',
+            'crackmapexec smb 192.168.1.0/24 -u users.txt -p pass.txt'
+        ],
+        notes: [
+            'Diseñada para entornos Windows',
+            'Soporta WinRM, SMB, MSSQL y otros protocolos',
+            'Se puede usar para password spraying (rociado de credenciales)'
+        ]
+    },
+    ncrack: {
+        name: 'Ncrack',
+        description: 'Herramienta de alta velocidad para cracking de autenticación de red, soporta SSH, RDP, FTP y más',
+        install: [
+            'sudo apt install ncrack'
+        ],
+        usage: [
+            'ncrack -U <user> -P <wordlist> <target>:<port>',
+            'ncrack --user admin -P pass.txt ssh://192.168.1.1'
+        ],
+        examples: [
+            'ncrack -U users.txt -P pass.txt ssh://192.168.1.1',
+            'ncrack -U admin -P rockyou.txt rdp://192.168.1.1'
+        ],
+        notes: [
+            'Diseñada para cracking de alta velocidad',
+            'Soporta SSH, RDP, FTP, Telnet, HTTP',
+            'Adecuada para escenarios de escaneo a gran escala'
+        ]
+    }
 };
 
-// ==================== PARSEAR ARGUMENTOS ====================
-const args = process.argv.slice(2);
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * Brute Force es un generador de comandos, no una herramienta de fuerza bruta.
+ * No hace fuerza bruta (no lanza Hydra, Medusa, CrackMapExec ni Ncrack).
+ * Solo imprime comandos genéricos de 4 herramientas.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso básico, ejemplos y notas de 4 herramientas.
+ * - Muestra el target y servicio en el header (pero no los usa en comandos).
+ * - Acepta --tool para elegir herramienta o 'all'.
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - --target es DECORATIVO: solo se muestra en el header. Los ejemplos usan
+ *   192.168.1.1 fijo, no el target del usuario.
+ * - --service es DECORATIVO: solo cambia el header. Los ejemplos siguen
+ *   mostrando 'ssh' aunque pases --service ftp o --service http.
+ * - No valida IP: acepta 'admin', 'noesunaip', 'example.com' como target.
+ * - --hash, --user, --wordlist NO EXISTEN: solo --target, --service, --tool.
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja de seguridad:
+ * - No interpola target ni service → sin inyección por copiar/pegar.
+ *
+ * Limitaciones:
+ * - No hace fuerza bruta real.
+ * - No lanza Hydra, Medusa, CrackMapExec ni Ncrack.
+ * - No valida IPs.
+ * - No interpola target ni service en comandos.
+ *
+ * Veredicto:
+ * El nombre "Brute Force" promete fuerza bruta. Entrega un recetario de
+ * comandos con target y service decorativos y sin hacer fuerza bruta.
+ */
+function printReport(target, service, selectedTool) {
+    console.log('');
+    console.log('═'.repeat(65));
+    console.log('  🔨 REPORTE DE ATAQUE DE FUERZA BRUTA');
+    console.log('  Objetivo: ' + (target || 'No especificado'));
+    console.log('  Servicio: ' + (service || 'ssh'));
+    console.log('  Fecha: ' + new Date().toISOString());
+    console.log('═'.repeat(65));
+    console.log('');
 
-let domain = null;
-let wordlist = CONFIG.defaultWordlist;
-let threads = CONFIG.concurrency;
-let outputFile = null;
-let timeout = CONFIG.timeout;
-let verbose = false;
+    var toolsToShow = selectedTool === 'all' ? Object.keys(TOOLS) :
+                      TOOLS[selectedTool] ? [selectedTool] : Object.keys(TOOLS);
 
-if (args.length < 1) {
-    console.error(`
-🔍 DNS Brute Forcer - MFH TOOLS PRO
-====================================
-Encuentra subdominios usando fuerza bruta con wordlists.
+    toolsToShow.forEach(function(key) {
+        var tool = TOOLS[key];
+        console.log('📌 ' + tool.name);
+        console.log('   ' + tool.description);
+        console.log('');
+        console.log('   🔧 Instalación:');
+        tool.install.forEach(function(line) { console.log('      ' + line); });
+        console.log('');
+        console.log('   💻 Uso básico:');
+        tool.usage.forEach(function(line) { console.log('      ' + line); });
+        console.log('');
+        console.log('   🎯 Ejemplos:');
+        tool.examples.forEach(function(line) { console.log('      ' + line); });
+        console.log('');
+        console.log('   📝 Notas:');
+        tool.notes.forEach(function(line) { console.log('      • ' + line); });
+        console.log('');
+        console.log('─'.repeat(65));
+        console.log('');
+    });
 
-Uso:
-  node dns-brute-forcer.js <dominio> [opciones]
-
-Opciones:
-  --wordlist <archivo>  Usar lista personalizada de subdominios
-  --threads <n>         Número de hilos concurrentes (default: 20)
-  --output <archivo>    Guardar resultados en archivo
-  --timeout <ms>        Timeout en milisegundos (default: 3000)
-  --verbose             Mostrar más detalles
-  --help                Mostrar esta ayuda
-
-Ejemplos:
-  node dns-brute-forcer.js google.com
-  node dns-brute-forcer.js ejemplo.com --wordlist mylist.txt
-  node dns-brute-forcer.js ejemplo.com --threads 50 --output subs.txt
-`);
-    process.exit(1);
+    console.log('  ⚠️ ADVERTENCIA');
+    console.log('     Solo realiza fuerza bruta contra sistemas que tengas permiso de probar.');
+    console.log('     Los ataques de credenciales no autorizados son ilegales.');
+    console.log('');
+    console.log('─'.repeat(65));
+    console.log('');
 }
 
-domain = args[0];
+// ============================================================
+// CLI
+// ============================================================
+function main() {
+    var args = process.argv.slice(2);
+    var targetIdx = args.indexOf('--target');
+    var serviceIdx = args.indexOf('--service');
+    var toolIdx = args.indexOf('--tool');
 
-for (let i = 1; i < args.length; i++) {
-    if (args[i] === '--wordlist' && args[i + 1]) {
-        try {
-            const content = fs.readFileSync(args[i + 1], 'utf8');
-            wordlist = content.split('\n').filter(w => w.trim());
-            i++;
-        } catch (e) {
-            console.error(`⚠️ No se pudo leer wordlist: ${args[i + 1]}`);
-        }
-    } else if (args[i] === '--threads' && args[i + 1]) {
-        threads = parseInt(args[i + 1]) || CONFIG.concurrency;
-        i++;
-    } else if (args[i] === '--output' && args[i + 1]) {
-        outputFile = args[i + 1];
-        i++;
-    } else if (args[i] === '--timeout' && args[i + 1]) {
-        timeout = parseInt(args[i + 1]) || CONFIG.timeout;
-        i++;
-    } else if (args[i] === '--verbose') {
-        verbose = true;
-    } else if (args[i] === '--help') {
-        console.error('Ayuda: revisa el mensaje de uso arriba.');
+    if (args.length === 0 || targetIdx === -1) {
+        console.log('');
+        console.log('╔══════════════════════════════════════════════════════╗');
+        console.log('║  MFH TOOLS — Fuerza Bruta v' + CONFIG.version + '                    ║');
+        console.log('║  ' + CONFIG.author + '                              ║');
+        console.log('╚══════════════════════════════════════════════════════╝');
+        console.log('');
+        console.log('  Uso: node brute-force.js --target <IP> [--service <ssh|ftp|http>] [--tool <nombre>]');
+        console.log('');
+        console.log('  Herramientas:');
+        Object.keys(TOOLS).forEach(function(k) {
+            console.log('    • ' + k + ' - ' + TOOLS[k].name);
+        });
+        console.log('');
+        console.log('  Ejemplos:');
+        console.log('    node brute-force.js --target 192.168.1.1');
+        console.log('    node brute-force.js --target 192.168.1.1 --service ftp --tool hydra');
+        console.log('');
         process.exit(0);
     }
+
+    var target = args[targetIdx + 1] || null;
+    var service = serviceIdx !== -1 ? args[serviceIdx + 1] : 'ssh';
+    var tool = toolIdx !== -1 ? args[toolIdx + 1].toLowerCase() : 'all';
+
+    console.log('\n🔨 Generando comandos de fuerza bruta...\n');
+    printReport(target, service, tool);
 }
 
-// ==================== FUNCIONES ====================
-async function resolveSubdomain(subdomain, domain, retries = 0) {
-    const hostname = `${subdomain}.${domain}`;
-    try {
-        const addresses = await dns.resolve4(hostname);
-        return {
-            subdomain: hostname,
-            ips: addresses,
-            resolved: true,
-            type: 'A'
-        };
-    } catch (error) {
-        if (error.code === 'ENOTFOUND' || error.code === 'NXDOMAIN') {
-            return { subdomain: hostname, resolved: false };
-        }
-        if (retries < CONFIG.maxRetries) {
-            await new Promise(r => setTimeout(r, 200));
-            return resolveSubdomain(subdomain, domain, retries + 1);
-        }
-        return { subdomain: hostname, resolved: false };
-    }
-}
-
-async function bruteForce(domain, wordlist, threads) {
-    console.log(`🔍 DNS Brute Forcer - ${domain}`);
-    console.log('='.repeat(60));
-    console.log(`📋 Wordlist: ${wordlist.length} subdominios`);
-    console.log(`🔄 Hilos: ${threads}`);
-    console.log('');
-    
-    const results = [];
-    let completed = 0;
-    const total = wordlist.length;
-    let found = 0;
-    const startTime = Date.now();
-    
-    for (let i = 0; i < wordlist.length; i += threads) {
-        const batch = wordlist.slice(i, i + threads);
-        const batchPromises = batch.map(sub => resolveSubdomain(sub, domain));
-        const batchResults = await Promise.all(batchPromises);
-        
-        const resolved = batchResults.filter(r => r.resolved);
-        results.push(...resolved);
-        found += resolved.length;
-        
-        completed += batch.length;
-        const progress = Math.round((completed / total) * 100);
-        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-        process.stdout.write(`\r📊 Progreso: ${progress}% (${completed}/${total}) - Encontrados: ${found} - Tiempo: ${elapsed}s`);
-        
-        if (verbose && resolved.length > 0) {
-            resolved.forEach(r => {
-                console.log(`\n   ✅ ${r.subdomain} → ${r.ips.join(', ')}`);
-            });
-        }
-    }
-    
-    process.stdout.write('\n');
-    return results;
-}
-
-// ==================== MAIN ====================
-(async function main() {
-    try {
-        // Validar dominio
-        const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-.]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
-        if (!domainRegex.test(domain)) {
-            console.error('❌ Dominio inválido');
-            process.exit(1);
-        }
-        
-        // Verificar dominio principal
-        try {
-            const ip = await dns.resolve4(domain);
-            console.log(`✅ Dominio principal resuelto: ${domain} → ${ip[0]}`);
-        } catch (error) {
-            console.warn(`⚠️ No se pudo resolver el dominio principal: ${domain}`);
-        }
-        
-        const results = await bruteForce(domain, wordlist, threads);
-        const found = results.filter(r => r.resolved);
-        const subdomains = found.map(r => r.subdomain);
-        
-        console.log('\n' + '='.repeat(60));
-        console.log('📊 RESULTADOS');
-        console.log('='.repeat(60));
-        console.log(`🎯 Dominio: ${domain}`);
-        console.log(`✅ Subdominios encontrados: ${subdomains.length}`);
-        console.log(`⏱️ Tiempo: ${((Date.now() - startTime) / 1000).toFixed(2)} segundos`);
-        
-        if (subdomains.length > 0) {
-            console.log('\n📋 LISTA DE SUBDOMINIOS:');
-            subdomains.forEach((s, i) => {
-                const ip = found.find(r => r.subdomain === s);
-                console.log(`   ${String(i + 1).padStart(3)}. ${s}${ip ? ` → ${ip.ips.join(', ')}` : ''}`);
-            });
-        } else {
-            console.log('\n❌ No se encontraron subdominios');
-        }
-        
-        // Guardar resultados
-        if (outputFile) {
-            const output = outputFile || `dns_brute_${domain}_${Date.now()}.txt`;
-            fs.writeFileSync(output, subdomains.join('\n'));
-            console.log(`\n📁 Resultados guardados en: ${output}`);
-        }
-        
-        console.log('\n✅ DNS Brute Forcer completado exitosamente');
-        
-    } catch (error) {
-        console.error(`❌ Error: ${error.message}`);
-        process.exit(1);
-    }
-})();
+main();
