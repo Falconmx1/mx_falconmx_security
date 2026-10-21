@@ -186,6 +186,46 @@ const TOOLS = {
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * Wordlist Profiling (Password Profiling) es un generador de comandos,
+ * y el más decorativo de todos. No lee wordlists, no analiza archivos,
+ * no genera nada. Solo imprime comandos genéricos de 8 herramientas.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso, notas y ejemplo de 8 herramientas.
+ * - Muestra el target en el header (pero no lo usa en comandos).
+ * - Acepta --tool para elegir herramienta o 'all'.
+ * - Imprime un flujo recomendado de 5 pasos (también sin usar el target).
+ *
+ * Bugs funcionales conocidos:
+ * - --target es DECORATIVO: solo se muestra en el header. No se usa en ningún
+ *   comando, ni en ejemplos, ni en el flujo recomendado. El flujo usa
+ *   'https://target.com' fijo, no el target del usuario.
+ * - --wordlist NO EXISTE: el flag natural para una wordlist no está.
+ * - --file NO EXISTE: tampoco hay forma de pasar un archivo.
+ * - dosfi es herramienta INVENTADA/PLACEHOLDER: 'Denial of Service Fuzzy
+ *   Inference' no tiene sentido en wordlists. git clone tiene [repo] placeholder.
+ * - twofi depende de Twitter API muerta (desde 2023 ya no es gratuita).
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - No tiene advertencia legal (inconsistente con BT/RF/WiFi/Cred).
+ * - Inconsistencia de naming: 'Password Profiling' en banner,
+ *   'wordlist-profiling' en archivo.
+ *
+ * Ventaja de seguridad:
+ * - No interpola target → sin inyección por copiar/pegar.
+ *
+ * Limitaciones:
+ * - No lee wordlists.
+ * - No analiza archivos.
+ * - No genera nada.
+ * - No hace profiling real.
+ *
+ * Veredicto:
+ * El nombre "Wordlist Profiling" promete perfilar wordlists. Entrega un
+ * recetario de comandos con target decorativo y sin leer ninguna wordlist.
+ * Es la que menos cumple lo que promete de todas las auditadas.
+ */
 function printReport(target, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
