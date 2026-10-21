@@ -117,6 +117,35 @@ const TOOLS = {
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * Credential Dumping es un generador de comandos, no un volcador de credenciales.
+ * No extrae nada (no lanza samdump2, chntpw, pwdump.py, secretsdump.py,
+ * mimikatz.exe). Solo imprime comandos genéricos de 5 herramientas.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso, notas y ejemplo de 5 herramientas.
+ * - Muestra el target en el header (pero no lo usa en comandos).
+ * - Acepta --tool para elegir una herramienta o 'all'.
+ * - Advertencia legal específica.
+ *
+ * Bugs funcionales conocidos:
+ * - --target es DECORATIVO: solo se muestra en el header. Los comandos tienen
+ *   paths fijos (/path/to/SYSTEM, /mnt/win/...). El usuario pasa
+ *   --target /mnt/win esperando comandos para /mnt/win/.../SAM y recibe
+ *   /path/to/SYSTEM (fijo). Ni siquiera los ejemplos usan el target.
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - --target no valida: acepta cualquier string (noesunpath, C:\Windows\...).
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja de seguridad:
+ * - No interpola target → sin inyección por copiar/pegar.
+ *   Igual que Bluetooth Scanning y RF Scanning.
+ *
+ * Limitaciones:
+ * - No extrae credenciales (solo imprime comandos).
+ * - Mimikatz es para Windows (.NET), no Linux, aunque se documenta.
+ * - No hace cred dumping real.
+ */
 function printReport(target, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
