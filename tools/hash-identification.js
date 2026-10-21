@@ -97,6 +97,37 @@ const HASH_EXAMPLES = [
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * Hash Identification es un generador de comandos CON análisis real del hash.
+ * No identifica hashes de verdad (no lanza hashid, hash-identifier ni hashcrack).
+ * Solo imprime comandos genéricos de 3 herramientas + análisis básico del input.
+ *
+ * Lo que realmente hace:
+ * - Analiza el hash: longitud, formato (hex/mixto), tipo probable.
+ * - Detecta MD5, SHA-1, SHA-256, SHA-512, bcrypt, Argon2, crypt formats.
+ * - Imprime un reporte con instalación, uso, notas y ejemplo de 3 herramientas.
+ * - Acepta --tool para elegir herramienta o 'all'.
+ * - Lista ejemplos de hashes por tipo.
+ *
+ * Bugs funcionales conocidos:
+ * - --hash sin flag es ignorado: el hash posicional no se procesa.
+ *   Solo funciona con --hash <hash>. Bug de UX.
+ * - tool.example.replace('<hash>', ...) nunca se ejecuta: los ejemplos
+ *   no contienen '<hash>', así que siempre muestran el MD5 fijo.
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - --hash no valida: acepta 'noesunhash', strings arbitrarios.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - No tiene advertencia legal (inconsistente con BT/RF/WiFi/Cred).
+ *
+ * Limitaciones:
+ * - No identifica hashes de verdad (solo análisis básico + comandos).
+ * - No hace lookup en APIs, no crackea, no consulta hashid.
+ * - No interpola hash en comandos → sin inyección por copiar/pegar.
+ *
+ * Veredicto:
+ * Es el más funcional de los generadores de comandos porque SÍ analiza
+ * el hash (longitud, formato, tipo). Pero sigue sin identificar de verdad.
+ */
 function printReport(hash, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
