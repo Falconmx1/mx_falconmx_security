@@ -39,6 +39,47 @@ const TOOLS = {
     }
 };
 
+// ============================================================
+// Generación de reporte
+// ============================================================
+/**
+ * Keylogger es un generador de comandos, no un keylogger.
+ * No ejecuta nada. No lanza msfconsole, no escanea X11, no registra teclado.
+ * Solo imprime comandos de Metasploit.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación/preparación, comandos de Metasploit
+ *   y notas de la herramienta Xspy (X11 Keyboard Spy).
+ * - Imprime 2 pasos previos: escanear X11 y conectar/registrar teclado.
+ * - SÍ interpola target, port y timeout en los comandos de los pasos previos
+ *   (set rhosts <target>, set rport <port>, set LISTENER_TIMEOUT <timeout>).
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - No valida IP: acepta 'noesunaip', 'example.com', cualquier string.
+ * - Inconsistencia: la sección "Comandos de Metasploit" usa <target_ip>
+ *   placeholder, mientras que "Pasos previos" SÍ usa el target real.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Solo 1 herramienta (xspy).
+ *
+ * Ventaja funcional:
+ * - Es el PRIMERO (y único hasta ahora) que SÍ interpola target, port y
+ *   timeout en los comandos (en pasos previos). No es decorativo.
+ * - Herramienta coherente: Xspy es keylogger X11.
+ * - No inyección en pasos previos (target se interpola en set rhosts,
+ *   que Metasploit valida al ejecutar).
+ *
+ * Limitaciones:
+ * - No captura teclas reales.
+ * - No ejecuta msfconsole, no escanea X11, no registra teclado.
+ * - No valida IPs.
+ * - No interpola target en la sección principal (solo en pasos previos).
+ *
+ * Veredicto:
+ * El nombre "Keylogger" promete capturar teclas. Entrega un recetario de
+ * comandos de Metasploit con target/port/timeout interpolados en pasos
+ * previos, pero sin capturar nada.
+ */
 function printReport(target, port, timeout) {
     console.log('');
     console.log('═'.repeat(65));
@@ -87,6 +128,9 @@ function printReport(target, port, timeout) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var targetIdx = args.indexOf('--target');
