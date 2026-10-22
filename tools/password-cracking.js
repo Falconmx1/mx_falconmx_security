@@ -148,6 +148,42 @@ const TOOLS = {
 // ============================================================
 // Generación de reporte
 // ============================================================
+/**
+ * Password Cracking es un generador de comandos, no un crackeador de contraseñas.
+ * No crackea nada (no lanza hashcat, john, fcrackzip, cmospwd, crackle ni truecrack).
+ * Solo imprime comandos genéricos de 6 herramientas.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso básico, ejemplos y notas de 6 herramientas.
+ * - Muestra el hash y el tipo en el header (pero no los usa en comandos).
+ * - Acepta --tool para elegir herramienta o 'all'.
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - --hash es DECORATIVO: solo se muestra en el header. Los ejemplos usan
+ *   'hash.txt' fijo, no el hash del usuario.
+ * - --type es DECORATIVO: solo cambia el header. Los comandos de Hashcat
+ *   siguen mostrando -m 0 (MD5) aunque pases --type ntlm (debería ser -m 1000).
+ *   --type zip no activa fcrackzip como comando recomendado.
+ * - Mezcla inconsistente de herramientas: cmospwd (BIOS), crackle (BLE) y
+ *   truecrack (TrueCrypt) no son cracking de hashes. Solo Hashcat, John y
+ *   fcrackzip lo son.
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja de seguridad:
+ * - No interpola hash ni type → sin inyección por copiar/pegar.
+ *
+ * Limitaciones:
+ * - No crackea contraseñas reales.
+ * - No lanza hashcat, john, fcrackzip, cmospwd, crackle ni truecrack.
+ * - No valida hashes ni archivos.
+ * - No interpola hash ni type en comandos.
+ *
+ * Veredicto:
+ * El nombre "Password Cracking" promete crackear contraseñas. Entrega un
+ * recetario de comandos con hash y type decorativos y sin crackear nada.
+ */
 function printReport(hashFile, hashType, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
