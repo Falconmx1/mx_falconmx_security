@@ -137,6 +137,41 @@ const CATEGORIES = {
 // ============================================================
 // Generación de reporte
 // ============================================================
+/**
+ * Unsecured Credentials es un generador de listas estáticas, no un
+ * enumerador de credenciales. No busca archivos, no lee nada, no enumera
+ * nada. Solo imprime una lista fija de rutas y riesgos con '~/' fijo.
+ *
+ * Lo que realmente hace:
+ * - Imprime una lista estática de 7 categorías de credenciales con rutas,
+ *   riesgos y referencias MITRE ATT&CK.
+ * - Muestra el target en el header (pero no lo usa en rutas ni comandos).
+ * - Acepta --category para elegir una categoría o 'all'.
+ * - Imprime 4 comandos de verificación genéricos con '~/' fijo.
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - --target es 100% DECORATIVO: solo se muestra en el header. Las rutas
+ *   internas son siempre '~/.ssh/...', '~/.aws/...', etc. El target NO se
+ *   interpola en ninguna ruta ni comando. Es el más decorativo de todas
+ *   las herramientas auditadas.
+ * - Rutas siempre '~/': no se usa el target para construir rutas como
+ *   '<target>/.ssh/id_rsa'.
+ * - Output 100% estático: el mismo siempre, solo cambia el header.
+ * - --user y --path NO EXISTEN: solo --target y --category.
+ * - --category inválida no advierte: cae silenciosamente a mostrar todas.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja de seguridad:
+ * - No interpola target → sin inyección por copiar/pegar.
+ *
+ * Limitaciones:
+ * - No enumera nada (solo imprime lista estática).
+ * - No busca archivos, no lee nada, no detecta nada.
+ * - No usa el target para construir rutas.
+ * - El nombre "Unsecured Credentials" promete enumerar credenciales
+ *   no protegidas; entrega una lista estática de rutas conocidas.
+ */
 function printReport(targetHome, selectedCategory) {
     console.log('');
     console.log('═'.repeat(65));
