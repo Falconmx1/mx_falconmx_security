@@ -124,6 +124,46 @@ const TOOLS = {
     }
 };
 
+// ============================================================
+// Generación de reporte
+// ============================================================
+/**
+ * WiFi Credential Access es un generador de comandos, no una herramienta
+ * de acceso a credenciales WiFi. No hace nada: no lanza airgeddon,
+ * wifiphisher, wifite, bully, fern-wifi-cracker ni eapmd5pass.
+ * Solo imprime comandos genéricos de 6 herramientas.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso básico y notas de 6 herramientas
+ *   de acceso a credenciales WiFi (Airgeddon, Wifiphisher, Wifite, Bully,
+ *   Fern WiFi Cracker, eapmd5pass).
+ * - Muestra el target en el header (pero no lo usa en comandos).
+ * - Acepta --tool para elegir herramienta o 'all'.
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - --target es DECORATIVO: solo se muestra en el header. Los ejemplos usan
+ *   BSSID fijo (00:11:22:33:44:55), no el target del usuario.
+ * - No valida BSSID ni SSID: acepta 'noesunbssid', '/ruta', cualquier string.
+ * - --iface NO EXISTE: solo --target y --tool. No hay forma de pasar interfaz.
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja de seguridad:
+ * - No interpola target → sin inyección por copiar/pegar.
+ * - Herramientas coherentes: las 6 son de WiFi credential access
+ *   (a diferencia de Password Cracking que mezclaba BIOS/BLE/TrueCrypt).
+ *
+ * Limitaciones:
+ * - No accede a credenciales WiFi reales.
+ * - No lanza airgeddon, wifiphisher, wifite, bully, fern-wifi-cracker ni eapmd5pass.
+ * - No valida BSSID ni SSID.
+ * - No usa el target para construir comandos.
+ *
+ * Veredicto:
+ * El nombre "WiFi Credential Access" promete acceso a credenciales WiFi.
+ * Entrega un recetario de comandos con target decorativo y sin acceder a nada.
+ */
 function printReport(target, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
@@ -162,6 +202,9 @@ function printReport(target, selectedTool) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var targetIdx = args.indexOf('--target');
