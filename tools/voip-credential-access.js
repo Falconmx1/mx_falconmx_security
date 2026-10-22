@@ -55,6 +55,50 @@ const TOOLS = {
     }
 };
 
+// ============================================================
+// Generación de reporte
+// ============================================================
+/**
+ * VoIP Credential Access es un generador de comandos, no una herramienta
+ * de acceso a credenciales VoIP. No hace nada: no lanza sipvicious_svcrack,
+ * enumiax, svmap ni svwar. Solo imprime comandos genéricos de 2 herramientas.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso básico y notas de 2 herramientas
+ *   de acceso a credenciales VoIP (SVCrack/SIPVicious, Enumiax).
+ * - Muestra el target y user en el header (pero no los usa en comandos).
+ * - Acepta --tool para elegir herramienta o 'all'.
+ * - Imprime un flujo recomendado de 4 pasos (svmap, svwar, svcrack, enumiax)
+ *   con placeholders <target_range>, <target>, <user> (no interpolados).
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - --target es DECORATIVO: solo se muestra en el header. Los ejemplos usan
+ *   10.0.0.1 fijo, no el target del usuario. El flujo usa <target> placeholder.
+ * - --user es DECORATIVO: solo se muestra en el header. Los ejemplos de SVCrack
+ *   usan -u100 fijo aunque pases --user 200 o --user admin. El flujo usa
+ *   <user> placeholder.
+ * - No valida IP: acepta 'noesunaip', cualquier string.
+ * - --tool inválida no advierte: cae silenciosamente a mostrar todas.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja de seguridad:
+ * - No interpola target ni user → sin inyección por copiar/pegar.
+ * - Herramientas coherentes: SVCrack (SIP) y Enumiax (IAX) son de VoIP
+ *   credential access.
+ *
+ * Limitaciones:
+ * - No accede a credenciales VoIP reales.
+ * - No lanza sipvicious_svcrack, enumiax, svmap ni svwar.
+ * - No valida IPs.
+ * - No usa el target ni el user para construir comandos.
+ *
+ * Veredicto:
+ * El nombre "VoIP Credential Access" promete acceso a credenciales VoIP.
+ * Entrega un recetario de comandos con target y user 100% decorativos
+ * (ni en ejemplos ni en flujo) y sin acceder a nada. Es más decorativo
+ * que Keylogger (que al menos interpolaba en pasos previos).
+ */
 function printReport(target, user, selectedTool) {
     console.log('');
     console.log('═'.repeat(65));
@@ -108,6 +152,9 @@ function printReport(target, user, selectedTool) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var targetIdx = args.indexOf('--target');
