@@ -30,6 +30,51 @@ const PAYLOADS = {
     'windows/meterpreter/reverse_https': 'Windows Meterpreter HTTPS'
 };
 
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * Metasploit es un generador de comandos, no un lanzador de Metasploit.
+ * No ejecuta nada: no lanza msfconsole, msfvenom ni msfdb.
+ * Solo imprime comandos con target/port/module/payload/lhost/lport interpolados.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, inicialización de DB, flujo completo,
+ *   one-liner, msfvenom, listener multi/handler, 6 módulos, 6 payloads,
+ *   12 comandos útiles de msfconsole y advertencia legal.
+ * - SÍ interpola target/port/module/payload/lhost/lport en 4 tipos de comandos
+ *   (flujo, one-liner, msfvenom, listener).
+ *
+ * Bugs funcionales conocidos:
+ * - No valida target/port/module/payload/lhost/lport: acepta cualquier string.
+ * - INYECCIÓN POR COPIAR/PEGAR: los 6 params se interpolan sin sanitizar.
+ *   Ej: --target "192.168.1.10; rm -rf /" genera "set RHOSTS 192.168.1.10; rm -rf /".
+ * - --target sin valor genera "set RHOSTS undefined" (bug menor).
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Defaults funcionan (target=192.168.1.10, port=445, module=ms17_010,
+ *   payload=windows/x64, lhost=192.168.1.50, lport=4444).
+ *
+ * Ventaja funcional:
+ * - Interpola 6 params en 4 tipos de comandos (flujo, one-liner,
+ *   msfvenom, listener).
+ * - 6 módulos reales (EternalBlue, Log4Shell, vsftpd, Tomcat, JBoss, MS08-067).
+ * - 6 payloads reales (Windows/Linux meterpreter, bash, https).
+ * - 12 comandos útiles de msfconsole (search, use, info, show options, etc.).
+ * - Documentación real (install, msfdb init, msfvenom, multi/handler).
+ * - Herramienta coherente: Metasploit es pentesting.
+ *
+ * Limitaciones:
+ * - No ejecuta msfconsole, msfvenom ni msfdb.
+ * - No hace pentesting real.
+ * - No valida parámetros.
+ * - Riesgo de inyección por copiar/pegar.
+ * - Solo 1 herramienta (Metasploit).
+ *
+ * Veredicto:
+ * El nombre "Metasploit" promete Metasploit. Entrega un recetario REAL de
+ * Metasploit con comandos personalizados y 6+6 módulos/payloads reales,
+ * pero sin ejecutar nada. Sigue siendo un generador de comandos.
+ */
 function printReport(target, port, module, payload, lhost, lport) {
     console.log('');
     console.log('='.repeat(65));
@@ -112,6 +157,9 @@ function printReport(target, port, module, payload, lhost, lport) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var targetIdx = args.indexOf('--target');
