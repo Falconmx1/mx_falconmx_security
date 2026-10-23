@@ -26,6 +26,45 @@ const CONNECTIONS = {
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * LibNFC es un generador de comandos, no una herramienta NFC.
+ * No ejecuta nada: no lanza nfc-list, nfc-poll ni nfc-scan-device.
+ * Solo imprime comandos y configuración de ejemplo de libnfc.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, configuración de /etc/nfc/libnfc.conf,
+ *   cadenas de conexión comunes, comando recomendado (nfc-list o nfc-poll),
+ *   ejemplo de salida y notas.
+ * - SÍ interpola el iface en device.connstring (device.connstring = "<iface>").
+ * - SÍ usa --cmd para elegir entre nfc-list (list) y nfc-poll (poll).
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - device.name es FIJO ("PN532 via SPI") aunque el iface sea I2C o UART.
+ * - --cmd INVALIDO no advierte: no muestra ni list ni poll, solo omite el bloque.
+ * - --cmd sin valor no muestra comando: el header dice "list" pero no se
+ *   imprime el bloque [Comando] ni nfc-list. Contradicción header/output.
+ * - No valida iface: acepta 'noesuniface', cualquier string.
+ * - --target y --tool NO EXISTEN: solo --iface y --cmd.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja funcional:
+ * - Es el segundo (junto con Keylogger) que SÍ interpola un parámetro
+ *   en un comando/config (device.connstring = "<iface>").
+ * - --cmd SÍ se usa para elegir entre nfc-list y nfc-poll.
+ * - Herramienta coherente: libnfc es la SDK NFC.
+ * - No inyección: el iface se interpola en config, no en shell.
+ *
+ * Limitaciones:
+ * - No hace NFC real.
+ * - No lanza nfc-list, nfc-poll ni nfc-scan-device.
+ * - No valida ifaces.
+ * - Solo 1 herramienta (libnfc).
+ *
+ * Veredicto:
+ * El nombre "LibNFC" promete NFC. Entrega un recetario de comandos de
+ * libnfc con iface y cmd interpolados, pero sin hacer NFC real.
+ */
 function printReport(iface, cmd) {
     console.log('');
     console.log('='.repeat(65));
