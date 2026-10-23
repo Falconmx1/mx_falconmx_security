@@ -15,6 +15,48 @@ const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * KrbRelayX es un generador de comandos, no una herramienta de Kerberos relay.
+ * No ejecuta nada: no lanza krbrelayx.py. Solo imprime comandos con
+ * target/ip/loot/format interpolados.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, 4 comandos de krbrelayx
+ *   (relay sin credenciales, ADCS, unconstrained delegation, con credenciales),
+ *   opciones comunes y notas reales.
+ * - SÍ interpola target/ip/loot/format en los 4 comandos.
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - No valida target/ip/loot/format: acepta 'noesuntarget', 'noesunaip', etc.
+ * - INYECCIÓN POR COPIAR/PEGAR: target/ip/loot/format se interpolan sin
+ *   sanitizar. Ej: --target "smb://host; rm -rf /" genera comando con "; rm -rf /".
+ * - --domain, --user y --dc NO EXISTEN: solo target/ip/loot/format.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Defaults funcionan (target=smb://server:445, ip=192.168.1.50,
+ *   loot=./loot, format=ccache).
+ *
+ * Ventaja funcional:
+ * - Interpola target/ip/loot/format en 4 comandos (relay, ADCS,
+ *   unconstrained delegation, con credenciales).
+ * - Documentación real: opciones -t, -ip, -l, -f, -wh, --adcs, --template;
+ *   notas sobre target hostname (no IP), coercion, DNS record,
+ *   KRB5CCNAME, secretsdump -k.
+ * - Herramienta coherente: krbrelayx es Kerberos relay.
+ * - 4 comandos útiles con parámetros interpolados.
+ *
+ * Limitaciones:
+ * - No ejecuta krbrelayx.py.
+ * - No hace Kerberos relay real.
+ * - No valida target/ip/loot/format.
+ * - Riesgo de inyección por copiar/pegar.
+ * - Solo 1 herramienta (krbrelayx).
+ *
+ * Veredicto:
+ * El nombre "KrbRelayX" promete Kerberos relay. Entrega un recetario REAL
+ * de krbrelayx con comandos personalizados, pero sin ejecutar nada.
+ * Sigue siendo un generador de comandos.
+ */
 function printReport(target, ip, loot, format) {
     console.log('');
     console.log('='.repeat(65));
