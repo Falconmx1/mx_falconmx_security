@@ -15,6 +15,48 @@ const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * Kerberoast es un generador de comandos, no una herramienta de kerberoasting.
+ * No ejecuta nada: no lanza GetUserSPNs, netexec, john ni hashcat.
+ * Solo imprime comandos con domain/user/pass/dc interpolados.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, comandos de Impacket GetUserSPNs y
+ *   NetExec (nxc), comandos de cracking (john, hashcat) y notas reales.
+ * - SÍ interpola domain/user/pass/dc en los comandos de Impacket y NetExec.
+ * - DETECTA hash vs password: si --pass contiene ':' usa -hashes <LM:NT>,
+ *   si no usa <user>:<pass>. Lógica condicional real.
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - No valida domain/user/dc: acepta 'noesundominio', 'noesunaip', cualquier string.
+ * - INYECCIÓN POR COPIAR/PEGAR: domain/user/pass/dc se interpolan sin sanitizar.
+ *   Ej: --domain "example.local; rm -rf /" genera comando con "; rm -rf /".
+ * - --pass vacío genera comando inválido: "example.local/svc: -dc-ip ...".
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Defaults funcionan (domain=example.local, user=username, dc=192.168.1.10).
+ *
+ * Ventaja funcional:
+ * - Es el MEJOR implementado de los generadores de comandos:
+ *   · Interpola domain/user/pass/dc en Impacket y NetExec.
+ *   · Detecta hash vs password (lógica condicional real).
+ *   · 2 herramientas coherentes (Impacket, NetExec).
+ *   · Documentación real (modos hashcat 13100/19600/19700, RC4 hardening 2026,
+ *     low-priv, hash output $krb5tgs$23$... o $krb5tgs$18$...).
+ *   · Comandos de cracking correctos (john --format=krb5tgs, hashcat -m 13100/19600/19700).
+ *
+ * Limitaciones:
+ * - No ejecuta GetUserSPNs, netexec, john ni hashcat.
+ * - No hace kerberoasting real.
+ * - No valida domain/user/dc.
+ * - Riesgo de inyección por copiar/pegar.
+ *
+ * Veredicto:
+ * El nombre "Kerberoast" promete kerberoasting. Entrega un recetario REAL de
+ * kerberoasting con comandos personalizados y lógica condicional (hash vs
+ * password), pero sin ejecutar nada. Es el mejor implementado hasta ahora,
+ * pero sigue siendo un generador de comandos.
+ */
 function printReport(domain, user, pass, dc) {
     console.log('');
     console.log('='.repeat(65));
