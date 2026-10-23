@@ -15,6 +15,50 @@ const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 // ============================================================
 // REPORTE
 // ============================================================
+/**
+ * NFC MIFARE Classic es un generador de comandos, no una herramienta
+ * de MIFARE Classic. No ejecuta nfc-mfclassic: solo imprime el comando
+ * generado + documentación real de la herramienta.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con sintaxis, acciones, keys, UID y notas reales
+ *   de nfc-mfclassic (manpage de Debian/Ubuntu).
+ * - Genera un comando nfc-mfclassic con action, key, uid y dump
+ *   INTERPOLADOS (no es decorativo).
+ * - Muestra 5 ejemplos fijos (útiles como referencia).
+ * - Advertencia legal.
+ *
+ * Bugs funcionales conocidos:
+ * - No valida action: acepta 'X', genera 'nfc-mfclassic X a u dump.mfd'.
+ * - No valida key: acepta 'X', genera 'nfc-mfclassic r X u dump.mfd'.
+ * - No valida uid: acepta 'X', genera 'nfc-mfclassic r a X dump.mfd'.
+ * - No valida dump: acepta 'noesundump', sin extensión.
+ * - INYECCIÓN POR COPIAR/PEGAR: dump y action se interpolan sin sanitizar.
+ *   Ej: --dump "card.mfd; rm -rf /" genera "nfc-mfclassic r a u card.mfd; rm -rf /"
+ *   Ej: --action "r; rm -rf /" genera "nfc-mfclassic r; rm -rf / a u dump.mfd"
+ * - --op NO EXISTE: solo --action. --op write se ignora silenciosamente.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Solo 1 herramienta (nfc-mfclassic).
+ *
+ * Ventaja funcional:
+ * - Es el mejor implementado de los generadores de comandos: interpola
+ *   action, key, uid y dump en el comando generado.
+ * - Documentación real (manpage de Debian/Ubuntu), no inventada.
+ * - Comando personalizado + 5 ejemplos fijos de referencia.
+ * - Herramienta coherente: nfc-mfclassic es MIFARE Classic.
+ *
+ * Limitaciones:
+ * - No ejecuta nfc-mfclassic.
+ * - No lee ni escribe tarjetas reales.
+ * - No valida parámetros.
+ * - Riesgo de inyección por copiar/pegar (dump/action sin sanitizar).
+ *
+ * Veredicto:
+ * El nombre "NFC MIFARE Classic" promete MIFARE Classic. Entrega un
+ * recetario REAL de nfc-mfclassic con el comando personalizado, pero
+ * sin ejecutar nada. Es el mejor implementado hasta ahora, pero sigue
+ * siendo un generador de comandos.
+ */
 function printReport(action, key, uid, dump) {
     console.log('');
     console.log('='.repeat(65));
