@@ -12,6 +12,57 @@
 
 const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * SQLSus es un generador de comandos, no un lanzador de SQLSus.
+ * No ejecuta nada: no lanza sqlsus. Solo imprime comandos con
+ * config/cmd interpolados (target NO se usa en comandos).
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, flujo de trabajo (genconf, editar
+ *   config, shell), comando generado (si --cmd), shell interactivo con
+ *   12 comandos, notas reales y advertencia legal.
+ * - SÍ interpola config en --genconf y en el comando shell.
+ * - SÍ interpola cmd en el comando generado (sqlsus <config> -e '<cmd>').
+ * - Lógica condicional: cmd → comando generado, sin cmd → shell interactivo.
+ * - NO interpola target: --target solo se muestra en el header.
+ *
+ * Bugs funcionales conocidos:
+ * - --target es DECORATIVO: solo se muestra en el header. Los comandos
+ *   (sqlsus --genconf target.cfg, sqlsus target.cfg) NO incluyen el target.
+ *   El usuario pasa --target esperando que se use, pero no.
+ * - No valida target/config/cmd: acepta 'noesuntarget', 'noesunconfig', etc.
+ * - INYECCIÓN POR COPIAR/PEGAR: config/cmd se interpolan sin sanitizar.
+ *   Ej: --config "target.cfg; rm -rf /" genera "sqlsus target.cfg; rm -rf /".
+ * - --url y --host NO EXISTEN: solo target/config/cmd.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Defaults funcionan (target=http://ejemplo.com/page.php?id=1,
+ *   config=target.cfg, cmd=vacío → shell interactivo).
+ *
+ * Ventaja funcional:
+ * - Interpola config/cmd en los comandos.
+ * - Lógica condicional: cmd → comando generado, sin cmd → shell interactivo.
+ * - 12 comandos del shell (start, get tables, get columns, get version,
+ *   get users, get privileges, get dbs, dump, clone, exec, help, quit).
+ * - Documentación real: flujo (genconf, editar config, shell), notas
+ *   (MySQL, SQLite cache, Perl, doc).
+ * - Herramienta coherente: sqlsus es MySQL injection.
+ *
+ * Limitaciones:
+ * - No ejecuta sqlsus.
+ * - No hace SQL injection real.
+ * - No valida target/config/cmd.
+ * - --target decorativo.
+ * - Riesgo de inyección por copiar/pegar.
+ * - Solo 1 herramienta (sqlsus).
+ *
+ * Veredicto:
+ * El nombre "SQLSus" promete SQLSus. Entrega un recetario REAL de sqlsus
+ * con comandos personalizados (config/cmd) y lógica condicional, pero sin
+ * ejecutar nada y con --target decorativo. Sigue siendo un generador de comandos.
+ */
 function printReport(target, config, cmd) {
     console.log('');
     console.log('='.repeat(65));
@@ -70,6 +121,9 @@ function printReport(target, config, cmd) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var targetIdx = args.indexOf('--target');
