@@ -12,6 +12,50 @@
 
 const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * DNS Rebind es un generador de comandos, no una herramienta de DNS rebinding.
+ * No ejecuta nada: no lanza rebind. Solo imprime comandos con iface/domain/targets
+ * interpolados (port NO se usa).
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, uso básico, comando con targets,
+ *   opciones reales de rebind, requisitos y advertencia legal.
+ * - SÍ interpola iface y domain en el comando básico.
+ * - SÍ interpola iface, domain y targets en el comando con targets.
+ * - NO interpola port: --port solo se muestra en el header, no se usa en comandos.
+ *
+ * Bugs funcionales conocidos:
+ * - --port es DECORATIVO: solo se muestra en el header. Los comandos NO incluyen
+ *   -p <port>. El usuario pasa --port 8080 esperando -p 8080 y no lo recibe.
+ * - No valida iface/domain/targets/port: acepta 'noesuniface', 'noesundominio', etc.
+ * - INYECCIÓN POR COPIAR/PEGAR: iface/domain/targets se interpolan sin sanitizar.
+ *   Ej: --iface "eth0; rm -rf /" genera "rebind -i eth0; rm -rf / -d ...".
+ * - --target y --ip NO EXISTEN: solo iface/domain/targets/port.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Defaults funcionan (iface=eth0, domain=kali.local, targets=ejemplo, port=80).
+ *
+ * Ventaja funcional:
+ * - Interpola iface/domain/targets en 2 comandos (básico y con targets).
+ * - Documentación real: opciones -i, -d, -t, -p, -c, -u, -a, -n;
+ *   requisitos (dominio, DNS/HTTP/callback, autorización).
+ * - Herramienta coherente: rebind es DNS rebinding.
+ *
+ * Limitaciones:
+ * - No ejecuta rebind.
+ * - No hace DNS rebinding real.
+ * - No valida parámetros.
+ * - --port decorativo (no se usa en comandos).
+ * - Riesgo de inyección por copiar/pegar.
+ * - Solo 1 herramienta (rebind).
+ *
+ * Veredicto:
+ * El nombre "DNS Rebind" promete DNS rebinding. Entrega un recetario REAL
+ * de rebind con comandos personalizados (iface/domain/targets), pero sin
+ * ejecutar nada y con --port decorativo. Sigue siendo un generador de comandos.
+ */
 function printReport(iface, domain, targets, port) {
     console.log('');
     console.log('='.repeat(65));
@@ -60,6 +104,9 @@ function printReport(iface, domain, targets, port) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var ifaceIdx = args.indexOf('--iface');
