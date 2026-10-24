@@ -12,6 +12,52 @@
 
 const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * SQLMap es un generador de comandos, no un lanzador de SQLMap.
+ * No ejecuta nada: no lanza sqlmap. Solo imprime comandos con
+ * url/data/cookie/db/table interpolados condicionalmente.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, detección básica, enumerar DBs,
+ *   enumerar tablas, dump de tabla, opciones útiles y advertencia legal.
+ * - SÍ interpola url/data/cookie en el comando base.
+ * - SÍ interpola db/table condicionalmente: db activa --tables,
+ *   table (con db) activa --dump. Sin db, muestra placeholder <dbname>.
+ * - Lógica condicional real: db → tablas, table → dump.
+ *
+ * Bugs funcionales conocidos:
+ * - --url sin valor genera "sqlmap -u 'undefined' --batch" (bug grave).
+ *   El código no valida que args[urlIdx + 1] exista.
+ * - No valida url/data/cookie/db/table: acepta 'noesunaurl', 'noesundata', etc.
+ * - INYECCIÓN POR COPIAR/PEGAR: url/data/cookie/db/table se interpolan sin
+ *   sanitizar. Ej: --url "http://example.com; rm -rf /" genera comando con
+ *   "; rm -rf /". --data "user=admin; id" genera comando con "; id".
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ *
+ * Ventaja funcional:
+ * - Interpolación condicional: db → --tables, table → --dump.
+ * - 5 params interpolados (url/data/cookie/db/table).
+ * - Documentación real: --level=5 --risk=3, --dbms=mysql, --os-shell,
+ *   --file-read=/etc/passwd, --random-agent, --tamper=space2comment, -r request.txt.
+ * - --data sin --url → banner (correcto).
+ * - Herramienta coherente: SQLMap es SQL injection.
+ *
+ * Limitaciones:
+ * - No ejecuta sqlmap.
+ * - No hace SQL injection real.
+ * - No valida url/data/cookie/db/table.
+ * - --url sin valor → "undefined".
+ * - Riesgo de inyección por copiar/pegar.
+ * - Solo 1 herramienta (SQLMap).
+ *
+ * Veredicto:
+ * El nombre "SQLMap" promete SQLMap. Entrega un recetario REAL de SQLMap
+ * con comandos personalizados y lógica condicional (db/table), pero sin
+ * ejecutar nada. Sigue siendo un generador de comandos.
+ */
 function printReport(url, data, cookie, db, table) {
     console.log('');
     console.log('='.repeat(65));
@@ -66,6 +112,9 @@ function printReport(url, data, cookie, db, table) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var urlIdx = args.indexOf('--url');
