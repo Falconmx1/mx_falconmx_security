@@ -12,6 +12,57 @@
 
 const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * JBoss-Autopwn es un generador de comandos, no un lanzador de JBoss-Autopwn.
+ * No ejecuta nada: no lanza e.sh, e2.sh, jboss-linux ni jboss-win. Solo imprime
+ * comandos con target/port/os interpolados condicionalmente.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, comando generado (Linux: ./e.sh,
+ *   Windows: ./e2.sh), alternativa directa (jboss-linux / jboss-win),
+ *   cómo funciona (4 pasos), scripts incluidos, requisitos y advertencia legal.
+ * - SÍ interpola target/port en el comando generado (script) y en la alternativa
+ *   directa (wrapper).
+ * - Lógica condicional: --os linux → e.sh + jboss-linux;
+ *   --os windows → e2.sh + jboss-win.
+ *
+ * Bugs funcionales conocidos:
+ * - --os NO VALIDA: cualquier valor que no sea 'linux' se trata como Windows
+ *   (ej: --os macos genera e2.sh + jboss-win). Bug grave.
+ * - No valida target/port: acepta 'noesunaip', 'noesunpuerto', etc.
+ * - INYECCIÓN POR COPIAR/PEGAR: target/port se interpolan sin sanitizar en
+ *   2 comandos (script y wrapper).
+ *   Ej: --target "192.168.1.10; rm -rf /" genera comando con "; rm -rf /".
+ * - --url NO EXISTE: solo target/port/os.
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Defaults funcionan (target=192.168.1.200, port=8080, os=linux).
+ *
+ * Ventaja funcional:
+ * - Interpola target/port/os en 2 comandos (script y wrapper).
+ * - Lógica condicional: Linux vs Windows (e.sh/e2.sh, jboss-linux/jboss-win).
+ * - Documentación real: cómo funciona (detecta versión, elige payload,
+ *   deploya JSP shell, shell interactivo), scripts incluidos (e.sh, e2.sh,
+ *   jboss-linux, jboss-win), requisitos (JBoss, JMX/Web Console, autorización).
+ * - Herramienta coherente: jboss-autopwn es JBoss exploitation.
+ *
+ * Limitaciones:
+ * - No ejecuta e.sh, e2.sh, jboss-linux ni jboss-win.
+ * - No explota JBoss real.
+ * - --os no valida (macos → Windows).
+ * - No valida target/port.
+ * - --url no existe.
+ * - Riesgo de inyección por copiar/pegar (2 comandos).
+ * - Solo 1 herramienta (jboss-autopwn).
+ *
+ * Veredicto:
+ * El nombre "JBoss AutoPwn" promete JBoss AutoPwn. Entrega un recetario REAL
+ * de jboss-autopwn con comandos personalizados (target/port/os) y lógica
+ * condicional Linux/Windows, pero sin ejecutar nada. Sigue siendo un generador
+ * de comandos.
+ */
 function printReport(target, port, os) {
     console.log('');
     console.log('='.repeat(65));
@@ -67,6 +118,9 @@ function printReport(target, port, os) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var targetIdx = args.indexOf('--target');
