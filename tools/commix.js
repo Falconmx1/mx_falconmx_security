@@ -12,6 +12,59 @@
 
 const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * Commix es un generador de comandos, no un lanzador de Commix.
+ * No ejecuta nada: no lanza commix. Solo imprime comandos con
+ * url/data/level interpolados condicionalmente.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, detección básica, nivel específico,
+ *   OS shell (si --os-shell), comando único, técnicas de inyección,
+ *   opciones útiles y advertencia legal.
+ * - SÍ interpola url/data en detección básica y nivel específico.
+ * - SÍ interpola level en "con nivel específico".
+ * - Lógica condicional: --os-shell → bloque [OS Shell interactivo].
+ * - Documentación real: técnicas (classic, timebased, filebased, semi-blind),
+ *   opciones (--tamper, -r, --batch, --random-agent, --cookie).
+ *
+ * Bugs funcionales conocidos:
+ * - --os-cmd NO EXISTE: solo --os-shell (booleano). El comando único se
+ *   muestra con --os-cmd="whoami" FIJO, ignorando el --os-cmd del usuario.
+ * - --level no valida: acepta --level 5 aunque Commix solo acepta 1-3.
+ * - --url sin valor genera "commix --url='undefined'" (bug grave).
+ * - No valida url/data/level: acepta 'noesunaurl', 'noesundata', etc.
+ * - INYECCIÓN POR COPIAR/PEGAR: url/data se interpolan sin sanitizar.
+ *   Ej: --url "http://example.com; rm -rf /" genera comando con "; rm -rf /".
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - Defaults funcionan (url=http://target.com/ping?ip=127.0.0.1, level=1,
+ *   data=vacío, osShell=false).
+ *
+ * Ventaja funcional:
+ * - Interpola url/data/level en múltiples comandos (detección básica,
+ *   nivel específico, OS shell, comando único).
+ * - Lógica condicional: --os-shell → bloque OS shell.
+ * - Documentación real: técnicas (classic, timebased, filebased, semi-blind),
+ *   opciones (--tamper=base64encode, -r, --batch, --random-agent, --cookie).
+ * - Herramienta coherente: Commix es command injection.
+ *
+ * Limitaciones:
+ * - No ejecuta commix.
+ * - No hace command injection real.
+ * - No valida url/data/level.
+ * - --os-cmd no existe (solo --os-shell).
+ * - --level 5 se acepta.
+ * - --url sin valor → "undefined".
+ * - Riesgo de inyección por copiar/pegar.
+ * - Solo 1 herramienta (Commix).
+ *
+ * Veredicto:
+ * El nombre "Commix" promete Commix. Entrega un recetario REAL de Commix
+ * con comandos personalizados y lógica condicional (os-shell), pero sin
+ * ejecutar nada. Sigue siendo un generador de comandos.
+ */
 function printReport(url, data, level, osShell) {
     console.log('');
     console.log('='.repeat(65));
@@ -66,6 +119,9 @@ function printReport(url, data, level, osShell) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var urlIdx = args.indexOf('--url');
