@@ -12,6 +12,55 @@
 
 const CONFIG = { version: '1.0.0', author: 'FalconMX Security' };
 
+// ============================================================
+// REPORTE
+// ============================================================
+/**
+ * jSQL Injection es un generador de comandos, no un lanzador de jSQL Injection.
+ * No ejecuta nada: no lanza jsql-injection ni java -jar. Solo imprime comandos
+ * con url/data interpolados condicionalmente en modo headless.
+ *
+ * Lo que realmente hace:
+ * - Imprime un reporte con instalación, modo headless (si --headless),
+ *   enumerar databases, dump a archivo, características y advertencia legal.
+ * - SÍ interpola url/data en los comandos de modo headless.
+ * - Lógica condicional: --headless → 3 comandos (headless, enumerar, dump);
+ *   sin --headless → modo GUI (jsql-injection / java -jar).
+ * - NO interpola url en modo GUI (solo muestra comandos genéricos).
+ *
+ * Bugs funcionales conocidos:
+ * - --url sin valor genera "Target: --headless" o url=undefined, tomando
+ *   el siguiente flag como valor (bug grave).
+ * - --method no valida: PUT se ignora silenciosamente (solo POST se añade).
+ * - No valida url/data/method: acepta 'noesunaurl', 'noesundata', etc.
+ * - INYECCIÓN POR COPIAR/PEGAR: url/data se interpolan sin sanitizar.
+ *   Ej: --url "http://example.com; rm -rf /" genera comando con "; rm -rf /".
+ * - Exit code 0 en todos los casos (no hay process.exit(1)).
+ * - --headless sin url → banner (correcto).
+ * - Defaults funcionan (url=http://target.com/item.php?id=1, method=GET,
+ *   data=vacío, headless=false).
+ *
+ * Ventaja funcional:
+ * - Interpola url/data en modo headless (3 comandos: headless, enumerar, dump).
+ * - Lógica condicional: headless → comandos, sin headless → GUI.
+ * - Documentación real: 33 motores DB, estrategias (Normal, Stacked, Error,
+ *   Blind, Time), LOAD_FILE/INTO OUTFILE, admin pages, bypass.
+ * - Herramienta coherente: jSQL Injection es SQL injection.
+ *
+ * Limitaciones:
+ * - No ejecuta jsql-injection ni java -jar.
+ * - No hace SQL injection real.
+ * - No valida url/data/method.
+ * - --url sin valor → "undefined" o toma flag como valor.
+ * - --method PUT se ignora.
+ * - Riesgo de inyección por copiar/pegar.
+ * - Solo 1 herramienta (jSQL Injection).
+ *
+ * Veredicto:
+ * El nombre "jSQL Injection" promete jSQL Injection. Entrega un recetario
+ * REAL de jSQL Injection con comandos personalizados en headless y lógica
+ * condicional, pero sin ejecutar nada. Sigue siendo un generador de comandos.
+ */
 function printReport(url, data, headless, method) {
     console.log('');
     console.log('='.repeat(65));
@@ -63,6 +112,9 @@ function printReport(url, data, headless, method) {
     console.log('');
 }
 
+// ============================================================
+// CLI
+// ============================================================
 function main() {
     var args = process.argv.slice(2);
     var urlIdx = args.indexOf('--url');
